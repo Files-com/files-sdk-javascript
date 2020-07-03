@@ -1,0 +1,540 @@
+import fs from 'fs'
+import Readable from 'readable-stream'
+import { Buffer } from 'safe-buffer'
+
+import Api from '../Api'
+import Logger from '../Logger'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+import FilePartUpload from './FilePartUpload'
+
+/**
+ * Class File
+ */
+class File {
+  attributes = {}
+  options = {}
+
+  constructor(attributes = {}, options = {}) {
+    Object.entries(attributes).forEach(([key, value]) => {
+      const normalizedKey = key.replace('?', '')
+
+      this.attributes[normalizedKey] = value
+
+      Object.defineProperty(this, normalizedKey, { value, writable: false })
+    })
+
+    this.options = { ...options }
+  }
+
+  isLoaded = () => !!this.attributes.id
+
+  static _openUpload = async path => {
+    const params = { action: 'put' }
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
+
+    if (!response) {
+      return null
+    }
+
+    const partData = {
+      ...response.data,
+      headers: response.headers,
+      parameters: params,
+    }
+
+    return new FilePartUpload(partData)
+  }
+
+  static _continueUpload = async (path, partNumber, firstFilePartUpload) => {
+    const params = {
+      action: 'put',
+      part: partNumber,
+      ref: firstFilePartUpload.ref,
+    }
+
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
+
+    if (!response) {
+      return null
+    }
+
+    const partData = {
+      ...response.data,
+      headers: response.headers,
+      parameters: params,
+    }
+
+    return new FilePartUpload(partData)
+  }
+
+  static _completeUpload = async filePartUpload => {
+    const params = {
+      action: 'end',
+      ref: filePartUpload.ref,
+    }
+
+    return Api.sendRequest(`/files/${encodeURIComponent(filePartUpload.path)}`, 'POST', params)
+  }
+
+  static uploadStream = async (destinationPath, readableStream) => {
+    const filePartUpload = await File._openUpload(destinationPath)
+
+    if (!filePartUpload) {
+      return
+    }
+
+    try {
+      const file = await new Promise((resolve, reject) => {
+        let part = 0
+        let chunks = []
+        let length = 0
+
+        readableStream.on('error', error => { reject(error) })
+
+        readableStream.on('data', async chunk => {
+          length += chunk.length
+
+          if (length > filePartUpload.partsize) {
+            readableStream.pause()
+
+            const buffer = Buffer.concat(chunks)
+            const nextFilePartUpload = await File._continueUpload(destinationPath, ++part, filePartUpload)
+
+            await Api.sendFilePart(nextFilePartUpload.upload_uri, 'PUT', buffer)
+
+            chunks = []
+            length = 0
+
+            readableStream.resume()
+          }
+
+          chunks.push(Buffer.from(chunk))
+        })
+
+        readableStream.on('end', async () => {
+          if (chunks.length > 0) {
+            const buffer = Buffer.concat(chunks)
+            const nextFilePartUpload = await File._continueUpload(destinationPath, ++part, filePartUpload)
+
+            await Api.sendFilePart(nextFilePartUpload.upload_uri, 'PUT', buffer)
+          }
+
+          const response = await File._completeUpload(filePartUpload)
+          const createdFile = new File(response.data)
+
+          resolve(createdFile)
+        })
+      })
+
+      return file
+    } catch (error) {
+      throw error
+    }
+  }
+
+  /**
+   * data - string, Buffer, Stream, any object implementing Symbol.iterator or Symbol.asyncIterator
+   */
+  static uploadData = async (destinationPath, data) => {
+    if (!data) {
+      throw new Error('Upload data was not provided')
+    }
+
+    return File.uploadStream(destinationPath, Readable.from(data))
+  }
+
+  static uploadFile = async (destinationPath, sourceFilePath) => {
+    const stream = fs.createReadStream(sourceFilePath)
+    return File.uploadStream(destinationPath, stream)
+  }
+
+  static find = async path => {
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'GET')
+    return new File(response.data)
+  }
+
+  get = async path => {
+    return File.find(path)
+  }
+
+  copyTo = async destinationFilePath => {
+    const params = { destination: destinationFilePath }
+    return Api.sendRequest(`/file_actions/copy/${encodeURIComponent(this.path)}`, 'POST', params)
+  }
+
+  moveTo = async destinationFilePath => {
+    const params = { destination: destinationFilePath }
+    return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params)
+  }
+
+  // int64 # File/Folder ID
+  getId = () => this.attributes.id
+
+  setId = value => {
+    this.attributes.id = value
+  }
+
+  // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  getPath = () => this.attributes.path
+
+  setPath = value => {
+    this.attributes.path = value
+  }
+
+  // string # File/Folder display name
+  getDisplayName = () => this.attributes.display_name
+
+  setDisplayName = value => {
+    this.attributes.display_name = value
+  }
+
+  // string # Type: `directory` or `file`.
+  getType = () => this.attributes.type
+
+  setType = value => {
+    this.attributes.type = value
+  }
+
+  // int64 # File/Folder size
+  getSize = () => this.attributes.size
+
+  setSize = value => {
+    this.attributes.size = value
+  }
+
+  // date-time # File last modified date/time, according to the server.  This is the timestamp of the last Files.com operation of the file, regardless of what modified timestamp was sent.
+  getMtime = () => this.attributes.mtime
+
+  setMtime = value => {
+    this.attributes.mtime = value
+  }
+
+  // date-time # File last modified date/time, according to the client who set it.  Files.com allows desktop, FTP, SFTP, and WebDAV clients to set modified at times.  This allows Desktop<->Cloud syncing to preserve modified at times.
+  getProvidedMtime = () => this.attributes.provided_mtime
+
+  setProvidedMtime = value => {
+    this.attributes.provided_mtime = value
+  }
+
+  // string # File CRC32 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+  getCrc32 = () => this.attributes.crc32
+
+  setCrc32 = value => {
+    this.attributes.crc32 = value
+  }
+
+  // string # File MD5 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+  getMd5 = () => this.attributes.md5
+
+  setMd5 = value => {
+    this.attributes.md5 = value
+  }
+
+  // string # MIME Type.  This is determined by the filename extension and is not stored separately internally.
+  getMimeType = () => this.attributes.mime_type
+
+  setMimeType = value => {
+    this.attributes.mime_type = value
+  }
+
+  // string # Region location
+  getRegion = () => this.attributes.region
+
+  setRegion = value => {
+    this.attributes.region = value
+  }
+
+  // string # A short string representing the current user's permissions.  Can be `r`,`w`,`p`, or any combination
+  getPermissions = () => this.attributes.permissions
+
+  setPermissions = value => {
+    this.attributes.permissions = value
+  }
+
+  // boolean # Are subfolders locked and unable to be modified?
+  getSubfoldersLocked = () => this.attributes.subfolders_locked
+
+  setSubfoldersLocked = value => {
+    this.attributes.subfolders_locked = value
+  }
+
+  // string # Link to download file. Provided only in response to a download request.
+  getDownloadUri = () => this.attributes.download_uri
+
+  setDownloadUri = value => {
+    this.attributes.download_uri = value
+  }
+
+  // string # Bookmark/priority color of file/folder
+  getPriorityColor = () => this.attributes.priority_color
+
+  setPriorityColor = value => {
+    this.attributes.priority_color = value
+  }
+
+  // int64 # File preview ID
+  getPreviewId = () => this.attributes.preview_id
+
+  setPreviewId = value => {
+    this.attributes.preview_id = value
+  }
+
+  // File preview
+  getPreview = () => this.attributes.preview
+
+  setPreview = value => {
+    this.attributes.preview = value
+  }
+
+  // string # The action to perform.  Can be `append`, `attachment`, `end`, `upload`, `put`, or may not exist
+  getAction = () => this.attributes.action
+
+  setAction = value => {
+    this.attributes.action = value
+  }
+
+  // int64 # Length of file.
+  getLength = () => this.attributes.length
+
+  setLength = value => {
+    this.attributes.length = value
+  }
+
+  // boolean # Create parent directories if they do not exist?
+  getMkdirParents = () => this.attributes.mkdir_parents
+
+  setMkdirParents = value => {
+    this.attributes.mkdir_parents = value
+  }
+
+  // int64 # Part if uploading a part.
+  getPart = () => this.attributes.part
+
+  setPart = value => {
+    this.attributes.part = value
+  }
+
+  // int64 # How many parts to fetch?
+  getParts = () => this.attributes.parts
+
+  setParts = value => {
+    this.attributes.parts = value
+  }
+
+  // string #
+  getRef = () => this.attributes.ref
+
+  setRef = value => {
+    this.attributes.ref = value
+  }
+
+  // int64 # File byte offset to restart from.
+  getRestart = () => this.attributes.restart
+
+  setRestart = value => {
+    this.attributes.restart = value
+  }
+
+  // string # If copying folder, copy just the structure?
+  getStructure = () => this.attributes.structure
+
+  setStructure = value => {
+    this.attributes.structure = value
+  }
+
+  // boolean # Allow file rename instead of overwrite?
+  getWithRename = () => this.attributes.with_rename
+
+  setWithRename = value => {
+    this.attributes.with_rename = value
+  }
+
+
+  // Download file
+  //
+  // Parameters:
+  //   action - string - Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
+  //   id - int64 - If provided, lookup the file by id instead of path.
+  //   with_previews - boolean - Include file preview information?
+  //   with_priority_color - boolean - Include file priority color information?
+  download = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no ID')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+    if (params['action'] && !isString(params['action'])) {
+      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    if (!params['path']) {
+      if (this.attributes.path) {
+        params['path'] = this.path
+      } else {
+        throw new Error('Parameter missing: path')
+      }
+    }
+
+    return Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'GET', params, this.options)
+  }
+
+  // Parameters:
+  //   provided_mtime - string - Modified time of file.
+  //   priority_color - string - Priority/Bookmark color of file.
+  update = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no ID')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
+      throw new Error(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
+    }
+    if (params['priority_color'] && !isString(params['priority_color'])) {
+      throw new Error(`Bad parameter: priority_color must be of type String, received ${getType(priority_color)}`)
+    }
+
+    if (!params['path']) {
+      if (this.attributes.path) {
+        params['path'] = this.path
+      } else {
+        throw new Error('Parameter missing: path')
+      }
+    }
+
+    return Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
+  }
+
+  // Parameters:
+  //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.  For legacy reasons, this parameter may also be provided as the HTTP header `Depth: Infinity`
+  delete = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no ID')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+
+    if (!params['path']) {
+      if (this.attributes.path) {
+        params['path'] = this.path
+      } else {
+        throw new Error('Parameter missing: path')
+      }
+    }
+
+    return Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
+  }
+
+  destroy = (params = {}) =>
+    this.delete(params)
+
+  save = () => {
+    if (this.attributes['path']) {
+      return this.update(this.attributes)
+    } else {
+      const newObject = File.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+  }
+
+  // Parameters:
+  //   path (required) - string - Path to operate on.
+  //   action - string - The action to perform.  Can be `append`, `attachment`, `end`, `upload`, `put`, or may not exist
+  //   etags[etag] (required) - array(string) - etag identifier.
+  //   etags[part] (required) - array(int64) - Part number.
+  //   length - int64 - Length of file.
+  //   mkdir_parents - boolean - Create parent directories if they do not exist?
+  //   part - int64 - Part if uploading a part.
+  //   parts - int64 - How many parts to fetch?
+  //   provided_mtime - string - User provided modification time.
+  //   ref - string -
+  //   restart - int64 - File byte offset to restart from.
+  //   size - int64 - Size of file.
+  //   structure - string - If copying folder, copy just the structure?
+  //   with_rename - boolean - Allow file rename instead of overwrite?
+  static create = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['path'] = path
+
+    if (!params['path']) {
+      throw new Error('Parameter missing: path')
+    }
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+
+    if (params['action'] && !isString(params['action'])) {
+      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['length'] && !isInt(params['length'])) {
+      throw new Error(`Bad parameter: length must be of type Int, received ${getType(length)}`)
+    }
+
+    if (params['part'] && !isInt(params['part'])) {
+      throw new Error(`Bad parameter: part must be of type Int, received ${getType(part)}`)
+    }
+
+    if (params['parts'] && !isInt(params['parts'])) {
+      throw new Error(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
+    }
+
+    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
+      throw new Error(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
+    }
+
+    if (params['ref'] && !isString(params['ref'])) {
+      throw new Error(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
+    }
+
+    if (params['restart'] && !isInt(params['restart'])) {
+      throw new Error(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
+    }
+
+    if (params['size'] && !isInt(params['size'])) {
+      throw new Error(`Bad parameter: size must be of type Int, received ${getType(size)}`)
+    }
+
+    if (params['structure'] && !isString(params['structure'])) {
+      throw new Error(`Bad parameter: structure must be of type String, received ${getType(structure)}`)
+    }
+
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+
+    return new File(response?.data, options)
+  }
+}
+
+export default File

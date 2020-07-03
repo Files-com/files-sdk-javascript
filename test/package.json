@@ -1,0 +1,25 @@
+{
+  "name": "files.com-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.10.3",
+    "files.com": "file:../",
+    "readable-stream": "^3.6.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.3",
+    "@babel/preset-env": "^7.10.3"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/babel src -d lib",
+    "test": "node index.js"
+  }
+}

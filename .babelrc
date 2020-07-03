@@ -1,0 +1,19 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "ie": "11"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-modules-commonjs", {
+      "loose": true
+    }],
+    "@babel/plugin-transform-runtime"
+  ]
+}
