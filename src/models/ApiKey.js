@@ -198,6 +198,12 @@ class ApiKey {
   static all = (params = {}, options = {}) =>
     ApiKey.list(params, options)
 
+  static findCurrent = async (params = {}, options = {}) => {
+    const response = await Api.sendRequest(`/api_key`, 'GET', options)
+
+    return new ApiKey(response?.data, options)
+  }
+
   // Parameters:
   //   id (required) - int64 - Api Key ID.
   static find = async (id, params = {}, options = {}) => {
@@ -222,12 +228,6 @@ class ApiKey {
 
   static get = (id, params = {}, options = {}) =>
     ApiKey.find(id, params, options)
-
-  static findCurrent = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/api_key`, 'GET', options)
-
-    return new ApiKey(response?.data, options)
-  }
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
