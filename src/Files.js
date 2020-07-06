@@ -15,6 +15,8 @@ let minNetworkRetryDelay = 0.5
 let maxNetworkRetryDelay = 1.5
 let networkTimeout = 30.0
 
+let autoPaginate = true
+
 class Files {
   static setApiKey = value => apiKey = value
   static getApiKey = () => apiKey
@@ -65,6 +67,9 @@ class Files {
   static getMinNetworkRetryDelay = () => minNetworkRetryDelay
   static getMaxNetworkRetryDelay = () => maxNetworkRetryDelay
   static getNetworkTimeout = () => networkTimeout
+
+  static setAutoPaginate = value => autoPaginate = value
+  static getAutoPaginate = () => autoPaginate
 }
 
 export default Files

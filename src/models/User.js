@@ -1,6 +1,6 @@
 import Api from '../Api'
 import Logger from '../Logger'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
  * Class User
@@ -138,7 +138,7 @@ class User {
     this.attributes.ftp_permission = value
   }
 
-  // array # Comma-separated list of group IDs of which this user is a member
+  // string # Comma-separated list of group IDs of which this user is a member
   getGroupIds = () => this.attributes.group_ids
 
   setGroupIds = value => {

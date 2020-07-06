@@ -1,6 +1,6 @@
 import Api from '../Api'
 import Logger from '../Logger'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
  * Class Preview

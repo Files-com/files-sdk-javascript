@@ -3,8 +3,9 @@ import Files from 'files.com/lib/Files'
 import Logger, { LogLevel } from 'files.com/lib/Logger'
 import ApiKey from 'files.com/lib/models/ApiKey'
 import File from 'files.com/lib/models/File'
+import Folder from 'files.com/lib/models/Folder'
 import Session from 'files.com/lib/models/Session'
-// import User from 'files.com/lib/models/User'
+import { isBrowser } from 'files.com/lib/utils'
 
 // name of an existing folder in your root to create/delete test files and folders
 const SDK_TEST_ROOT_FOLDER = 'sdk-test'
@@ -38,21 +39,54 @@ Files.configureDebugging({
 const testSuite = async () => {
   const nonce = new Date().getTime()
 
-  // const testUser = async () => {
-  //   const users = await User.list()
-  //   User.find(123456)
-  // }
+  const testFolderListAutoPagination = async () => {
+    Files.setAutoPaginate(false)
+    const firstPageItems = await Folder.listFor('/', { per_page: 1 })
+    assert(firstPageItems.length === 1)
 
-  const testUpload = async () => {
+    Files.setAutoPaginate(true)
+
+    // note: this test will fail if the root folder has <= 1 file or folder
+    const allPageItems = await Folder.listFor('/', { per_page: 1 })
+
+    // if auto-pagination executed, we'll have found more than just the 1 we requested
+    assert(allPageItems.length > 1)
+
+    Logger.info('***** testFolderListAutoPagination() succeeded! *****')
+  }
+
+  const testUploadAndDownload = async () => {
+    const sourceFilePath = '../files.com-logo.png'
+
     const displayName = `files.com-logo__${nonce}.png`
-    const file = await File.uploadFile(`${SDK_TEST_ROOT_FOLDER}/${displayName}`, '../files.com-logo.png')
+    const destinationPath = `${SDK_TEST_ROOT_FOLDER}/${displayName}`
+
+    const file = await File.uploadFile(destinationPath, sourceFilePath)
 
     assert(!!file.id)
     assert(file.display_name === displayName)
 
+    const foundFile = await File.find(destinationPath)
+
+    assert(foundFile.path === destinationPath)
+    assert(foundFile.display_name === displayName)
+
+    if (!isBrowser()) {
+      const downloadPath = `./${displayName}`
+      await foundFile.downloadToFile(downloadPath)
+
+      const fs = require('fs')
+      const originalBuffer = fs.readFileSync(sourceFilePath)
+      const downloadedBuffer = fs.readFileSync(downloadPath)
+
+      assert(originalBuffer.equals(downloadedBuffer))
+
+      fs.unlinkSync(downloadPath)
+    }
+
     await file.delete()
 
-    Logger.info('***** testUpload() succeeded! *****')
+    Logger.info('***** testUploadAndDownload() succeeded! *****')
   }
 
   const testSession = async () => {
@@ -87,7 +121,8 @@ const testSuite = async () => {
   // execute all tests
   //
 
-  await testUpload()
+  await testFolderListAutoPagination()
+  await testUploadAndDownload()
   await testSession()
 }
 

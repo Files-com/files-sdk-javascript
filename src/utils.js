@@ -15,9 +15,12 @@ const getType = value =>
     ? 'array'
     : typeof value
 
+const isBrowser = () => typeof self !== 'undefined' && typeof self.document !== 'undefined'
+
 export {
   getType,
   isArray,
+  isBrowser,
   isEmpty,
   isInt,
   isObject,

@@ -1,10 +1,9 @@
-import fs from 'fs'
 import Readable from 'readable-stream'
 import { Buffer } from 'safe-buffer'
 
 import Api from '../Api'
 import Logger from '../Logger'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 import FilePartUpload from './FilePartUpload'
 
 /**
@@ -144,8 +143,40 @@ class File {
   }
 
   static uploadFile = async (destinationPath, sourceFilePath) => {
-    const stream = fs.createReadStream(sourceFilePath)
+    if (isBrowser()) {
+      throw new Error('Disk file uploads are only available in a NodeJS environment')
+    }
+
+    const { openDiskFileReadStream } = require('../isomorphic/File.node.js')
+    const stream = openDiskFileReadStream(sourceFilePath)
+
     return File.uploadStream(destinationPath, stream)
+  }
+
+  downloadToStream = async writableStream => {
+    if (isBrowser()) {
+      throw new Error('Disk file downloads are only available in a NodeJS environment')
+    }
+
+    if (!this.download_uri) {
+      throw new Error('Current object has no download URI')
+    }
+
+    const { saveUrlToStream } = require('../isomorphic/File.node.js')
+    return saveUrlToStream(this.download_uri, writableStream)
+  }
+
+  downloadToFile = async destinationPath => {
+    if (isBrowser()) {
+      throw new Error('Disk file downloads are only available in a NodeJS environment')
+    }
+
+    if (!this.download_uri) {
+      throw new Error('Current object has no download URI')
+    }
+
+    const { saveUrlToFile } = require('../isomorphic/File.node.js')
+    return saveUrlToFile(this.download_uri, destinationPath)
   }
 
   static find = async path => {

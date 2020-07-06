@@ -81,7 +81,45 @@ class Api {
     return Api._sendVerbatim(externalUrl, verb, params)
   }
 
-  static sendRequest = async (path, verb, params = null, options = {}) => {
+  static _autoPaginate = async (path, verb, params, options, response, metadata) => {
+    if (Files.getAutoPaginate()) {
+      const nextCursor = response?.headers?.['x-files-cursor']
+
+      const {
+        autoPaginateCount,
+        previousAutoPaginateData,
+      } = metadata || {}
+
+      if (nextCursor) {
+        const nextPage = (Number(params?.page) || 1) + 1
+        const nextParams = {
+          ...params,
+          cursor: nextCursor,
+          page: nextPage,
+        }
+
+        const nextMetadata = {
+          autoPaginateCount: (autoPaginateCount || 1) + 1,
+          previousAutoPaginateData: [
+            ...previousAutoPaginateData || [],
+            ...response?.data || [],
+          ],
+        }
+
+        return Api.sendRequest(path, verb, nextParams, options, nextMetadata)
+      } else if (previousAutoPaginateData) {
+        return {
+          ...response,
+          autoPaginateRequests: autoPaginateCount,
+          data: [...previousAutoPaginateData, ...response?.data || []],
+        }
+      }
+    }
+
+    return response
+  }
+
+  static sendRequest = async (path, verb, params = null, options = {}, metadata = null) => {
     const headers = {
       ...options.headers,
       Accept: 'application/json',
@@ -111,11 +149,18 @@ class Api {
       }
     }
 
+    let requestPath = path
     const hasParams = isObject(params) && !isEmpty(params)
 
     if (hasParams) {
-      options.data = JSON.stringify(params)
-      headers['Content-Type'] = 'application/json'
+      if (verb.toUpperCase() === 'GET') {
+        const pairs = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        requestPath += path.includes('?') ? '&' : '?'
+        requestPath += pairs.join('&')
+      } else {
+        options.data = JSON.stringify(params)
+        headers['Content-Type'] = 'application/json'
+      }
     }
 
     options.headers = headers
@@ -134,7 +179,9 @@ class Api {
       })
     }
 
-    return Api._sendVerbatim(path, verb, options)
+    const response = await Api._sendVerbatim(requestPath, verb, options)
+
+    return Api._autoPaginate(path, verb, params, options, response, metadata)
   }
 }
 

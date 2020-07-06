@@ -9,6 +9,10 @@
   ],
   "homepage": "https://www.files.com/",
   "author": "Files.com <support@files.com> (https://www.files.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Files-com/files-sdk-javascript.git"
+  },
   "contributors": [],
   "engines": {
     "node": "^6 || ^8.1 || >=10.*"
@@ -18,8 +22,6 @@
     "@babel/runtime": "^7.10.3",
     "axios": "^0.19.2",
     "axios-retry": "^3.1.8",
-    "lodash.isplainobject": "^4.0.6",
-    "qs": "^6.6.0",
     "readable-stream": "^3.6.0",
     "safe-buffer": "^5.1.1",
     "uuid": "^3.3.2"

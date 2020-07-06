@@ -7,11 +7,11 @@ The Files.com JavaScript SDK provides convenient access to the Files.com API fro
 
 To install the package:
 
-* `yarn add files-com`
+* `yarn add files.com`
 
 or
 
-* `npm install files-com`
+* `npm install files.com`
 
 
 ### Requirements
