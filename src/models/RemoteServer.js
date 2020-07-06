@@ -198,7 +198,7 @@ class RemoteServer {
     this.attributes.auth_account_name = value
   }
 
-  // string # Either personnel or business_other account types
+  // string # Either personal or business_other account types
   getOneDriveAccountType = () => this.attributes.one_drive_account_type
 
   setOneDriveAccountType = value => {
@@ -315,7 +315,7 @@ class RemoteServer {
   //   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
-  //   one_drive_account_type - string - Either personnel or business_other account types
+  //   one_drive_account_type - string - Either personal or business_other account types
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
@@ -556,7 +556,7 @@ class RemoteServer {
   //   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
-  //   one_drive_account_type - string - Either personnel or business_other account types
+  //   one_drive_account_type - string - Either personal or business_other account types
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new Error(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
