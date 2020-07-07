@@ -140,7 +140,7 @@ class Permission {
   // Parameters:
   //   group_id - int64 - Group ID
   //   path - string - Folder path
-  //   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `previewonly`, or `history`
+  //   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
   //   recursive - boolean - Apply to subfolders recursively?
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
