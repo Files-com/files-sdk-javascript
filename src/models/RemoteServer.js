@@ -205,6 +205,20 @@ class RemoteServer {
     this.attributes.one_drive_account_type = value
   }
 
+  // string # Azure Blob Storage Account name
+  getAzureBlobStorageAccount = () => this.attributes.azure_blob_storage_account
+
+  setAzureBlobStorageAccount = value => {
+    this.attributes.azure_blob_storage_account = value
+  }
+
+  // string # Azure Blob Storage Container name
+  getAzureBlobStorageContainer = () => this.attributes.azure_blob_storage_container
+
+  setAzureBlobStorageContainer = value => {
+    this.attributes.azure_blob_storage_container = value
+  }
+
   // string # AWS Access Key.
   getAwsAccessKey = () => this.attributes.aws_access_key
 
@@ -282,6 +296,13 @@ class RemoteServer {
     this.attributes.reset_authentication = value
   }
 
+  // string # Azure Blob Storage secret key.
+  getAzureBlobStorageAccessKey = () => this.attributes.azure_blob_storage_access_key
+
+  setAzureBlobStorageAccessKey = value => {
+    this.attributes.azure_blob_storage_access_key = value
+  }
+
 
   // Parameters:
   //   aws_access_key - string - AWS Access Key.
@@ -295,6 +316,7 @@ class RemoteServer {
   //   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage applicationKey.
   //   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
   //   reset_authentication - boolean - Reset authenticated account
+  //   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -316,6 +338,8 @@ class RemoteServer {
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
+  //   azure_blob_storage_account - string - Azure Blob Storage Account name
+  //   azure_blob_storage_container - string - Azure Blob Storage Container name
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
@@ -359,6 +383,9 @@ class RemoteServer {
     }
     if (params['rackspace_api_key'] && !isString(params['rackspace_api_key'])) {
       throw new Error(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
+    }
+    if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
     }
     if (params['hostname'] && !isString(params['hostname'])) {
       throw new Error(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
@@ -422,6 +449,12 @@ class RemoteServer {
     }
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
       throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+    }
+    if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
+    }
+    if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
     }
 
     if (!params['id']) {
@@ -536,6 +569,7 @@ class RemoteServer {
   //   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage applicationKey.
   //   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
   //   reset_authentication - boolean - Reset authenticated account
+  //   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -557,6 +591,8 @@ class RemoteServer {
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
+  //   azure_blob_storage_account - string - Azure Blob Storage Account name
+  //   azure_blob_storage_container - string - Azure Blob Storage Container name
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new Error(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
@@ -596,6 +632,10 @@ class RemoteServer {
 
     if (params['rackspace_api_key'] && !isString(params['rackspace_api_key'])) {
       throw new Error(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
+    }
+
+    if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
     }
 
     if (params['hostname'] && !isString(params['hostname'])) {
@@ -680,6 +720,14 @@ class RemoteServer {
 
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
       throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+    }
+
+    if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
+    }
+
+    if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)
