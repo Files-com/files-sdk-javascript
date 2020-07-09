@@ -12,6 +12,7 @@ export default Files
 import AccountLineItem from './models/AccountLineItem'
 import Action from './models/Action'
 import ApiKey from './models/ApiKey'
+import App from './models/App'
 import As2Key from './models/As2Key'
 import Auto from './models/Auto'
 import Automation from './models/Automation'
@@ -66,6 +67,7 @@ export {
   AccountLineItem,
   Action,
   ApiKey,
+  App,
   As2Key,
   Auto,
   Automation,
