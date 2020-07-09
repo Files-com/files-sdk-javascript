@@ -69,6 +69,8 @@ class Behavior {
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+  //   behavior - string - Behavior type.
+  //   path - string - Folder behaviors path.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
@@ -85,6 +87,12 @@ class Behavior {
     }
     if (params['value'] && !isString(params['value'])) {
       throw new Error(`Bad parameter: value must be of type String, received ${getType(value)}`)
+    }
+    if (params['behavior'] && !isString(params['behavior'])) {
+      throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
+    }
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (!params['id']) {
@@ -276,6 +284,7 @@ class Behavior {
   //   encoding - string - HTTP encoding method.  Can be JSON, XML, or RAW (form data).
   //   headers - object - Additional request headers.
   //   body - object - Additional body parameters.
+  //   action - string - action for test body
   static webhookTest = async (params = {}, options = {}) => {
     if (!params['url']) {
       throw new Error('Parameter missing: url')
@@ -291,6 +300,10 @@ class Behavior {
 
     if (params['encoding'] && !isString(params['encoding'])) {
       throw new Error(`Bad parameter: encoding must be of type String, received ${getType(encoding)}`)
+    }
+
+    if (params['action'] && !isString(params['action'])) {
+      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
     const response = await Api.sendRequest(`/behaviors/webhook/test`, 'POST', params, options)

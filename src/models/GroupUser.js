@@ -118,6 +118,9 @@ class GroupUser {
     return Api.sendRequest(`/group_users/' . params['id'] . '`, 'PATCH', params, this.options)
   }
 
+  // Parameters:
+  //   group_id (required) - int64 - Group ID from which to remove user.
+  //   user_id (required) - int64 - User ID to remove from group.
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
@@ -132,12 +135,34 @@ class GroupUser {
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
+    if (params['group_id'] && !isInt(params['group_id'])) {
+      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+    }
+    if (params['user_id'] && !isInt(params['user_id'])) {
+      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+    }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
         throw new Error('Parameter missing: id')
+      }
+    }
+
+    if (!params['group_id']) {
+      if (this.attributes.group_id) {
+        params['group_id'] = this.group_id
+      } else {
+        throw new Error('Parameter missing: group_id')
+      }
+    }
+
+    if (!params['user_id']) {
+      if (this.attributes.user_id) {
+        params['user_id'] = this.user_id
+      } else {
+        throw new Error('Parameter missing: user_id')
       }
     }
 

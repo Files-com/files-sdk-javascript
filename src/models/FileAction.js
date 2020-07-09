@@ -28,6 +28,7 @@ class FileAction {
   //
   // Parameters:
   //   destination (required) - string - Copy destination path.
+  //   structure - boolean - Copy structure only?
   copy = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
