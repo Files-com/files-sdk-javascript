@@ -47,6 +47,7 @@ import PaymentLineItem from './models/PaymentLineItem'
 import Permission from './models/Permission'
 import Preview from './models/Preview'
 import Project from './models/Project'
+import PublicIpAddress from './models/PublicIpAddress'
 import PublicKey from './models/PublicKey'
 import RemoteServer from './models/RemoteServer'
 import Request from './models/Request'
@@ -102,6 +103,7 @@ export {
   Permission,
   Preview,
   Project,
+  PublicIpAddress,
   PublicKey,
   RemoteServer,
   Request,

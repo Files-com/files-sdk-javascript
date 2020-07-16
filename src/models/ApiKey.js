@@ -68,6 +68,13 @@ class ApiKey {
     this.attributes.name = value
   }
 
+  // string # Folder path restriction for this api key. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  getPath = () => this.attributes.path
+
+  setPath = value => {
+    this.attributes.path = value
+  }
+
   // string # Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   getPermissionSet = () => this.attributes.permission_set
 
@@ -173,6 +180,14 @@ class ApiKey {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `deleted_at` and `expires_at`.
+  //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `expires_at`.
+  //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `expires_at`.
+  //   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `expires_at`.
+  //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `expires_at`.
+  //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `expires_at`.
+  //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `expires_at`.
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
       throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
@@ -188,6 +203,10 @@ class ApiKey {
 
     if (params['action'] && !isString(params['action'])) {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     const response = await Api.sendRequest(`/api_keys`, 'GET', params, options)
@@ -234,6 +253,7 @@ class ApiKey {
   //   name - string - Internal name for the API Key.  For your use.
   //   expires_at - string - API Key expiration date
   //   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+  //   path - string - Folder path restriction for this api key.
   static create = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
       throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
@@ -249,6 +269,10 @@ class ApiKey {
 
     if (params['permission_set'] && !isString(params['permission_set'])) {
       throw new Error(`Bad parameter: permission_set must be of type String, received ${getType(permission_set)}`)
+    }
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     const response = await Api.sendRequest(`/api_keys`, 'POST', params, options)

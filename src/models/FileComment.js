@@ -162,7 +162,7 @@ class FileComment {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/file_comments/files/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_comments/files/' . params['path'] . '`, 'GET', params, options)
 
     return response?.data?.map(obj => new FileComment(obj, options)) || []
   }

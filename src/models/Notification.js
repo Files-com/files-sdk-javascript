@@ -181,11 +181,19 @@ class Notification {
   }
 
   // Parameters:
-  //   user_id - int64 - Show notifications for this User ID.
+  //   user_id - int64 - DEPRECATED: Show notifications for this User ID. Use `filter[user_id]` instead.
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-  //   group_id - int64 - Show notifications for this Group ID.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `path`, `user_id` or `group_id`.
+  //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+  //   group_id - int64 - DEPRECATED: Show notifications for this Group ID. Use `filter[group_id]` instead.
   //   path - string - Show notifications for this Path.
   //   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
   static list = async (params = {}, options = {}) => {
@@ -203,6 +211,10 @@ class Notification {
 
     if (params['action'] && !isString(params['action'])) {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {

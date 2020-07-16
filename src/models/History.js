@@ -70,6 +70,8 @@ class History {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
   //   path (required) - string - Path to operate on.
   static listForFile = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -106,11 +108,15 @@ class History {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/history/files(/*path)`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history/files/' . params['path'] . '`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
@@ -122,6 +128,8 @@ class History {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
   //   path (required) - string - Path to operate on.
   static listForFolder = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -158,11 +166,15 @@ class History {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/history/folders(/*path)`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history/folders/' . params['path'] . '`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
@@ -174,6 +186,8 @@ class History {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
   //   user_id (required) - int64 - User ID.
   static listForUser = async (user_id, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -210,6 +224,10 @@ class History {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
     if (params['user_id'] && !isInt(params['user_id'])) {
       throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
@@ -226,6 +244,8 @@ class History {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
   static listLogins = async (params = {}, options = {}) => {
     if (params['start_at'] && !isString(params['start_at'])) {
       throw new Error(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
@@ -251,6 +271,10 @@ class History {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
     const response = await Api.sendRequest(`/history/login`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
@@ -263,6 +287,14 @@ class History {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `path`, `created_at`, `folder` or `user_id`.
+  //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+  //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `user_id`, `folder` or `path`.
+  //   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+  //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+  //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `user_id`, `folder` or `path`.
+  //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
   static list = async (params = {}, options = {}) => {
     if (params['start_at'] && !isString(params['start_at'])) {
       throw new Error(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
@@ -286,6 +318,10 @@ class History {
 
     if (params['action'] && !isString(params['action'])) {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     const response = await Api.sendRequest(`/history`, 'GET', params, options)

@@ -209,7 +209,7 @@ class Folder {
       throw new Error(`Bad parameter: search must be of type String, received ${getType(search)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/folders/' . params['path'] . '`, 'GET', params, options)
 
     return response?.data?.map(obj => new File(obj, options)) || []
   }
@@ -231,7 +231,7 @@ class Folder {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/folders/' . params['path'] . '`, 'POST', params, options)
 
     return new File(response?.data, options)
   }

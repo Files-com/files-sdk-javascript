@@ -123,7 +123,7 @@ class Lock {
       }
     }
 
-    return Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/locks/' . params['path'] . '`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -172,7 +172,7 @@ class Lock {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/locks/' . params['path'] . '`, 'GET', params, options)
 
     return response?.data?.map(obj => new Lock(obj, options)) || []
   }
@@ -199,7 +199,7 @@ class Lock {
       throw new Error(`Bad parameter: timeout must be of type Int, received ${getType(timeout)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/locks/' . params['path'] . '`, 'POST', params, options)
 
     return new Lock(response?.data, options)
   }

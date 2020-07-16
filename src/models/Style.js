@@ -92,7 +92,7 @@ class Style {
       }
     }
 
-    return Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/styles/' . params['path'] . '`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
@@ -118,7 +118,7 @@ class Style {
       }
     }
 
-    return Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/styles/' . params['path'] . '`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -129,7 +129,7 @@ class Style {
 
   // Parameters:
   //   path (required) - string - Style path.
-  static list = async (path, params = {}, options = {}) => {
+  static find = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
@@ -144,13 +144,13 @@ class Style {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/styles/' . params['path'] . '`, 'GET', params, options)
 
     return new Style(response?.data, options)
   }
 
-  static all = (path, params = {}, options = {}) =>
-    Style.list(path, params, options)
+  static get = (path, params = {}, options = {}) =>
+    Style.find(path, params, options)
 }
 
 export default Style

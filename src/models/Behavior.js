@@ -149,6 +149,14 @@ class Behavior {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+  //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+  //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+  //   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+  //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+  //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+  //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
   //   behavior - string - If set, only shows folder behaviors matching this behavior type.
   static list = async (params = {}, options = {}) => {
     if (params['page'] && !isInt(params['page'])) {
@@ -163,6 +171,10 @@ class Behavior {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
     if (params['behavior'] && !isString(params['behavior'])) {
       throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
     }
@@ -174,53 +186,6 @@ class Behavior {
 
   static all = (params = {}, options = {}) =>
     Behavior.list(params, options)
-
-  // Parameters:
-  //   page - int64 - Current page number.
-  //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-  //   path (required) - string - Path to operate on.
-  //   recursive - string - Show behaviors above this path?
-  //   behavior - string - If set only shows folder behaviors matching this behavior type.
-  static listFor = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['path'] = path
-
-    if (!params['path']) {
-      throw new Error('Parameter missing: path')
-    }
-
-    if (params['page'] && !isInt(params['page'])) {
-      throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
-    }
-
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
-    }
-
-    if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
-    }
-
-    if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
-    }
-
-    if (params['recursive'] && !isString(params['recursive'])) {
-      throw new Error(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
-    }
-
-    if (params['behavior'] && !isString(params['behavior'])) {
-      throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
-    }
-
-    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
-
-    return response?.data?.map(obj => new Behavior(obj, options)) || []
-  }
 
   // Parameters:
   //   id (required) - int64 - Behavior ID.
@@ -246,6 +211,65 @@ class Behavior {
 
   static get = (id, params = {}, options = {}) =>
     Behavior.find(id, params, options)
+
+  // Parameters:
+  //   page - int64 - Current page number.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+  //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+  //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+  //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+  //   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+  //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+  //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+  //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
+  //   path (required) - string - Path to operate on.
+  //   recursive - string - Show behaviors above this path?
+  //   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
+  static listFor = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['path'] = path
+
+    if (!params['path']) {
+      throw new Error('Parameter missing: path')
+    }
+
+    if (params['page'] && !isInt(params['page'])) {
+      throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
+    }
+
+    if (params['per_page'] && !isInt(params['per_page'])) {
+      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+    }
+
+    if (params['action'] && !isString(params['action'])) {
+      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+    }
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+
+    if (params['recursive'] && !isString(params['recursive'])) {
+      throw new Error(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
+    }
+
+    if (params['behavior'] && !isString(params['behavior'])) {
+      throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
+    }
+
+    const response = await Api.sendRequest(`/behaviors/folders/' . params['path'] . '`, 'GET', params, options)
+
+    return response?.data?.map(obj => new Behavior(obj, options)) || []
+  }
 
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
