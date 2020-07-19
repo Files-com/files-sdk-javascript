@@ -23,7 +23,7 @@ class Session {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Session ID
+  // string # Session ID
   getId = () => this.attributes.id
 
   setId = value => {
