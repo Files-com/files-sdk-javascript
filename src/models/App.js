@@ -32,6 +32,9 @@ class App {
   // string # Collection of named links to documentation
   getDocumentationLinks = () => this.attributes.documentation_links
 
+  // string # App icon
+  getIconUrl = () => this.attributes.icon_url
+
   // string # Full size logo for the App
   getLogoUrl = () => this.attributes.logo_url
 
