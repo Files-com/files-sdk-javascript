@@ -19,6 +19,7 @@ import Automation from './models/Automation'
 import Behavior from './models/Behavior'
 import Bundle from './models/Bundle'
 import BundleDownload from './models/BundleDownload'
+import BundleRecipient from './models/BundleRecipient'
 import Clickwrap from './models/Clickwrap'
 import DnsRecord from './models/DnsRecord'
 import Errors from './models/Errors'
@@ -52,6 +53,7 @@ import PublicKey from './models/PublicKey'
 import RemoteServer from './models/RemoteServer'
 import Request from './models/Request'
 import Session from './models/Session'
+import SettingsChange from './models/SettingsChange'
 import Site from './models/Site'
 import SsoStrategy from './models/SsoStrategy'
 import Status from './models/Status'
@@ -75,6 +77,7 @@ export {
   Behavior,
   Bundle,
   BundleDownload,
+  BundleRecipient,
   Clickwrap,
   DnsRecord,
   Errors,
@@ -108,6 +111,7 @@ export {
   RemoteServer,
   Request,
   Session,
+  SettingsChange,
   Site,
   SsoStrategy,
   Status,
