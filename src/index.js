@@ -16,6 +16,7 @@ import App from './models/App'
 import As2Key from './models/As2Key'
 import Auto from './models/Auto'
 import Automation from './models/Automation'
+import BandwidthSnapshot from './models/BandwidthSnapshot'
 import Behavior from './models/Behavior'
 import Bundle from './models/Bundle'
 import BundleDownload from './models/BundleDownload'
@@ -74,6 +75,7 @@ export {
   As2Key,
   Auto,
   Automation,
+  BandwidthSnapshot,
   Behavior,
   Bundle,
   BundleDownload,
