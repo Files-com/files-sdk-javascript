@@ -498,13 +498,13 @@ class RemoteServer {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['id']) {
-      return this.update(this.attributes)
-    } else {
-      const newObject = RemoteServer.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        return this.update(this.attributes)
+      } else {
+        const newObject = RemoteServer.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

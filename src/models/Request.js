@@ -110,13 +110,13 @@ class Request {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['id']) {
-      throw new Error('The Request object doesn\'t support updates.')
-    } else {
-      const newObject = Request.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        throw new Error('The Request object doesn\'t support updates.')
+      } else {
+        const newObject = Request.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

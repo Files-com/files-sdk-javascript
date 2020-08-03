@@ -179,13 +179,13 @@ class Session {
 
 
   save = () => {
-    if (this.attributes['id']) {
-      throw new Error('The Session object doesn\'t support updates.')
-    } else {
-      const newObject = Session.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        throw new Error('The Session object doesn\'t support updates.')
+      } else {
+        const newObject = Session.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

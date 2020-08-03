@@ -75,13 +75,13 @@ class MessageReaction {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['id']) {
-      throw new Error('The MessageReaction object doesn\'t support updates.')
-    } else {
-      const newObject = MessageReaction.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        throw new Error('The MessageReaction object doesn\'t support updates.')
+      } else {
+        const newObject = MessageReaction.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

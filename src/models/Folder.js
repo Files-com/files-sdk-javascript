@@ -145,13 +145,9 @@ class Folder {
 
 
   save = () => {
-    if (this.attributes['path']) {
-      throw new Error('The Folder object doesn\'t support updates.')
-    } else {
-      const newObject = Folder.create(this.attributes, this.options)
+      const newObject = Folder.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
-    }
   }
 
   // Parameters:

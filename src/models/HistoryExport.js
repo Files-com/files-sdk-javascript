@@ -200,13 +200,13 @@ class HistoryExport {
 
 
   save = () => {
-    if (this.attributes['id']) {
-      throw new Error('The HistoryExport object doesn\'t support updates.')
-    } else {
-      const newObject = HistoryExport.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        throw new Error('The HistoryExport object doesn\'t support updates.')
+      } else {
+        const newObject = HistoryExport.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

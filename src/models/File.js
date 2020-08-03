@@ -487,13 +487,9 @@ class File {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['path']) {
-      return this.update(this.attributes)
-    } else {
-      const newObject = File.create(this.attributes, this.options)
+      const newObject = File.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
-    }
   }
 
   // Parameters:

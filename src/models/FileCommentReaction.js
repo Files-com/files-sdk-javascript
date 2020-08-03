@@ -82,13 +82,13 @@ class FileCommentReaction {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['id']) {
-      throw new Error('The FileCommentReaction object doesn\'t support updates.')
-    } else {
-      const newObject = FileCommentReaction.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
+      if (this.attributes['id']) {
+        throw new Error('The FileCommentReaction object doesn\'t support updates.')
+      } else {
+        const newObject = FileCommentReaction.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
   }
 
   // Parameters:

@@ -130,13 +130,9 @@ class Lock {
     this.delete(params)
 
   save = () => {
-    if (this.attributes['path']) {
-      throw new Error('The Lock object doesn\'t support updates.')
-    } else {
-      const newObject = Lock.create(this.attributes, this.options)
+      const newObject = Lock.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
-    }
   }
 
   // Parameters:
