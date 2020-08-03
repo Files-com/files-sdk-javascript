@@ -80,8 +80,37 @@ class Request {
   }
 
 
+  delete = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no ID')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    if (!params['id']) {
+      if (this.attributes.id) {
+        params['id'] = this.id
+      } else {
+        throw new Error('Parameter missing: id')
+      }
+    }
+
+    return Api.sendRequest(`/requests/' . params['id'] . '`, 'DELETE', params, this.options)
+  }
+
+  destroy = (params = {}) =>
+    this.delete(params)
+
   save = () => {
-    if (this.attributes['path']) {
+    if (this.attributes['id']) {
       throw new Error('The Request object doesn\'t support updates.')
     } else {
       const newObject = Request.create(this.attributes, this.options)
@@ -98,13 +127,7 @@ class Request {
   //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
   //   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
   //   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
-  static list = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['path'] = path
-
+  static list = async (params = {}, options = {}) => {
     if (params['page'] && !isInt(params['page'])) {
       throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
     }
@@ -130,8 +153,8 @@ class Request {
     return response?.data?.map(obj => new Request(obj, options)) || []
   }
 
-  static all = (path, params = {}, options = {}) =>
-    Request.list(path, params, options)
+  static all = (params = {}, options = {}) =>
+    Request.list(params, options)
 
   // Parameters:
   //   page - int64 - Current page number.
@@ -141,7 +164,7 @@ class Request {
   //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
   //   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
   //   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
-  static findFolder = async (path, params = {}, options = {}) => {
+  static getFolder = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
@@ -182,13 +205,7 @@ class Request {
   //   destination (required) - string - Destination filename (without extension) to request.
   //   user_ids - string - A list of user IDs to request the file from. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs to request the file from. If sent as a string, it should be comma-delimited.
-  static create = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['path'] = path
-
+  static create = async (params = {}, options = {}) => {
     if (!params['path']) {
       throw new Error('Parameter missing: path')
     }
@@ -217,31 +234,6 @@ class Request {
 
     return new Request(response?.data, options)
   }
-
-  // Parameters:
-  //   id (required) - int64 - Request ID.
-  static delete = async (id, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['id'] = id
-
-    if (!params['id']) {
-      throw new Error('Parameter missing: id')
-    }
-
-    if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
-    }
-
-    const response = await Api.sendRequest(`/requests/' . params['id'] . '`, 'DELETE', params, options)
-
-    return response?.data
-  }
-
-  static destroy = (id, params = {}, options = {}) =>
-    Request.delete(id, params, options)
 }
 
 export default Request

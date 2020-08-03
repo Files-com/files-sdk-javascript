@@ -80,8 +80,37 @@ class Permission {
   }
 
 
+  delete = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no ID')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    if (!params['id']) {
+      if (this.attributes.id) {
+        params['id'] = this.id
+      } else {
+        throw new Error('Parameter missing: id')
+      }
+    }
+
+    return Api.sendRequest(`/permissions/' . params['id'] . '`, 'DELETE', params, this.options)
+  }
+
+  destroy = (params = {}) =>
+    this.delete(params)
+
   save = () => {
-    if (this.attributes['path']) {
+    if (this.attributes['id']) {
       throw new Error('The Permission object doesn\'t support updates.')
     } else {
       const newObject = Permission.create(this.attributes, this.options)
@@ -106,13 +135,7 @@ class Permission {
   //   group_id - string - DEPRECATED: Group ID.  If provided, will scope permissions to this group. Use `filter[group_id]` instead.`
   //   user_id - string - DEPRECATED: User ID.  If provided, will scope permissions to this user. Use `filter[user_id]` instead.`
   //   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
-  static list = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['path'] = path
-
+  static list = async (params = {}, options = {}) => {
     if (params['page'] && !isInt(params['page'])) {
       throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
     }
@@ -146,8 +169,8 @@ class Permission {
     return response?.data?.map(obj => new Permission(obj, options)) || []
   }
 
-  static all = (path, params = {}, options = {}) =>
-    Permission.list(path, params, options)
+  static all = (params = {}, options = {}) =>
+    Permission.list(params, options)
 
   // Parameters:
   //   group_id - int64 - Group ID
@@ -156,13 +179,7 @@ class Permission {
   //   recursive - boolean - Apply to subfolders recursively?
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
-  static create = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['path'] = path
-
+  static create = async (params = {}, options = {}) => {
     if (params['group_id'] && !isInt(params['group_id'])) {
       throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
@@ -187,31 +204,6 @@ class Permission {
 
     return new Permission(response?.data, options)
   }
-
-  // Parameters:
-  //   id (required) - int64 - Permission ID.
-  static delete = async (id, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params['id'] = id
-
-    if (!params['id']) {
-      throw new Error('Parameter missing: id')
-    }
-
-    if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
-    }
-
-    const response = await Api.sendRequest(`/permissions/' . params['id'] . '`, 'DELETE', params, options)
-
-    return response?.data
-  }
-
-  static destroy = (id, params = {}, options = {}) =>
-    Permission.delete(id, params, options)
 }
 
 export default Permission
