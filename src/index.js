@@ -34,6 +34,7 @@ import Group from './models/Group'
 import GroupUser from './models/GroupUser'
 import History from './models/History'
 import HistoryExport from './models/HistoryExport'
+import HistoryExportResult from './models/HistoryExportResult'
 import Image from './models/Image'
 import Invoice from './models/Invoice'
 import InvoiceLineItem from './models/InvoiceLineItem'
@@ -93,6 +94,7 @@ export {
   GroupUser,
   History,
   HistoryExport,
+  HistoryExportResult,
   Image,
   Invoice,
   InvoiceLineItem,

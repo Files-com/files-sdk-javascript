@@ -184,6 +184,13 @@ class HistoryExport {
     this.attributes.query_target_permission_set = value
   }
 
+  // string # If `status` is `ready` and the query succeeded, this will be a URL where all the results can be downloaded at once as a CSV.
+  getResultsUrl = () => this.attributes.results_url
+
+  setResultsUrl = value => {
+    this.attributes.results_url = value
+  }
+
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
   getUserId = () => this.attributes.user_id
 
@@ -191,35 +198,6 @@ class HistoryExport {
     this.attributes.user_id = value
   }
 
-
-  delete = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
-    }
-
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params.id = this.attributes.id
-
-    if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
-    }
-
-    if (!params['id']) {
-      if (this.attributes.id) {
-        params['id'] = this.id
-      } else {
-        throw new Error('Parameter missing: id')
-      }
-    }
-
-    return Api.sendRequest(`/history_exports/' . params['id'] . '`, 'DELETE', params, this.options)
-  }
-
-  destroy = (params = {}) =>
-    this.delete(params)
 
   save = () => {
     if (this.attributes['id']) {
@@ -230,36 +208,6 @@ class HistoryExport {
       return true
     }
   }
-
-  // Parameters:
-  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   page - int64 - Current page number.
-  //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-  static list = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
-    }
-
-    if (params['page'] && !isInt(params['page'])) {
-      throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
-    }
-
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
-    }
-
-    if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
-    }
-
-    const response = await Api.sendRequest(`/history_exports`, 'GET', params, options)
-
-    return response?.data?.map(obj => new HistoryExport(obj, options)) || []
-  }
-
-  static all = (params = {}, options = {}) =>
-    HistoryExport.list(params, options)
 
   // Parameters:
   //   id (required) - int64 - History Export ID.
