@@ -23,6 +23,13 @@ class UserRequest {
 
   isLoaded = () => !!this.attributes.id
 
+  // int64 # ID
+  getId = () => this.attributes.id
+
+  setId = value => {
+    this.attributes.id = value
+  }
+
   // string # User's full name
   getName = () => this.attributes.name
 
