@@ -47,6 +47,9 @@ class FilePartUpload {
   // string # Currently unused
   getNextPartsize = () => this.attributes.next_partsize
 
+  // boolean # If true, parts may be uploaded in parallel
+  getParallelParts = () => this.attributes.parallel_parts
+
   // string # Additional upload parameters
   getParameters = () => this.attributes.parameters
 
