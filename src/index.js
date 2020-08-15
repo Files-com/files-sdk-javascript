@@ -24,6 +24,7 @@ import BundleRecipient from './models/BundleRecipient'
 import Clickwrap from './models/Clickwrap'
 import DnsRecord from './models/DnsRecord'
 import Errors from './models/Errors'
+import ExternalEvent from './models/ExternalEvent'
 import File from './models/File'
 import FileAction from './models/FileAction'
 import FileComment from './models/FileComment'
@@ -84,6 +85,7 @@ export {
   Clickwrap,
   DnsRecord,
   Errors,
+  ExternalEvent,
   File,
   FileAction,
   FileComment,

@@ -44,6 +44,7 @@ class BundleRecipient {
   //   page - int64 - Current page number.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
   //   bundle_id (required) - int64 - List recipients for the bundle with this ID.
   static list = async (params = {}, options = {}) => {
     if (!params['bundle_id']) {
@@ -64,6 +65,10 @@ class BundleRecipient {
 
     if (params['action'] && !isString(params['action'])) {
       throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+    }
+
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
