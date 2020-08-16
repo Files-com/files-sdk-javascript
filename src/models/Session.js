@@ -215,8 +215,15 @@ class Session {
     return new Session(response?.data, options)
   }
 
+  // Parameters:
+  //   format - string
+  //   session - object
   static delete = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/sessions`, 'DELETE', options)
+    if (params['format'] && !isString(params['format'])) {
+      throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
+    }
+
+    const response = await Api.sendRequest(`/sessions`, 'DELETE', params, options)
 
     return response?.data
   }
