@@ -74,6 +74,9 @@ class SsoStrategy {
   // boolean # Auto-deprovision group membership based on group memberships on the SSO side?
   getDeprovisionGroups = () => this.attributes.deprovision_groups
 
+  // string # Method used for deprovisioning users.
+  getDeprovisionBehavior = () => this.attributes.deprovision_behavior
+
   // string # Comma-separated list of group names for groups to automatically add all auto-provisioned users to.
   getProvisionGroupDefault = () => this.attributes.provision_group_default
 

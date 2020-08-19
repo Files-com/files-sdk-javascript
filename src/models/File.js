@@ -456,7 +456,7 @@ class File {
   }
 
   // Parameters:
-  //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.  For legacy reasons, this parameter may also be provided as the HTTP header `Depth: Infinity`
+  //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no ID')
