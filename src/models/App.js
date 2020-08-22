@@ -38,6 +38,9 @@ class App {
   // string # Full size logo for the App
   getLogoUrl = () => this.attributes.logo_url
 
+  // string # Screenshots of the App
+  getScreenshotListUrls = () => this.attributes.screenshot_list_urls
+
   // string # Logo thumbnail for the App
   getLogoThumbnailUrl = () => this.attributes.logo_thumbnail_url
 

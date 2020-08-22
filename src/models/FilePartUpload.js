@@ -32,7 +32,7 @@ class FilePartUpload {
   // boolean # If false, rename conflicting files instead of asking for overwrite confirmation
   getAskAboutOverwrites = () => this.attributes.ask_about_overwrites
 
-  // string # Currently unused
+  // int64 # Currently unused
   getAvailableParts = () => this.attributes.available_parts
 
   // string # Currently unused
@@ -44,19 +44,19 @@ class FilePartUpload {
   // string # Upload method, usually POST
   getHttpMethod = () => this.attributes.http_method
 
-  // string # Currently unused
+  // int64 # Currently unused
   getNextPartsize = () => this.attributes.next_partsize
 
   // boolean # If true, parts may be uploaded in parallel
   getParallelParts = () => this.attributes.parallel_parts
 
-  // string # Additional upload parameters
+  // object # Additional upload parameters
   getParameters = () => this.attributes.parameters
 
-  // string # Currently unused
+  // int64 # Currently unused
   getPartNumber = () => this.attributes.part_number
 
-  // string # Currently unused
+  // int64 # Currently unused
   getPartsize = () => this.attributes.partsize
 
   // string # Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.

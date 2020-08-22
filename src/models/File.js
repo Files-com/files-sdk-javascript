@@ -198,13 +198,6 @@ class File {
     return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params)
   }
 
-  // int64 # File/Folder ID
-  getId = () => this.attributes.id
-
-  setId = value => {
-    this.attributes.id = value
-  }
-
   // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
