@@ -44,6 +44,9 @@ class SsoStrategy {
   // string # Identity provider issuer url
   getSamlProviderIssuerUrl = () => this.attributes.saml_provider_issuer_url
 
+  // string # Custom identity provider metadata
+  getSamlProviderMetadataContent = () => this.attributes.saml_provider_metadata_content
+
   // string # Metadata URL for the SAML identity provider
   getSamlProviderMetadataUrl = () => this.attributes.saml_provider_metadata_url
 
