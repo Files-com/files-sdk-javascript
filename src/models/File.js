@@ -4,7 +4,7 @@ import { Buffer } from 'safe-buffer'
 import Api from '../Api'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
-import FilePartUpload from './FilePartUpload'
+import FileUploadPart from './FileUploadPart'
 
 /**
  * Class File
@@ -41,14 +41,14 @@ class File {
       parameters: params,
     }
 
-    return new FilePartUpload(partData)
+    return new FileUploadPart(partData)
   }
 
-  static _continueUpload = async (path, partNumber, firstFilePartUpload) => {
+  static _continueUpload = async (path, partNumber, firstFileUploadPart) => {
     const params = {
       action: 'put',
       part: partNumber,
-      ref: firstFilePartUpload.ref,
+      ref: firstFileUploadPart.ref,
     }
 
     const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
@@ -63,22 +63,22 @@ class File {
       parameters: params,
     }
 
-    return new FilePartUpload(partData)
+    return new FileUploadPart(partData)
   }
 
-  static _completeUpload = async filePartUpload => {
+  static _completeUpload = async fileUploadPart => {
     const params = {
       action: 'end',
-      ref: filePartUpload.ref,
+      ref: fileUploadPart.ref,
     }
 
-    return Api.sendRequest(`/files/${encodeURIComponent(filePartUpload.path)}`, 'POST', params)
+    return Api.sendRequest(`/files/${encodeURIComponent(fileUploadPart.path)}`, 'POST', params)
   }
 
   static uploadStream = async (destinationPath, readableStream) => {
-    const filePartUpload = await File._openUpload(destinationPath)
+    const fileUploadPart = await File._openUpload(destinationPath)
 
-    if (!filePartUpload) {
+    if (!fileUploadPart) {
       return
     }
 
@@ -93,13 +93,13 @@ class File {
         readableStream.on('data', async chunk => {
           length += chunk.length
 
-          if (length > filePartUpload.partsize) {
+          if (length > fileUploadPart.partsize) {
             readableStream.pause()
 
             const buffer = Buffer.concat(chunks)
-            const nextFilePartUpload = await File._continueUpload(destinationPath, ++part, filePartUpload)
+            const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
 
-            await Api.sendFilePart(nextFilePartUpload.upload_uri, 'PUT', buffer)
+            await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
 
             chunks = []
             length = 0
@@ -113,12 +113,12 @@ class File {
         readableStream.on('end', async () => {
           if (chunks.length > 0) {
             const buffer = Buffer.concat(chunks)
-            const nextFilePartUpload = await File._continueUpload(destinationPath, ++part, filePartUpload)
+            const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
 
-            await Api.sendFilePart(nextFilePartUpload.upload_uri, 'PUT', buffer)
+            await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
           }
 
-          const response = await File._completeUpload(filePartUpload)
+          const response = await File._completeUpload(fileUploadPart)
           const createdFile = new File(response.data)
 
           resolve(createdFile)

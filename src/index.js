@@ -29,7 +29,7 @@ import File from './models/File'
 import FileAction from './models/FileAction'
 import FileComment from './models/FileComment'
 import FileCommentReaction from './models/FileCommentReaction'
-import FilePartUpload from './models/FilePartUpload'
+import FileUploadPart from './models/FileUploadPart'
 import Folder from './models/Folder'
 import Group from './models/Group'
 import GroupUser from './models/GroupUser'
@@ -90,7 +90,7 @@ export {
   FileAction,
   FileComment,
   FileCommentReaction,
-  FilePartUpload,
+  FileUploadPart,
   Folder,
   Group,
   GroupUser,

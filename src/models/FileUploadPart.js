@@ -3,9 +3,9 @@ import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
- * Class FilePartUpload
+ * Class FileUploadPart
  */
-class FilePartUpload {
+class FileUploadPart {
   attributes = {}
   options = {}
 
@@ -29,37 +29,37 @@ class FilePartUpload {
   // string # Type of upload
   getAction = () => this.attributes.action
 
-  // boolean # If false, rename conflicting files instead of asking for overwrite confirmation
+  // boolean # If `true`, this file exists and you may wish to ask the user for overwrite confirmation
   getAskAboutOverwrites = () => this.attributes.ask_about_overwrites
 
-  // int64 # Currently unused
+  // int64 # Number of parts in the upload
   getAvailableParts = () => this.attributes.available_parts
 
-  // string # Currently unused
+  // string # Date/time of when this Upload part expires and the URL cannot be used any more
   getExpires = () => this.attributes.expires
 
-  // object # Additional upload headers
+  // object # Additional upload headers to provide as part of the upload
   getHeaders = () => this.attributes.headers
 
-  // string # Upload method, usually POST
+  // string # HTTP Method to use for uploading the part, usually `PUT`
   getHttpMethod = () => this.attributes.http_method
 
-  // int64 # Currently unused
+  // int64 # Size in bytes for this part
   getNextPartsize = () => this.attributes.next_partsize
 
-  // boolean # If true, parts may be uploaded in parallel
+  // boolean # If `true`, multiple parts may be uploaded in parallel.  If `false`, be sure to only upload one part at a time, in order.
   getParallelParts = () => this.attributes.parallel_parts
 
-  // object # Additional upload parameters
+  // object # Additional HTTP parameters to send with the upload
   getParameters = () => this.attributes.parameters
 
-  // int64 # Currently unused
+  // int64 # Number of this upload part
   getPartNumber = () => this.attributes.part_number
 
-  // int64 # Currently unused
+  // int64 # Size in bytes for the next upload part
   getPartsize = () => this.attributes.partsize
 
-  // string # Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # New file path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # Reference name for this upload part
@@ -70,4 +70,4 @@ class FilePartUpload {
 
 }
 
-export default FilePartUpload
+export default FileUploadPart
