@@ -155,7 +155,7 @@ class File {
 
   downloadToStream = async writableStream => {
     if (isBrowser()) {
-      throw new Error('Disk file downloads are only available in a NodeJS environment')
+      throw new Error('Stream downloads are only available in a NodeJS environment')
     }
 
     if (!this.download_uri) {
