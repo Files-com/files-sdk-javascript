@@ -22,7 +22,6 @@ class Clickwrap {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Name of the Clickwrap agreement (used when selecting from multiple Clickwrap agreements.)
   getName = () => this.attributes.name
 
@@ -74,7 +73,7 @@ class Clickwrap {
   //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -82,7 +81,6 @@ class Clickwrap {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -110,12 +108,12 @@ class Clickwrap {
       }
     }
 
-    return Api.sendRequest(`/clickwraps/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/clickwraps/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -123,7 +121,6 @@ class Clickwrap {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -136,7 +133,7 @@ class Clickwrap {
       }
     }
 
-    return Api.sendRequest(`/clickwraps/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/clickwraps/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -199,7 +196,7 @@ class Clickwrap {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/clickwraps/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'GET', params, options)
 
     return new Clickwrap(response?.data, options)
   }

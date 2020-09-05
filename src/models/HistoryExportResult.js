@@ -22,7 +22,6 @@ class HistoryExportResult {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Action ID
   getId = () => this.attributes.id
 

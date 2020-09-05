@@ -22,7 +22,6 @@ class SettingsChange {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // object # Specifics on what changed.
   getChangeDetails = () => this.attributes.change_details
 

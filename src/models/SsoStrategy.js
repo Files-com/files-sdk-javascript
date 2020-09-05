@@ -22,7 +22,6 @@ class SsoStrategy {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // array # SSO Protocol
   getProtocol = () => this.attributes.protocol
 
@@ -185,7 +184,7 @@ class SsoStrategy {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/sso_strategies/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/sso_strategies/${params['id']}`, 'GET', params, options)
 
     return new SsoStrategy(response?.data, options)
   }

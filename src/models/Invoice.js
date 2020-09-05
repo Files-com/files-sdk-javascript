@@ -22,7 +22,6 @@ class Invoice {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Line item Id
   getId = () => this.attributes.id
 
@@ -113,7 +112,7 @@ class Invoice {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/invoices/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/invoices/${params['id']}`, 'GET', params, options)
 
     return new AccountLineItem(response?.data, options)
   }

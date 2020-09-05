@@ -22,7 +22,6 @@ class Behavior {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Folder behavior ID
   getId = () => this.attributes.id
 
@@ -73,7 +72,7 @@ class Behavior {
   //   path - string - Folder behaviors path.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -81,7 +80,6 @@ class Behavior {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -103,12 +101,12 @@ class Behavior {
       }
     }
 
-    return Api.sendRequest(`/behaviors/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/behaviors/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -116,7 +114,6 @@ class Behavior {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -129,7 +126,7 @@ class Behavior {
       }
     }
 
-    return Api.sendRequest(`/behaviors/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/behaviors/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -204,7 +201,7 @@ class Behavior {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'GET', params, options)
 
     return new Behavior(response?.data, options)
   }
@@ -266,7 +263,7 @@ class Behavior {
       throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/folders/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/folders/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }

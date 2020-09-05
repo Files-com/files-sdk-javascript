@@ -22,7 +22,6 @@ class UsageDailySnapshot {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # ID of the usage record
   getId = () => this.attributes.id
 

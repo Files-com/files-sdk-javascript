@@ -22,7 +22,6 @@ class Request {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Request ID
   getId = () => this.attributes.id
 
@@ -82,7 +81,7 @@ class Request {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -90,7 +89,6 @@ class Request {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -103,7 +101,7 @@ class Request {
       }
     }
 
-    return Api.sendRequest(`/requests/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/requests/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -195,7 +193,7 @@ class Request {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/requests/folders/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/requests/folders/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Request(obj, options)) || []
   }

@@ -22,7 +22,6 @@ class AccountLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Line item Id
   getId = () => this.attributes.id
 

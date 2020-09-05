@@ -22,7 +22,6 @@ class BandwidthSnapshot {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Site bandwidth ID
   getId = () => this.attributes.id
 

@@ -22,7 +22,6 @@ class InvoiceLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // double # Invoice line item amount
   getAmount = () => this.attributes.amount
 

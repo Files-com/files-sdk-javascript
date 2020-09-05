@@ -22,8 +22,7 @@ class Folder {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
   // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
@@ -198,7 +197,7 @@ class Folder {
       throw new Error(`Bad parameter: search must be of type String, received ${getType(search)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/folders/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new File(obj, options)) || []
   }
@@ -220,7 +219,7 @@ class Folder {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/' . params['path'] . '`, 'POST', params, options)
+    const response = await Api.sendRequest(`/folders/${params['path']}`, 'POST', params, options)
 
     return new File(response?.data, options)
   }

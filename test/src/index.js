@@ -63,7 +63,7 @@ const testSuite = async () => {
 
     const file = await File.uploadFile(destinationPath, sourceFilePath)
 
-    assert(!!file.id)
+    assert(!!file.path)
     assert(file.display_name === displayName)
 
     const foundFile = await File.find(destinationPath)

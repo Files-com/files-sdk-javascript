@@ -21,8 +21,7 @@ class Style {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
   // int64 # Style ID
   getId = () => this.attributes.id
 
@@ -62,16 +61,15 @@ class Style {
   // Parameters:
   //   file (required) - file - Logo for custom branding.
   update = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -92,20 +90,19 @@ class Style {
       }
     }
 
-    return Api.sendRequest(`/styles/' . params['path'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/styles/${params['path']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -118,7 +115,7 @@ class Style {
       }
     }
 
-    return Api.sendRequest(`/styles/' . params['path'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/styles/${params['path']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -144,7 +141,7 @@ class Style {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/styles/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/styles/${params['path']}`, 'GET', params, options)
 
     return new Style(response?.data, options)
   }

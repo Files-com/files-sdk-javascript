@@ -22,7 +22,6 @@ class BundleDownload {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Download method (file or full_zip)
   getDownloadMethod = () => this.attributes.download_method
 

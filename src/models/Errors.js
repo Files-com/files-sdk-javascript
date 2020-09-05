@@ -22,7 +22,6 @@ class Errors {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // array # A list of fields where errors occur
   getFields = () => this.attributes.fields
 

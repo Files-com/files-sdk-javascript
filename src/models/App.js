@@ -22,7 +22,6 @@ class App {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Name of the App
   getName = () => this.attributes.name
 

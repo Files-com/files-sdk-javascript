@@ -22,7 +22,6 @@ class Status {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Status http code
   getCode = () => this.attributes.code
 

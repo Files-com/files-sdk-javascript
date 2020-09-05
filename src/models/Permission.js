@@ -22,7 +22,6 @@ class Permission {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Permission ID
   getId = () => this.attributes.id
 
@@ -82,7 +81,7 @@ class Permission {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -90,7 +89,6 @@ class Permission {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -103,7 +101,7 @@ class Permission {
       }
     }
 
-    return Api.sendRequest(`/permissions/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/permissions/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>

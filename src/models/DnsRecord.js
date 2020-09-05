@@ -22,7 +22,6 @@ class DnsRecord {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Unique label for DNS record; used by Zapier and other integrations.
   getId = () => this.attributes.id
 

@@ -21,8 +21,7 @@ class FileAction {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
 
   // Copy file/folder
   //
@@ -30,16 +29,15 @@ class FileAction {
   //   destination (required) - string - Copy destination path.
   //   structure - boolean - Copy structure only?
   copy = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -63,7 +61,7 @@ class FileAction {
       }
     }
 
-    return Api.sendRequest(`/file_actions/copy/' . params['path'] . '`, 'POST', params, this.options)
+    return Api.sendRequest(`/file_actions/copy/${params['path']}`, 'POST', params, this.options)
   }
 
   // Move file/folder
@@ -71,16 +69,15 @@ class FileAction {
   // Parameters:
   //   destination (required) - string - Move destination path.
   move = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -104,7 +101,7 @@ class FileAction {
       }
     }
 
-    return Api.sendRequest(`/file_actions/move/' . params['path'] . '`, 'POST', params, this.options)
+    return Api.sendRequest(`/file_actions/move/${params['path']}`, 'POST', params, this.options)
   }
 
   // Begin file upload
@@ -117,16 +114,15 @@ class FileAction {
   //   restart - int64 - File byte offset to restart from.
   //   with_rename - boolean - Allow file rename instead of overwrite?
   beginUpload = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -151,7 +147,7 @@ class FileAction {
       }
     }
 
-    return Api.sendRequest(`/file_actions/begin_upload/' . params['path'] . '`, 'POST', params, this.options)
+    return Api.sendRequest(`/file_actions/begin_upload/${params['path']}`, 'POST', params, this.options)
   }
 }
 

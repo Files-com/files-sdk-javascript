@@ -22,7 +22,6 @@ class UsageSnapshot {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Site usage ID
   getId = () => this.attributes.id
 

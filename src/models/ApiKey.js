@@ -22,7 +22,6 @@ class ApiKey {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # API Key ID
   getId = () => this.attributes.id
 
@@ -103,7 +102,7 @@ class ApiKey {
   //   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -111,7 +110,6 @@ class ApiKey {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -133,12 +131,12 @@ class ApiKey {
       }
     }
 
-    return Api.sendRequest(`/api_keys/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/api_keys/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -146,7 +144,6 @@ class ApiKey {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -159,7 +156,7 @@ class ApiKey {
       }
     }
 
-    return Api.sendRequest(`/api_keys/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/api_keys/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -247,7 +244,7 @@ class ApiKey {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/api_keys/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'GET', params, options)
 
     return new ApiKey(response?.data, options)
   }

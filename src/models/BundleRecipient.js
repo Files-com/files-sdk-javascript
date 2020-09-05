@@ -22,7 +22,6 @@ class BundleRecipient {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # The recipient's company.
   getCompany = () => this.attributes.company
 

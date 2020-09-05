@@ -22,7 +22,6 @@ class PublicIpAddress {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # The public IP address.
   getIpAddress = () => this.attributes.ip_address
 

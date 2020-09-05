@@ -22,7 +22,6 @@ class Message {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Message ID
   getId = () => this.attributes.id
 
@@ -72,7 +71,7 @@ class Message {
   //   body (required) - string - Message body.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -80,7 +79,6 @@ class Message {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -126,12 +124,12 @@ class Message {
       }
     }
 
-    return Api.sendRequest(`/messages/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/messages/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -139,7 +137,6 @@ class Message {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -152,7 +149,7 @@ class Message {
       }
     }
 
-    return Api.sendRequest(`/messages/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/messages/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -229,7 +226,7 @@ class Message {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/messages/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/messages/${params['id']}`, 'GET', params, options)
 
     return new Message(response?.data, options)
   }

@@ -21,8 +21,7 @@ class History {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
   // int64 # Action ID
   getId = () => this.attributes.id
 
@@ -116,7 +115,7 @@ class History {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/history/files/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history/files/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
@@ -174,7 +173,7 @@ class History {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/history/folders/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history/folders/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
@@ -232,7 +231,7 @@ class History {
       throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
-    const response = await Api.sendRequest(`/history/users/' . params['user_id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history/users/${params['user_id']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Action(obj, options)) || []
   }

@@ -22,7 +22,6 @@ class User {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # User ID
   getId = () => this.attributes.id
 
@@ -401,7 +400,7 @@ class User {
   // Unlock user who has been locked out due to failed logins
   unlock = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -409,7 +408,6 @@ class User {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -422,13 +420,13 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/' . params['id'] . '/unlock`, 'POST', params, this.options)
+    return Api.sendRequest(`/users/${params['id']}/unlock`, 'POST', params, this.options)
   }
 
   // Resend user welcome email
   resendWelcomeEmail = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -436,7 +434,6 @@ class User {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -449,13 +446,13 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/' . params['id'] . '/resend_welcome_email`, 'POST', params, this.options)
+    return Api.sendRequest(`/users/${params['id']}/resend_welcome_email`, 'POST', params, this.options)
   }
 
   // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
   user2faReset = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -463,7 +460,6 @@ class User {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -476,7 +472,7 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/' . params['id'] . '/2fa/reset`, 'POST', params, this.options)
+    return Api.sendRequest(`/users/${params['id']}/2fa/reset`, 'POST', params, this.options)
   }
 
   // Parameters:
@@ -523,7 +519,7 @@ class User {
   //   username - string - User's username
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -531,7 +527,6 @@ class User {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -610,12 +605,12 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/users/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -623,7 +618,6 @@ class User {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -636,7 +630,7 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/users/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -723,7 +717,7 @@ class User {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/users/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/users/${params['id']}`, 'GET', params, options)
 
     return new User(response?.data, options)
   }

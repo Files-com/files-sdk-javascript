@@ -22,7 +22,6 @@ class FileUploadPart {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // object # Content-Type and File to send
   getSend = () => this.attributes.send
 

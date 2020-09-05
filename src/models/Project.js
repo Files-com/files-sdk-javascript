@@ -22,7 +22,6 @@ class Project {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Project ID
   getId = () => this.attributes.id
 
@@ -42,7 +41,7 @@ class Project {
   //   global_access (required) - string - Global permissions.  Can be: `none`, `anyone_with_read`, `anyone_with_full`.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -50,7 +49,6 @@ class Project {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -74,12 +72,12 @@ class Project {
       }
     }
 
-    return Api.sendRequest(`/projects/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/projects/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -87,7 +85,6 @@ class Project {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -100,7 +97,7 @@ class Project {
       }
     }
 
-    return Api.sendRequest(`/projects/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/projects/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -163,7 +160,7 @@ class Project {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/projects/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/projects/${params['id']}`, 'GET', params, options)
 
     return new Project(response?.data, options)
   }

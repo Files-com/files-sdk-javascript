@@ -22,7 +22,6 @@ class HistoryExport {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # History Export ID
   getId = () => this.attributes.id
 
@@ -226,7 +225,7 @@ class HistoryExport {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/history_exports/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history_exports/${params['id']}`, 'GET', params, options)
 
     return new HistoryExport(response?.data, options)
   }

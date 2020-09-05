@@ -25,8 +25,7 @@ class File {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
   static _openUpload = async path => {
     const params = { action: 'put' }
     const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
@@ -382,16 +381,15 @@ class File {
   //   with_previews - boolean - Include file preview information?
   //   with_priority_color - boolean - Include file priority color information?
   download = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -410,23 +408,22 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/' . params['path'] . '`, 'GET', params, this.options)
+    return Api.sendRequest(`/files/${params['path']}`, 'GET', params, this.options)
   }
 
   // Parameters:
   //   provided_mtime - string - Modified time of file.
   //   priority_color - string - Priority/Bookmark color of file.
   update = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -445,22 +442,21 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/' . params['path'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/files/${params['path']}`, 'PATCH', params, this.options)
   }
 
   // Parameters:
   //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
   delete = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -473,7 +469,7 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/' . params['path'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/files/${params['path']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -551,7 +547,7 @@ class File {
       throw new Error(`Bad parameter: structure must be of type String, received ${getType(structure)}`)
     }
 
-    const response = await Api.sendRequest(`/files/' . params['path'] . '`, 'POST', params, options)
+    const response = await Api.sendRequest(`/files/${params['path']}`, 'POST', params, options)
 
     return new File(response?.data, options)
   }

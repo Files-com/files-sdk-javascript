@@ -22,7 +22,6 @@ class Automation {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Automation ID
   getId = () => this.attributes.id
 
@@ -127,7 +126,7 @@ class Automation {
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -135,7 +134,6 @@ class Automation {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -183,12 +181,12 @@ class Automation {
       }
     }
 
-    return Api.sendRequest(`/automations/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/automations/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -196,7 +194,6 @@ class Automation {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -209,7 +206,7 @@ class Automation {
       }
     }
 
-    return Api.sendRequest(`/automations/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/automations/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -284,7 +281,7 @@ class Automation {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/automations/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/automations/${params['id']}`, 'GET', params, options)
 
     return new Automation(response?.data, options)
   }

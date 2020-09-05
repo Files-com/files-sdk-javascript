@@ -22,7 +22,6 @@ class Image {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Image name
   getName = () => this.attributes.name
 

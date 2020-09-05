@@ -22,7 +22,6 @@ class Session {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Session ID
   getId = () => this.attributes.id
 

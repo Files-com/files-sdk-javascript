@@ -22,7 +22,6 @@ class UserCipherUse {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # UserCipherUse ID
   getId = () => this.attributes.id
 

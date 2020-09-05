@@ -22,7 +22,6 @@ class MessageReaction {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Reaction ID
   getId = () => this.attributes.id
 
@@ -47,7 +46,7 @@ class MessageReaction {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -55,7 +54,6 @@ class MessageReaction {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -68,7 +66,7 @@ class MessageReaction {
       }
     }
 
-    return Api.sendRequest(`/message_reactions/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/message_reactions/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -145,7 +143,7 @@ class MessageReaction {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_reactions/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/message_reactions/${params['id']}`, 'GET', params, options)
 
     return new MessageReaction(response?.data, options)
   }

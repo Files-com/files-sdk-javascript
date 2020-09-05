@@ -21,8 +21,7 @@ class Lock {
     this.options = { ...options }
   }
 
-  isLoaded = () => !!this.attributes.id
-
+  isLoaded = () => !!this.attributes.path
   // string # Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
@@ -90,16 +89,15 @@ class Lock {
   // Parameters:
   //   token (required) - string - Lock token
   delete = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+    if (!this.attributes.path) {
+      throw new Error('Current object has no path')
     }
 
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params.id = this.attributes.id
-
+    params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
@@ -123,7 +121,7 @@ class Lock {
       }
     }
 
-    return Api.sendRequest(`/locks/' . params['path'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/locks/${params['path']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -173,7 +171,7 @@ class Lock {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/' . params['path'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/locks/${params['path']}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Lock(obj, options)) || []
   }
@@ -200,7 +198,7 @@ class Lock {
       throw new Error(`Bad parameter: timeout must be of type Int, received ${getType(timeout)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/' . params['path'] . '`, 'POST', params, options)
+    const response = await Api.sendRequest(`/locks/${params['path']}`, 'POST', params, options)
 
     return new Lock(response?.data, options)
   }

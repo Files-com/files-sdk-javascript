@@ -22,7 +22,6 @@ class Preview {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Preview ID
   getId = () => this.attributes.id
 

@@ -20,7 +20,6 @@ class LogLevel {
 }
 
 class Logger {
-  static stream
   static isPaused = false
 
   static getLogLevelName = level => {

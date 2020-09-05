@@ -22,7 +22,6 @@ class Group {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Group ID
   getId = () => this.attributes.id
 
@@ -73,7 +72,7 @@ class Group {
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -81,7 +80,6 @@ class Group {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -106,12 +104,12 @@ class Group {
       }
     }
 
-    return Api.sendRequest(`/groups/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/groups/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -119,7 +117,6 @@ class Group {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -132,7 +129,7 @@ class Group {
       }
     }
 
-    return Api.sendRequest(`/groups/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/groups/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -207,7 +204,7 @@ class Group {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/groups/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/groups/${params['id']}`, 'GET', params, options)
 
     return new Group(response?.data, options)
   }

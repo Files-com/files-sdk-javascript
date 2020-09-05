@@ -22,7 +22,6 @@ class UserRequest {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # ID
   getId = () => this.attributes.id
 
@@ -54,7 +53,7 @@ class UserRequest {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -62,7 +61,6 @@ class UserRequest {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -75,7 +73,7 @@ class UserRequest {
       }
     }
 
-    return Api.sendRequest(`/user_requests/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/user_requests/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -138,7 +136,7 @@ class UserRequest {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/user_requests/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/user_requests/${params['id']}`, 'GET', params, options)
 
     return new UserRequest(response?.data, options)
   }

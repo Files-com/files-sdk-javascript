@@ -22,7 +22,6 @@ class MessageComment {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Message Comment ID
   getId = () => this.attributes.id
 
@@ -56,7 +55,7 @@ class MessageComment {
   //   body (required) - string - Comment body.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -64,7 +63,6 @@ class MessageComment {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -88,12 +86,12 @@ class MessageComment {
       }
     }
 
-    return Api.sendRequest(`/message_comments/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/message_comments/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -101,7 +99,6 @@ class MessageComment {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -114,7 +111,7 @@ class MessageComment {
       }
     }
 
-    return Api.sendRequest(`/message_comments/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/message_comments/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -191,7 +188,7 @@ class MessageComment {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comments/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'GET', params, options)
 
     return new MessageComment(response?.data, options)
   }

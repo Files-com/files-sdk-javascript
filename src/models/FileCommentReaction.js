@@ -22,7 +22,6 @@ class FileCommentReaction {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # Reaction ID
   getId = () => this.attributes.id
 
@@ -54,7 +53,7 @@ class FileCommentReaction {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -62,7 +61,6 @@ class FileCommentReaction {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -75,7 +73,7 @@ class FileCommentReaction {
       }
     }
 
-    return Api.sendRequest(`/file_comment_reactions/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/file_comment_reactions/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>

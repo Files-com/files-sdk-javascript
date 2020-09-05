@@ -22,7 +22,6 @@ class Auto {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // object
   getDynamic = () => this.attributes.dynamic
 

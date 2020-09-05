@@ -22,7 +22,6 @@ class Bundle {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Bundle code.  This code forms the end part of the Public URL.
   getCode = () => this.attributes.code
 
@@ -153,7 +152,7 @@ class Bundle {
   //   note - string - Note to include in email.
   share = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -161,7 +160,6 @@ class Bundle {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -188,7 +186,7 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/' . params['id'] . '/share`, 'POST', params, this.options)
+    return Api.sendRequest(`/bundles/${params['id']}/share`, 'POST', params, this.options)
   }
 
   // Parameters:
@@ -204,7 +202,7 @@ class Bundle {
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -212,7 +210,6 @@ class Bundle {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -249,12 +246,12 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/bundles/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -262,7 +259,6 @@ class Bundle {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -275,7 +271,7 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/bundles/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -350,7 +346,7 @@ class Bundle {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundles/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'GET', params, options)
 
     return new Bundle(response?.data, options)
   }

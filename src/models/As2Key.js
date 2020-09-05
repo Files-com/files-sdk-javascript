@@ -22,7 +22,6 @@ class As2Key {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // int64 # AS2 Key ID
   getId = () => this.attributes.id
 
@@ -66,7 +65,7 @@ class As2Key {
   //   as2_partnership_name (required) - string - AS2 Partnership Name
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -74,7 +73,6 @@ class As2Key {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -98,12 +96,12 @@ class As2Key {
       }
     }
 
-    return Api.sendRequest(`/as2_keys/' . params['id'] . '`, 'PATCH', params, this.options)
+    return Api.sendRequest(`/as2_keys/${params['id']}`, 'PATCH', params, this.options)
   }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no ID')
+      throw new Error('Current object has no id')
     }
 
     if (!isObject(params)) {
@@ -111,7 +109,6 @@ class As2Key {
     }
 
     params.id = this.attributes.id
-
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
@@ -124,7 +121,7 @@ class As2Key {
       }
     }
 
-    return Api.sendRequest(`/as2_keys/' . params['id'] . '`, 'DELETE', params, this.options)
+    return Api.sendRequest(`/as2_keys/${params['id']}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -192,7 +189,7 @@ class As2Key {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
-    const response = await Api.sendRequest(`/as2_keys/' . params['id'] . '`, 'GET', params, options)
+    const response = await Api.sendRequest(`/as2_keys/${params['id']}`, 'GET', params, options)
 
     return new As2Key(response?.data, options)
   }

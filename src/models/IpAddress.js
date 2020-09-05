@@ -22,7 +22,6 @@ class IpAddress {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // string # Unique label for list; used by Zapier and other integrations.
   getId = () => this.attributes.id
 

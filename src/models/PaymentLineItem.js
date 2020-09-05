@@ -22,7 +22,6 @@ class PaymentLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
-
   // double # Payment line item amount
   getAmount = () => this.attributes.amount
 
