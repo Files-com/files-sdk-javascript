@@ -130,6 +130,13 @@ class Bundle {
     this.attributes.inbox_id = value
   }
 
+  // boolean # Does this bundle have an associated inbox?
+  getHasInbox = () => this.attributes.has_inbox
+
+  setHasInbox = value => {
+    this.attributes.has_inbox = value
+  }
+
   // array # A list of paths in this bundle
   getPaths = () => this.attributes.paths
 
