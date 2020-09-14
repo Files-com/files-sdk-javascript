@@ -249,6 +249,13 @@ class User {
     this.attributes.require_2fa = value
   }
 
+  // boolean # Is 2fa required to sign in?
+  getActive2fa = () => this.attributes.active_2fa
+
+  setActive2fa = value => {
+    this.attributes.active_2fa = value
+  }
+
   // boolean # Is a password change required upon next user login?
   getRequirePasswordChange = () => this.attributes.require_password_change
 
