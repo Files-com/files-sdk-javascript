@@ -106,6 +106,9 @@ class Site {
   // email # Main email for this site
   getEmail = () => this.attributes.email
 
+  // email # Reply-to email for this site
+  getReplyToEmail = () => this.attributes.reply_to_email
+
   // boolean # If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
   getNonSsoGroupsAllowed = () => this.attributes.non_sso_groups_allowed
 
@@ -384,6 +387,7 @@ class Site {
   //   subdomain - string - Site subdomain
   //   domain - string - Custom domain
   //   email - string - Main email for this site
+  //   reply_to_email - string - Reply-to email for this site
   //   allow_bundle_names - boolean - Are manual Bundle names allowed?
   //   bundle_expiration - int64 - Site-wide Bundle expiration in days
   //   overage_notify - boolean - Notify site email of overages?
@@ -497,6 +501,10 @@ class Site {
 
     if (params['email'] && !isString(params['email'])) {
       throw new Error(`Bad parameter: email must be of type String, received ${getType(email)}`)
+    }
+
+    if (params['reply_to_email'] && !isString(params['reply_to_email'])) {
+      throw new Error(`Bad parameter: reply_to_email must be of type String, received ${getType(reply_to_email)}`)
     }
 
     if (params['bundle_expiration'] && !isInt(params['bundle_expiration'])) {
