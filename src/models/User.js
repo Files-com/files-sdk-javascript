@@ -249,7 +249,7 @@ class User {
     this.attributes.require_2fa = value
   }
 
-  // boolean # Is 2fa required to sign in?
+  // boolean # Is 2fa active for the user?
   getActive2fa = () => this.attributes.active_2fa
 
   setActive2fa = value => {
