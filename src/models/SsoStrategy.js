@@ -91,6 +91,9 @@ class SsoStrategy {
   // string # Comma or newline separated list of group names (with optional wildcards) to require membership for user provisioning.
   getProvisionGroupRequired = () => this.attributes.provision_group_required
 
+  // string # Comma-separated list of group names whose members will be created as Site Admins.
+  getProvisionSiteAdminGroups = () => this.attributes.provision_site_admin_groups
+
   // boolean # Auto-provisioned users get Sharing permission?
   getProvisionAttachmentsPermission = () => this.attributes.provision_attachments_permission
 
