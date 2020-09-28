@@ -309,7 +309,7 @@ class ApiKey {
   // Parameters:
   //   format - string
   //   api_key - object
-  static current = async (params = {}, options = {}) => {
+  static deleteCurrent = async (params = {}, options = {}) => {
     if (params['format'] && !isString(params['format'])) {
       throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
     }
