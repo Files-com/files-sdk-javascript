@@ -246,6 +246,13 @@ class RemoteServer {
     this.attributes.private_key = value
   }
 
+  // string # SSL client certificate.
+  getSslCertificate = () => this.attributes.ssl_certificate
+
+  setSslCertificate = value => {
+    this.attributes.ssl_certificate = value
+  }
+
   // string # A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
   getGoogleCloudStorageCredentialsJson = () => this.attributes.google_cloud_storage_credentials_json
 
@@ -308,6 +315,7 @@ class RemoteServer {
   //   aws_secret_key - string - AWS secret key.
   //   password - string - Password if needed.
   //   private_key - string - Private key if needed.
+  //   ssl_certificate - string - SSL client certificate.
   //   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
   //   wasabi_access_key - string - Wasabi access key.
   //   wasabi_secret_key - string - Wasabi secret key.
@@ -363,6 +371,9 @@ class RemoteServer {
     }
     if (params['private_key'] && !isString(params['private_key'])) {
       throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+    }
+    if (params['ssl_certificate'] && !isString(params['ssl_certificate'])) {
+      throw new Error(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
     }
     if (params['google_cloud_storage_credentials_json'] && !isString(params['google_cloud_storage_credentials_json'])) {
       throw new Error(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(google_cloud_storage_credentials_json)}`)
@@ -564,6 +575,7 @@ class RemoteServer {
   //   aws_secret_key - string - AWS secret key.
   //   password - string - Password if needed.
   //   private_key - string - Private key if needed.
+  //   ssl_certificate - string - SSL client certificate.
   //   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
   //   wasabi_access_key - string - Wasabi access key.
   //   wasabi_secret_key - string - Wasabi secret key.
@@ -610,6 +622,10 @@ class RemoteServer {
 
     if (params['private_key'] && !isString(params['private_key'])) {
       throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+    }
+
+    if (params['ssl_certificate'] && !isString(params['ssl_certificate'])) {
+      throw new Error(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
     }
 
     if (params['google_cloud_storage_credentials_json'] && !isString(params['google_cloud_storage_credentials_json'])) {
