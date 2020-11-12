@@ -118,10 +118,8 @@ class Permission {
   }
 
   // Parameters:
-  //   page - int64 - Current page number.
+  //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-  //   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
   //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `deleted_at`, `group_id`, `path`, `user_id` or `permission`.
   //   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `group_id`, `user_id` or `path`.
   //   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `group_id`, `user_id` or `path`.
@@ -134,20 +132,12 @@ class Permission {
   //   user_id - string - DEPRECATED: User ID.  If provided, will scope permissions to this user. Use `filter[user_id]` instead.`
   //   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
   static list = async (params = {}, options = {}) => {
-    if (params['page'] && !isInt(params['page'])) {
-      throw new Error(`Bad parameter: page must be of type Int, received ${getType(page)}`)
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
       throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
-    }
-
-    if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
-    }
-
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {

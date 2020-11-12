@@ -43,6 +43,20 @@ class HistoryExport {
     this.attributes.end_at = value
   }
 
+  // string # Export format
+  getExportAs = () => this.attributes.export_as
+
+  setExportAs = value => {
+    this.attributes.export_as = value
+  }
+
+  // boolean # Is a file export, downloadable using the results_url
+  getFileExport = () => this.attributes.file_export
+
+  setFileExport = value => {
+    this.attributes.file_export = value
+  }
+
   // string # Status of export.  Will be: `building`, `ready`, or `failed`
   getStatus = () => this.attributes.status
 
@@ -237,6 +251,7 @@ class HistoryExport {
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   start_at - string - Start date/time of export range.
   //   end_at - string - End date/time of export range.
+  //   export_as - string - Export format
   //   query_action - string - Filter results by this this action type. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`
   //   query_interface - string - Filter results by this this interface type. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`, `office`
   //   query_user_id - string - Return results that are actions performed by the user indiciated by this User ID
@@ -267,6 +282,10 @@ class HistoryExport {
 
     if (params['end_at'] && !isString(params['end_at'])) {
       throw new Error(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+    }
+
+    if (params['export_as'] && !isString(params['export_as'])) {
+      throw new Error(`Bad parameter: export_as must be of type String, received ${getType(export_as)}`)
     }
 
     if (params['query_action'] && !isString(params['query_action'])) {
