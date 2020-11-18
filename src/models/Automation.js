@@ -113,9 +113,23 @@ class Automation {
     this.attributes.group_ids = value
   }
 
+  // string # How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+  getTrigger = () => this.attributes.trigger
+
+  setTrigger = value => {
+    this.attributes.trigger = value
+  }
+
+  // object # Custom schedule description for when the automation should be run.
+  getSchedule = () => this.attributes.schedule
+
+  setSchedule = value => {
+    this.attributes.schedule = value
+  }
+
 
   // Parameters:
-  //   automation (required) - string - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+  //   automation (required) - string - Automation type
   //   source - string - Source Path
   //   destination - string - Destination Path
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -124,6 +138,8 @@ class Automation {
   //   path - string - Path on which this Automation runs.  Supports globs.
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+  //   schedule - object - Custom schedule for running this automation.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -163,6 +179,9 @@ class Automation {
     }
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+    if (params['trigger'] && !isString(params['trigger'])) {
+      throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
     }
 
     if (!params['id']) {
@@ -280,7 +299,7 @@ class Automation {
     Automation.find(id, params, options)
 
   // Parameters:
-  //   automation (required) - string - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+  //   automation (required) - string - Automation type
   //   source - string - Source Path
   //   destination - string - Destination Path
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -289,6 +308,8 @@ class Automation {
   //   path - string - Path on which this Automation runs.  Supports globs.
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+  //   schedule - object - Custom schedule for running this automation.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
@@ -328,6 +349,10 @@ class Automation {
 
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+
+    if (params['trigger'] && !isString(params['trigger'])) {
+      throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'POST', params, options)
