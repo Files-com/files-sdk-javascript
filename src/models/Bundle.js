@@ -201,6 +201,7 @@ class Bundle {
   }
 
   // Parameters:
+  //   paths - array(string) - A list of paths to include in this bundle.
   //   password - string - Password for this bundle.
   //   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
   //   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -223,6 +224,9 @@ class Bundle {
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+    if (params['paths'] && !isArray(params['paths'])) {
+      throw new Error(`Bad parameter: paths must be of type Array, received ${getType(paths)}`)
     }
     if (params['password'] && !isString(params['password'])) {
       throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
