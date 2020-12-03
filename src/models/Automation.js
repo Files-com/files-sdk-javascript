@@ -36,6 +36,34 @@ class Automation {
     this.attributes.automation = value
   }
 
+  // string # How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+  getTrigger = () => this.attributes.trigger
+
+  setTrigger = value => {
+    this.attributes.trigger = value
+  }
+
+  // string # If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+  getInterval = () => this.attributes.interval
+
+  setInterval = value => {
+    this.attributes.interval = value
+  }
+
+  // string # If trigger is `daily`, date this automation will next run.
+  getNextProcessOn = () => this.attributes.next_process_on
+
+  setNextProcessOn = value => {
+    this.attributes.next_process_on = value
+  }
+
+  // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  getSchedule = () => this.attributes.schedule
+
+  setSchedule = value => {
+    this.attributes.schedule = value
+  }
+
   // string # Source Path
   getSource = () => this.attributes.source
 
@@ -64,32 +92,11 @@ class Automation {
     this.attributes.destination_replace_to = value
   }
 
-  // string # How often to run this automation?  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
-  getInterval = () => this.attributes.interval
-
-  setInterval = value => {
-    this.attributes.interval = value
-  }
-
-  // string # Date this automation will next run.
-  getNextProcessOn = () => this.attributes.next_process_on
-
-  setNextProcessOn = value => {
-    this.attributes.next_process_on = value
-  }
-
   // string # Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   setPath = value => {
     this.attributes.path = value
-  }
-
-  // boolean # Does this automation run in real time?  This is a read-only property based on automation type.
-  getRealtime = () => this.attributes.realtime
-
-  setRealtime = value => {
-    this.attributes.realtime = value
   }
 
   // int64 # User ID of the Automation's creator.
@@ -111,20 +118,6 @@ class Automation {
 
   setGroupIds = value => {
     this.attributes.group_ids = value
-  }
-
-  // string # How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
-  getTrigger = () => this.attributes.trigger
-
-  setTrigger = value => {
-    this.attributes.trigger = value
-  }
-
-  // object # Custom schedule description for when the automation should be run.
-  getSchedule = () => this.attributes.schedule
-
-  setSchedule = value => {
-    this.attributes.schedule = value
   }
 
 
