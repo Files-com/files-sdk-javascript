@@ -36,7 +36,7 @@ class Automation {
     this.attributes.automation = value
   }
 
-  // string # How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+  // string # How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
   getTrigger = () => this.attributes.trigger
 
   setTrigger = value => {
@@ -132,7 +132,7 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -302,7 +302,7 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
