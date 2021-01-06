@@ -3,9 +3,9 @@ import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
- * Class BundleDownload
+ * Class InboxUpload
  */
-class BundleDownload {
+class InboxUpload {
   attributes = {}
   options = {}
 
@@ -22,23 +22,20 @@ class BundleDownload {
   }
 
   isLoaded = () => !!this.attributes.id
-  getBundleRegistration = () => this.attributes.bundle_registration
+  getInboxRegistration = () => this.attributes.inbox_registration
 
-  // string # Download method (file or full_zip)
-  getDownloadMethod = () => this.attributes.download_method
-
-  // string # Download path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
-  // date-time # Download date/time
+  // date-time # Upload date/time
   getCreatedAt = () => this.attributes.created_at
 
 
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   bundle_id - int64 - Bundle ID
-  //   bundle_registration_id - int64 - BundleRegistration ID
+  //   inbox_registration_id - int64 - InboxRegistration ID
+  //   inbox_id - int64 - Inbox ID
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
       throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
@@ -48,21 +45,21 @@ class BundleDownload {
       throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
-    if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new Error(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+    if (params['inbox_registration_id'] && !isInt(params['inbox_registration_id'])) {
+      throw new Error(`Bad parameter: inbox_registration_id must be of type Int, received ${getType(inbox_registration_id)}`)
     }
 
-    if (params['bundle_registration_id'] && !isInt(params['bundle_registration_id'])) {
-      throw new Error(`Bad parameter: bundle_registration_id must be of type Int, received ${getType(bundle_registration_id)}`)
+    if (params['inbox_id'] && !isInt(params['inbox_id'])) {
+      throw new Error(`Bad parameter: inbox_id must be of type Int, received ${getType(inbox_id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_downloads`, 'GET', params, options)
+    const response = await Api.sendRequest(`/inbox_uploads`, 'GET', params, options)
 
-    return response?.data?.map(obj => new BundleDownload(obj, options)) || []
+    return response?.data?.map(obj => new InboxUpload(obj, options)) || []
   }
 
   static all = (params = {}, options = {}) =>
-    BundleDownload.list(params, options)
+    InboxUpload.list(params, options)
 }
 
-export default BundleDownload
+export default InboxUpload
