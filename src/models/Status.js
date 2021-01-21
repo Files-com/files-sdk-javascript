@@ -22,7 +22,7 @@ class Status {
   }
 
   isLoaded = () => !!this.attributes.id
-  // int64 # Status http code
+  // int64 # Status HTTP code
   getCode = () => this.attributes.code
 
   // string # Error message
@@ -36,6 +36,12 @@ class Status {
 
   // array # A list of api errors
   getErrors = () => this.attributes.errors
+
+  // int64 # Required Clickwrap id
+  getClickwrapId = () => this.attributes.clickwrap_id
+
+  // string # Required Clickwrap body
+  getClickwrapBody = () => this.attributes.clickwrap_body
 
 }
 

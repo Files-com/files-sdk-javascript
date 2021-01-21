@@ -3,9 +3,9 @@ import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
- * Class BundleRecipient
+ * Class InboxRecipient
  */
-class BundleRecipient {
+class InboxRecipient {
   attributes = {}
   options = {}
 
@@ -36,7 +36,7 @@ class BundleRecipient {
     this.attributes.name = value
   }
 
-  // string # A note sent to the recipient with the bundle.
+  // string # A note sent to the recipient with the inbox.
   getNote = () => this.attributes.note
 
   setNote = value => {
@@ -50,7 +50,7 @@ class BundleRecipient {
     this.attributes.recipient = value
   }
 
-  // date-time # When the Bundle was shared with this recipient.
+  // date-time # When the Inbox was shared with this recipient.
   getSentAt = () => this.attributes.sent_at
 
   setSentAt = value => {
@@ -64,11 +64,11 @@ class BundleRecipient {
     this.attributes.user_id = value
   }
 
-  // int64 # Bundle to share.
-  getBundleId = () => this.attributes.bundle_id
+  // int64 # Inbox to share.
+  getInboxId = () => this.attributes.inbox_id
 
-  setBundleId = value => {
-    this.attributes.bundle_id = value
+  setInboxId = value => {
+    this.attributes.inbox_id = value
   }
 
   // boolean # Set to true to share the link with the recipient upon creation.
@@ -81,9 +81,9 @@ class BundleRecipient {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The BundleRecipient object doesn\'t support updates.')
+        throw new Error('The InboxRecipient object doesn\'t support updates.')
       } else {
-        const newObject = BundleRecipient.create(this.attributes, this.options)
+        const newObject = InboxRecipient.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }
@@ -100,10 +100,10 @@ class BundleRecipient {
   //   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `has_registrations`.
   //   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `has_registrations`.
   //   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `has_registrations`.
-  //   bundle_id (required) - int64 - List recipients for the bundle with this ID.
+  //   inbox_id (required) - int64 - List recipients for the inbox with this ID.
   static list = async (params = {}, options = {}) => {
-    if (!params['bundle_id']) {
-      throw new Error('Parameter missing: bundle_id')
+    if (!params['inbox_id']) {
+      throw new Error('Parameter missing: inbox_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
@@ -118,29 +118,29 @@ class BundleRecipient {
       throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
-    if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new Error(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+    if (params['inbox_id'] && !isInt(params['inbox_id'])) {
+      throw new Error(`Bad parameter: inbox_id must be of type Int, received ${getType(inbox_id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_recipients`, 'GET', params, options)
+    const response = await Api.sendRequest(`/inbox_recipients`, 'GET', params, options)
 
-    return response?.data?.map(obj => new BundleRecipient(obj, options)) || []
+    return response?.data?.map(obj => new InboxRecipient(obj, options)) || []
   }
 
   static all = (params = {}, options = {}) =>
-    BundleRecipient.list(params, options)
+    InboxRecipient.list(params, options)
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   bundle_id (required) - int64 - Bundle to share.
-  //   recipient (required) - string - Email addresses to share this bundle with.
+  //   inbox_id (required) - int64 - Inbox to share.
+  //   recipient (required) - string - Email addresses to share this inbox with.
   //   name - string - Name of recipient.
   //   company - string - Company of recipient.
   //   note - string - Note to include in email.
   //   share_after_create - boolean - Set to true to share the link with the recipient upon creation.
   static create = async (params = {}, options = {}) => {
-    if (!params['bundle_id']) {
-      throw new Error('Parameter missing: bundle_id')
+    if (!params['inbox_id']) {
+      throw new Error('Parameter missing: inbox_id')
     }
 
     if (!params['recipient']) {
@@ -151,8 +151,8 @@ class BundleRecipient {
       throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
-    if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new Error(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+    if (params['inbox_id'] && !isInt(params['inbox_id'])) {
+      throw new Error(`Bad parameter: inbox_id must be of type Int, received ${getType(inbox_id)}`)
     }
 
     if (params['recipient'] && !isString(params['recipient'])) {
@@ -171,10 +171,10 @@ class BundleRecipient {
       throw new Error(`Bad parameter: note must be of type String, received ${getType(note)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_recipients`, 'POST', params, options)
+    const response = await Api.sendRequest(`/inbox_recipients`, 'POST', params, options)
 
-    return new BundleRecipient(response?.data, options)
+    return new InboxRecipient(response?.data, options)
   }
 }
 
-export default BundleRecipient
+export default InboxRecipient
