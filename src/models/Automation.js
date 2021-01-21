@@ -36,7 +36,7 @@ class Automation {
     this.attributes.automation = value
   }
 
-  // string # How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+  // string # How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   getTrigger = () => this.attributes.trigger
 
   setTrigger = value => {
@@ -127,6 +127,20 @@ class Automation {
     this.attributes.webhook_url = value
   }
 
+  // string # If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+  getTriggerActions = () => this.attributes.trigger_actions
+
+  setTriggerActions = value => {
+    this.attributes.trigger_actions = value
+  }
+
+  // string # If trigger is `action`, this is the path to watch for the specified trigger actions.
+  getTriggerActionPath = () => this.attributes.trigger_action_path
+
+  setTriggerActionPath = value => {
+    this.attributes.trigger_action_path = value
+  }
+
 
   // Parameters:
   //   automation (required) - string - Automation type
@@ -139,7 +153,9 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+  //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+  //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -182,6 +198,12 @@ class Automation {
     }
     if (params['trigger'] && !isString(params['trigger'])) {
       throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
+    }
+    if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
+      throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+    }
+    if (params['trigger_action_path'] && !isString(params['trigger_action_path'])) {
+      throw new Error(`Bad parameter: trigger_action_path must be of type String, received ${getType(trigger_action_path)}`)
     }
 
     if (!params['id']) {
@@ -309,7 +331,9 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+  //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+  //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
@@ -353,6 +377,14 @@ class Automation {
 
     if (params['trigger'] && !isString(params['trigger'])) {
       throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
+    }
+
+    if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
+      throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+    }
+
+    if (params['trigger_action_path'] && !isString(params['trigger_action_path'])) {
+      throw new Error(`Bad parameter: trigger_action_path must be of type String, received ${getType(trigger_action_path)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'POST', params, options)
