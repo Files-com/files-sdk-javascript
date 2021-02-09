@@ -55,6 +55,12 @@ class App {
   // string # Link to external homepage
   getExternalHomepageUrl = () => this.attributes.external_homepage_url
 
+  // string # Marketing video page
+  getMarketingYoutubeUrl = () => this.attributes.marketing_youtube_url
+
+  // string # Tutorial video page
+  getTutorialYoutubeUrl = () => this.attributes.tutorial_youtube_url
+
   // string # The type of the App
   getAppType = () => this.attributes.app_type
 
