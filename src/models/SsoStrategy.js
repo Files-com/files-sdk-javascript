@@ -100,7 +100,7 @@ class SsoStrategy {
   // string # Comma-separated list of group names whose members will be created as Site Admins.
   getProvisionSiteAdminGroups = () => this.attributes.provision_site_admin_groups
 
-  // boolean # Auto-provisioned users get Sharing permission?
+  // boolean # DEPRECATED: Auto-provisioned users get Sharing permission. Use a Group with the Bundle permission instead.
   getProvisionAttachmentsPermission = () => this.attributes.provision_attachments_permission
 
   // boolean # Auto-provisioned users get WebDAV permission?
