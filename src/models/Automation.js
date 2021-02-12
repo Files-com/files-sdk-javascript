@@ -141,6 +141,13 @@ class Automation {
     this.attributes.trigger_action_path = value
   }
 
+  // object # A Hash of attributes specific to the automation type.
+  getValue = () => this.attributes.value
+
+  setValue = value => {
+    this.attributes.value = value
+  }
+
 
   // Parameters:
   //   automation (required) - string - Automation type
@@ -156,6 +163,7 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
+  //   value - object - A Hash of attributes specific to the automation type.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -334,6 +342,7 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
+  //   value - object - A Hash of attributes specific to the automation type.
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
