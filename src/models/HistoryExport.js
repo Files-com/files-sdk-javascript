@@ -29,6 +29,13 @@ class HistoryExport {
     this.attributes.id = value
   }
 
+  // string # Version of the history for the export.
+  getHistoryVersion = () => this.attributes.history_version
+
+  setHistoryVersion = value => {
+    this.attributes.history_version = value
+  }
+
   // date-time # Start date/time of export range.
   getStartAt = () => this.attributes.start_at
 
