@@ -43,6 +43,13 @@ class RemoteServer {
     this.attributes.hostname = value
   }
 
+  // string # Initial home folder on remote server
+  getRemoteHomePath = () => this.attributes.remote_home_path
+
+  setRemoteHomePath = value => {
+    this.attributes.remote_home_path = value
+  }
+
   // string # Internal name for your reference
   getName = () => this.attributes.name
 
