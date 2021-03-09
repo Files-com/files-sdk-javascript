@@ -71,11 +71,18 @@ class Automation {
     this.attributes.source = value
   }
 
-  // string # Destination Path
+  // string # DEPRECATED: Destination Path
   getDestination = () => this.attributes.destination
 
   setDestination = value => {
     this.attributes.destination = value
+  }
+
+  // string # Destination Path
+  getDestinations = () => this.attributes.destinations
+
+  setDestinations = value => {
+    this.attributes.destinations = value
   }
 
   // string # If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -152,7 +159,8 @@ class Automation {
   // Parameters:
   //   automation (required) - string - Automation type
   //   source - string - Source Path
-  //   destination - string - Destination Path
+  //   destination - string - DEPRECATED: Destination Path
+  //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   //   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
   //   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -185,6 +193,9 @@ class Automation {
     }
     if (params['destination'] && !isString(params['destination'])) {
       throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+    }
+    if (params['destinations'] && !isArray(params['destinations'])) {
+      throw new Error(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
     }
     if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
       throw new Error(`Bad parameter: destination_replace_from must be of type String, received ${getType(destination_replace_from)}`)
@@ -331,7 +342,8 @@ class Automation {
   // Parameters:
   //   automation (required) - string - Automation type
   //   source - string - Source Path
-  //   destination - string - Destination Path
+  //   destination - string - DEPRECATED: Destination Path
+  //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   //   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
   //   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -358,6 +370,10 @@ class Automation {
 
     if (params['destination'] && !isString(params['destination'])) {
       throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+    }
+
+    if (params['destinations'] && !isArray(params['destinations'])) {
+      throw new Error(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
     }
 
     if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
