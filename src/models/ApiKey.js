@@ -204,15 +204,8 @@ class ApiKey {
   static all = (params = {}, options = {}) =>
     ApiKey.list(params, options)
 
-  // Parameters:
-  //   format - string
-  //   api_key - object
   static findCurrent = async (params = {}, options = {}) => {
-    if (params['format'] && !isString(params['format'])) {
-      throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
-    }
-
-    const response = await Api.sendRequest(`/api_key`, 'GET', params, options)
+    const response = await Api.sendRequest(`/api_key`, 'GET', options)
 
     return new ApiKey(response?.data, options)
   }
@@ -296,15 +289,8 @@ class ApiKey {
     return new ApiKey(response?.data, options)
   }
 
-  // Parameters:
-  //   format - string
-  //   api_key - object
   static deleteCurrent = async (params = {}, options = {}) => {
-    if (params['format'] && !isString(params['format'])) {
-      throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
-    }
-
-    const response = await Api.sendRequest(`/api_key`, 'DELETE', params, options)
+    const response = await Api.sendRequest(`/api_key`, 'DELETE', options)
 
     return response?.data
   }
