@@ -362,14 +362,28 @@ class Site {
   getDisableUsersFromInactivityPeriodDays = () => this.attributes.disable_users_from_inactivity_period_days
 
 
+  // Parameters:
+  //   format - string
+  //   site - object
   static get = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/site`, 'GET', options)
+    if (params['format'] && !isString(params['format'])) {
+      throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
+    }
+
+    const response = await Api.sendRequest(`/site`, 'GET', params, options)
 
     return new Site(response?.data, options)
   }
 
+  // Parameters:
+  //   format - string
+  //   site - object
   static getUsage = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/site/usage`, 'GET', options)
+    if (params['format'] && !isString(params['format'])) {
+      throw new Error(`Bad parameter: format must be of type String, received ${getType(format)}`)
+    }
+
+    const response = await Api.sendRequest(`/site/usage`, 'GET', params, options)
 
     return new UsageSnapshot(response?.data, options)
   }
