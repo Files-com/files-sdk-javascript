@@ -34,6 +34,9 @@ class UsageSnapshot {
   // date-time # Site usage report created at date/time
   getCreatedAt = () => this.attributes.created_at
 
+  // double # Site usage report highest usage in time period
+  getHighWaterUserCount = () => this.attributes.high_water_user_count
+
   // double # Current site usage as of report
   getCurrentStorage = () => this.attributes.current_storage
 
