@@ -169,8 +169,15 @@ class GroupUser {
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () =>
-    this.update(this.attributes)
+  save = () => {
+      if (this.attributes['id']) {
+        return this.update(this.attributes)
+      } else {
+        const newObject = GroupUser.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
+  }
 
   // Parameters:
   //   user_id - int64 - User ID.  If provided, will return group_users of this user.
@@ -201,6 +208,32 @@ class GroupUser {
 
   static all = (params = {}, options = {}) =>
     GroupUser.list(params, options)
+
+  // Parameters:
+  //   group_id (required) - int64 - Group ID to add user to.
+  //   user_id (required) - int64 - User ID to add to group.
+  //   admin - boolean - Is the user a group administrator?
+  static create = async (params = {}, options = {}) => {
+    if (!params['group_id']) {
+      throw new Error('Parameter missing: group_id')
+    }
+
+    if (!params['user_id']) {
+      throw new Error('Parameter missing: user_id')
+    }
+
+    if (params['group_id'] && !isInt(params['group_id'])) {
+      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+    }
+
+    if (params['user_id'] && !isInt(params['user_id'])) {
+      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+    }
+
+    const response = await Api.sendRequest(`/group_users`, 'POST', params, options)
+
+    return new GroupUser(response?.data, options)
+  }
 }
 
 export default GroupUser
