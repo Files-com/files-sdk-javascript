@@ -169,9 +169,9 @@ class Bundle {
   // Send email(s) with a link to bundle
   //
   // Parameters:
-  //   to (required) - array(string) - A list of email addresses to share this bundle with.
+  //   to - array(string) - A list of email addresses to share this bundle with. Required unless `recipients` is used.
   //   note - string - Note to include in email.
-  //   recipients - array(object) - A list of recipients to share this bundle with.
+  //   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
   share = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -200,14 +200,6 @@ class Bundle {
         params['id'] = this.id
       } else {
         throw new Error('Parameter missing: id')
-      }
-    }
-
-    if (!params['to']) {
-      if (this.attributes.to) {
-        params['to'] = this.to
-      } else {
-        throw new Error('Parameter missing: to')
       }
     }
 
