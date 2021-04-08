@@ -71,13 +71,6 @@ class Automation {
     this.attributes.source = value
   }
 
-  // string # DEPRECATED: Destination Path
-  getDestination = () => this.attributes.destination
-
-  setDestination = value => {
-    this.attributes.destination = value
-  }
-
   // string # Destination Path
   getDestinations = () => this.attributes.destinations
 
@@ -155,11 +148,18 @@ class Automation {
     this.attributes.value = value
   }
 
+  // string # DEPRECATED: Destination Path. Use `destinations` instead.
+  getDestination = () => this.attributes.destination
+
+  setDestination = value => {
+    this.attributes.destination = value
+  }
+
 
   // Parameters:
   //   automation (required) - string - Automation type
   //   source - string - Source Path
-  //   destination - string - DEPRECATED: Destination Path
+  //   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
   //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   //   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -342,7 +342,7 @@ class Automation {
   // Parameters:
   //   automation (required) - string - Automation type
   //   source - string - Source Path
-  //   destination - string - DEPRECATED: Destination Path
+  //   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
   //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
   //   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   //   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
