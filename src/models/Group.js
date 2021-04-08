@@ -36,7 +36,7 @@ class Group {
     this.attributes.name = value
   }
 
-  // array # List of user IDs who are group administrators (separated by commas)
+  // string # List of user IDs who are group administrators (separated by commas)
   getAdminIds = () => this.attributes.admin_ids
 
   setAdminIds = value => {

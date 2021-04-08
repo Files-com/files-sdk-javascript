@@ -22,10 +22,10 @@ class ExternalEvent {
   }
 
   isLoaded = () => !!this.attributes.id
-  // string # Type of event being recorded. Valid values: `remote_server_sync`, `lockout`, `ldap_login`, `saml_login`
+  // string # Type of event being recorded.
   getEventType = () => this.attributes.event_type
 
-  // string # Status of event. Valid values: `error`
+  // string # Status of event.
   getStatus = () => this.attributes.status
 
   // string # Event body

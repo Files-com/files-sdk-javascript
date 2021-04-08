@@ -22,7 +22,7 @@ class SsoStrategy {
   }
 
   isLoaded = () => !!this.attributes.id
-  // array # SSO Protocol
+  // string # SSO Protocol
   getProtocol = () => this.attributes.protocol
 
   // string # Provider name
