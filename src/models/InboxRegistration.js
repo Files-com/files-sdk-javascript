@@ -34,6 +34,9 @@ class InboxRegistration {
   // string # Registrant email address
   getEmail = () => this.attributes.email
 
+  // string # Clickwrap text that was shown to the registrant
+  getClickwrapBody = () => this.attributes.clickwrap_body
+
   // int64 # Id of associated form field set
   getFormFieldSetId = () => this.attributes.form_field_set_id
 

@@ -37,6 +37,9 @@ class BundleRegistration {
   // string # InboxRegistration cookie code, if there is an associated InboxRegistration
   getInboxCode = () => this.attributes.inbox_code
 
+  // string # Clickwrap text that was shown to the registrant
+  getClickwrapBody = () => this.attributes.clickwrap_body
+
   // int64 # Id of associated form field set
   getFormFieldSetId = () => this.attributes.form_field_set_id
 
