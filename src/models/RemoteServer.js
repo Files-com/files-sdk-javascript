@@ -211,6 +211,13 @@ class RemoteServer {
     this.attributes.one_drive_account_type = value
   }
 
+  // string # Cloud hosted sharepoint hostname
+  getSharepointHostname = () => this.attributes.sharepoint_hostname
+
+  setSharepointHostname = value => {
+    this.attributes.sharepoint_hostname = value
+  }
+
   // string # Azure Blob Storage Account name
   getAzureBlobStorageAccount = () => this.attributes.azure_blob_storage_account
 
@@ -352,6 +359,7 @@ class RemoteServer {
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
+  //   sharepoint_hostname - string - Cloud hosted sharepoint hostname
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   update = async (params = {}) => {
@@ -465,6 +473,9 @@ class RemoteServer {
     }
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
       throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+    }
+    if (params['sharepoint_hostname'] && !isString(params['sharepoint_hostname'])) {
+      throw new Error(`Bad parameter: sharepoint_hostname must be of type String, received ${getType(sharepoint_hostname)}`)
     }
     if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
       throw new Error(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
@@ -602,6 +613,7 @@ class RemoteServer {
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
+  //   sharepoint_hostname - string - Cloud hosted sharepoint hostname
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   static create = async (params = {}, options = {}) => {
@@ -735,6 +747,10 @@ class RemoteServer {
 
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
       throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+    }
+
+    if (params['sharepoint_hostname'] && !isString(params['sharepoint_hostname'])) {
+      throw new Error(`Bad parameter: sharepoint_hostname must be of type String, received ${getType(sharepoint_hostname)}`)
     }
 
     if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
