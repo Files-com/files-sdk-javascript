@@ -97,6 +97,9 @@ class SsoStrategy {
   // string # Comma or newline separated list of group names (with optional wildcards) to require membership for user provisioning.
   getProvisionGroupRequired = () => this.attributes.provision_group_required
 
+  // string # Comma-separated list of group names whose members will be created with email_signup authentication.
+  getProvisionEmailSignupGroups = () => this.attributes.provision_email_signup_groups
+
   // string # Comma-separated list of group names whose members will be created as Site Admins.
   getProvisionSiteAdminGroups = () => this.attributes.provision_site_admin_groups
 
