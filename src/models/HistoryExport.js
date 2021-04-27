@@ -190,7 +190,7 @@ class HistoryExport {
     this.attributes.query_target_permission_set = value
   }
 
-  // string # If `status` is `ready` and the query succeeded, this will be a URL where all the results can be downloaded at once as a CSV.
+  // string # If `status` is `ready`, this will be a URL where all the results can be downloaded at once as a CSV.
   getResultsUrl = () => this.attributes.results_url
 
   setResultsUrl = value => {
