@@ -22,6 +22,9 @@ class ExternalEvent {
   }
 
   isLoaded = () => !!this.attributes.id
+  // int64 # Event ID
+  getId = () => this.attributes.id
+
   // string # Type of event being recorded.
   getEventType = () => this.attributes.event_type
 
@@ -61,6 +64,31 @@ class ExternalEvent {
 
   static all = (params = {}, options = {}) =>
     ExternalEvent.list(params, options)
+
+  // Parameters:
+  //   id (required) - int64 - External Event ID.
+  static find = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['id'] = id
+
+    if (!params['id']) {
+      throw new Error('Parameter missing: id')
+    }
+
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    const response = await Api.sendRequest(`/external_events/${params['id']}`, 'GET', params, options)
+
+    return new ExternalEvent(response?.data, options)
+  }
+
+  static get = (id, params = {}, options = {}) =>
+    ExternalEvent.find(id, params, options)
 }
 
 export default ExternalEvent
