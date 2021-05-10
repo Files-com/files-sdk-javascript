@@ -217,6 +217,9 @@ class Site {
   // boolean # Allow users to use Office for the web?
   getOfficeIntegrationAvailable = () => this.attributes.office_integration_available
 
+  // string # Link to scheduling a meeting with our Sales team
+  getOncehubLink = () => this.attributes.oncehub_link
+
   // boolean # Use servers in the USA only?
   getOptOutGlobal = () => this.attributes.opt_out_global
 
