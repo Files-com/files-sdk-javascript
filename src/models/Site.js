@@ -76,9 +76,6 @@ class Site {
   // string # Top bar text color
   getColor2TopText = () => this.attributes.color2_top_text
 
-  // string # Site main contact name
-  getContactName = () => this.attributes.contact_name
-
   // date-time # Time this site was created
   getCreatedAt = () => this.attributes.created_at
 
