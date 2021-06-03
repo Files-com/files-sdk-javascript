@@ -37,6 +37,9 @@ class ExternalEvent {
   // date-time # External event create date/time
   getCreatedAt = () => this.attributes.created_at
 
+  // string # Link to log file.
+  getBodyUrl = () => this.attributes.body_url
+
 
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
