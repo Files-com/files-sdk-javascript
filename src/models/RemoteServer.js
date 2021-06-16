@@ -148,14 +148,14 @@ class RemoteServer {
     this.attributes.backblaze_b2_bucket = value
   }
 
-  // string # Wasabi region
+  // string # Wasabi Bucket name
   getWasabiBucket = () => this.attributes.wasabi_bucket
 
   setWasabiBucket = value => {
     this.attributes.wasabi_bucket = value
   }
 
-  // string # Wasabi Bucket name
+  // string # Wasabi region
   getWasabiRegion = () => this.attributes.wasabi_region
 
   setWasabiRegion = value => {
@@ -223,6 +223,27 @@ class RemoteServer {
 
   setAzureBlobStorageContainer = value => {
     this.attributes.azure_blob_storage_container = value
+  }
+
+  // string # S3-compatible Bucket name
+  getS3CompatibleBucket = () => this.attributes.s3_compatible_bucket
+
+  setS3CompatibleBucket = value => {
+    this.attributes.s3_compatible_bucket = value
+  }
+
+  // string # S3-compatible Bucket name
+  getS3CompatibleRegion = () => this.attributes.s3_compatible_region
+
+  setS3CompatibleRegion = value => {
+    this.attributes.s3_compatible_region = value
+  }
+
+  // string # S3-compatible endpoint
+  getS3CompatibleEndpoint = () => this.attributes.s3_compatible_endpoint
+
+  setS3CompatibleEndpoint = value => {
+    this.attributes.s3_compatible_endpoint = value
   }
 
   // string # AWS Access Key.
@@ -316,6 +337,20 @@ class RemoteServer {
     this.attributes.azure_blob_storage_access_key = value
   }
 
+  // string # S3-compatible access key
+  getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
+
+  setS3CompatibleAccessKey = value => {
+    this.attributes.s3_compatible_access_key = value
+  }
+
+  // string # S3-compatible secret key
+  getS3CompatibleSecretKey = () => this.attributes.s3_compatible_secret_key
+
+  setS3CompatibleSecretKey = value => {
+    this.attributes.s3_compatible_secret_key = value
+  }
+
 
   // Parameters:
   //   aws_access_key - string - AWS Access Key.
@@ -346,14 +381,19 @@ class RemoteServer {
   //   google_cloud_storage_project_id - string - Google Cloud Project ID
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage S3 Endpoint
-  //   wasabi_bucket - string - Wasabi region
-  //   wasabi_region - string - Wasabi Bucket name
+  //   wasabi_bucket - string - Wasabi Bucket name
+  //   wasabi_region - string - Wasabi region
   //   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
+  //   s3_compatible_bucket - string - S3-compatible Bucket name
+  //   s3_compatible_region - string - S3-compatible Bucket name
+  //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   s3_compatible_access_key - string - S3-compatible access key
+  //   s3_compatible_secret_key - string - S3-compatible secret key
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -471,6 +511,21 @@ class RemoteServer {
     }
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
       throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+    }
+    if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
+      throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
+    }
+    if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
+      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
+    }
+    if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
+      throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+    }
+    if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
+      throw new Error(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
+    }
+    if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
+      throw new Error(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
     }
 
     if (!params['id']) {
@@ -596,14 +651,19 @@ class RemoteServer {
   //   google_cloud_storage_project_id - string - Google Cloud Project ID
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage S3 Endpoint
-  //   wasabi_bucket - string - Wasabi region
-  //   wasabi_region - string - Wasabi Bucket name
+  //   wasabi_bucket - string - Wasabi Bucket name
+  //   wasabi_region - string - Wasabi region
   //   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
   //   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
   //   rackspace_container - string - The name of the container (top level directory) where files will sync.
   //   one_drive_account_type - string - Either personal or business_other account types
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
+  //   s3_compatible_bucket - string - S3-compatible Bucket name
+  //   s3_compatible_region - string - S3-compatible Bucket name
+  //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   s3_compatible_access_key - string - S3-compatible access key
+  //   s3_compatible_secret_key - string - S3-compatible secret key
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new Error(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
@@ -743,6 +803,26 @@ class RemoteServer {
 
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
       throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+    }
+
+    if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
+      throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
+    }
+
+    if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
+      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
+    }
+
+    if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
+      throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+    }
+
+    if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
+      throw new Error(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
+    }
+
+    if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
+      throw new Error(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)
