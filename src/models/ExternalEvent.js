@@ -25,14 +25,30 @@ class ExternalEvent {
   // int64 # Event ID
   getId = () => this.attributes.id
 
+  setId = value => {
+    this.attributes.id = value
+  }
+
   // string # Type of event being recorded.
   getEventType = () => this.attributes.event_type
+
+  setEventType = value => {
+    this.attributes.event_type = value
+  }
 
   // string # Status of event.
   getStatus = () => this.attributes.status
 
+  setStatus = value => {
+    this.attributes.status = value
+  }
+
   // string # Event body
   getBody = () => this.attributes.body
+
+  setBody = value => {
+    this.attributes.body = value
+  }
 
   // date-time # External event create date/time
   getCreatedAt = () => this.attributes.created_at
@@ -40,6 +56,20 @@ class ExternalEvent {
   // string # Link to log file.
   getBodyUrl = () => this.attributes.body_url
 
+  setBodyUrl = value => {
+    this.attributes.body_url = value
+  }
+
+
+  save = () => {
+      if (this.attributes['id']) {
+        throw new Error('The ExternalEvent object doesn\'t support updates.')
+      } else {
+        const newObject = ExternalEvent.create(this.attributes, this.options)
+        this.attributes = { ...newObject.attributes }
+        return true
+      }
+  }
 
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
@@ -92,6 +122,31 @@ class ExternalEvent {
 
   static get = (id, params = {}, options = {}) =>
     ExternalEvent.find(id, params, options)
+
+  // Parameters:
+  //   status (required) - string - Status of event.
+  //   body (required) - string - Event body
+  static create = async (params = {}, options = {}) => {
+    if (!params['status']) {
+      throw new Error('Parameter missing: status')
+    }
+
+    if (!params['body']) {
+      throw new Error('Parameter missing: body')
+    }
+
+    if (params['status'] && !isString(params['status'])) {
+      throw new Error(`Bad parameter: status must be of type String, received ${getType(status)}`)
+    }
+
+    if (params['body'] && !isString(params['body'])) {
+      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+    }
+
+    const response = await Api.sendRequest(`/external_events`, 'POST', params, options)
+
+    return new ExternalEvent(response?.data, options)
+  }
 }
 
 export default ExternalEvent
