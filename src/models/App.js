@@ -28,6 +28,9 @@ class App {
   // string # Long form description of the App
   getExtendedDescription = () => this.attributes.extended_description
 
+  // string # Short description of the App
+  getShortDescription = () => this.attributes.short_description
+
   // string # Collection of named links to documentation
   getDocumentationLinks = () => this.attributes.documentation_links
 
