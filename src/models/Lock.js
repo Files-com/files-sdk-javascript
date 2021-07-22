@@ -29,32 +29,46 @@ class Lock {
     this.attributes.path = value
   }
 
-  // int64 # Lock timeout
+  // int64 # Lock timeout in seconds
   getTimeout = () => this.attributes.timeout
 
   setTimeout = value => {
     this.attributes.timeout = value
   }
 
-  // string # Lock depth (0 or infinity)
+  // string # DEPRECATED: Lock depth
   getDepth = () => this.attributes.depth
 
   setDepth = value => {
     this.attributes.depth = value
   }
 
-  // string # Owner of lock.  This can be any arbitrary string.
+  // boolean # Does lock apply to subfolders?
+  getRecursive = () => this.attributes.recursive
+
+  setRecursive = value => {
+    this.attributes.recursive = value
+  }
+
+  // string # Owner of the lock.  This can be any arbitrary string.
   getOwner = () => this.attributes.owner
 
   setOwner = value => {
     this.attributes.owner = value
   }
 
-  // string # Lock scope(shared or exclusive)
+  // string # DEPRECATED: Lock scope
   getScope = () => this.attributes.scope
 
   setScope = value => {
     this.attributes.scope = value
+  }
+
+  // boolean # Is lock exclusive?
+  getExclusive = () => this.attributes.exclusive
+
+  setExclusive = value => {
+    this.attributes.exclusive = value
   }
 
   // string # Lock token.  Use to release lock.
@@ -64,11 +78,18 @@ class Lock {
     this.attributes.token = value
   }
 
-  // string # Lock type
+  // string # DEPRECATED: Lock type
   getType = () => this.attributes.type
 
   setType = value => {
     this.attributes.type = value
+  }
+
+  // boolean # Can lock be modified by users other than its creator?
+  getAllowAccessByAnyUser = () => this.attributes.allow_access_by_any_user
+
+  setAllowAccessByAnyUser = value => {
+    this.attributes.allow_access_by_any_user = value
   }
 
   // int64 # Lock creator user ID
@@ -168,6 +189,9 @@ class Lock {
 
   // Parameters:
   //   path (required) - string - Path
+  //   allow_access_by_any_user - boolean - Allow lock to be updated by any user?
+  //   exclusive - boolean - Is lock exclusive?
+  //   recursive - string - Does lock apply to subfolders?
   //   timeout - int64 - Lock timeout length
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -182,6 +206,10 @@ class Lock {
 
     if (params['path'] && !isString(params['path'])) {
       throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+
+    if (params['recursive'] && !isString(params['recursive'])) {
+      throw new Error(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
     }
 
     if (params['timeout'] && !isInt(params['timeout'])) {
