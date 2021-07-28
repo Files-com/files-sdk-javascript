@@ -246,6 +246,13 @@ class RemoteServer {
     this.attributes.s3_compatible_endpoint = value
   }
 
+  // boolean # `true` if remote server only accepts connections from dedicated IPs
+  getEnableDedicatedIps = () => this.attributes.enable_dedicated_ips
+
+  setEnableDedicatedIps = value => {
+    this.attributes.enable_dedicated_ips = value
+  }
+
   // string # AWS Access Key.
   getAwsAccessKey = () => this.attributes.aws_access_key
 
@@ -392,6 +399,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_region - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible access key
   //   s3_compatible_secret_key - string - S3-compatible secret key
   update = async (params = {}) => {
@@ -662,6 +670,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_region - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible access key
   //   s3_compatible_secret_key - string - S3-compatible secret key
   static create = async (params = {}, options = {}) => {
