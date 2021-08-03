@@ -92,6 +92,13 @@ class WebhookTest {
     this.attributes.body = value
   }
 
+  // string # raw body text
+  getRawBody = () => this.attributes.raw_body
+
+  setRawBody = value => {
+    this.attributes.raw_body = value
+  }
+
   // string # action for test body
   getAction = () => this.attributes.action
 
@@ -116,6 +123,7 @@ class WebhookTest {
   //   encoding - string - HTTP encoding method.  Can be JSON, XML, or RAW (form data).
   //   headers - object - Additional request headers.
   //   body - object - Additional body parameters.
+  //   raw_body - string - raw body text
   //   action - string - action for test body
   static create = async (params = {}, options = {}) => {
     if (!params['url']) {
@@ -132,6 +140,10 @@ class WebhookTest {
 
     if (params['encoding'] && !isString(params['encoding'])) {
       throw new Error(`Bad parameter: encoding must be of type String, received ${getType(encoding)}`)
+    }
+
+    if (params['raw_body'] && !isString(params['raw_body'])) {
+      throw new Error(`Bad parameter: raw_body must be of type String, received ${getType(raw_body)}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
