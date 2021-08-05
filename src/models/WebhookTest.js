@@ -99,6 +99,20 @@ class WebhookTest {
     this.attributes.raw_body = value
   }
 
+  // boolean # Send the file data as the request body?
+  getFileAsBody = () => this.attributes.file_as_body
+
+  setFileAsBody = value => {
+    this.attributes.file_as_body = value
+  }
+
+  // string # Send the file data as a named parameter in the request POST body
+  getFileFormField = () => this.attributes.file_form_field
+
+  setFileFormField = value => {
+    this.attributes.file_form_field = value
+  }
+
   // string # action for test body
   getAction = () => this.attributes.action
 
@@ -124,6 +138,8 @@ class WebhookTest {
   //   headers - object - Additional request headers.
   //   body - object - Additional body parameters.
   //   raw_body - string - raw body text
+  //   file_as_body - boolean - Send the file data as the request body?
+  //   file_form_field - string - Send the file data as a named parameter in the request POST body
   //   action - string - action for test body
   static create = async (params = {}, options = {}) => {
     if (!params['url']) {
@@ -144,6 +160,10 @@ class WebhookTest {
 
     if (params['raw_body'] && !isString(params['raw_body'])) {
       throw new Error(`Bad parameter: raw_body must be of type String, received ${getType(raw_body)}`)
+    }
+
+    if (params['file_form_field'] && !isString(params['file_form_field'])) {
+      throw new Error(`Bad parameter: file_form_field must be of type String, received ${getType(file_form_field)}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
