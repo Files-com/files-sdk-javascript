@@ -103,6 +103,15 @@ class Site {
   // int64 # Desktop app session lifetime (in hours)
   getDesktopAppSessionLifetime = () => this.attributes.desktop_app_session_lifetime
 
+  // boolean # Is the mobile app enabled?
+  getMobileApp = () => this.attributes.mobile_app
+
+  // boolean # Is mobile app session IP pinning enabled?
+  getMobileAppSessionIpPinning = () => this.attributes.mobile_app_session_ip_pinning
+
+  // int64 # Mobile app session lifetime (in hours)
+  getMobileAppSessionLifetime = () => this.attributes.mobile_app_session_lifetime
+
   // string # Comma seperated list of disallowed Country codes
   getDisallowedCountries = () => this.attributes.disallowed_countries
 
@@ -403,6 +412,9 @@ class Site {
   //   desktop_app - boolean - Is the desktop app enabled?
   //   desktop_app_session_ip_pinning - boolean - Is desktop app session IP pinning enabled?
   //   desktop_app_session_lifetime - int64 - Desktop app session lifetime (in hours)
+  //   mobile_app - boolean - Is the mobile app enabled?
+  //   mobile_app_session_ip_pinning - boolean - Is mobile app session IP pinning enabled?
+  //   mobile_app_session_lifetime - int64 - Mobile app session lifetime (in hours)
   //   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
   //   welcome_screen - string - Does the welcome screen appear?
   //   office_integration_available - boolean - Allow users to use Office for the web?
@@ -533,6 +545,10 @@ class Site {
 
     if (params['desktop_app_session_lifetime'] && !isInt(params['desktop_app_session_lifetime'])) {
       throw new Error(`Bad parameter: desktop_app_session_lifetime must be of type Int, received ${getType(desktop_app_session_lifetime)}`)
+    }
+
+    if (params['mobile_app_session_lifetime'] && !isInt(params['mobile_app_session_lifetime'])) {
+      throw new Error(`Bad parameter: mobile_app_session_lifetime must be of type Int, received ${getType(mobile_app_session_lifetime)}`)
     }
 
     if (params['welcome_screen'] && !isString(params['welcome_screen'])) {
