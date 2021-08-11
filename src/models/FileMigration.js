@@ -46,6 +46,9 @@ class FileMigration {
   // string # Status
   getStatus = () => this.attributes.status
 
+  // string # Link to download the log file for this migration.
+  getLogUrl = () => this.attributes.log_url
+
 
   // Parameters:
   //   id (required) - int64 - File Migration ID.
