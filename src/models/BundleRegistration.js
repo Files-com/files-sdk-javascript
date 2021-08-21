@@ -34,6 +34,9 @@ class BundleRegistration {
   // string # Registrant email address
   getEmail = () => this.attributes.email
 
+  // string # Registrant IP Address
+  getIp = () => this.attributes.ip
+
   // string # InboxRegistration cookie code, if there is an associated InboxRegistration
   getInboxCode = () => this.attributes.inbox_code
 
