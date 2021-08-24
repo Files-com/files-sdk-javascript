@@ -389,6 +389,13 @@ class User {
     this.attributes.group_id = value
   }
 
+  // string # Pre-calculated hash of the user's password.
+  getImportedPasswordHash = () => this.attributes.imported_password_hash
+
+  setImportedPasswordHash = value => {
+    this.attributes.imported_password_hash = value
+  }
+
   // string # User password.
   getPassword = () => this.attributes.password
 
@@ -498,6 +505,7 @@ class User {
   //   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
   //   group_id - int64 - Group ID to associate this user with.
   //   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+  //   imported_password_hash - string - Pre-calculated hash of the user's password.
   //   password - string - User password.
   //   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
   //   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
@@ -563,6 +571,9 @@ class User {
     }
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+    if (params['imported_password_hash'] && !isString(params['imported_password_hash'])) {
+      throw new Error(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
     }
     if (params['password'] && !isString(params['password'])) {
       throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
@@ -746,6 +757,7 @@ class User {
   //   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
   //   group_id - int64 - Group ID to associate this user with.
   //   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+  //   imported_password_hash - string - Pre-calculated hash of the user's password.
   //   password - string - User password.
   //   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
   //   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
@@ -804,6 +816,10 @@ class User {
 
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+
+    if (params['imported_password_hash'] && !isString(params['imported_password_hash'])) {
+      throw new Error(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
     }
 
     if (params['password'] && !isString(params['password'])) {
