@@ -50,13 +50,6 @@ class Automation {
     this.attributes.interval = value
   }
 
-  // string # If trigger is `daily`, date this automation will next run.
-  getNextProcessOn = () => this.attributes.next_process_on
-
-  setNextProcessOn = value => {
-    this.attributes.next_process_on = value
-  }
-
   // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
   getSchedule = () => this.attributes.schedule
 
