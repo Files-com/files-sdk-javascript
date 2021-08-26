@@ -50,6 +50,13 @@ class Automation {
     this.attributes.interval = value
   }
 
+  // string # Name for this automation.
+  getName = () => this.attributes.name
+
+  setName = value => {
+    this.attributes.name = value
+  }
+
   // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
   getSchedule = () => this.attributes.schedule
 
@@ -83,6 +90,13 @@ class Automation {
 
   setDestinationReplaceTo = value => {
     this.attributes.destination_replace_to = value
+  }
+
+  // string # Description for the this Automation.
+  getDescription = () => this.attributes.description
+
+  setDescription = value => {
+    this.attributes.description = value
   }
 
   // string # Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -161,6 +175,8 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
+  //   description - string - Description for the this Automation.
+  //   name - string - Name for this automation.
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -207,6 +223,12 @@ class Automation {
     }
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+    if (params['description'] && !isString(params['description'])) {
+      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
+    }
+    if (params['name'] && !isString(params['name'])) {
+      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['trigger'] && !isString(params['trigger'])) {
       throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
@@ -344,6 +366,8 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
+  //   description - string - Description for the this Automation.
+  //   name - string - Name for this automation.
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -391,6 +415,14 @@ class Automation {
 
     if (params['group_ids'] && !isString(params['group_ids'])) {
       throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+    }
+
+    if (params['description'] && !isString(params['description'])) {
+      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
+    }
+
+    if (params['name'] && !isString(params['name'])) {
+      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['trigger'] && !isString(params['trigger'])) {

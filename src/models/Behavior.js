@@ -50,6 +50,20 @@ class Behavior {
     this.attributes.behavior = value
   }
 
+  // string # Name for this behavior.
+  getName = () => this.attributes.name
+
+  setName = value => {
+    this.attributes.name = value
+  }
+
+  // string # Description for this behavior.
+  getDescription = () => this.attributes.description
+
+  setDescription = value => {
+    this.attributes.description = value
+  }
+
   // object # Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
   getValue = () => this.attributes.value
 
@@ -68,6 +82,8 @@ class Behavior {
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+  //   name - string - Name for this behavior.
+  //   description - string - Description for this behavior.
   //   behavior - string - Behavior type.
   //   path - string - Folder behaviors path.
   update = async (params = {}) => {
@@ -85,6 +101,12 @@ class Behavior {
     }
     if (params['value'] && !isString(params['value'])) {
       throw new Error(`Bad parameter: value must be of type String, received ${getType(value)}`)
+    }
+    if (params['name'] && !isString(params['name'])) {
+      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+    }
+    if (params['description'] && !isString(params['description'])) {
+      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
     }
     if (params['behavior'] && !isString(params['behavior'])) {
       throw new Error(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
@@ -251,6 +273,8 @@ class Behavior {
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+  //   name - string - Name for this behavior.
+  //   description - string - Description for this behavior.
   //   path (required) - string - Folder behaviors path.
   //   behavior (required) - string - Behavior type.
   static create = async (params = {}, options = {}) => {
@@ -264,6 +288,14 @@ class Behavior {
 
     if (params['value'] && !isString(params['value'])) {
       throw new Error(`Bad parameter: value must be of type String, received ${getType(value)}`)
+    }
+
+    if (params['name'] && !isString(params['name'])) {
+      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+    }
+
+    if (params['description'] && !isString(params['description'])) {
+      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
