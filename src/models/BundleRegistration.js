@@ -49,6 +49,12 @@ class BundleRegistration {
   // string # Data for form field set with form field ids as keys and user data as values
   getFormFieldData = () => this.attributes.form_field_data
 
+  // int64 # Id of associated bundle
+  getBundleId = () => this.attributes.bundle_id
+
+  // int64 # Id of associated bundle recipient
+  getBundleRecipientId = () => this.attributes.bundle_recipient_id
+
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
