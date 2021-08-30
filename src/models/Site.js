@@ -127,6 +127,9 @@ class Site {
   // email # Main email for this site
   getEmail = () => this.attributes.email
 
+  // boolean # Is FTP enabled?
+  getFtpEnabled = () => this.attributes.ftp_enabled
+
   // email # Reply-to email for this site
   getReplyToEmail = () => this.attributes.reply_to_email
 
@@ -285,6 +288,9 @@ class Site {
 
   // boolean # Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
   getSessionPinnedByIp = () => this.attributes.session_pinned_by_ip
+
+  // boolean # Is SFTP enabled?
+  getSftpEnabled = () => this.attributes.sftp_enabled
 
   // boolean # Use user FTP roots also for SFTP?
   getSftpUserRootEnabled = () => this.attributes.sftp_user_root_enabled
@@ -453,6 +459,8 @@ class Site {
   //   non_sso_users_allowed - boolean - If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
   //   sharing_enabled - boolean - Allow bundle creation
   //   user_requests_enabled - boolean - Enable User Requests feature
+  //   ftp_enabled - boolean - Is FTP enabled?
+  //   sftp_enabled - boolean - Is SFTP enabled?
   //   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
   //   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
   //   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
