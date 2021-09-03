@@ -263,6 +263,13 @@ class User {
     this.attributes.require_password_change = value
   }
 
+  // boolean # Is user's password expired?
+  getPasswordExpired = () => this.attributes.password_expired
+
+  setPasswordExpired = value => {
+    this.attributes.password_expired = value
+  }
+
   // boolean # Can this user access the REST API?
   getRestapiPermission = () => this.attributes.restapi_permission
 
