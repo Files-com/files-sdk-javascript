@@ -475,40 +475,6 @@ class File {
   destroy = (params = {}) =>
     this.delete(params)
 
-  // Return metadata for file/folder
-  //
-  // Parameters:
-  //   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
-  //   with_previews - boolean - Include file preview information?
-  //   with_priority_color - boolean - Include file priority color information?
-  metadata = async (params = {}) => {
-    if (!this.attributes.path) {
-      throw new Error('Current object has no path')
-    }
-
-    if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
-    }
-    if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new Error(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
-    }
-
-    if (!params['path']) {
-      if (this.attributes.path) {
-        params['path'] = this.path
-      } else {
-        throw new Error('Parameter missing: path')
-      }
-    }
-
-    return Api.sendRequest(`/file_actions/metadata/${params['path']}`, 'GET', params, this.options)
-  }
-
   // Copy file/folder
   //
   // Parameters:
@@ -709,6 +675,35 @@ class File {
     }
 
     const response = await Api.sendRequest(`/files/${params['path']}`, 'POST', params, options)
+
+    return new File(response?.data, options)
+  }
+
+  // Parameters:
+  //   path (required) - string - Path to operate on.
+  //   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
+  //   with_previews - boolean - Include file preview information?
+  //   with_priority_color - boolean - Include file priority color information?
+  static findBy = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['path'] = path
+
+    if (!params['path']) {
+      throw new Error('Parameter missing: path')
+    }
+
+    if (params['path'] && !isString(params['path'])) {
+      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+    }
+
+    if (params['preview_size'] && !isString(params['preview_size'])) {
+      throw new Error(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+    }
+
+    const response = await Api.sendRequest(`/file_actions/metadata/${params['path']}`, 'GET', params, options)
 
     return new File(response?.data, options)
   }
