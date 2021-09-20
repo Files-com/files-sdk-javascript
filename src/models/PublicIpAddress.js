@@ -28,6 +28,12 @@ class PublicIpAddress {
   // string # The name of the frontend server.
   getServerName = () => this.attributes.server_name
 
+  // string
+  getFtpEnabled = () => this.attributes.ftp_enabled
+
+  // string
+  getSftpEnabled = () => this.attributes.sftp_enabled
+
 }
 
 export default PublicIpAddress

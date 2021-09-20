@@ -684,7 +684,7 @@ class File {
   //   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
   //   with_previews - boolean - Include file preview information?
   //   with_priority_color - boolean - Include file priority color information?
-  static findBy = async (path, params = {}, options = {}) => {
+  static find = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
@@ -707,6 +707,9 @@ class File {
 
     return new File(response?.data, options)
   }
+
+  static get = (path, params = {}, options = {}) =>
+    File.find(path, params, options)
 }
 
 export default File

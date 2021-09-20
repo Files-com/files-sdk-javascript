@@ -292,6 +292,9 @@ class Site {
   // boolean # Is SFTP enabled?
   getSftpEnabled = () => this.attributes.sftp_enabled
 
+  // boolean # Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+  getSftpInsecureCiphers = () => this.attributes.sftp_insecure_ciphers
+
   // boolean # Use user FTP roots also for SFTP?
   getSftpUserRootEnabled = () => this.attributes.sftp_user_root_enabled
 
@@ -334,7 +337,7 @@ class Site {
   // date-time # If switching plans, when does the new plan take effect?
   getSwitchToPlanDate = () => this.attributes.switch_to_plan_date
 
-  // boolean # Is TLS disabled(site setting)?
+  // boolean # Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
   getTlsDisabled = () => this.attributes.tls_disabled
 
   // int64 # Number of days left in trial
@@ -426,7 +429,8 @@ class Site {
   //   office_integration_available - boolean - Allow users to use Office for the web?
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
-  //   tls_disabled - boolean - Is TLS disabled(site setting)?
+  //   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
+  //   sftp_insecure_ciphers - boolean - Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
   //   user_lockout - boolean - Will users be locked out after incorrect login attempts?
   //   user_lockout_tries - int64 - Number of login tries within `user_lockout_within` hours before users are locked out
   //   user_lockout_within - int64 - Number of hours for user lockout window

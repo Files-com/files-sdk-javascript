@@ -78,6 +78,13 @@ class Session {
     this.attributes.root_path = value
   }
 
+  // boolean # Are insecure SFTP ciphers allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure SSH ciphers for this user.)
+  getSftpInsecureCiphers = () => this.attributes.sftp_insecure_ciphers
+
+  setSftpInsecureCiphers = value => {
+    this.attributes.sftp_insecure_ciphers = value
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -92,7 +99,7 @@ class Session {
     this.attributes.ssl_required = value
   }
 
-  // boolean # Is strong TLS disabled for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
+  // boolean # Aee insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
   getTlsDisabled = () => this.attributes.tls_disabled
 
   setTlsDisabled = value => {
