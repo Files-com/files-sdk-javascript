@@ -1,25 +1,23 @@
-import Files from './Files'
-
-const getLogLevelMethod = level => {
-  switch (level) {
-    case LogLevel.ERROR: return 'error'
-    case LogLevel.WARN: return 'warn'
-    case LogLevel.INFO: return 'info'
-    case LogLevel.DEBUG: return 'log'
+class Logger {
+  static LogLevel = {
+    NONE: 0,
+    ERROR: 1,
+    WARN: 2,
+    INFO: 3,
+    DEBUG: 4,
   }
 
-  return 'log'
-}
+  static getLogLevelMethod = level => {
+    switch (level) {
+      case Logger.LogLevel.ERROR: return 'error'
+      case Logger.LogLevel.WARN: return 'warn'
+      case Logger.LogLevel.INFO: return 'info'
+      case Logger.LogLevel.DEBUG: return 'log'
+    }
+  
+    return 'log'
+  }
 
-class LogLevel {
-  static NONE = 0
-  static ERROR = 1
-  static WARN = 2
-  static INFO = 3
-  static DEBUG = 4
-}
-
-class Logger {
   static isPaused = false
 
   static getLogLevelName = level => {
@@ -54,12 +52,14 @@ class Logger {
       return
     }
 
+    const Files = require('./Files').default
+
     if (Files.getLogLevel() < level) {
       return;
     }
 
     const prefix = `[${Logger.getLogLevelName(level)}]: `
-    const method = getLogLevelMethod(level)
+    const method = Logger.getLogLevelMethod(level)
     console[method](prefix, ...messages)
   }
 
@@ -72,8 +72,6 @@ class Logger {
   }
 }
 
-export {
-  LogLevel,
-}
+export const LogLevel = Logger.LogLevel
 
 export default Logger

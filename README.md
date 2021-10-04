@@ -21,6 +21,18 @@ or
     // set your subdomain or custom domain
     Files.setBaseUrl('https://MY-SUBDOMAIN.files.com')
 
+#### `require()` vs. `import`
+
+The examples provided in the documentation here use the newer ES6 `import` syntax. To
+instead use the older CommonJS module syntax with `require()`, ensure that `.default`
+is included. For example:
+
+    const Files = require('files.com/lib/Files').default
+    const User = require('files.com/lib/models/User').default
+
+    // destructure to directly assign a named export
+    const { LogLevel } = require('files.com/lib/Logger').default
+
 ### Authentication
 
 There are multiple ways to authenticate to the API.
