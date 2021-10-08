@@ -22,8 +22,17 @@ class AutomationRun {
   }
 
   isLoaded = () => !!this.attributes.id
+  // int64 # ID.
+  getId = () => this.attributes.id
+
   // int64 # ID of the associated Automation.
   getAutomationId = () => this.attributes.automation_id
+
+  // date-time # Automation run completion/failure date/time.
+  getCompletedAt = () => this.attributes.completed_at
+
+  // date-time # Automation run start date/time.
+  getCreatedAt = () => this.attributes.created_at
 
   // string # The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
   getStatus = () => this.attributes.status
@@ -72,6 +81,31 @@ class AutomationRun {
 
   static all = (params = {}, options = {}) =>
     AutomationRun.list(params, options)
+
+  // Parameters:
+  //   id (required) - int64 - Automation Run ID.
+  static find = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['id'] = id
+
+    if (!params['id']) {
+      throw new Error('Parameter missing: id')
+    }
+
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    const response = await Api.sendRequest(`/automation_runs/${params['id']}`, 'GET', params, options)
+
+    return new AutomationRun(response?.data, options)
+  }
+
+  static get = (id, params = {}, options = {}) =>
+    AutomationRun.find(id, params, options)
 }
 
 export default AutomationRun
