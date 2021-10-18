@@ -108,6 +108,9 @@ You can set the following global properties using static methods on the `Files` 
 
       // network timeout in seconds (default: 30.0)
       networkTimeout: 30.0,
+
+      // auto-fetch all pages when results span multiple pages (default: `true`)
+      autoPaginate: true,
     })
 
 ### File Operations

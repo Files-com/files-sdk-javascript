@@ -14,7 +14,6 @@ let maxNetworkRetries = 3
 let minNetworkRetryDelay = 0.5
 let maxNetworkRetryDelay = 1.5
 let networkTimeout = 30.0
-
 let autoPaginate = true
 
 class Files {
@@ -61,14 +60,16 @@ class Files {
     if (typeof options.networkTimeout !== 'undefined') {
       networkTimeout = options.networkTimeout
     }
+
+    if (typeof options.autoPaginate !== 'undefined') {
+      autoPaginate = options.autoPaginate
+    }
   }
 
   static getMaxNetworkRetries = () => maxNetworkRetries
   static getMinNetworkRetryDelay = () => minNetworkRetryDelay
   static getMaxNetworkRetryDelay = () => maxNetworkRetryDelay
   static getNetworkTimeout = () => networkTimeout
-
-  static setAutoPaginate = value => autoPaginate = value
   static getAutoPaginate = () => autoPaginate
 }
 

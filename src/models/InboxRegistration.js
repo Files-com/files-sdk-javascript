@@ -49,6 +49,9 @@ class InboxRegistration {
   // int64 # Id of associated inbox recipient
   getInboxRecipientId = () => this.attributes.inbox_recipient_id
 
+  // string # Title of associated inbox
+  getInboxTitle = () => this.attributes.inbox_title
+
 
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.

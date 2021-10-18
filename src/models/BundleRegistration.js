@@ -49,6 +49,9 @@ class BundleRegistration {
   // string # Data for form field set with form field ids as keys and user data as values
   getFormFieldData = () => this.attributes.form_field_data
 
+  // string # Bundle URL code
+  getBundleCode = () => this.attributes.bundle_code
+
   // int64 # Id of associated bundle
   getBundleId = () => this.attributes.bundle_id
 
