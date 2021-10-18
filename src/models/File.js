@@ -564,6 +564,7 @@ class File {
   //   parts - int64 - How many parts to fetch?
   //   ref - string -
   //   restart - int64 - File byte offset to restart from.
+  //   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
   //   with_rename - boolean - Allow file rename instead of overwrite?
   beginUpload = async (params = {}) => {
     if (!this.attributes.path) {
@@ -589,6 +590,9 @@ class File {
     }
     if (params['restart'] && !isInt(params['restart'])) {
       throw new Error(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
+    }
+    if (params['size'] && !isInt(params['size'])) {
+      throw new Error(`Bad parameter: size must be of type Int, received ${getType(size)}`)
     }
 
     if (!params['path']) {
