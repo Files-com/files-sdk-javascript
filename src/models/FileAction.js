@@ -22,10 +22,10 @@ class FileAction {
   }
 
   isLoaded = () => !!this.attributes.path
-  // string # Status of file operation. Possible values: completed, enqueued.
+  // string # Status of file operation.
   getStatus = () => this.attributes.status
 
-  // int64 # If status is enqueued, this is the id of the FileMigration to check for status updates.
+  // int64 # If status is pending, this is the id of the FileMigration to check for status updates.
   getFileMigrationId = () => this.attributes.file_migration_id
 
 }
