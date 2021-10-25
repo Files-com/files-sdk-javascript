@@ -37,9 +37,6 @@ class Preview {
   // int64 # Preview size
   getSize = () => this.attributes.size
 
-  // string # Preview status message. Addtional context from the preview generation process about the status
-  getStatusMessage = () => this.attributes.status_message
-
 }
 
 export default Preview
