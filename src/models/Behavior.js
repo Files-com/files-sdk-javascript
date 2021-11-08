@@ -78,6 +78,13 @@ class Behavior {
     this.attributes.attachment_file = value
   }
 
+  // boolean # If true, will delete the file stored in attachment
+  getAttachmentDelete = () => this.attributes.attachment_delete
+
+  setAttachmentDelete = value => {
+    this.attributes.attachment_delete = value
+  }
+
 
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
@@ -86,6 +93,7 @@ class Behavior {
   //   description - string - Description for this behavior.
   //   behavior - string - Behavior type.
   //   path - string - Folder behaviors path.
+  //   attachment_delete - boolean - If true, will delete the file stored in attachment
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')

@@ -144,6 +144,20 @@ class Bundle {
     this.attributes.inbox_id = value
   }
 
+  // Preview watermark image applied to all bundle items.
+  getWatermarkAttachment = () => this.attributes.watermark_attachment
+
+  setWatermarkAttachment = value => {
+    this.attributes.watermark_attachment = value
+  }
+
+  // object # Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+  getWatermarkValue = () => this.attributes.watermark_value
+
+  setWatermarkValue = value => {
+    this.attributes.watermark_value = value
+  }
+
   // boolean # Does this bundle have an associated inbox?
   getHasInbox = () => this.attributes.has_inbox
 
@@ -170,6 +184,20 @@ class Bundle {
 
   setFormFieldSetId = value => {
     this.attributes.form_field_set_id = value
+  }
+
+  // file # Preview watermark image applied to all bundle items.
+  getWatermarkAttachmentFile = () => this.attributes.watermark_attachment_file
+
+  setWatermarkAttachmentFile = value => {
+    this.attributes.watermark_attachment_file = value
+  }
+
+  // boolean # If true, will delete the file stored in watermark_attachment
+  getWatermarkAttachmentDelete = () => this.attributes.watermark_attachment_delete
+
+  setWatermarkAttachmentDelete = value => {
+    this.attributes.watermark_attachment_delete = value
   }
 
 
@@ -227,6 +255,8 @@ class Bundle {
   //   preview_only - boolean - Restrict users to previewing files only?
   //   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+  //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
+  //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -392,6 +422,7 @@ class Bundle {
   //   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
   //   inbox_id - int64 - ID of the associated inbox, if available.
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+  //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   static create = async (params = {}, options = {}) => {
     if (!params['paths']) {
       throw new Error('Parameter missing: paths')
