@@ -25,6 +25,9 @@ class SettingsChange {
   // object # Specifics on what changed.
   getChangeDetails = () => this.attributes.change_details
 
+  // string # Markdown-formatted change messages.
+  getChanges = () => this.attributes.changes
+
   // date-time # The time this change was made
   getCreatedAt = () => this.attributes.created_at
 
