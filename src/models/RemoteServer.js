@@ -29,6 +29,13 @@ class RemoteServer {
     this.attributes.id = value
   }
 
+  // boolean # If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+  getDisabled = () => this.attributes.disabled
+
+  setDisabled = value => {
+    this.attributes.disabled = value
+  }
+
   // string # Type of authentication method
   getAuthenticationMethod = () => this.attributes.authentication_method
 

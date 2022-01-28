@@ -127,7 +127,7 @@ class SsoStrategy {
   // string # Domain name that will be appended to LDAP usernames
   getLdapDomain = () => this.attributes.ldap_domain
 
-  // boolean # Is strategy enabled?
+  // boolean # Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
   getEnabled = () => this.attributes.enabled
 
   // string # LDAP host
