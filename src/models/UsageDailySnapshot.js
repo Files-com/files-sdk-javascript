@@ -28,8 +28,29 @@ class UsageDailySnapshot {
   // date # The date of this usage record
   getDate = () => this.attributes.date
 
-  // int64 # The quantity of storage held for this site
+  // boolean # True if the API usage fields `read_api_usage` and `write_api_usage` can be relied upon.  If this is false, we suggest hiding that value from any UI.
+  getApiUsageAvailable = () => this.attributes.api_usage_available
+
+  // int64 # Read API Calls used on this day. Note: only updated for days before the current day.
+  getReadApiUsage = () => this.attributes.read_api_usage
+
+  // int64 # Write API Calls used on this day. Note: only updated for days before the current day.
+  getWriteApiUsage = () => this.attributes.write_api_usage
+
+  // int64 # Number of billable users as of this day.
+  getUserCount = () => this.attributes.user_count
+
+  // int64 # GB of Files Native Storage used on this day.
   getCurrentStorage = () => this.attributes.current_storage
+
+  // int64 # GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
+  getDeletedFilesStorage = () => this.attributes.deleted_files_storage
+
+  // int64 # GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
+  getDeletedFilesCountedInMinimum = () => this.attributes.deleted_files_counted_in_minimum
+
+  // int64 # GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
+  getRootStorage = () => this.attributes.root_storage
 
   // array # Usage broken down by each top-level folder
   getUsageByTopLevelDir = () => this.attributes.usage_by_top_level_dir
