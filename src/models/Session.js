@@ -134,6 +134,13 @@ class Session {
     this.attributes.allowed_2fa_method_u2f = value
   }
 
+  // boolean # Sent only if 2FA setup is needed. Is WebAuthn two factor authentication allowed?
+  getAllowed2faMethodWebauthn = () => this.attributes.allowed_2fa_method_webauthn
+
+  setAllowed2faMethodWebauthn = value => {
+    this.attributes.allowed_2fa_method_webauthn = value
+  }
+
   // boolean # Sent only if 2FA setup is needed. Is Yubikey two factor authentication allowed?
   getAllowed2faMethodYubi = () => this.attributes.allowed_2fa_method_yubi
 

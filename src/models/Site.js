@@ -34,6 +34,9 @@ class Site {
   // boolean # Is U2F two factor authentication allowed?
   getAllowed2faMethodU2f = () => this.attributes.allowed_2fa_method_u2f
 
+  // boolean # Is WebAuthn two factor authentication allowed?
+  getAllowed2faMethodWebauthn = () => this.attributes.allowed_2fa_method_webauthn
+
   // boolean # Is yubikey two factor authentication allowed?
   getAllowed2faMethodYubi = () => this.attributes.allowed_2fa_method_yubi
 
@@ -482,6 +485,7 @@ class Site {
   //   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
   //   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
   //   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
+  //   allowed_2fa_method_webauthn - boolean - Is WebAuthn two factor authentication allowed?
   //   allowed_2fa_method_yubi - boolean - Is yubikey two factor authentication allowed?
   //   require_2fa - boolean - Require two-factor authentication for all users?
   //   require_2fa_user_type - string - What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
