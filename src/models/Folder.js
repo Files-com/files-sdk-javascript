@@ -93,7 +93,7 @@ class Folder {
     this.attributes.region = value
   }
 
-  // string # A short string representing the current user's permissions.  Can be `r`,`w`,`p`, or any combination
+  // string # A short string representing the current user's permissions.  Can be `r`,`w`,`d`, `l` or any combination
   getPermissions = () => this.attributes.permissions
 
   setPermissions = value => {
