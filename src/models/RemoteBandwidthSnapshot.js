@@ -3,9 +3,9 @@ import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
 /**
- * Class BandwidthSnapshot
+ * Class RemoteBandwidthSnapshot
  */
-class BandwidthSnapshot {
+class RemoteBandwidthSnapshot {
   attributes = {}
   options = {}
 
@@ -25,29 +25,17 @@ class BandwidthSnapshot {
   // int64 # Site bandwidth ID
   getId = () => this.attributes.id
 
-  // double # Site bandwidth report bytes received
-  getBytesReceived = () => this.attributes.bytes_received
-
-  // double # Site bandwidth report bytes sent
-  getBytesSent = () => this.attributes.bytes_sent
-
   // double # Site sync bandwidth report bytes received
   getSyncBytesReceived = () => this.attributes.sync_bytes_received
 
   // double # Site sync bandwidth report bytes sent
   getSyncBytesSent = () => this.attributes.sync_bytes_sent
 
-  // double # Site bandwidth report get requests
-  getRequestsGet = () => this.attributes.requests_get
-
-  // double # Site bandwidth report put requests
-  getRequestsPut = () => this.attributes.requests_put
-
-  // double # Site bandwidth report other requests
-  getRequestsOther = () => this.attributes.requests_other
-
   // date-time # Time the site bandwidth report was logged
   getLoggedAt = () => this.attributes.logged_at
+
+  // int64 # ID of related Remote Server
+  getRemoteServerId = () => this.attributes.remote_server_id
 
 
   // Parameters:
@@ -69,13 +57,13 @@ class BandwidthSnapshot {
       throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/bandwidth_snapshots`, 'GET', params, options)
+    const response = await Api.sendRequest(`/remote_bandwidth_snapshots`, 'GET', params, options)
 
-    return response?.data?.map(obj => new BandwidthSnapshot(obj, options)) || []
+    return response?.data?.map(obj => new RemoteBandwidthSnapshot(obj, options)) || []
   }
 
   static all = (params = {}, options = {}) =>
-    BandwidthSnapshot.list(params, options)
+    RemoteBandwidthSnapshot.list(params, options)
 }
 
-export default BandwidthSnapshot
+export default RemoteBandwidthSnapshot
