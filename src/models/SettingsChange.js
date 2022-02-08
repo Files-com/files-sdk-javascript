@@ -31,6 +31,12 @@ class SettingsChange {
   // int64 # The user id responsible for this change
   getUserId = () => this.attributes.user_id
 
+  // boolean # true if this change was performed by Files.com support.
+  getUserIsFilesSupport = () => this.attributes.user_is_files_support
+
+  // string # The username of the user responsible for this change
+  getUsername = () => this.attributes.username
+
 
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
