@@ -92,6 +92,13 @@ class RemoteServer {
     this.attributes.s3_region = value
   }
 
+  // string # AWS Access Key.
+  getAwsAccessKey = () => this.attributes.aws_access_key
+
+  setAwsAccessKey = value => {
+    this.attributes.aws_access_key = value
+  }
+
   // string # Remote server certificate
   getServerCertificate = () => this.attributes.server_certificate
 
@@ -167,6 +174,13 @@ class RemoteServer {
 
   setWasabiRegion = value => {
     this.attributes.wasabi_region = value
+  }
+
+  // string # Wasabi access key.
+  getWasabiAccessKey = () => this.attributes.wasabi_access_key
+
+  setWasabiAccessKey = value => {
+    this.attributes.wasabi_access_key = value
   }
 
   // string # Rackspace username used to login to the Rackspace Cloud Control Panel.
@@ -246,18 +260,18 @@ class RemoteServer {
     this.attributes.s3_compatible_endpoint = value
   }
 
+  // string # S3-compatible Access Key.
+  getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
+
+  setS3CompatibleAccessKey = value => {
+    this.attributes.s3_compatible_access_key = value
+  }
+
   // boolean # `true` if remote server only accepts connections from dedicated IPs
   getEnableDedicatedIps = () => this.attributes.enable_dedicated_ips
 
   setEnableDedicatedIps = value => {
     this.attributes.enable_dedicated_ips = value
-  }
-
-  // string # AWS Access Key.
-  getAwsAccessKey = () => this.attributes.aws_access_key
-
-  setAwsAccessKey = value => {
-    this.attributes.aws_access_key = value
   }
 
   // string # AWS secret key.
@@ -293,13 +307,6 @@ class RemoteServer {
 
   setGoogleCloudStorageCredentialsJson = value => {
     this.attributes.google_cloud_storage_credentials_json = value
-  }
-
-  // string # Wasabi access key.
-  getWasabiAccessKey = () => this.attributes.wasabi_access_key
-
-  setWasabiAccessKey = value => {
-    this.attributes.wasabi_access_key = value
   }
 
   // string # Wasabi secret key.
@@ -342,13 +349,6 @@ class RemoteServer {
 
   setAzureBlobStorageAccessKey = value => {
     this.attributes.azure_blob_storage_access_key = value
-  }
-
-  // string # S3-compatible access key
-  getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
-
-  setS3CompatibleAccessKey = value => {
-    this.attributes.s3_compatible_access_key = value
   }
 
   // string # S3-compatible secret key
@@ -399,7 +399,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
-  //   s3_compatible_access_key - string - S3-compatible access key
+  //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -666,7 +666,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
-  //   s3_compatible_access_key - string - S3-compatible access key
+  //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
