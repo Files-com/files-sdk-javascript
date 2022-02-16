@@ -40,12 +40,16 @@ const testSuite = async () => {
   const nonce = new Date().getTime()
 
   const testFolderListAutoPagination = async () => {
-    Files.setAutoPaginate(false)
+    Files.configureNetwork({
+      autoPaginate: false,
+    })
     const firstPageItems = await Folder.listFor('/', { per_page: 1 })
+
     assert(firstPageItems.length === 1)
 
-    Files.setAutoPaginate(true)
-
+    Files.configureNetwork({
+      autoPaginate: true,
+    })
     // note: this test will fail if the root folder has <= 1 file or folder
     const allPageItems = await Folder.listFor('/', { per_page: 1 })
 
@@ -66,7 +70,7 @@ const testSuite = async () => {
     assert(!!file.path)
     assert(file.display_name === displayName)
 
-    const foundFile = await File.find(destinationPath)
+    const foundFile = await File.findDownload(destinationPath)
 
     assert(foundFile.path === destinationPath)
     assert(foundFile.display_name === displayName)

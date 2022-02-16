@@ -136,7 +136,7 @@ You can set the following global properties using static methods on the `Files` 
 #### Getting a file record by path
 
     import File from 'files.com/lib/models/File'
-    const foundFile = await File.find(remoteFilePath)
+    const foundFile = await File.findDownload(remoteFilePath)
 
 #### Download a file (not available in browser)
 

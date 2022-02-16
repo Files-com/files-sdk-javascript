@@ -178,7 +178,7 @@ class File {
     return saveUrlToFile(this.download_uri, destinationPath)
   }
 
-  static find = async path => {
+  static findDownload = async path => {
     const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'GET')
     return new File(response.data)
   }
