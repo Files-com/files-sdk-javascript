@@ -260,6 +260,13 @@ class RemoteServer {
     this.attributes.s3_compatible_endpoint = value
   }
 
+  // string # S3-compatible endpoint
+  getS3CompatibleRegion = () => this.attributes.s3_compatible_region
+
+  setS3CompatibleRegion = value => {
+    this.attributes.s3_compatible_region = value
+  }
+
   // string # S3-compatible Access Key.
   getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
 
@@ -398,6 +405,7 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   s3_compatible_region - string - S3-compatible endpoint
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
@@ -524,6 +532,9 @@ class RemoteServer {
     }
     if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
       throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+    }
+    if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
+      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
     }
     if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
       throw new Error(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
@@ -665,6 +676,7 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
+  //   s3_compatible_region - string - S3-compatible endpoint
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
@@ -815,6 +827,10 @@ class RemoteServer {
 
     if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
       throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+    }
+
+    if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
+      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
     }
 
     if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
