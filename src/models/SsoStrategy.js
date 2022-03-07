@@ -152,6 +152,32 @@ class SsoStrategy {
   getLdapUsernameField = () => this.attributes.ldap_username_field
 
 
+  // Synchronize provisioning data with the SSO remote server
+  sync = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new Error('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params['id'] && !isInt(params['id'])) {
+      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    if (!params['id']) {
+      if (this.attributes.id) {
+        params['id'] = this.id
+      } else {
+        throw new Error('Parameter missing: id')
+      }
+    }
+
+    return Api.sendRequest(`/sso_strategies/${params['id']}/sync`, 'POST', params, this.options)
+  }
+
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
