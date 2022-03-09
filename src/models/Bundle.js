@@ -78,7 +78,7 @@ class Bundle {
     this.attributes.clickwrap_body = value
   }
 
-  // Custom Form to use
+  // FormFieldSet # Custom Form to use
   getFormFieldSet = () => this.attributes.form_field_set
 
   setFormFieldSet = value => {
@@ -144,7 +144,7 @@ class Bundle {
     this.attributes.inbox_id = value
   }
 
-  // Preview watermark image applied to all bundle items.
+  // Image # Preview watermark image applied to all bundle items.
   getWatermarkAttachment = () => this.attributes.watermark_attachment
 
   setWatermarkAttachment = value => {

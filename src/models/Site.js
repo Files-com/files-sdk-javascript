@@ -64,7 +64,7 @@ class Site {
   // boolean # Do Bundles require recipients for sharing?
   getBundleRequireShareRecipient = () => this.attributes.bundle_require_share_recipient
 
-  // Preview watermark image applied to all bundle items.
+  // Image # Preview watermark image applied to all bundle items.
   getBundleWatermarkAttachment = () => this.attributes.bundle_watermark_attachment
 
   // object # Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
@@ -160,16 +160,16 @@ class Site {
   // boolean # Is there a signed HIPAA BAA between Files.com and this site?
   getHipaa = () => this.attributes.hipaa
 
-  // Branded icon 128x128
+  // Image # Branded icon 128x128
   getIcon128 = () => this.attributes.icon128
 
-  // Branded icon 16x16
+  // Image # Branded icon 16x16
   getIcon16 = () => this.attributes.icon16
 
-  // Branded icon 32x32
+  // Image # Branded icon 32x32
   getIcon32 = () => this.attributes.icon32
 
-  // Branded icon 48x48
+  // Image # Branded icon 48x48
   getIcon48 = () => this.attributes.icon48
 
   // date-time # Can files be modified?
@@ -232,7 +232,7 @@ class Site {
   // string # Login help text
   getLoginHelpText = () => this.attributes.login_help_text
 
-  // Branded logo
+  // Image # Branded logo
   getLogo = () => this.attributes.logo
 
   // int64 # Number of prior passwords to disallow
@@ -298,7 +298,7 @@ class Site {
   // string # What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
   getRequire2faUserType = () => this.attributes.require_2fa_user_type
 
-  // Current session
+  // Session # Current session
   getSession = () => this.attributes.session
 
   // boolean # Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
@@ -367,7 +367,7 @@ class Site {
   // boolean # Allow uploaders to set `provided_modified_at` for uploaded files?
   getUseProvidedModifiedAt = () => this.attributes.use_provided_modified_at
 
-  // User of current session
+  // User # User of current session
   getUser = () => this.attributes.user
 
   // boolean # Will users be locked out after incorrect login attempts?

@@ -22,6 +22,7 @@ class InboxUpload {
   }
 
   isLoaded = () => !!this.attributes.id
+  // InboxRegistration
   getInboxRegistration = () => this.attributes.inbox_registration
 
   // string # Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.

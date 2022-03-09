@@ -43,7 +43,7 @@ class WebhookTest {
     this.attributes.status = value
   }
 
-  // Additional data
+  // Auto # Additional data
   getData = () => this.attributes.data
 
   setData = value => {

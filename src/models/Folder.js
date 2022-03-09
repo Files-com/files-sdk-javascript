@@ -128,7 +128,7 @@ class Folder {
     this.attributes.preview_id = value
   }
 
-  // File preview
+  // Preview # File preview
   getPreview = () => this.attributes.preview
 
   setPreview = value => {

@@ -36,14 +36,14 @@ class Style {
     this.attributes.path = value
   }
 
-  // Logo
+  // Image # Logo
   getLogo = () => this.attributes.logo
 
   setLogo = value => {
     this.attributes.logo = value
   }
 
-  // Logo thumbnail
+  // Image # Logo thumbnail
   getThumbnail = () => this.attributes.thumbnail
 
   setThumbnail = value => {

@@ -22,6 +22,7 @@ class BundleDownload {
   }
 
   isLoaded = () => !!this.attributes.id
+  // BundleRegistration
   getBundleRegistration = () => this.attributes.bundle_registration
 
   // string # Download method (file or full_zip)

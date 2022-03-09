@@ -43,7 +43,7 @@ class FormFieldSet {
     this.attributes.form_layout = value
   }
 
-  // Associated form fields
+  // FormField # Associated form fields
   getFormFields = () => this.attributes.form_fields
 
   setFormFields = value => {

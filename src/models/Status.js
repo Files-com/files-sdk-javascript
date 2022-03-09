@@ -31,10 +31,10 @@ class Status {
   // string # Status message
   getStatus = () => this.attributes.status
 
-  // Additional data
+  // Auto # Additional data
   getData = () => this.attributes.data
 
-  // A list of api errors
+  // Errors # A list of api errors
   getErrors = () => this.attributes.errors
 
   // int64 # Required Clickwrap id
