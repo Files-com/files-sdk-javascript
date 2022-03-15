@@ -57,6 +57,41 @@ class As2Partner {
     this.attributes.public_certificate_md5 = value
   }
 
+  // string # Subject of public certificate used for message security.
+  getPublicCertificateSubject = () => this.attributes.public_certificate_subject
+
+  setPublicCertificateSubject = value => {
+    this.attributes.public_certificate_subject = value
+  }
+
+  // string # Issuer of public certificate used for message security.
+  getPublicCertificateIssuer = () => this.attributes.public_certificate_issuer
+
+  setPublicCertificateIssuer = value => {
+    this.attributes.public_certificate_issuer = value
+  }
+
+  // string # Serial of public certificate used for message security.
+  getPublicCertificateSerial = () => this.attributes.public_certificate_serial
+
+  setPublicCertificateSerial = value => {
+    this.attributes.public_certificate_serial = value
+  }
+
+  // string # Not before value of public certificate used for message security.
+  getPublicCertificateNotBefore = () => this.attributes.public_certificate_not_before
+
+  setPublicCertificateNotBefore = value => {
+    this.attributes.public_certificate_not_before = value
+  }
+
+  // string # Not after value of public certificate used for message security.
+  getPublicCertificateNotAfter = () => this.attributes.public_certificate_not_after
+
+  setPublicCertificateNotAfter = value => {
+    this.attributes.public_certificate_not_after = value
+  }
+
   // string
   getPublicCertificate = () => this.attributes.public_certificate
 

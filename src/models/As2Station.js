@@ -50,13 +50,6 @@ class As2Station {
     this.attributes.domain = value
   }
 
-  // string # Public certificate used for message security.
-  getPublicCertificate = () => this.attributes.public_certificate
-
-  setPublicCertificate = value => {
-    this.attributes.public_certificate = value
-  }
-
   // string # MD5 hash of public certificate used for message security.
   getPublicCertificateMd5 = () => this.attributes.public_certificate_md5
 
@@ -71,6 +64,48 @@ class As2Station {
     this.attributes.private_key_md5 = value
   }
 
+  // string # Subject of public certificate used for message security.
+  getPublicCertificateSubject = () => this.attributes.public_certificate_subject
+
+  setPublicCertificateSubject = value => {
+    this.attributes.public_certificate_subject = value
+  }
+
+  // string # Issuer of public certificate used for message security.
+  getPublicCertificateIssuer = () => this.attributes.public_certificate_issuer
+
+  setPublicCertificateIssuer = value => {
+    this.attributes.public_certificate_issuer = value
+  }
+
+  // string # Serial of public certificate used for message security.
+  getPublicCertificateSerial = () => this.attributes.public_certificate_serial
+
+  setPublicCertificateSerial = value => {
+    this.attributes.public_certificate_serial = value
+  }
+
+  // string # Not before value of public certificate used for message security.
+  getPublicCertificateNotBefore = () => this.attributes.public_certificate_not_before
+
+  setPublicCertificateNotBefore = value => {
+    this.attributes.public_certificate_not_before = value
+  }
+
+  // string # Not after value of public certificate used for message security.
+  getPublicCertificateNotAfter = () => this.attributes.public_certificate_not_after
+
+  setPublicCertificateNotAfter = value => {
+    this.attributes.public_certificate_not_after = value
+  }
+
+  // string
+  getPublicCertificate = () => this.attributes.public_certificate
+
+  setPublicCertificate = value => {
+    this.attributes.public_certificate = value
+  }
+
   // string
   getPrivateKey = () => this.attributes.private_key
 
@@ -81,8 +116,6 @@ class As2Station {
 
   // Parameters:
   //   name - string - AS2 Name
-  //   domain - string - AS2 Domain
-  //   uri - string - URL base for AS2 responses
   //   public_certificate - string
   //   private_key - string
   update = async (params = {}) => {
@@ -100,12 +133,6 @@ class As2Station {
     }
     if (params['name'] && !isString(params['name'])) {
       throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
-    }
-    if (params['domain'] && !isString(params['domain'])) {
-      throw new Error(`Bad parameter: domain must be of type String, received ${getType(domain)}`)
-    }
-    if (params['uri'] && !isString(params['uri'])) {
-      throw new Error(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
       throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
@@ -210,21 +237,11 @@ class As2Station {
 
   // Parameters:
   //   name (required) - string - AS2 Name
-  //   domain (required) - string - AS2 Domain
-  //   uri (required) - string - URL base for AS2 responses
   //   public_certificate (required) - string
   //   private_key (required) - string
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
       throw new Error('Parameter missing: name')
-    }
-
-    if (!params['domain']) {
-      throw new Error('Parameter missing: domain')
-    }
-
-    if (!params['uri']) {
-      throw new Error('Parameter missing: uri')
     }
 
     if (!params['public_certificate']) {
@@ -237,14 +254,6 @@ class As2Station {
 
     if (params['name'] && !isString(params['name'])) {
       throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
-    }
-
-    if (params['domain'] && !isString(params['domain'])) {
-      throw new Error(`Bad parameter: domain must be of type String, received ${getType(domain)}`)
-    }
-
-    if (params['uri'] && !isString(params['uri'])) {
-      throw new Error(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
     }
 
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
