@@ -66,7 +66,9 @@ class MessageReaction {
       }
     }
 
-    return Api.sendRequest(`/message_reactions/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/message_reactions/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

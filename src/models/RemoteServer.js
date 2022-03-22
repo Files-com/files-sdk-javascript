@@ -551,7 +551,9 @@ class RemoteServer {
       }
     }
 
-    return Api.sendRequest(`/remote_servers/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/remote_servers/${params['id']}`, 'PATCH', params, this.options)
+
+    return new RemoteServer(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -576,7 +578,9 @@ class RemoteServer {
       }
     }
 
-    return Api.sendRequest(`/remote_servers/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/remote_servers/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

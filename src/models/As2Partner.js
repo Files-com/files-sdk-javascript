@@ -135,7 +135,9 @@ class As2Partner {
       }
     }
 
-    return Api.sendRequest(`/as2_partners/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'PATCH', params, this.options)
+
+    return new As2Partner(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -160,7 +162,9 @@ class As2Partner {
       }
     }
 
-    return Api.sendRequest(`/as2_partners/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

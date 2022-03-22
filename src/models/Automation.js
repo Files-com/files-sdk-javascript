@@ -245,7 +245,9 @@ class Automation {
       }
     }
 
-    return Api.sendRequest(`/automations/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/automations/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Automation(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -270,7 +272,9 @@ class Automation {
       }
     }
 
-    return Api.sendRequest(`/automations/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/automations/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

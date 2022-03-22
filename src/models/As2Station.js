@@ -149,7 +149,9 @@ class As2Station {
       }
     }
 
-    return Api.sendRequest(`/as2_stations/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/as2_stations/${params['id']}`, 'PATCH', params, this.options)
+
+    return new As2Station(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -174,7 +176,9 @@ class As2Station {
       }
     }
 
-    return Api.sendRequest(`/as2_stations/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/as2_stations/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

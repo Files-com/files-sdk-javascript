@@ -70,14 +70,18 @@ const testSuite = async () => {
     assert(!!file.path)
     assert(file.display_name === displayName)
 
-    const foundFile = await File.findDownload(destinationPath)
-
+    const foundFile = await File.find(destinationPath)
+    
     assert(foundFile.path === destinationPath)
     assert(foundFile.display_name === displayName)
+    assert(typeof foundFile.getDownloadUri() === 'undefined')
 
     if (!isBrowser()) {
+      const downloadableFile = await foundFile.download()
+      assert(typeof downloadableFile.getDownloadUri() !== 'undefined')
+
       const downloadPath = `./${displayName}`
-      await foundFile.downloadToFile(downloadPath)
+      await downloadableFile.downloadToFile(downloadPath)
 
       const fs = require('fs')
       const originalBuffer = fs.readFileSync(sourceFilePath)

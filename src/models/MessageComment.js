@@ -86,7 +86,9 @@ class MessageComment {
       }
     }
 
-    return Api.sendRequest(`/message_comments/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'PATCH', params, this.options)
+
+    return new MessageComment(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -111,7 +113,9 @@ class MessageComment {
       }
     }
 
-    return Api.sendRequest(`/message_comments/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

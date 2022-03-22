@@ -46,7 +46,9 @@ class ActionWebhookFailure {
       }
     }
 
-    return Api.sendRequest(`/action_webhook_failures/${params['id']}/retry`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/action_webhook_failures/${params['id']}/retry`, 'POST', params, this.options)
+
+    return response?.data
   }
 }
 

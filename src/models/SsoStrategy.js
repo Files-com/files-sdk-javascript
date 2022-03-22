@@ -175,7 +175,9 @@ class SsoStrategy {
       }
     }
 
-    return Api.sendRequest(`/sso_strategies/${params['id']}/sync`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/sso_strategies/${params['id']}/sync`, 'POST', params, this.options)
+
+    return response?.data
   }
 
   // Parameters:

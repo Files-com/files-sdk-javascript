@@ -157,12 +157,14 @@ class File {
       throw new Error('Stream downloads are only available in a NodeJS environment')
     }
 
-    if (!this.download_uri) {
+    const downloadUri = this.getDownloadUri()
+
+    if (!downloadUri) {
       throw new Error('Current object has no download URI')
     }
 
     const { saveUrlToStream } = require('../isomorphic/File.node.js')
-    return saveUrlToStream(this.download_uri, writableStream)
+    return saveUrlToStream(downloadUri, writableStream)
   }
 
   downloadToFile = async destinationPath => {
@@ -170,21 +172,14 @@ class File {
       throw new Error('Disk file downloads are only available in a NodeJS environment')
     }
 
-    if (!this.download_uri) {
+    const downloadUri = this.getDownloadUri()
+
+    if (!downloadUri) {
       throw new Error('Current object has no download URI')
     }
 
     const { saveUrlToFile } = require('../isomorphic/File.node.js')
-    return saveUrlToFile(this.download_uri, destinationPath)
-  }
-
-  static findDownload = async path => {
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'GET')
-    return new File(response.data)
-  }
-
-  get = async path => {
-    return File.find(path)
+    return saveUrlToFile(downloadUri, destinationPath)
   }
 
   copyTo = async destinationFilePath => {
@@ -408,7 +403,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/${params['path']}`, 'GET', params, this.options)
+    const response = await Api.sendRequest(`/files/${params['path']}`, 'GET', params, this.options)
+
+    return new File(response?.data, this.options)
   }
 
   // Parameters:
@@ -442,7 +439,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/${params['path']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/files/${params['path']}`, 'PATCH', params, this.options)
+
+    return new File(response?.data, this.options)
   }
 
   // Parameters:
@@ -469,7 +468,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/files/${params['path']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/files/${params['path']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>
@@ -513,7 +514,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/file_actions/copy/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/copy/${params['path']}`, 'POST', params, this.options)
+
+    return new FileAction(response?.data, this.options)
   }
 
   // Move file/folder
@@ -553,7 +556,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/file_actions/move/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/move/${params['path']}`, 'POST', params, this.options)
+
+    return new FileAction(response?.data, this.options)
   }
 
   // Begin file upload
@@ -603,7 +608,9 @@ class File {
       }
     }
 
-    return Api.sendRequest(`/file_actions/begin_upload/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/begin_upload/${params['path']}`, 'POST', params, this.options)
+
+    return response?.data?.map(obj => new FileUploadPart(obj, this.options)) || []
   }
 
   save = () => {

@@ -104,7 +104,9 @@ class Group {
       }
     }
 
-    return Api.sendRequest(`/groups/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/groups/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Group(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -129,7 +131,9 @@ class Group {
       }
     }
 
-    return Api.sendRequest(`/groups/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/groups/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

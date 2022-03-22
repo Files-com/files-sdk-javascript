@@ -124,7 +124,9 @@ class Message {
       }
     }
 
-    return Api.sendRequest(`/messages/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/messages/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Message(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -149,7 +151,9 @@ class Message {
       }
     }
 
-    return Api.sendRequest(`/messages/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/messages/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

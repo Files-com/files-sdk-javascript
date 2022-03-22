@@ -72,7 +72,9 @@ class Project {
       }
     }
 
-    return Api.sendRequest(`/projects/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/projects/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Project(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -97,7 +99,9 @@ class Project {
       }
     }
 
-    return Api.sendRequest(`/projects/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/projects/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

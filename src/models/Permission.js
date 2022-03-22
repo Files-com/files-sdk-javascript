@@ -101,7 +101,9 @@ class Permission {
       }
     }
 
-    return Api.sendRequest(`/permissions/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/permissions/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

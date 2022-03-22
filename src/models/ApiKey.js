@@ -131,7 +131,9 @@ class ApiKey {
       }
     }
 
-    return Api.sendRequest(`/api_keys/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'PATCH', params, this.options)
+
+    return new ApiKey(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -156,7 +158,9 @@ class ApiKey {
       }
     }
 
-    return Api.sendRequest(`/api_keys/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

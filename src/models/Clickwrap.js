@@ -108,7 +108,9 @@ class Clickwrap {
       }
     }
 
-    return Api.sendRequest(`/clickwraps/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Clickwrap(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -133,7 +135,9 @@ class Clickwrap {
       }
     }
 
-    return Api.sendRequest(`/clickwraps/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

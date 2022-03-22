@@ -133,21 +133,25 @@ You can set the following global properties using static methods on the `Files` 
       await File.uploadFile(destinationFileName, sourceFilePath)
     }
 
-#### Getting a file record by path
+#### Downloading a file
+
+##### Get a downloadable file object by path
 
     import File from 'files.com/lib/models/File'
-    const foundFile = await File.findDownload(remoteFilePath)
 
-#### Download a file (not available in browser)
+    const foundFile = await File.find(remoteFilePath)
+    const downloadableFile = await foundFile.download()
+
+##### Download a file (not available in browser)
 
     import { isBrowser } from 'files.com/lib/utils'
 
     if (!isBrowser()) {
       // download to a file on disk
-      await foundFile.downloadToFile(localFilePath)
+      await downloadableFile.downloadToFile(localFilePath)
 
       // download to a writable stream
-      await foundFile.downloadToStream(stream)
+      await downloadableFile.downloadToStream(stream)
     }
 
 ### Additional Object Documentation

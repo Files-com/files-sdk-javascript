@@ -113,7 +113,9 @@ class FormFieldSet {
       }
     }
 
-    return Api.sendRequest(`/form_field_sets/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'PATCH', params, this.options)
+
+    return new FormFieldSet(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -138,7 +140,9 @@ class FormFieldSet {
       }
     }
 
-    return Api.sendRequest(`/form_field_sets/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

@@ -142,7 +142,9 @@ class Lock {
       }
     }
 
-    return Api.sendRequest(`/locks/${params['path']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/locks/${params['path']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

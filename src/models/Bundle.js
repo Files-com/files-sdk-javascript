@@ -238,7 +238,9 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/${params['id']}/share`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${params['id']}/share`, 'POST', params, this.options)
+
+    return response?.data
   }
 
   // Parameters:
@@ -309,7 +311,9 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Bundle(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -334,7 +338,9 @@ class Bundle {
       }
     }
 
-    return Api.sendRequest(`/bundles/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

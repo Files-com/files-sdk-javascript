@@ -73,7 +73,9 @@ class UserRequest {
       }
     }
 
-    return Api.sendRequest(`/user_requests/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/user_requests/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

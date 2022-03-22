@@ -131,7 +131,9 @@ class Behavior {
       }
     }
 
-    return Api.sendRequest(`/behaviors/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Behavior(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -156,7 +158,9 @@ class Behavior {
       }
     }
 
-    return Api.sendRequest(`/behaviors/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

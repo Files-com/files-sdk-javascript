@@ -448,7 +448,9 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/${params['id']}/unlock`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${params['id']}/unlock`, 'POST', params, this.options)
+
+    return response?.data
   }
 
   // Resend user welcome email
@@ -474,7 +476,9 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/${params['id']}/resend_welcome_email`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${params['id']}/resend_welcome_email`, 'POST', params, this.options)
+
+    return response?.data
   }
 
   // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
@@ -500,7 +504,9 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/${params['id']}/2fa/reset`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${params['id']}/2fa/reset`, 'POST', params, this.options)
+
+    return response?.data
   }
 
   // Parameters:
@@ -645,7 +651,9 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/users/${params['id']}`, 'PATCH', params, this.options)
+
+    return new User(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -670,7 +678,9 @@ class User {
       }
     }
 
-    return Api.sendRequest(`/users/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/users/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

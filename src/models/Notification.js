@@ -144,7 +144,9 @@ class Notification {
       }
     }
 
-    return Api.sendRequest(`/notifications/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/notifications/${params['id']}`, 'PATCH', params, this.options)
+
+    return new Notification(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -169,7 +171,9 @@ class Notification {
       }
     }
 
-    return Api.sendRequest(`/notifications/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/notifications/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>

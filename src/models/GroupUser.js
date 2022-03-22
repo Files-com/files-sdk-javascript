@@ -113,7 +113,9 @@ class GroupUser {
       }
     }
 
-    return Api.sendRequest(`/group_users/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/group_users/${params['id']}`, 'PATCH', params, this.options)
+
+    return new GroupUser(response?.data, this.options)
   }
 
   // Parameters:
@@ -163,7 +165,9 @@ class GroupUser {
       }
     }
 
-    return Api.sendRequest(`/group_users/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/group_users/${params['id']}`, 'DELETE', params, this.options)
+
+    return response?.data
   }
 
   destroy = (params = {}) =>
