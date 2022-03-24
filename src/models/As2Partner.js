@@ -50,6 +50,13 @@ class As2Partner {
     this.attributes.uri = value
   }
 
+  // string # Remote server certificate security setting
+  getServerCertificate = () => this.attributes.server_certificate
+
+  setServerCertificate = value => {
+    this.attributes.server_certificate = value
+  }
+
   // string # MD5 hash of public certificate used for message security.
   getPublicCertificateMd5 = () => this.attributes.public_certificate_md5
 
@@ -103,6 +110,7 @@ class As2Partner {
   // Parameters:
   //   name - string - AS2 Name
   //   uri - string - URL base for AS2 responses
+  //   server_certificate - string - Remote server certificate security setting
   //   public_certificate - string
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -122,6 +130,9 @@ class As2Partner {
     }
     if (params['uri'] && !isString(params['uri'])) {
       throw new Error(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
+    }
+    if (params['server_certificate'] && !isString(params['server_certificate'])) {
+      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
       throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
@@ -230,6 +241,7 @@ class As2Partner {
   //   uri (required) - string - URL base for AS2 responses
   //   public_certificate (required) - string
   //   as2_station_id (required) - int64 - Id of As2Station for this partner
+  //   server_certificate - string - Remote server certificate security setting
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
       throw new Error('Parameter missing: name')
@@ -261,6 +273,10 @@ class As2Partner {
 
     if (params['as2_station_id'] && !isInt(params['as2_station_id'])) {
       throw new Error(`Bad parameter: as2_station_id must be of type Int, received ${getType(as2_station_id)}`)
+    }
+
+    if (params['server_certificate'] && !isString(params['server_certificate'])) {
+      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
 
     const response = await Api.sendRequest(`/as2_partners`, 'POST', params, options)
