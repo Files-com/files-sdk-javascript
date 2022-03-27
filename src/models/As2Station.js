@@ -99,6 +99,13 @@ class As2Station {
     this.attributes.public_certificate_not_after = value
   }
 
+  // string # MD5 hash of private key password used for message security.
+  getPrivateKeyPasswordMd5 = () => this.attributes.private_key_password_md5
+
+  setPrivateKeyPasswordMd5 = value => {
+    this.attributes.private_key_password_md5 = value
+  }
+
   // string
   getPublicCertificate = () => this.attributes.public_certificate
 
@@ -113,11 +120,19 @@ class As2Station {
     this.attributes.private_key = value
   }
 
+  // string
+  getPrivateKeyPassword = () => this.attributes.private_key_password
+
+  setPrivateKeyPassword = value => {
+    this.attributes.private_key_password = value
+  }
+
 
   // Parameters:
   //   name - string - AS2 Name
   //   public_certificate - string
   //   private_key - string
+  //   private_key_password - string
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -139,6 +154,9 @@ class As2Station {
     }
     if (params['private_key'] && !isString(params['private_key'])) {
       throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+    }
+    if (params['private_key_password'] && !isString(params['private_key_password'])) {
+      throw new Error(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
     }
 
     if (!params['id']) {
@@ -243,6 +261,7 @@ class As2Station {
   //   name (required) - string - AS2 Name
   //   public_certificate (required) - string
   //   private_key (required) - string
+  //   private_key_password - string
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
       throw new Error('Parameter missing: name')
@@ -266,6 +285,10 @@ class As2Station {
 
     if (params['private_key'] && !isString(params['private_key'])) {
       throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+    }
+
+    if (params['private_key_password'] && !isString(params['private_key_password'])) {
+      throw new Error(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
     }
 
     const response = await Api.sendRequest(`/as2_stations`, 'POST', params, options)
