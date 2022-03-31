@@ -85,6 +85,27 @@ class Bundle {
     this.attributes.form_field_set = value
   }
 
+  // boolean # BundleRegistrations can be saved without providing name?
+  getSkipName = () => this.attributes.skip_name
+
+  setSkipName = value => {
+    this.attributes.skip_name = value
+  }
+
+  // boolean # BundleRegistrations can be saved without providing email?
+  getSkipEmail = () => this.attributes.skip_email
+
+  setSkipEmail = value => {
+    this.attributes.skip_email = value
+  }
+
+  // boolean # BundleRegistrations can be saved without providing company?
+  getSkipCompany = () => this.attributes.skip_company
+
+  setSkipCompany = value => {
+    this.attributes.skip_company = value
+  }
+
   // int64 # Bundle ID
   getId = () => this.attributes.id
 
