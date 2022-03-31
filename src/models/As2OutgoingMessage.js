@@ -37,7 +37,7 @@ class As2OutgoingMessage {
   // string # JSON Structure of the activity log.
   getActivityLog = () => this.attributes.activity_log
 
-  // string # Result of processing. Valid values: `send_failed`, `send_success`, `send_no_mdn`
+  // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
   // string # AS2 Message Integrity Check

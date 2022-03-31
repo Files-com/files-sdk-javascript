@@ -40,7 +40,7 @@ class As2IncomingMessage {
   // string # JSON Structure of the activity log.
   getActivityLog = () => this.attributes.activity_log
 
-  // string # Result of processing. Valid values: `unable_to_find_station`, `unable_to_find_partner`, `unable_to_validate_signature`, `decrypt_fail`, `file_save_fail`, `success`
+  // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
   // string # AS2 TO header of message
