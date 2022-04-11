@@ -57,6 +57,13 @@ class As2Partner {
     this.attributes.server_certificate = value
   }
 
+  // string # Serial of public certificate used for message security in hex format.
+  getHexPublicCertificateSerial = () => this.attributes.hex_public_certificate_serial
+
+  setHexPublicCertificateSerial = value => {
+    this.attributes.hex_public_certificate_serial = value
+  }
+
   // string # MD5 hash of public certificate used for message security.
   getPublicCertificateMd5 = () => this.attributes.public_certificate_md5
 

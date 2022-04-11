@@ -28,6 +28,9 @@ class As2IncomingMessage {
   // int64 # Id of the AS2 Partner associated with this message.
   getAs2PartnerId = () => this.attributes.as2_partner_id
 
+  // int64 # Id of the AS2 Station associated with this message.
+  getAs2StationId = () => this.attributes.as2_station_id
+
   // string # UUID assigned to this message.
   getUuid = () => this.attributes.uuid
 
@@ -42,6 +45,12 @@ class As2IncomingMessage {
 
   // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
+
+  // string # AS2 Message Integrity Check
+  getMic = () => this.attributes.mic
+
+  // string # AS2 Message Integrity Check Algorithm Used
+  getMicAlgo = () => this.attributes.mic_algo
 
   // string # AS2 TO header of message
   getAs2To = () => this.attributes.as2_to
@@ -61,8 +70,47 @@ class As2IncomingMessage {
   // string # Filename of the file being received.
   getAttachmentFilename = () => this.attributes.attachment_filename
 
+  // string # IP Address of the Sender
+  getIp = () => this.attributes.ip
+
   // date-time # Message creation date/time
   getCreatedAt = () => this.attributes.created_at
+
+  // string # HTTP Response Code sent for this message
+  getHttpResponseCode = () => this.attributes.http_response_code
+
+  // object # HTTP Headers sent for this message.
+  getHttpResponseHeaders = () => this.attributes.http_response_headers
+
+  // boolean # Message body received?
+  getMessageReceived = () => this.attributes.message_received
+
+  // boolean # Message decrypted successfully?
+  getMessageDecrypted = () => this.attributes.message_decrypted
+
+  // boolean # Message signature verified?
+  getMessageSignatureVerified = () => this.attributes.message_signature_verified
+
+  // boolean # Message processed successfully?
+  getMessageProcessingSuccess = () => this.attributes.message_processing_success
+
+  // boolean # MDN returned?
+  getMessageMdnReturned = () => this.attributes.message_mdn_returned
+
+  // string # URL to download the encrypted signed smime that is to sent as AS2 body
+  getEncryptedUri = () => this.attributes.encrypted_uri
+
+  // string # URL to download the file contents as smime with signature
+  getSmimeSignedUri = () => this.attributes.smime_signed_uri
+
+  // string # URL to download the file contents encoded as smime
+  getSmimeUri = () => this.attributes.smime_uri
+
+  // string # URL to download the original file contents
+  getRawUri = () => this.attributes.raw_uri
+
+  // string # URL to download the http response body
+  getMdnResponseUri = () => this.attributes.mdn_response_uri
 
 
   // Parameters:

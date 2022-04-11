@@ -28,6 +28,9 @@ class As2OutgoingMessage {
   // int64 # Id of the AS2 Partner associated with this message.
   getAs2PartnerId = () => this.attributes.as2_partner_id
 
+  // int64 # Id of the AS2 Station associated with this message.
+  getAs2StationId = () => this.attributes.as2_station_id
+
   // string # UUID assigned to this message.
   getUuid = () => this.attributes.uuid
 
@@ -40,8 +43,17 @@ class As2OutgoingMessage {
   // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
-  // string # AS2 Message Integrity Check
+  // string # AS2 Message Integrity Check SHA1
   getMic = () => this.attributes.mic
+
+  // string # AS2 Message Integrity Check SHA256
+  getMicSha256 = () => this.attributes.mic_sha_256
+
+  // string # AS2 TO
+  getAs2To = () => this.attributes.as2_to
+
+  // string # AS2 FROM
+  getAs2From = () => this.attributes.as2_from
 
   // string # AS2 Message Id
   getMessageId = () => this.attributes.message_id
@@ -54,6 +66,45 @@ class As2OutgoingMessage {
 
   // date-time # Message creation date/time
   getCreatedAt = () => this.attributes.created_at
+
+  // string # HTTP Response Code received for this message
+  getHttpResponseCode = () => this.attributes.http_response_code
+
+  // object # HTTP Headers received for this message.
+  getHttpResponseHeaders = () => this.attributes.http_response_headers
+
+  // boolean # Did the partner give a response body?
+  getMdnReceived = () => this.attributes.mdn_received
+
+  // boolean # Is the response in MDN format?
+  getMdnValid = () => this.attributes.mdn_valid
+
+  // boolean # MDN signature verified?
+  getMdnSignatureVerified = () => this.attributes.mdn_signature_verified
+
+  // boolean # MDN message id matched?
+  getMdnMessageIdMatched = () => this.attributes.mdn_message_id_matched
+
+  // boolean # MDN MIC matched?
+  getMdnMicMatched = () => this.attributes.mdn_mic_matched
+
+  // boolean # MDN disposition indicate a successful processing?
+  getMdnProcessingSuccess = () => this.attributes.mdn_processing_success
+
+  // string # URL to download the original file contents
+  getRawUri = () => this.attributes.raw_uri
+
+  // string # URL to download the file contents encoded as smime
+  getSmimeUri = () => this.attributes.smime_uri
+
+  // string # URL to download the file contents as smime with signature
+  getSmimeSignedUri = () => this.attributes.smime_signed_uri
+
+  // string # URL to download the encrypted signed smime that is to sent as AS2 body
+  getEncryptedUri = () => this.attributes.encrypted_uri
+
+  // string # URL to download the http response body
+  getMdnResponseUri = () => this.attributes.mdn_response_uri
 
 
   // Parameters:
