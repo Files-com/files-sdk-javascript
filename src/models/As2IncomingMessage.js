@@ -82,6 +82,15 @@ class As2IncomingMessage {
   // object # HTTP Headers sent for this message.
   getHttpResponseHeaders = () => this.attributes.http_response_headers
 
+  // string # Incoming Message Recipient(the Client Cert used to encrypt this message)'s serial
+  getRecipientSerial = () => this.attributes.recipient_serial
+
+  // string # Incoming Message Recipient(the Client Cert used to encrypt this message)'s serial in hex format.
+  getHexRecipientSerial = () => this.attributes.hex_recipient_serial
+
+  // string # Incoming Message Recipient(the Client Cert used to encrypt this message)'s issuer
+  getRecipientIssuer = () => this.attributes.recipient_issuer
+
   // boolean # Message body received?
   getMessageReceived = () => this.attributes.message_received
 
