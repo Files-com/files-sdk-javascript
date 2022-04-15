@@ -391,6 +391,9 @@ class Site {
   // email # Include this email in welcome emails if enabled
   getWelcomeEmailCc = () => this.attributes.welcome_email_cc
 
+  // string # Include this email subject in welcome emails if enabled
+  getWelcomeEmailSubject = () => this.attributes.welcome_email_subject
+
   // boolean # Will the welcome email be sent to new users?
   getWelcomeEmailEnabled = () => this.attributes.welcome_email_enabled
 
@@ -431,6 +434,7 @@ class Site {
   //   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   //   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
   //   welcome_email_cc - string - Include this email in welcome emails if enabled
+  //   welcome_email_subject - string - Include this email subject in welcome emails if enabled
   //   welcome_custom_text - string - Custom text send in user welcome email
   //   language - string - Site default language
   //   windows_mode_ftp - boolean - Does FTP user Windows emulation mode?
@@ -565,6 +569,10 @@ class Site {
 
     if (params['welcome_email_cc'] && !isString(params['welcome_email_cc'])) {
       throw new Error(`Bad parameter: welcome_email_cc must be of type String, received ${getType(welcome_email_cc)}`)
+    }
+
+    if (params['welcome_email_subject'] && !isString(params['welcome_email_subject'])) {
+      throw new Error(`Bad parameter: welcome_email_subject must be of type String, received ${getType(welcome_email_subject)}`)
     }
 
     if (params['welcome_custom_text'] && !isString(params['welcome_custom_text'])) {
