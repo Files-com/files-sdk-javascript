@@ -55,6 +55,9 @@ class As2OutgoingMessage {
   // string # AS2 FROM
   getAs2From = () => this.attributes.as2_from
 
+  // string # Date Header
+  getDate = () => this.attributes.date
+
   // string # AS2 Message Id
   getMessageId = () => this.attributes.message_id
 

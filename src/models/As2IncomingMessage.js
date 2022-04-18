@@ -64,6 +64,9 @@ class As2IncomingMessage {
   // string # AS2 Subject Header
   getSubject = () => this.attributes.subject
 
+  // string # Date Header
+  getDate = () => this.attributes.date
+
   // string # Encrypted Payload Body Size
   getBodySize = () => this.attributes.body_size
 
