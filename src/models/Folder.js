@@ -135,6 +135,13 @@ class Folder {
     this.attributes.preview = value
   }
 
+  // boolean # Create parent directories if they do not exist?
+  getMkdirParents = () => this.attributes.mkdir_parents
+
+  setMkdirParents = value => {
+    this.attributes.mkdir_parents = value
+  }
+
 
   save = () => {
       const newObject = Folder.create(this.attributes.path, this.attributes, this.options)
@@ -194,6 +201,7 @@ class Folder {
 
   // Parameters:
   //   path (required) - string - Path to operate on.
+  //   mkdir_parents - boolean - Create parent directories if they do not exist?
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
