@@ -36,34 +36,6 @@ class Session {
     this.attributes.language = value
   }
 
-  // string # Login token. If set, this token will allow your user to log in via browser at the domain in `login_token_domain`.
-  getLoginToken = () => this.attributes.login_token
-
-  setLoginToken = value => {
-    this.attributes.login_token = value
-  }
-
-  // string # Domain to use with `login_token`.
-  getLoginTokenDomain = () => this.attributes.login_token_domain
-
-  setLoginTokenDomain = value => {
-    this.attributes.login_token_domain = value
-  }
-
-  // int64 # Maximum number of files to retrieve per folder for a directory listing.  This is based on the user's plan.
-  getMaxDirListingSize = () => this.attributes.max_dir_listing_size
-
-  setMaxDirListingSize = value => {
-    this.attributes.max_dir_listing_size = value
-  }
-
-  // boolean # Can access multiple regions?
-  getMultipleRegions = () => this.attributes.multiple_regions
-
-  setMultipleRegions = value => {
-    this.attributes.multiple_regions = value
-  }
-
   // boolean # Is this session read only?
   getReadOnly = () => this.attributes.read_only
 
@@ -71,95 +43,11 @@ class Session {
     this.attributes.read_only = value
   }
 
-  // string # Initial root path to start the user's session in.
-  getRootPath = () => this.attributes.root_path
-
-  setRootPath = value => {
-    this.attributes.root_path = value
-  }
-
   // boolean # Are insecure SFTP ciphers allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure SSH ciphers for this user.)
   getSftpInsecureCiphers = () => this.attributes.sftp_insecure_ciphers
 
   setSftpInsecureCiphers = value => {
     this.attributes.sftp_insecure_ciphers = value
-  }
-
-  // int64 # Site ID
-  getSiteId = () => this.attributes.site_id
-
-  setSiteId = value => {
-    this.attributes.site_id = value
-  }
-
-  // boolean # Is SSL required for this user?  (If so, ensure all your communications with this user use SSL.)
-  getSslRequired = () => this.attributes.ssl_required
-
-  setSslRequired = value => {
-    this.attributes.ssl_required = value
-  }
-
-  // boolean # Are insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
-  getTlsDisabled = () => this.attributes.tls_disabled
-
-  setTlsDisabled = value => {
-    this.attributes.tls_disabled = value
-  }
-
-  // boolean # If true, this user needs to add a Two Factor Authentication method before performing any further actions.
-  getTwoFactorSetupNeeded = () => this.attributes.two_factor_setup_needed
-
-  setTwoFactorSetupNeeded = value => {
-    this.attributes.two_factor_setup_needed = value
-  }
-
-  // boolean # Sent only if 2FA setup is needed. Is SMS two factor authentication allowed?
-  getAllowed2faMethodSms = () => this.attributes.allowed_2fa_method_sms
-
-  setAllowed2faMethodSms = value => {
-    this.attributes.allowed_2fa_method_sms = value
-  }
-
-  // boolean # Sent only if 2FA setup is needed. Is TOTP two factor authentication allowed?
-  getAllowed2faMethodTotp = () => this.attributes.allowed_2fa_method_totp
-
-  setAllowed2faMethodTotp = value => {
-    this.attributes.allowed_2fa_method_totp = value
-  }
-
-  // boolean # Sent only if 2FA setup is needed. Is U2F two factor authentication allowed?
-  getAllowed2faMethodU2f = () => this.attributes.allowed_2fa_method_u2f
-
-  setAllowed2faMethodU2f = value => {
-    this.attributes.allowed_2fa_method_u2f = value
-  }
-
-  // boolean # Sent only if 2FA setup is needed. Is WebAuthn two factor authentication allowed?
-  getAllowed2faMethodWebauthn = () => this.attributes.allowed_2fa_method_webauthn
-
-  setAllowed2faMethodWebauthn = value => {
-    this.attributes.allowed_2fa_method_webauthn = value
-  }
-
-  // boolean # Sent only if 2FA setup is needed. Is Yubikey two factor authentication allowed?
-  getAllowed2faMethodYubi = () => this.attributes.allowed_2fa_method_yubi
-
-  setAllowed2faMethodYubi = value => {
-    this.attributes.allowed_2fa_method_yubi = value
-  }
-
-  // boolean # Allow the user to provide file/folder modified at dates?  If false, the server will always use the current date/time.
-  getUseProvidedModifiedAt = () => this.attributes.use_provided_modified_at
-
-  setUseProvidedModifiedAt = value => {
-    this.attributes.use_provided_modified_at = value
-  }
-
-  // boolean # Does this user want to use Windows line-ending emulation?  (CR vs CRLF)
-  getWindowsModeFtp = () => this.attributes.windows_mode_ftp
-
-  setWindowsModeFtp = value => {
-    this.attributes.windows_mode_ftp = value
   }
 
   // string # Username to sign in as
