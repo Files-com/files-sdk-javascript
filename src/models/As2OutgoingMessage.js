@@ -43,6 +43,9 @@ class As2OutgoingMessage {
   // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
+  // string # Result of processing description.
+  getProcessingResultDescription = () => this.attributes.processing_result_description
+
   // string # AS2 Message Integrity Check SHA1
   getMic = () => this.attributes.mic
 
@@ -75,6 +78,9 @@ class As2OutgoingMessage {
 
   // object # HTTP Headers received for this message.
   getHttpResponseHeaders = () => this.attributes.http_response_headers
+
+  // double # HTTP transmission duration in seceonds
+  getHttpTransmissionDuration = () => this.attributes.http_transmission_duration
 
   // boolean # Did the partner give a response body?
   getMdnReceived = () => this.attributes.mdn_received

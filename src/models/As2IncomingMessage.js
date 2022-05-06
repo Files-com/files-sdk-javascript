@@ -46,6 +46,9 @@ class As2IncomingMessage {
   // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
+  // string # Result of processing description.
+  getProcessingResultDescription = () => this.attributes.processing_result_description
+
   // string # AS2 Message Integrity Check
   getMic = () => this.attributes.mic
 
