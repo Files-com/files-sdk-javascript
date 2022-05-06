@@ -72,10 +72,10 @@ class As2Partner {
   }
 
   // string # Subject of public certificate used for message security.
-  getPublicCertificateSubjec = () => this.attributes.public_certificate_subjec
+  getPublicCertificateSubject = () => this.attributes.public_certificate_subject
 
-  setPublicCertificateSubjec = value => {
-    this.attributes.public_certificate_subjec = value
+  setPublicCertificateSubject = value => {
+    this.attributes.public_certificate_subject = value
   }
 
   // string # Issuer of public certificate used for message security.
