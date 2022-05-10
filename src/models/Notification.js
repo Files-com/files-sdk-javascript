@@ -78,6 +78,13 @@ class Notification {
     this.attributes.send_interval = value
   }
 
+  // string # Custom message to include in notification emails.
+  getMessage = () => this.attributes.message
+
+  setMessage = value => {
+    this.attributes.message = value
+  }
+
   // boolean # Is the user unsubscribed from this notification?
   getUnsubscribed = () => this.attributes.unsubscribed
 
@@ -119,6 +126,7 @@ class Notification {
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+  //   message - string - Custom message to include in notification emails.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -134,6 +142,9 @@ class Notification {
     }
     if (params['send_interval'] && !isString(params['send_interval'])) {
       throw new Error(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
+    }
+    if (params['message'] && !isString(params['message'])) {
+      throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
     }
 
     if (!params['id']) {
@@ -263,6 +274,7 @@ class Notification {
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+  //   message - string - Custom message to include in notification emails.
   //   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
   //   path - string - Path
   //   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
@@ -273,6 +285,10 @@ class Notification {
 
     if (params['send_interval'] && !isString(params['send_interval'])) {
       throw new Error(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
+    }
+
+    if (params['message'] && !isString(params['message'])) {
+      throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
