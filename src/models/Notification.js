@@ -50,6 +50,27 @@ class Notification {
     this.attributes.group_name = value
   }
 
+  // int64 # Only notify on actions made by a member of one of the specified groups
+  getTriggeringGroupIds = () => this.attributes.triggering_group_ids
+
+  setTriggeringGroupIds = value => {
+    this.attributes.triggering_group_ids = value
+  }
+
+  // int64 # Only notify on actions made one of the specified users
+  getTriggeringUserIds = () => this.attributes.triggering_user_ids
+
+  setTriggeringUserIds = value => {
+    this.attributes.triggering_user_ids = value
+  }
+
+  // boolean # Notify when actions are performed by a share recipient?
+  getTriggerByShareRecipients = () => this.attributes.trigger_by_share_recipients
+
+  setTriggerByShareRecipients = value => {
+    this.attributes.trigger_by_share_recipients = value
+  }
+
   // boolean # Trigger notification on notification user actions?
   getNotifyUserActions = () => this.attributes.notify_user_actions
 
@@ -57,11 +78,39 @@ class Notification {
     this.attributes.notify_user_actions = value
   }
 
-  // boolean # Triggers notification when moving or copying files to this path
+  // boolean # Triggers notification when copying files to this path
   getNotifyOnCopy = () => this.attributes.notify_on_copy
 
   setNotifyOnCopy = value => {
     this.attributes.notify_on_copy = value
+  }
+
+  // boolean # Triggers notification when deleting files from this path
+  getNotifyOnDelete = () => this.attributes.notify_on_delete
+
+  setNotifyOnDelete = value => {
+    this.attributes.notify_on_delete = value
+  }
+
+  // boolean # Triggers notification when downloading files from this path
+  getNotifyOnDownload = () => this.attributes.notify_on_download
+
+  setNotifyOnDownload = value => {
+    this.attributes.notify_on_download = value
+  }
+
+  // boolean # Triggers notification when moving files to this path
+  getNotifyOnMove = () => this.attributes.notify_on_move
+
+  setNotifyOnMove = value => {
+    this.attributes.notify_on_move = value
+  }
+
+  // boolean # Triggers notification when uploading new files to this path
+  getNotifyOnUpload = () => this.attributes.notify_on_upload
+
+  setNotifyOnUpload = value => {
+    this.attributes.notify_on_upload = value
   }
 
   // boolean # Enable notifications for each subfolder in this path
@@ -83,6 +132,13 @@ class Notification {
 
   setMessage = value => {
     this.attributes.message = value
+  }
+
+  // array # Array of filenames (possibly with wildcards) to match for action path
+  getTriggeringFilenames = () => this.attributes.triggering_filenames
+
+  setTriggeringFilenames = value => {
+    this.attributes.triggering_filenames = value
   }
 
   // boolean # Is the user unsubscribed from this notification?
@@ -123,10 +179,18 @@ class Notification {
 
   // Parameters:
   //   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+  //   notify_on_delete - boolean - Triggers notification when deleting files from this path
+  //   notify_on_download - boolean - Triggers notification when downloading files from this path
+  //   notify_on_move - boolean - Triggers notification when moving files to this path
+  //   notify_on_upload - boolean - Triggers notification when uploading new files to this path
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
   //   message - string - Custom message to include in notification emails.
+  //   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to match for action path
+  //   triggering_group_ids - array(int64) - Only notify on actions made by a member of one of the specified groups
+  //   triggering_user_ids - array(int64) - Only notify on actions made one of the specified users
+  //   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -145,6 +209,15 @@ class Notification {
     }
     if (params['message'] && !isString(params['message'])) {
       throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
+    }
+    if (params['triggering_filenames'] && !isArray(params['triggering_filenames'])) {
+      throw new Error(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
+    }
+    if (params['triggering_group_ids'] && !isArray(params['triggering_group_ids'])) {
+      throw new Error(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
+    }
+    if (params['triggering_user_ids'] && !isArray(params['triggering_user_ids'])) {
+      throw new Error(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
     }
 
     if (!params['id']) {
@@ -271,10 +344,18 @@ class Notification {
   // Parameters:
   //   user_id - int64 - The id of the user to notify. Provide `user_id`, `username` or `group_id`.
   //   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+  //   notify_on_delete - boolean - Triggers notification when deleting files from this path
+  //   notify_on_download - boolean - Triggers notification when downloading files from this path
+  //   notify_on_move - boolean - Triggers notification when moving files to this path
+  //   notify_on_upload - boolean - Triggers notification when uploading new files to this path
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
   //   message - string - Custom message to include in notification emails.
+  //   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to match for action path
+  //   triggering_group_ids - array(int64) - Only notify on actions made by a member of one of the specified groups
+  //   triggering_user_ids - array(int64) - Only notify on actions made one of the specified users
+  //   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
   //   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
   //   path - string - Path
   //   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
@@ -289,6 +370,18 @@ class Notification {
 
     if (params['message'] && !isString(params['message'])) {
       throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
+    }
+
+    if (params['triggering_filenames'] && !isArray(params['triggering_filenames'])) {
+      throw new Error(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
+    }
+
+    if (params['triggering_group_ids'] && !isArray(params['triggering_group_ids'])) {
+      throw new Error(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
+    }
+
+    if (params['triggering_user_ids'] && !isArray(params['triggering_user_ids'])) {
+      throw new Error(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {

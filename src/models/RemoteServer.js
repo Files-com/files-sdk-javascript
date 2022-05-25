@@ -239,6 +239,13 @@ class RemoteServer {
     this.attributes.azure_blob_storage_account = value
   }
 
+  // string # Shared Access Signature (SAS) token
+  getAzureBlobStorageSasToken = () => this.attributes.azure_blob_storage_sas_token
+
+  setAzureBlobStorageSasToken = value => {
+    this.attributes.azure_blob_storage_sas_token = value
+  }
+
   // string # Azure Blob Storage Container name
   getAzureBlobStorageContainer = () => this.attributes.azure_blob_storage_container
 
@@ -403,6 +410,7 @@ class RemoteServer {
   //   one_drive_account_type - string - Either personal or business_other account types
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
+  //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -526,6 +534,9 @@ class RemoteServer {
     }
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
       throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+    }
+    if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
     }
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
       throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
@@ -678,6 +689,7 @@ class RemoteServer {
   //   one_drive_account_type - string - Either personal or business_other account types
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
+  //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -823,6 +835,10 @@ class RemoteServer {
 
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
       throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+    }
+
+    if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
+      throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
     }
 
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {

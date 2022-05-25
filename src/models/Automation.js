@@ -36,6 +36,13 @@ class Automation {
     this.attributes.automation = value
   }
 
+  // boolean # Indicates if the automation has been deleted.
+  getDeleted = () => this.attributes.deleted
+
+  setDeleted = value => {
+    this.attributes.deleted = value
+  }
+
   // boolean # If true, this automation will not run.
   getDisabled = () => this.attributes.disabled
 
@@ -55,6 +62,13 @@ class Automation {
 
   setInterval = value => {
     this.attributes.interval = value
+  }
+
+  // date-time # Time when automation was last modified. Does not change for name or description updates.
+  getLastModifiedAt = () => this.attributes.last_modified_at
+
+  setLastModifiedAt = value => {
+    this.attributes.last_modified_at = value
   }
 
   // string # Name for this automation.
@@ -162,9 +176,15 @@ class Automation {
     this.attributes.destination = value
   }
 
+  // int64 # Set to the ID of automation used a clone template. For
+  getClonedFrom = () => this.attributes.cloned_from
+
+  setClonedFrom = value => {
+    this.attributes.cloned_from = value
+  }
+
 
   // Parameters:
-  //   automation (required) - string - Automation type
   //   source - string - Source Path
   //   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
   //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
@@ -181,6 +201,7 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
+  //   automation - string - Automation type
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new Error('Current object has no id')
@@ -193,9 +214,6 @@ class Automation {
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
       throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
-    }
-    if (params['automation'] && !isString(params['automation'])) {
-      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
     }
     if (params['source'] && !isString(params['source'])) {
       throw new Error(`Bad parameter: source must be of type String, received ${getType(source)}`)
@@ -236,20 +254,15 @@ class Automation {
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
       throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
     }
+    if (params['automation'] && !isString(params['automation'])) {
+      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
+    }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
         throw new Error('Parameter missing: id')
-      }
-    }
-
-    if (!params['automation']) {
-      if (this.attributes.automation) {
-        params['automation'] = this.automation
-      } else {
-        throw new Error('Parameter missing: automation')
       }
     }
 
@@ -301,13 +314,14 @@ class Automation {
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`.
-  //   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`.
-  //   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `automation`.
-  //   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`.
+  //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`, `last_modified_at` or `disabled`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+  //   with_deleted - boolean - Set to true to include deleted automations in the results.
   //   automation - string - DEPRECATED: Type of automation to filter by. Use `filter[automation]` instead.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
@@ -356,7 +370,6 @@ class Automation {
     Automation.find(id, params, options)
 
   // Parameters:
-  //   automation (required) - string - Automation type
   //   source - string - Source Path
   //   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
   //   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
@@ -373,13 +386,11 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
+  //   automation (required) - string - Automation type
+  //   cloned_from - int64 - Set to the ID of automation used a clone template. For
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
-    }
-
-    if (params['automation'] && !isString(params['automation'])) {
-      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
     }
 
     if (params['source'] && !isString(params['source'])) {
@@ -432,6 +443,14 @@ class Automation {
 
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
       throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+    }
+
+    if (params['automation'] && !isString(params['automation'])) {
+      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
+    }
+
+    if (params['cloned_from'] && !isInt(params['cloned_from'])) {
+      throw new Error(`Bad parameter: cloned_from must be of type Int, received ${getType(cloned_from)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'POST', params, options)
