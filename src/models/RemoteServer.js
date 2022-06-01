@@ -253,6 +253,27 @@ class RemoteServer {
     this.attributes.azure_blob_storage_container = value
   }
 
+  // string # Azure File Storage Account name
+  getAzureFilesStorageAccount = () => this.attributes.azure_files_storage_account
+
+  setAzureFilesStorageAccount = value => {
+    this.attributes.azure_files_storage_account = value
+  }
+
+  // string # Shared Access Signature (SAS) token
+  getAzureFilesSasToken = () => this.attributes.azure_files_sas_token
+
+  setAzureFilesSasToken = value => {
+    this.attributes.azure_files_sas_token = value
+  }
+
+  // string # Azure File Storage Share name
+  getAzureFilesShareName = () => this.attributes.azure_files_share_name
+
+  setAzureFilesShareName = value => {
+    this.attributes.azure_files_share_name = value
+  }
+
   // string # S3-compatible Bucket name
   getS3CompatibleBucket = () => this.attributes.s3_compatible_bucket
 
@@ -365,6 +386,13 @@ class RemoteServer {
     this.attributes.azure_blob_storage_access_key = value
   }
 
+  // string # Azure File Storage access key.
+  getAzureFilesStorageAccessKey = () => this.attributes.azure_files_storage_access_key
+
+  setAzureFilesStorageAccessKey = value => {
+    this.attributes.azure_files_storage_access_key = value
+  }
+
   // string # S3-compatible secret key
   getS3CompatibleSecretKey = () => this.attributes.s3_compatible_secret_key
 
@@ -387,6 +415,7 @@ class RemoteServer {
   //   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
   //   reset_authentication - boolean - Reset authenticated account
   //   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
+  //   azure_files_storage_access_key - string - Azure File Storage access key.
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -411,6 +440,9 @@ class RemoteServer {
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_files_storage_account - string - Azure File Storage Account name
+  //   azure_files_share_name - string - Azure File Storage Share name
+  //   azure_files_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -465,6 +497,9 @@ class RemoteServer {
     }
     if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
       throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
+    }
+    if (params['azure_files_storage_access_key'] && !isString(params['azure_files_storage_access_key'])) {
+      throw new Error(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
     }
     if (params['hostname'] && !isString(params['hostname'])) {
       throw new Error(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
@@ -537,6 +572,15 @@ class RemoteServer {
     }
     if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
       throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
+    }
+    if (params['azure_files_storage_account'] && !isString(params['azure_files_storage_account'])) {
+      throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
+    }
+    if (params['azure_files_share_name'] && !isString(params['azure_files_share_name'])) {
+      throw new Error(`Bad parameter: azure_files_share_name must be of type String, received ${getType(azure_files_share_name)}`)
+    }
+    if (params['azure_files_sas_token'] && !isString(params['azure_files_sas_token'])) {
+      throw new Error(`Bad parameter: azure_files_sas_token must be of type String, received ${getType(azure_files_sas_token)}`)
     }
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
       throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
@@ -666,6 +710,7 @@ class RemoteServer {
   //   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
   //   reset_authentication - boolean - Reset authenticated account
   //   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
+  //   azure_files_storage_access_key - string - Azure File Storage access key.
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -690,6 +735,9 @@ class RemoteServer {
   //   azure_blob_storage_account - string - Azure Blob Storage Account name
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_files_storage_account - string - Azure File Storage Account name
+  //   azure_files_share_name - string - Azure File Storage Share name
+  //   azure_files_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -743,6 +791,10 @@ class RemoteServer {
 
     if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
       throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
+    }
+
+    if (params['azure_files_storage_access_key'] && !isString(params['azure_files_storage_access_key'])) {
+      throw new Error(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
     }
 
     if (params['hostname'] && !isString(params['hostname'])) {
@@ -839,6 +891,18 @@ class RemoteServer {
 
     if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
       throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
+    }
+
+    if (params['azure_files_storage_account'] && !isString(params['azure_files_storage_account'])) {
+      throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
+    }
+
+    if (params['azure_files_share_name'] && !isString(params['azure_files_share_name'])) {
+      throw new Error(`Bad parameter: azure_files_share_name must be of type String, received ${getType(azure_files_share_name)}`)
+    }
+
+    if (params['azure_files_sas_token'] && !isString(params['azure_files_sas_token'])) {
+      throw new Error(`Bad parameter: azure_files_sas_token must be of type String, received ${getType(azure_files_sas_token)}`)
     }
 
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
