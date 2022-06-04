@@ -261,17 +261,17 @@ class RemoteServer {
   }
 
   // string # Shared Access Signature (SAS) token
-  getAzureFilesSasToken = () => this.attributes.azure_files_sas_token
+  getAzureFilesStorageSasToken = () => this.attributes.azure_files_storage_sas_token
 
-  setAzureFilesSasToken = value => {
-    this.attributes.azure_files_sas_token = value
+  setAzureFilesStorageSasToken = value => {
+    this.attributes.azure_files_storage_sas_token = value
   }
 
   // string # Azure File Storage Share name
-  getAzureFilesShareName = () => this.attributes.azure_files_share_name
+  getAzureFilesStorageShareName = () => this.attributes.azure_files_storage_share_name
 
-  setAzureFilesShareName = value => {
-    this.attributes.azure_files_share_name = value
+  setAzureFilesStorageShareName = value => {
+    this.attributes.azure_files_storage_share_name = value
   }
 
   // string # S3-compatible Bucket name
@@ -441,8 +441,8 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   azure_files_storage_account - string - Azure File Storage Account name
-  //   azure_files_share_name - string - Azure File Storage Share name
-  //   azure_files_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_files_storage_share_name - string - Azure File Storage Share name
+  //   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -576,11 +576,11 @@ class RemoteServer {
     if (params['azure_files_storage_account'] && !isString(params['azure_files_storage_account'])) {
       throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
     }
-    if (params['azure_files_share_name'] && !isString(params['azure_files_share_name'])) {
-      throw new Error(`Bad parameter: azure_files_share_name must be of type String, received ${getType(azure_files_share_name)}`)
+    if (params['azure_files_storage_share_name'] && !isString(params['azure_files_storage_share_name'])) {
+      throw new Error(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
     }
-    if (params['azure_files_sas_token'] && !isString(params['azure_files_sas_token'])) {
-      throw new Error(`Bad parameter: azure_files_sas_token must be of type String, received ${getType(azure_files_sas_token)}`)
+    if (params['azure_files_storage_sas_token'] && !isString(params['azure_files_storage_sas_token'])) {
+      throw new Error(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
     }
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
       throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
@@ -736,8 +736,8 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   azure_files_storage_account - string - Azure File Storage Account name
-  //   azure_files_share_name - string - Azure File Storage Share name
-  //   azure_files_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_files_storage_share_name - string - Azure File Storage Share name
+  //   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
   //   s3_compatible_region - string - S3-compatible endpoint
@@ -897,12 +897,12 @@ class RemoteServer {
       throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
     }
 
-    if (params['azure_files_share_name'] && !isString(params['azure_files_share_name'])) {
-      throw new Error(`Bad parameter: azure_files_share_name must be of type String, received ${getType(azure_files_share_name)}`)
+    if (params['azure_files_storage_share_name'] && !isString(params['azure_files_storage_share_name'])) {
+      throw new Error(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
     }
 
-    if (params['azure_files_sas_token'] && !isString(params['azure_files_sas_token'])) {
-      throw new Error(`Bad parameter: azure_files_sas_token must be of type String, received ${getType(azure_files_sas_token)}`)
+    if (params['azure_files_storage_sas_token'] && !isString(params['azure_files_storage_sas_token'])) {
+      throw new Error(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
     }
 
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
