@@ -176,13 +176,6 @@ class Automation {
     this.attributes.destination = value
   }
 
-  // int64 # Set to the ID of automation used a clone template. For
-  getClonedFrom = () => this.attributes.cloned_from
-
-  setClonedFrom = value => {
-    this.attributes.cloned_from = value
-  }
-
 
   // Parameters:
   //   source - string - Source Path
@@ -387,7 +380,6 @@ class Automation {
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
   //   automation (required) - string - Automation type
-  //   cloned_from - int64 - Set to the ID of automation used a clone template. For
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
       throw new Error('Parameter missing: automation')
@@ -447,10 +439,6 @@ class Automation {
 
     if (params['automation'] && !isString(params['automation'])) {
       throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
-    }
-
-    if (params['cloned_from'] && !isInt(params['cloned_from'])) {
-      throw new Error(`Bad parameter: cloned_from must be of type Int, received ${getType(cloned_from)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'POST', params, options)

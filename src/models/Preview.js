@@ -31,10 +31,10 @@ class Preview {
   // string # Link to download preview
   getDownloadUri = () => this.attributes.download_uri
 
-  // string # Preview status.  Can be invalid, not_generated, generating, complete, or file_too_large
+  // string # Preview type. Can be image, pdf, pdf_native, video, or audio
   getType = () => this.attributes.type
 
-  // int64 # Preview size
+  // string # Preview size
   getSize = () => this.attributes.size
 
 }
