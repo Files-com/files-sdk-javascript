@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -72,35 +73,35 @@ class Group {
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['notes'] && !isString(params['notes'])) {
-      throw new Error(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
     }
     if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new Error(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
     }
     if (params['admin_ids'] && !isString(params['admin_ids'])) {
-      throw new Error(`Bad parameter: admin_ids must be of type String, received ${getType(admin_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(admin_ids)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -111,23 +112,23 @@ class Group {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -162,15 +163,15 @@ class Group {
   //   ids - string - Comma-separated list of group ids to include in results.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['ids'] && !isString(params['ids'])) {
-      throw new Error(`Bad parameter: ids must be of type String, received ${getType(ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ids must be of type String, received ${getType(ids)}`)
     }
 
     const response = await Api.sendRequest(`/groups`, 'GET', params, options)
@@ -185,17 +186,17 @@ class Group {
   //   id (required) - int64 - Group ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/groups/${params['id']}`, 'GET', params, options)
@@ -213,19 +214,19 @@ class Group {
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
   static create = async (params = {}, options = {}) => {
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['notes'] && !isString(params['notes'])) {
-      throw new Error(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
     }
 
     if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new Error(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
     }
 
     if (params['admin_ids'] && !isString(params['admin_ids'])) {
-      throw new Error(`Bad parameter: admin_ids must be of type String, received ${getType(admin_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(admin_ids)}`)
     }
 
     const response = await Api.sendRequest(`/groups`, 'POST', params, options)

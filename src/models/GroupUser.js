@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -71,29 +72,29 @@ class GroupUser {
   //   admin - boolean - Is the user a group administrator?
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -101,7 +102,7 @@ class GroupUser {
       if (this.attributes.group_id) {
         params['group_id'] = this.group_id
       } else {
-        throw new Error('Parameter missing: group_id')
+        throw new errors.MissingParameterError('Parameter missing: group_id')
       }
     }
 
@@ -109,7 +110,7 @@ class GroupUser {
       if (this.attributes.user_id) {
         params['user_id'] = this.user_id
       } else {
-        throw new Error('Parameter missing: user_id')
+        throw new errors.MissingParameterError('Parameter missing: user_id')
       }
     }
 
@@ -123,29 +124,29 @@ class GroupUser {
   //   user_id (required) - int64 - User ID to remove from group.
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -153,7 +154,7 @@ class GroupUser {
       if (this.attributes.group_id) {
         params['group_id'] = this.group_id
       } else {
-        throw new Error('Parameter missing: group_id')
+        throw new errors.MissingParameterError('Parameter missing: group_id')
       }
     }
 
@@ -161,7 +162,7 @@ class GroupUser {
       if (this.attributes.user_id) {
         params['user_id'] = this.user_id
       } else {
-        throw new Error('Parameter missing: user_id')
+        throw new errors.MissingParameterError('Parameter missing: user_id')
       }
     }
 
@@ -190,19 +191,19 @@ class GroupUser {
   //   group_id - int64 - Group ID.  If provided, will return group_users of this group.
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
 
     const response = await Api.sendRequest(`/group_users`, 'GET', params, options)
@@ -219,19 +220,19 @@ class GroupUser {
   //   admin - boolean - Is the user a group administrator?
   static create = async (params = {}, options = {}) => {
     if (!params['group_id']) {
-      throw new Error('Parameter missing: group_id')
+      throw new errors.MissingParameterError('Parameter missing: group_id')
     }
 
     if (!params['user_id']) {
-      throw new Error('Parameter missing: user_id')
+      throw new errors.MissingParameterError('Parameter missing: user_id')
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     const response = await Api.sendRequest(`/group_users`, 'POST', params, options)

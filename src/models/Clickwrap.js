@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -73,38 +74,38 @@ class Clickwrap {
   //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['body'] && !isString(params['body'])) {
-      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
     }
     if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new Error(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
     }
     if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new Error(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
     }
     if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new Error(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -115,23 +116,23 @@ class Clickwrap {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -158,11 +159,11 @@ class Clickwrap {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps`, 'GET', params, options)
@@ -177,17 +178,17 @@ class Clickwrap {
   //   id (required) - int64 - Clickwrap ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'GET', params, options)
@@ -206,23 +207,23 @@ class Clickwrap {
   //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
   static create = async (params = {}, options = {}) => {
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
     }
 
     if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new Error(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
     }
 
     if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new Error(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
     }
 
     if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new Error(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps`, 'POST', params, options)

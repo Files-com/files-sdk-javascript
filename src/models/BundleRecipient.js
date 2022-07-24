@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -81,7 +82,7 @@ class BundleRecipient {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The BundleRecipient object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The BundleRecipient object doesn\'t support updates.')
       } else {
         const newObject = BundleRecipient.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -103,23 +104,23 @@ class BundleRecipient {
   //   bundle_id (required) - int64 - List recipients for the bundle with this ID.
   static list = async (params = {}, options = {}) => {
     if (!params['bundle_id']) {
-      throw new Error('Parameter missing: bundle_id')
+      throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new Error(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
     }
 
     const response = await Api.sendRequest(`/bundle_recipients`, 'GET', params, options)
@@ -140,35 +141,35 @@ class BundleRecipient {
   //   share_after_create - boolean - Set to true to share the link with the recipient upon creation.
   static create = async (params = {}, options = {}) => {
     if (!params['bundle_id']) {
-      throw new Error('Parameter missing: bundle_id')
+      throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
 
     if (!params['recipient']) {
-      throw new Error('Parameter missing: recipient')
+      throw new errors.MissingParameterError('Parameter missing: recipient')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new Error(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
     }
 
     if (params['recipient'] && !isString(params['recipient'])) {
-      throw new Error(`Bad parameter: recipient must be of type String, received ${getType(recipient)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(recipient)}`)
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['company'] && !isString(params['company'])) {
-      throw new Error(`Bad parameter: company must be of type String, received ${getType(company)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(company)}`)
     }
 
     if (params['note'] && !isString(params['note'])) {
-      throw new Error(`Bad parameter: note must be of type String, received ${getType(note)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(note)}`)
     }
 
     const response = await Api.sendRequest(`/bundle_recipients`, 'POST', params, options)

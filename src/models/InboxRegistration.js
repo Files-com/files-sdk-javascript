@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -59,15 +60,15 @@ class InboxRegistration {
   //   folder_behavior_id - int64 - ID of the associated Inbox.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['folder_behavior_id'] && !isInt(params['folder_behavior_id'])) {
-      throw new Error(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(folder_behavior_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(folder_behavior_id)}`)
     }
 
     const response = await Api.sendRequest(`/inbox_registrations`, 'GET', params, options)

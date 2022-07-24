@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -62,23 +63,23 @@ class Style {
   //   file (required) - file - Logo for custom branding.
   update = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -86,7 +87,7 @@ class Style {
       if (this.attributes.file) {
         params['file'] = this.file
       } else {
-        throw new Error('Parameter missing: file')
+        throw new errors.MissingParameterError('Parameter missing: file')
       }
     }
 
@@ -97,23 +98,23 @@ class Style {
 
   delete = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -132,17 +133,17 @@ class Style {
   //   path (required) - string - Style path.
   static find = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     const response = await Api.sendRequest(`/styles/${params['path']}`, 'GET', params, options)

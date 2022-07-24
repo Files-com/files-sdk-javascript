@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -197,65 +198,65 @@ class Automation {
   //   automation - string - Automation type
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['source'] && !isString(params['source'])) {
-      throw new Error(`Bad parameter: source must be of type String, received ${getType(source)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(source)}`)
     }
     if (params['destination'] && !isString(params['destination'])) {
-      throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
     }
     if (params['destinations'] && !isArray(params['destinations'])) {
-      throw new Error(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
     }
     if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
-      throw new Error(`Bad parameter: destination_replace_from must be of type String, received ${getType(destination_replace_from)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(destination_replace_from)}`)
     }
     if (params['destination_replace_to'] && !isString(params['destination_replace_to'])) {
-      throw new Error(`Bad parameter: destination_replace_to must be of type String, received ${getType(destination_replace_to)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(destination_replace_to)}`)
     }
     if (params['interval'] && !isString(params['interval'])) {
-      throw new Error(`Bad parameter: interval must be of type String, received ${getType(interval)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(interval)}`)
     }
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new Error(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
     }
     if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
     }
     if (params['description'] && !isString(params['description'])) {
-      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['trigger'] && !isString(params['trigger'])) {
-      throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
     }
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
-      throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
     }
     if (params['automation'] && !isString(params['automation'])) {
-      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -266,23 +267,23 @@ class Automation {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -318,15 +319,15 @@ class Automation {
   //   automation - string - DEPRECATED: Type of automation to filter by. Use `filter[automation]` instead.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['automation'] && !isString(params['automation'])) {
-      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'GET', params, options)
@@ -341,17 +342,17 @@ class Automation {
   //   id (required) - int64 - Automation ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/automations/${params['id']}`, 'GET', params, options)
@@ -382,63 +383,63 @@ class Automation {
   //   automation (required) - string - Automation type
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
-      throw new Error('Parameter missing: automation')
+      throw new errors.MissingParameterError('Parameter missing: automation')
     }
 
     if (params['source'] && !isString(params['source'])) {
-      throw new Error(`Bad parameter: source must be of type String, received ${getType(source)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(source)}`)
     }
 
     if (params['destination'] && !isString(params['destination'])) {
-      throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
     }
 
     if (params['destinations'] && !isArray(params['destinations'])) {
-      throw new Error(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(destinations)}`)
     }
 
     if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
-      throw new Error(`Bad parameter: destination_replace_from must be of type String, received ${getType(destination_replace_from)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(destination_replace_from)}`)
     }
 
     if (params['destination_replace_to'] && !isString(params['destination_replace_to'])) {
-      throw new Error(`Bad parameter: destination_replace_to must be of type String, received ${getType(destination_replace_to)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(destination_replace_to)}`)
     }
 
     if (params['interval'] && !isString(params['interval'])) {
-      throw new Error(`Bad parameter: interval must be of type String, received ${getType(interval)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(interval)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new Error(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
     }
 
     if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
     }
 
     if (params['description'] && !isString(params['description'])) {
-      throw new Error(`Bad parameter: description must be of type String, received ${getType(description)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['trigger'] && !isString(params['trigger'])) {
-      throw new Error(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(trigger)}`)
     }
 
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
-      throw new Error(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
     }
 
     if (params['automation'] && !isString(params['automation'])) {
-      throw new Error(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
     }
 
     const response = await Api.sendRequest(`/automations`, 'POST', params, options)

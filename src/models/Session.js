@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -81,7 +82,7 @@ class Session {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The Session object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The Session object doesn\'t support updates.')
       } else {
         const newObject = Session.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -96,19 +97,19 @@ class Session {
   //   partial_session_id - string - Identifier for a partially-completed login
   static create = async (params = {}, options = {}) => {
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
 
     if (params['password'] && !isString(params['password'])) {
-      throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
     }
 
     if (params['otp'] && !isString(params['otp'])) {
-      throw new Error(`Bad parameter: otp must be of type String, received ${getType(otp)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: otp must be of type String, received ${getType(otp)}`)
     }
 
     if (params['partial_session_id'] && !isString(params['partial_session_id'])) {
-      throw new Error(`Bad parameter: partial_session_id must be of type String, received ${getType(partial_session_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: partial_session_id must be of type String, received ${getType(partial_session_id)}`)
     }
 
     const response = await Api.sendRequest(`/sessions`, 'POST', params, options)

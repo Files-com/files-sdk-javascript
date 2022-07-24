@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -71,32 +72,32 @@ class Message {
   //   body (required) - string - Message body.
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['project_id'] && !isInt(params['project_id'])) {
-      throw new Error(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
     }
     if (params['subject'] && !isString(params['subject'])) {
-      throw new Error(`Bad parameter: subject must be of type String, received ${getType(subject)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(subject)}`)
     }
     if (params['body'] && !isString(params['body'])) {
-      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -104,7 +105,7 @@ class Message {
       if (this.attributes.project_id) {
         params['project_id'] = this.project_id
       } else {
-        throw new Error('Parameter missing: project_id')
+        throw new errors.MissingParameterError('Parameter missing: project_id')
       }
     }
 
@@ -112,7 +113,7 @@ class Message {
       if (this.attributes.subject) {
         params['subject'] = this.subject
       } else {
-        throw new Error('Parameter missing: subject')
+        throw new errors.MissingParameterError('Parameter missing: subject')
       }
     }
 
@@ -120,7 +121,7 @@ class Message {
       if (this.attributes.body) {
         params['body'] = this.body
       } else {
-        throw new Error('Parameter missing: body')
+        throw new errors.MissingParameterError('Parameter missing: body')
       }
     }
 
@@ -131,23 +132,23 @@ class Message {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -176,23 +177,23 @@ class Message {
   //   project_id (required) - int64 - Project for which to return messages.
   static list = async (params = {}, options = {}) => {
     if (!params['project_id']) {
-      throw new Error('Parameter missing: project_id')
+      throw new errors.MissingParameterError('Parameter missing: project_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['project_id'] && !isInt(params['project_id'])) {
-      throw new Error(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
     }
 
     const response = await Api.sendRequest(`/messages`, 'GET', params, options)
@@ -207,17 +208,17 @@ class Message {
   //   id (required) - int64 - Message ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/messages/${params['id']}`, 'GET', params, options)
@@ -235,31 +236,31 @@ class Message {
   //   body (required) - string - Message body.
   static create = async (params = {}, options = {}) => {
     if (!params['project_id']) {
-      throw new Error('Parameter missing: project_id')
+      throw new errors.MissingParameterError('Parameter missing: project_id')
     }
 
     if (!params['subject']) {
-      throw new Error('Parameter missing: subject')
+      throw new errors.MissingParameterError('Parameter missing: subject')
     }
 
     if (!params['body']) {
-      throw new Error('Parameter missing: body')
+      throw new errors.MissingParameterError('Parameter missing: body')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['project_id'] && !isInt(params['project_id'])) {
-      throw new Error(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
     }
 
     if (params['subject'] && !isString(params['subject'])) {
-      throw new Error(`Bad parameter: subject must be of type String, received ${getType(subject)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(subject)}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
     }
 
     const response = await Api.sendRequest(`/messages`, 'POST', params, options)

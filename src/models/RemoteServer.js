@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -459,161 +460,161 @@ class RemoteServer {
   //   s3_compatible_secret_key - string - S3-compatible secret key
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
-      throw new Error(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
     }
     if (params['aws_secret_key'] && !isString(params['aws_secret_key'])) {
-      throw new Error(`Bad parameter: aws_secret_key must be of type String, received ${getType(aws_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: aws_secret_key must be of type String, received ${getType(aws_secret_key)}`)
     }
     if (params['password'] && !isString(params['password'])) {
-      throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
     }
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
     }
     if (params['private_key_passphrase'] && !isString(params['private_key_passphrase'])) {
-      throw new Error(`Bad parameter: private_key_passphrase must be of type String, received ${getType(private_key_passphrase)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(private_key_passphrase)}`)
     }
     if (params['ssl_certificate'] && !isString(params['ssl_certificate'])) {
-      throw new Error(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
     }
     if (params['google_cloud_storage_credentials_json'] && !isString(params['google_cloud_storage_credentials_json'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(google_cloud_storage_credentials_json)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(google_cloud_storage_credentials_json)}`)
     }
     if (params['wasabi_access_key'] && !isString(params['wasabi_access_key'])) {
-      throw new Error(`Bad parameter: wasabi_access_key must be of type String, received ${getType(wasabi_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_access_key must be of type String, received ${getType(wasabi_access_key)}`)
     }
     if (params['wasabi_secret_key'] && !isString(params['wasabi_secret_key'])) {
-      throw new Error(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(wasabi_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(wasabi_secret_key)}`)
     }
     if (params['backblaze_b2_key_id'] && !isString(params['backblaze_b2_key_id'])) {
-      throw new Error(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(backblaze_b2_key_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(backblaze_b2_key_id)}`)
     }
     if (params['backblaze_b2_application_key'] && !isString(params['backblaze_b2_application_key'])) {
-      throw new Error(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(backblaze_b2_application_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(backblaze_b2_application_key)}`)
     }
     if (params['rackspace_api_key'] && !isString(params['rackspace_api_key'])) {
-      throw new Error(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
     }
     if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
     }
     if (params['azure_files_storage_access_key'] && !isString(params['azure_files_storage_access_key'])) {
-      throw new Error(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
     }
     if (params['hostname'] && !isString(params['hostname'])) {
-      throw new Error(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['max_connections'] && !isInt(params['max_connections'])) {
-      throw new Error(`Bad parameter: max_connections must be of type Int, received ${getType(max_connections)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: max_connections must be of type Int, received ${getType(max_connections)}`)
     }
     if (params['port'] && !isInt(params['port'])) {
-      throw new Error(`Bad parameter: port must be of type Int, received ${getType(port)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(port)}`)
     }
     if (params['s3_bucket'] && !isString(params['s3_bucket'])) {
-      throw new Error(`Bad parameter: s3_bucket must be of type String, received ${getType(s3_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_bucket must be of type String, received ${getType(s3_bucket)}`)
     }
     if (params['s3_region'] && !isString(params['s3_region'])) {
-      throw new Error(`Bad parameter: s3_region must be of type String, received ${getType(s3_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_region must be of type String, received ${getType(s3_region)}`)
     }
     if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
     if (params['server_host_key'] && !isString(params['server_host_key'])) {
-      throw new Error(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
     }
     if (params['server_type'] && !isString(params['server_type'])) {
-      throw new Error(`Bad parameter: server_type must be of type String, received ${getType(server_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(server_type)}`)
     }
     if (params['ssl'] && !isString(params['ssl'])) {
-      throw new Error(`Bad parameter: ssl must be of type String, received ${getType(ssl)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl must be of type String, received ${getType(ssl)}`)
     }
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
     if (params['google_cloud_storage_bucket'] && !isString(params['google_cloud_storage_bucket'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(google_cloud_storage_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(google_cloud_storage_bucket)}`)
     }
     if (params['google_cloud_storage_project_id'] && !isString(params['google_cloud_storage_project_id'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(google_cloud_storage_project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(google_cloud_storage_project_id)}`)
     }
     if (params['backblaze_b2_bucket'] && !isString(params['backblaze_b2_bucket'])) {
-      throw new Error(`Bad parameter: backblaze_b2_bucket must be of type String, received ${getType(backblaze_b2_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_bucket must be of type String, received ${getType(backblaze_b2_bucket)}`)
     }
     if (params['backblaze_b2_s3_endpoint'] && !isString(params['backblaze_b2_s3_endpoint'])) {
-      throw new Error(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(backblaze_b2_s3_endpoint)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(backblaze_b2_s3_endpoint)}`)
     }
     if (params['wasabi_bucket'] && !isString(params['wasabi_bucket'])) {
-      throw new Error(`Bad parameter: wasabi_bucket must be of type String, received ${getType(wasabi_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_bucket must be of type String, received ${getType(wasabi_bucket)}`)
     }
     if (params['wasabi_region'] && !isString(params['wasabi_region'])) {
-      throw new Error(`Bad parameter: wasabi_region must be of type String, received ${getType(wasabi_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_region must be of type String, received ${getType(wasabi_region)}`)
     }
     if (params['rackspace_username'] && !isString(params['rackspace_username'])) {
-      throw new Error(`Bad parameter: rackspace_username must be of type String, received ${getType(rackspace_username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_username must be of type String, received ${getType(rackspace_username)}`)
     }
     if (params['rackspace_region'] && !isString(params['rackspace_region'])) {
-      throw new Error(`Bad parameter: rackspace_region must be of type String, received ${getType(rackspace_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_region must be of type String, received ${getType(rackspace_region)}`)
     }
     if (params['rackspace_container'] && !isString(params['rackspace_container'])) {
-      throw new Error(`Bad parameter: rackspace_container must be of type String, received ${getType(rackspace_container)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_container must be of type String, received ${getType(rackspace_container)}`)
     }
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
-      throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
     }
     if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
     }
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
     }
     if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
     }
     if (params['azure_files_storage_account'] && !isString(params['azure_files_storage_account'])) {
-      throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
     }
     if (params['azure_files_storage_share_name'] && !isString(params['azure_files_storage_share_name'])) {
-      throw new Error(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
     }
     if (params['azure_files_storage_sas_token'] && !isString(params['azure_files_storage_sas_token'])) {
-      throw new Error(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
     }
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
-      throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
     }
     if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
-      throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
     }
     if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
-      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
     }
     if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
-      throw new Error(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
     }
     if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
-      throw new Error(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -624,23 +625,23 @@ class RemoteServer {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -667,11 +668,11 @@ class RemoteServer {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'GET', params, options)
@@ -686,17 +687,17 @@ class RemoteServer {
   //   id (required) - int64 - Remote Server ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers/${params['id']}`, 'GET', params, options)
@@ -758,187 +759,187 @@ class RemoteServer {
   //   s3_compatible_secret_key - string - S3-compatible secret key
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
-      throw new Error(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(aws_access_key)}`)
     }
 
     if (params['aws_secret_key'] && !isString(params['aws_secret_key'])) {
-      throw new Error(`Bad parameter: aws_secret_key must be of type String, received ${getType(aws_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: aws_secret_key must be of type String, received ${getType(aws_secret_key)}`)
     }
 
     if (params['password'] && !isString(params['password'])) {
-      throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
     }
 
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
     }
 
     if (params['private_key_passphrase'] && !isString(params['private_key_passphrase'])) {
-      throw new Error(`Bad parameter: private_key_passphrase must be of type String, received ${getType(private_key_passphrase)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(private_key_passphrase)}`)
     }
 
     if (params['ssl_certificate'] && !isString(params['ssl_certificate'])) {
-      throw new Error(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl_certificate must be of type String, received ${getType(ssl_certificate)}`)
     }
 
     if (params['google_cloud_storage_credentials_json'] && !isString(params['google_cloud_storage_credentials_json'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(google_cloud_storage_credentials_json)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(google_cloud_storage_credentials_json)}`)
     }
 
     if (params['wasabi_access_key'] && !isString(params['wasabi_access_key'])) {
-      throw new Error(`Bad parameter: wasabi_access_key must be of type String, received ${getType(wasabi_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_access_key must be of type String, received ${getType(wasabi_access_key)}`)
     }
 
     if (params['wasabi_secret_key'] && !isString(params['wasabi_secret_key'])) {
-      throw new Error(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(wasabi_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(wasabi_secret_key)}`)
     }
 
     if (params['backblaze_b2_key_id'] && !isString(params['backblaze_b2_key_id'])) {
-      throw new Error(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(backblaze_b2_key_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(backblaze_b2_key_id)}`)
     }
 
     if (params['backblaze_b2_application_key'] && !isString(params['backblaze_b2_application_key'])) {
-      throw new Error(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(backblaze_b2_application_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(backblaze_b2_application_key)}`)
     }
 
     if (params['rackspace_api_key'] && !isString(params['rackspace_api_key'])) {
-      throw new Error(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_api_key must be of type String, received ${getType(rackspace_api_key)}`)
     }
 
     if (params['azure_blob_storage_access_key'] && !isString(params['azure_blob_storage_access_key'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(azure_blob_storage_access_key)}`)
     }
 
     if (params['azure_files_storage_access_key'] && !isString(params['azure_files_storage_access_key'])) {
-      throw new Error(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(azure_files_storage_access_key)}`)
     }
 
     if (params['hostname'] && !isString(params['hostname'])) {
-      throw new Error(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['max_connections'] && !isInt(params['max_connections'])) {
-      throw new Error(`Bad parameter: max_connections must be of type Int, received ${getType(max_connections)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: max_connections must be of type Int, received ${getType(max_connections)}`)
     }
 
     if (params['port'] && !isInt(params['port'])) {
-      throw new Error(`Bad parameter: port must be of type Int, received ${getType(port)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(port)}`)
     }
 
     if (params['s3_bucket'] && !isString(params['s3_bucket'])) {
-      throw new Error(`Bad parameter: s3_bucket must be of type String, received ${getType(s3_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_bucket must be of type String, received ${getType(s3_bucket)}`)
     }
 
     if (params['s3_region'] && !isString(params['s3_region'])) {
-      throw new Error(`Bad parameter: s3_region must be of type String, received ${getType(s3_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_region must be of type String, received ${getType(s3_region)}`)
     }
 
     if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
 
     if (params['server_host_key'] && !isString(params['server_host_key'])) {
-      throw new Error(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
     }
 
     if (params['server_type'] && !isString(params['server_type'])) {
-      throw new Error(`Bad parameter: server_type must be of type String, received ${getType(server_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(server_type)}`)
     }
 
     if (params['ssl'] && !isString(params['ssl'])) {
-      throw new Error(`Bad parameter: ssl must be of type String, received ${getType(ssl)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl must be of type String, received ${getType(ssl)}`)
     }
 
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
 
     if (params['google_cloud_storage_bucket'] && !isString(params['google_cloud_storage_bucket'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(google_cloud_storage_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(google_cloud_storage_bucket)}`)
     }
 
     if (params['google_cloud_storage_project_id'] && !isString(params['google_cloud_storage_project_id'])) {
-      throw new Error(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(google_cloud_storage_project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(google_cloud_storage_project_id)}`)
     }
 
     if (params['backblaze_b2_bucket'] && !isString(params['backblaze_b2_bucket'])) {
-      throw new Error(`Bad parameter: backblaze_b2_bucket must be of type String, received ${getType(backblaze_b2_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_bucket must be of type String, received ${getType(backblaze_b2_bucket)}`)
     }
 
     if (params['backblaze_b2_s3_endpoint'] && !isString(params['backblaze_b2_s3_endpoint'])) {
-      throw new Error(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(backblaze_b2_s3_endpoint)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(backblaze_b2_s3_endpoint)}`)
     }
 
     if (params['wasabi_bucket'] && !isString(params['wasabi_bucket'])) {
-      throw new Error(`Bad parameter: wasabi_bucket must be of type String, received ${getType(wasabi_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_bucket must be of type String, received ${getType(wasabi_bucket)}`)
     }
 
     if (params['wasabi_region'] && !isString(params['wasabi_region'])) {
-      throw new Error(`Bad parameter: wasabi_region must be of type String, received ${getType(wasabi_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: wasabi_region must be of type String, received ${getType(wasabi_region)}`)
     }
 
     if (params['rackspace_username'] && !isString(params['rackspace_username'])) {
-      throw new Error(`Bad parameter: rackspace_username must be of type String, received ${getType(rackspace_username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_username must be of type String, received ${getType(rackspace_username)}`)
     }
 
     if (params['rackspace_region'] && !isString(params['rackspace_region'])) {
-      throw new Error(`Bad parameter: rackspace_region must be of type String, received ${getType(rackspace_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_region must be of type String, received ${getType(rackspace_region)}`)
     }
 
     if (params['rackspace_container'] && !isString(params['rackspace_container'])) {
-      throw new Error(`Bad parameter: rackspace_container must be of type String, received ${getType(rackspace_container)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: rackspace_container must be of type String, received ${getType(rackspace_container)}`)
     }
 
     if (params['one_drive_account_type'] && !isString(params['one_drive_account_type'])) {
-      throw new Error(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: one_drive_account_type must be of type String, received ${getType(one_drive_account_type)}`)
     }
 
     if (params['azure_blob_storage_account'] && !isString(params['azure_blob_storage_account'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(azure_blob_storage_account)}`)
     }
 
     if (params['azure_blob_storage_container'] && !isString(params['azure_blob_storage_container'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_container must be of type String, received ${getType(azure_blob_storage_container)}`)
     }
 
     if (params['azure_blob_storage_sas_token'] && !isString(params['azure_blob_storage_sas_token'])) {
-      throw new Error(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(azure_blob_storage_sas_token)}`)
     }
 
     if (params['azure_files_storage_account'] && !isString(params['azure_files_storage_account'])) {
-      throw new Error(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(azure_files_storage_account)}`)
     }
 
     if (params['azure_files_storage_share_name'] && !isString(params['azure_files_storage_share_name'])) {
-      throw new Error(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(azure_files_storage_share_name)}`)
     }
 
     if (params['azure_files_storage_sas_token'] && !isString(params['azure_files_storage_sas_token'])) {
-      throw new Error(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(azure_files_storage_sas_token)}`)
     }
 
     if (params['s3_compatible_bucket'] && !isString(params['s3_compatible_bucket'])) {
-      throw new Error(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_bucket must be of type String, received ${getType(s3_compatible_bucket)}`)
     }
 
     if (params['s3_compatible_endpoint'] && !isString(params['s3_compatible_endpoint'])) {
-      throw new Error(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_endpoint must be of type String, received ${getType(s3_compatible_endpoint)}`)
     }
 
     if (params['s3_compatible_region'] && !isString(params['s3_compatible_region'])) {
-      throw new Error(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_region must be of type String, received ${getType(s3_compatible_region)}`)
     }
 
     if (params['s3_compatible_access_key'] && !isString(params['s3_compatible_access_key'])) {
-      throw new Error(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(s3_compatible_access_key)}`)
     }
 
     if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
-      throw new Error(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)

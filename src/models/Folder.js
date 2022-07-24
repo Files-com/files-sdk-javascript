@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 import File from './File'
@@ -161,37 +162,37 @@ class Folder {
   //   with_priority_color - boolean - Include file priority color information?
   static listFor = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['filter'] && !isString(params['filter'])) {
-      throw new Error(`Bad parameter: filter must be of type String, received ${getType(filter)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: filter must be of type String, received ${getType(filter)}`)
     }
 
     if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new Error(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
     }
 
     if (params['search'] && !isString(params['search'])) {
-      throw new Error(`Bad parameter: search must be of type String, received ${getType(search)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(search)}`)
     }
 
     const response = await Api.sendRequest(`/folders/${params['path']}`, 'GET', params, options)
@@ -204,17 +205,17 @@ class Folder {
   //   mkdir_parents - boolean - Create parent directories if they do not exist?
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     const response = await Api.sendRequest(`/folders/${params['path']}`, 'POST', params, options)

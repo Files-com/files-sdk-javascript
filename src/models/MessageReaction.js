@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -46,23 +47,23 @@ class MessageReaction {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -76,7 +77,7 @@ class MessageReaction {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The MessageReaction object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The MessageReaction object doesn\'t support updates.')
       } else {
         const newObject = MessageReaction.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -91,23 +92,23 @@ class MessageReaction {
   //   message_id (required) - int64 - Message to return reactions for.
   static list = async (params = {}, options = {}) => {
     if (!params['message_id']) {
-      throw new Error('Parameter missing: message_id')
+      throw new errors.MissingParameterError('Parameter missing: message_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['message_id'] && !isInt(params['message_id'])) {
-      throw new Error(`Bad parameter: message_id must be of type Int, received ${getType(message_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: message_id must be of type Int, received ${getType(message_id)}`)
     }
 
     const response = await Api.sendRequest(`/message_reactions`, 'GET', params, options)
@@ -122,17 +123,17 @@ class MessageReaction {
   //   id (required) - int64 - Message Reaction ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/message_reactions/${params['id']}`, 'GET', params, options)
@@ -148,15 +149,15 @@ class MessageReaction {
   //   emoji (required) - string - Emoji to react with.
   static create = async (params = {}, options = {}) => {
     if (!params['emoji']) {
-      throw new Error('Parameter missing: emoji')
+      throw new errors.MissingParameterError('Parameter missing: emoji')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['emoji'] && !isString(params['emoji'])) {
-      throw new Error(`Bad parameter: emoji must be of type String, received ${getType(emoji)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(emoji)}`)
     }
 
     const response = await Api.sendRequest(`/message_reactions`, 'POST', params, options)

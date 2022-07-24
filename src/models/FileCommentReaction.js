@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -53,23 +54,23 @@ class FileCommentReaction {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -83,7 +84,7 @@ class FileCommentReaction {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The FileCommentReaction object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The FileCommentReaction object doesn\'t support updates.')
       } else {
         const newObject = FileCommentReaction.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -97,23 +98,23 @@ class FileCommentReaction {
   //   emoji (required) - string - Emoji to react with.
   static create = async (params = {}, options = {}) => {
     if (!params['file_comment_id']) {
-      throw new Error('Parameter missing: file_comment_id')
+      throw new errors.MissingParameterError('Parameter missing: file_comment_id')
     }
 
     if (!params['emoji']) {
-      throw new Error('Parameter missing: emoji')
+      throw new errors.MissingParameterError('Parameter missing: emoji')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['file_comment_id'] && !isInt(params['file_comment_id'])) {
-      throw new Error(`Bad parameter: file_comment_id must be of type Int, received ${getType(file_comment_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(file_comment_id)}`)
     }
 
     if (params['emoji'] && !isString(params['emoji'])) {
-      throw new Error(`Bad parameter: emoji must be of type String, received ${getType(emoji)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(emoji)}`)
     }
 
     const response = await Api.sendRequest(`/file_comment_reactions`, 'POST', params, options)

@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -55,23 +56,23 @@ class AutomationRun {
   //   automation_id (required) - int64 - ID of the associated Automation.
   static list = async (params = {}, options = {}) => {
     if (!params['automation_id']) {
-      throw new Error('Parameter missing: automation_id')
+      throw new errors.MissingParameterError('Parameter missing: automation_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['automation_id'] && !isInt(params['automation_id'])) {
-      throw new Error(`Bad parameter: automation_id must be of type Int, received ${getType(automation_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(automation_id)}`)
     }
 
     const response = await Api.sendRequest(`/automation_runs`, 'GET', params, options)
@@ -86,17 +87,17 @@ class AutomationRun {
   //   id (required) - int64 - Automation Run ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/automation_runs/${params['id']}`, 'GET', params, options)

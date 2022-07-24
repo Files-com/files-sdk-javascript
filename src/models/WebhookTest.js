@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -123,7 +124,7 @@ class WebhookTest {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The WebhookTest object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The WebhookTest object doesn\'t support updates.')
       } else {
         const newObject = WebhookTest.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -143,31 +144,31 @@ class WebhookTest {
   //   action - string - action for test body
   static create = async (params = {}, options = {}) => {
     if (!params['url']) {
-      throw new Error('Parameter missing: url')
+      throw new errors.MissingParameterError('Parameter missing: url')
     }
 
     if (params['url'] && !isString(params['url'])) {
-      throw new Error(`Bad parameter: url must be of type String, received ${getType(url)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(url)}`)
     }
 
     if (params['method'] && !isString(params['method'])) {
-      throw new Error(`Bad parameter: method must be of type String, received ${getType(method)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(method)}`)
     }
 
     if (params['encoding'] && !isString(params['encoding'])) {
-      throw new Error(`Bad parameter: encoding must be of type String, received ${getType(encoding)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(encoding)}`)
     }
 
     if (params['raw_body'] && !isString(params['raw_body'])) {
-      throw new Error(`Bad parameter: raw_body must be of type String, received ${getType(raw_body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(raw_body)}`)
     }
 
     if (params['file_form_field'] && !isString(params['file_form_field'])) {
-      throw new Error(`Bad parameter: file_form_field must be of type String, received ${getType(file_form_field)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(file_form_field)}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
     const response = await Api.sendRequest(`/webhook_tests`, 'POST', params, options)

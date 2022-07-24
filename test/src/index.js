@@ -1,10 +1,13 @@
 import assert from 'assert'
+// import * as errors from 'files.com/lib/Errors'
+const errors = require('files.com/lib/Errors')
 import Files from 'files.com/lib/Files'
 import Logger, { LogLevel } from 'files.com/lib/Logger'
 import ApiKey from 'files.com/lib/models/ApiKey'
 import File from 'files.com/lib/models/File'
 import Folder from 'files.com/lib/models/Folder'
 import Session from 'files.com/lib/models/Session'
+import User from 'files.com/lib/models/User'
 import { isBrowser } from 'files.com/lib/utils'
 
 // name of an existing folder in your root to create/delete test files and folders
@@ -125,6 +128,47 @@ const testSuite = async () => {
     Logger.info('***** testSession() succeeded! *****')
   }
 
+  const testFailure = async () => {
+    // test invalid api key
+    Files.setApiKey('this_is_not_a_valid_api_key')
+    Logger.pause()
+
+    let caughtInvalidCredentialsError = false
+
+    try {
+      await User.list()
+    } catch (error) {
+      caughtInvalidCredentialsError = error instanceof errors.NotAuthenticated_InvalidCredentialsError
+    }
+
+    assert(caughtInvalidCredentialsError === true)
+
+    // restore valid api key
+    Files.setApiKey(apiKey)
+    Logger.unpause()
+
+    Logger.info('***** testFailure() succeeded! *****')
+  }
+
+  const testUserListAndUpdate = async () => {
+    const allUsers = await User.all()
+    const firstUser = allUsers[0]
+  
+    const oldName = firstUser.name
+    const newName = `edited name - ${Math.random()}`
+  
+    firstUser.setName(newName)
+    await firstUser.save()
+  
+    const updatedUser = await User.find(firstUser.id)
+  
+    assert(updatedUser.isLoaded())
+    assert(oldName !== newName)
+    assert(updatedUser.name === newName)
+  
+    Logger.info('***** testUserListAndUpdate() succeeded! *****');
+  }
+
   //
   // execute all tests
   //
@@ -132,6 +176,8 @@ const testSuite = async () => {
   await testFolderListAutoPagination()
   await testUploadAndDownload()
   await testSession()
+  await testFailure()
+  await testUserListAndUpdate()
 }
 
 export default testSuite

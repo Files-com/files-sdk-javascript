@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -544,231 +545,231 @@ class Site {
   //   smtp_password - string - Password for SMTP server.
   static update = async (params = {}, options = {}) => {
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['subdomain'] && !isString(params['subdomain'])) {
-      throw new Error(`Bad parameter: subdomain must be of type String, received ${getType(subdomain)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: subdomain must be of type String, received ${getType(subdomain)}`)
     }
 
     if (params['domain'] && !isString(params['domain'])) {
-      throw new Error(`Bad parameter: domain must be of type String, received ${getType(domain)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: domain must be of type String, received ${getType(domain)}`)
     }
 
     if (params['domain_letsencrypt_chain'] && !isString(params['domain_letsencrypt_chain'])) {
-      throw new Error(`Bad parameter: domain_letsencrypt_chain must be of type String, received ${getType(domain_letsencrypt_chain)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: domain_letsencrypt_chain must be of type String, received ${getType(domain_letsencrypt_chain)}`)
     }
 
     if (params['email'] && !isString(params['email'])) {
-      throw new Error(`Bad parameter: email must be of type String, received ${getType(email)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(email)}`)
     }
 
     if (params['reply_to_email'] && !isString(params['reply_to_email'])) {
-      throw new Error(`Bad parameter: reply_to_email must be of type String, received ${getType(reply_to_email)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: reply_to_email must be of type String, received ${getType(reply_to_email)}`)
     }
 
     if (params['bundle_expiration'] && !isInt(params['bundle_expiration'])) {
-      throw new Error(`Bad parameter: bundle_expiration must be of type Int, received ${getType(bundle_expiration)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_expiration must be of type Int, received ${getType(bundle_expiration)}`)
     }
 
     if (params['welcome_email_cc'] && !isString(params['welcome_email_cc'])) {
-      throw new Error(`Bad parameter: welcome_email_cc must be of type String, received ${getType(welcome_email_cc)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: welcome_email_cc must be of type String, received ${getType(welcome_email_cc)}`)
     }
 
     if (params['welcome_email_subject'] && !isString(params['welcome_email_subject'])) {
-      throw new Error(`Bad parameter: welcome_email_subject must be of type String, received ${getType(welcome_email_subject)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: welcome_email_subject must be of type String, received ${getType(welcome_email_subject)}`)
     }
 
     if (params['welcome_custom_text'] && !isString(params['welcome_custom_text'])) {
-      throw new Error(`Bad parameter: welcome_custom_text must be of type String, received ${getType(welcome_custom_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: welcome_custom_text must be of type String, received ${getType(welcome_custom_text)}`)
     }
 
     if (params['language'] && !isString(params['language'])) {
-      throw new Error(`Bad parameter: language must be of type String, received ${getType(language)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(language)}`)
     }
 
     if (params['default_time_zone'] && !isString(params['default_time_zone'])) {
-      throw new Error(`Bad parameter: default_time_zone must be of type String, received ${getType(default_time_zone)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: default_time_zone must be of type String, received ${getType(default_time_zone)}`)
     }
 
     if (params['desktop_app_session_lifetime'] && !isInt(params['desktop_app_session_lifetime'])) {
-      throw new Error(`Bad parameter: desktop_app_session_lifetime must be of type Int, received ${getType(desktop_app_session_lifetime)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: desktop_app_session_lifetime must be of type Int, received ${getType(desktop_app_session_lifetime)}`)
     }
 
     if (params['mobile_app_session_lifetime'] && !isInt(params['mobile_app_session_lifetime'])) {
-      throw new Error(`Bad parameter: mobile_app_session_lifetime must be of type Int, received ${getType(mobile_app_session_lifetime)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: mobile_app_session_lifetime must be of type Int, received ${getType(mobile_app_session_lifetime)}`)
     }
 
     if (params['welcome_screen'] && !isString(params['welcome_screen'])) {
-      throw new Error(`Bad parameter: welcome_screen must be of type String, received ${getType(welcome_screen)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: welcome_screen must be of type String, received ${getType(welcome_screen)}`)
     }
 
     if (params['user_lockout_tries'] && !isInt(params['user_lockout_tries'])) {
-      throw new Error(`Bad parameter: user_lockout_tries must be of type Int, received ${getType(user_lockout_tries)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_lockout_tries must be of type Int, received ${getType(user_lockout_tries)}`)
     }
 
     if (params['user_lockout_within'] && !isInt(params['user_lockout_within'])) {
-      throw new Error(`Bad parameter: user_lockout_within must be of type Int, received ${getType(user_lockout_within)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_lockout_within must be of type Int, received ${getType(user_lockout_within)}`)
     }
 
     if (params['user_lockout_lock_period'] && !isInt(params['user_lockout_lock_period'])) {
-      throw new Error(`Bad parameter: user_lockout_lock_period must be of type Int, received ${getType(user_lockout_lock_period)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_lockout_lock_period must be of type Int, received ${getType(user_lockout_lock_period)}`)
     }
 
     if (params['allowed_countries'] && !isString(params['allowed_countries'])) {
-      throw new Error(`Bad parameter: allowed_countries must be of type String, received ${getType(allowed_countries)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_countries must be of type String, received ${getType(allowed_countries)}`)
     }
 
     if (params['allowed_ips'] && !isString(params['allowed_ips'])) {
-      throw new Error(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
     }
 
     if (params['disallowed_countries'] && !isString(params['disallowed_countries'])) {
-      throw new Error(`Bad parameter: disallowed_countries must be of type String, received ${getType(disallowed_countries)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: disallowed_countries must be of type String, received ${getType(disallowed_countries)}`)
     }
 
     if (params['days_to_retain_backups'] && !isInt(params['days_to_retain_backups'])) {
-      throw new Error(`Bad parameter: days_to_retain_backups must be of type Int, received ${getType(days_to_retain_backups)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: days_to_retain_backups must be of type Int, received ${getType(days_to_retain_backups)}`)
     }
 
     if (params['max_prior_passwords'] && !isInt(params['max_prior_passwords'])) {
-      throw new Error(`Bad parameter: max_prior_passwords must be of type Int, received ${getType(max_prior_passwords)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: max_prior_passwords must be of type Int, received ${getType(max_prior_passwords)}`)
     }
 
     if (params['password_validity_days'] && !isInt(params['password_validity_days'])) {
-      throw new Error(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
     }
 
     if (params['password_min_length'] && !isInt(params['password_min_length'])) {
-      throw new Error(`Bad parameter: password_min_length must be of type Int, received ${getType(password_min_length)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_min_length must be of type Int, received ${getType(password_min_length)}`)
     }
 
     if (params['disable_users_from_inactivity_period_days'] && !isInt(params['disable_users_from_inactivity_period_days'])) {
-      throw new Error(`Bad parameter: disable_users_from_inactivity_period_days must be of type Int, received ${getType(disable_users_from_inactivity_period_days)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: disable_users_from_inactivity_period_days must be of type Int, received ${getType(disable_users_from_inactivity_period_days)}`)
     }
 
     if (params['require_2fa_user_type'] && !isString(params['require_2fa_user_type'])) {
-      throw new Error(`Bad parameter: require_2fa_user_type must be of type String, received ${getType(require_2fa_user_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: require_2fa_user_type must be of type String, received ${getType(require_2fa_user_type)}`)
     }
 
     if (params['color2_top'] && !isString(params['color2_top'])) {
-      throw new Error(`Bad parameter: color2_top must be of type String, received ${getType(color2_top)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: color2_top must be of type String, received ${getType(color2_top)}`)
     }
 
     if (params['color2_left'] && !isString(params['color2_left'])) {
-      throw new Error(`Bad parameter: color2_left must be of type String, received ${getType(color2_left)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: color2_left must be of type String, received ${getType(color2_left)}`)
     }
 
     if (params['color2_link'] && !isString(params['color2_link'])) {
-      throw new Error(`Bad parameter: color2_link must be of type String, received ${getType(color2_link)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: color2_link must be of type String, received ${getType(color2_link)}`)
     }
 
     if (params['color2_text'] && !isString(params['color2_text'])) {
-      throw new Error(`Bad parameter: color2_text must be of type String, received ${getType(color2_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: color2_text must be of type String, received ${getType(color2_text)}`)
     }
 
     if (params['color2_top_text'] && !isString(params['color2_top_text'])) {
-      throw new Error(`Bad parameter: color2_top_text must be of type String, received ${getType(color2_top_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: color2_top_text must be of type String, received ${getType(color2_top_text)}`)
     }
 
     if (params['site_header'] && !isString(params['site_header'])) {
-      throw new Error(`Bad parameter: site_header must be of type String, received ${getType(site_header)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: site_header must be of type String, received ${getType(site_header)}`)
     }
 
     if (params['site_footer'] && !isString(params['site_footer'])) {
-      throw new Error(`Bad parameter: site_footer must be of type String, received ${getType(site_footer)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: site_footer must be of type String, received ${getType(site_footer)}`)
     }
 
     if (params['login_help_text'] && !isString(params['login_help_text'])) {
-      throw new Error(`Bad parameter: login_help_text must be of type String, received ${getType(login_help_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: login_help_text must be of type String, received ${getType(login_help_text)}`)
     }
 
     if (params['smtp_address'] && !isString(params['smtp_address'])) {
-      throw new Error(`Bad parameter: smtp_address must be of type String, received ${getType(smtp_address)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_address must be of type String, received ${getType(smtp_address)}`)
     }
 
     if (params['smtp_authentication'] && !isString(params['smtp_authentication'])) {
-      throw new Error(`Bad parameter: smtp_authentication must be of type String, received ${getType(smtp_authentication)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_authentication must be of type String, received ${getType(smtp_authentication)}`)
     }
 
     if (params['smtp_from'] && !isString(params['smtp_from'])) {
-      throw new Error(`Bad parameter: smtp_from must be of type String, received ${getType(smtp_from)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_from must be of type String, received ${getType(smtp_from)}`)
     }
 
     if (params['smtp_username'] && !isString(params['smtp_username'])) {
-      throw new Error(`Bad parameter: smtp_username must be of type String, received ${getType(smtp_username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_username must be of type String, received ${getType(smtp_username)}`)
     }
 
     if (params['smtp_port'] && !isInt(params['smtp_port'])) {
-      throw new Error(`Bad parameter: smtp_port must be of type Int, received ${getType(smtp_port)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_port must be of type Int, received ${getType(smtp_port)}`)
     }
 
     if (params['ldap_type'] && !isString(params['ldap_type'])) {
-      throw new Error(`Bad parameter: ldap_type must be of type String, received ${getType(ldap_type)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_type must be of type String, received ${getType(ldap_type)}`)
     }
 
     if (params['ldap_host'] && !isString(params['ldap_host'])) {
-      throw new Error(`Bad parameter: ldap_host must be of type String, received ${getType(ldap_host)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_host must be of type String, received ${getType(ldap_host)}`)
     }
 
     if (params['ldap_host_2'] && !isString(params['ldap_host_2'])) {
-      throw new Error(`Bad parameter: ldap_host_2 must be of type String, received ${getType(ldap_host_2)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_host_2 must be of type String, received ${getType(ldap_host_2)}`)
     }
 
     if (params['ldap_host_3'] && !isString(params['ldap_host_3'])) {
-      throw new Error(`Bad parameter: ldap_host_3 must be of type String, received ${getType(ldap_host_3)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_host_3 must be of type String, received ${getType(ldap_host_3)}`)
     }
 
     if (params['ldap_port'] && !isInt(params['ldap_port'])) {
-      throw new Error(`Bad parameter: ldap_port must be of type Int, received ${getType(ldap_port)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_port must be of type Int, received ${getType(ldap_port)}`)
     }
 
     if (params['ldap_username'] && !isString(params['ldap_username'])) {
-      throw new Error(`Bad parameter: ldap_username must be of type String, received ${getType(ldap_username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_username must be of type String, received ${getType(ldap_username)}`)
     }
 
     if (params['ldap_username_field'] && !isString(params['ldap_username_field'])) {
-      throw new Error(`Bad parameter: ldap_username_field must be of type String, received ${getType(ldap_username_field)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_username_field must be of type String, received ${getType(ldap_username_field)}`)
     }
 
     if (params['ldap_domain'] && !isString(params['ldap_domain'])) {
-      throw new Error(`Bad parameter: ldap_domain must be of type String, received ${getType(ldap_domain)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_domain must be of type String, received ${getType(ldap_domain)}`)
     }
 
     if (params['ldap_user_action'] && !isString(params['ldap_user_action'])) {
-      throw new Error(`Bad parameter: ldap_user_action must be of type String, received ${getType(ldap_user_action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_user_action must be of type String, received ${getType(ldap_user_action)}`)
     }
 
     if (params['ldap_group_action'] && !isString(params['ldap_group_action'])) {
-      throw new Error(`Bad parameter: ldap_group_action must be of type String, received ${getType(ldap_group_action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_action must be of type String, received ${getType(ldap_group_action)}`)
     }
 
     if (params['ldap_user_include_groups'] && !isString(params['ldap_user_include_groups'])) {
-      throw new Error(`Bad parameter: ldap_user_include_groups must be of type String, received ${getType(ldap_user_include_groups)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_user_include_groups must be of type String, received ${getType(ldap_user_include_groups)}`)
     }
 
     if (params['ldap_group_exclusion'] && !isString(params['ldap_group_exclusion'])) {
-      throw new Error(`Bad parameter: ldap_group_exclusion must be of type String, received ${getType(ldap_group_exclusion)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_exclusion must be of type String, received ${getType(ldap_group_exclusion)}`)
     }
 
     if (params['ldap_group_inclusion'] && !isString(params['ldap_group_inclusion'])) {
-      throw new Error(`Bad parameter: ldap_group_inclusion must be of type String, received ${getType(ldap_group_inclusion)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_inclusion must be of type String, received ${getType(ldap_group_inclusion)}`)
     }
 
     if (params['ldap_base_dn'] && !isString(params['ldap_base_dn'])) {
-      throw new Error(`Bad parameter: ldap_base_dn must be of type String, received ${getType(ldap_base_dn)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_base_dn must be of type String, received ${getType(ldap_base_dn)}`)
     }
 
     if (params['ldap_password_change'] && !isString(params['ldap_password_change'])) {
-      throw new Error(`Bad parameter: ldap_password_change must be of type String, received ${getType(ldap_password_change)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change must be of type String, received ${getType(ldap_password_change)}`)
     }
 
     if (params['ldap_password_change_confirmation'] && !isString(params['ldap_password_change_confirmation'])) {
-      throw new Error(`Bad parameter: ldap_password_change_confirmation must be of type String, received ${getType(ldap_password_change_confirmation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change_confirmation must be of type String, received ${getType(ldap_password_change_confirmation)}`)
     }
 
     if (params['smtp_password'] && !isString(params['smtp_password'])) {
-      throw new Error(`Bad parameter: smtp_password must be of type String, received ${getType(smtp_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: smtp_password must be of type String, received ${getType(smtp_password)}`)
     }
 
     const response = await Api.sendRequest(`/site`, 'PATCH', params, options)

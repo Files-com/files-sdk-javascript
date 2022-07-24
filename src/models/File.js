@@ -2,6 +2,7 @@ import Readable from 'readable-stream'
 import { Buffer } from 'safe-buffer'
 
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 import FileUploadPart from './FileUploadPart'
@@ -126,7 +127,7 @@ class File {
 
       return file
     } catch (error) {
-      throw error
+      errors.handleErrorResponse(error)
     }
   }
 
@@ -135,7 +136,7 @@ class File {
    */
   static uploadData = async (destinationPath, data) => {
     if (!data) {
-      throw new Error('Upload data was not provided')
+      throw new errors.MissingParameterError('Upload data was not provided')
     }
 
     return File.uploadStream(destinationPath, Readable.from(data))
@@ -143,7 +144,7 @@ class File {
 
   static uploadFile = async (destinationPath, sourceFilePath) => {
     if (isBrowser()) {
-      throw new Error('Disk file uploads are only available in a NodeJS environment')
+      throw new errors.NotImplementedError('Disk file uploads are only available in a NodeJS environment')
     }
 
     const { openDiskFileReadStream } = require('../isomorphic/File.node.js')
@@ -154,13 +155,13 @@ class File {
 
   downloadToStream = async writableStream => {
     if (isBrowser()) {
-      throw new Error('Stream downloads are only available in a NodeJS environment')
+      throw new errors.NotImplementedError('Stream downloads are only available in a NodeJS environment')
     }
 
     const downloadUri = this.getDownloadUri()
 
     if (!downloadUri) {
-      throw new Error('Current object has no download URI')
+      throw new errors.EmptyPropertyError('Current object has no download URI')
     }
 
     const { saveUrlToStream } = require('../isomorphic/File.node.js')
@@ -169,13 +170,13 @@ class File {
 
   downloadToFile = async destinationPath => {
     if (isBrowser()) {
-      throw new Error('Disk file downloads are only available in a NodeJS environment')
+      throw new errors.NotImplementedError('Disk file downloads are only available in a NodeJS environment')
     }
 
     const downloadUri = this.getDownloadUri()
 
     if (!downloadUri) {
-      throw new Error('Current object has no download URI')
+      throw new errors.EmptyPropertyError('Current object has no download URI')
     }
 
     const { saveUrlToFile } = require('../isomorphic/File.node.js')
@@ -377,29 +378,29 @@ class File {
   //   with_priority_color - boolean - Include file priority color information?
   download = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
     if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new Error(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -413,29 +414,29 @@ class File {
   //   priority_color - string - Priority/Bookmark color of file.
   update = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new Error(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
     }
     if (params['priority_color'] && !isString(params['priority_color'])) {
-      throw new Error(`Bad parameter: priority_color must be of type String, received ${getType(priority_color)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: priority_color must be of type String, received ${getType(priority_color)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -448,23 +449,23 @@ class File {
   //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
   delete = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -483,26 +484,26 @@ class File {
   //   structure - boolean - Copy structure only?
   copy = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['destination'] && !isString(params['destination'])) {
-      throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -510,7 +511,7 @@ class File {
       if (this.attributes.destination) {
         params['destination'] = this.destination
       } else {
-        throw new Error('Parameter missing: destination')
+        throw new errors.MissingParameterError('Parameter missing: destination')
       }
     }
 
@@ -525,26 +526,26 @@ class File {
   //   destination (required) - string - Move destination path.
   move = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['destination'] && !isString(params['destination'])) {
-      throw new Error(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(destination)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -552,7 +553,7 @@ class File {
       if (this.attributes.destination) {
         params['destination'] = this.destination
       } else {
-        throw new Error('Parameter missing: destination')
+        throw new errors.MissingParameterError('Parameter missing: destination')
       }
     }
 
@@ -573,38 +574,38 @@ class File {
   //   with_rename - boolean - Allow file rename instead of overwrite?
   beginUpload = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['part'] && !isInt(params['part'])) {
-      throw new Error(`Bad parameter: part must be of type Int, received ${getType(part)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(part)}`)
     }
     if (params['parts'] && !isInt(params['parts'])) {
-      throw new Error(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
     }
     if (params['ref'] && !isString(params['ref'])) {
-      throw new Error(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
     }
     if (params['restart'] && !isInt(params['restart'])) {
-      throw new Error(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
     }
     if (params['size'] && !isInt(params['size'])) {
-      throw new Error(`Bad parameter: size must be of type Int, received ${getType(size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(size)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -636,53 +637,53 @@ class File {
   //   with_rename - boolean - Allow file rename instead of overwrite?
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
-      throw new Error(`Bad parameter: action must be of type String, received ${getType(action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(action)}`)
     }
 
     if (params['length'] && !isInt(params['length'])) {
-      throw new Error(`Bad parameter: length must be of type Int, received ${getType(length)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: length must be of type Int, received ${getType(length)}`)
     }
 
     if (params['part'] && !isInt(params['part'])) {
-      throw new Error(`Bad parameter: part must be of type Int, received ${getType(part)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(part)}`)
     }
 
     if (params['parts'] && !isInt(params['parts'])) {
-      throw new Error(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
     }
 
     if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new Error(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
     }
 
     if (params['ref'] && !isString(params['ref'])) {
-      throw new Error(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
     }
 
     if (params['restart'] && !isInt(params['restart'])) {
-      throw new Error(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
     }
 
     if (params['size'] && !isInt(params['size'])) {
-      throw new Error(`Bad parameter: size must be of type Int, received ${getType(size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(size)}`)
     }
 
     if (params['structure'] && !isString(params['structure'])) {
-      throw new Error(`Bad parameter: structure must be of type String, received ${getType(structure)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(structure)}`)
     }
 
     const response = await Api.sendRequest(`/files/${params['path']}`, 'POST', params, options)
@@ -697,21 +698,21 @@ class File {
   //   with_priority_color - boolean - Include file priority color information?
   static find = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new Error(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
     }
 
     const response = await Api.sendRequest(`/file_actions/metadata/${params['path']}`, 'GET', params, options)

@@ -2,6 +2,7 @@ import axios from 'axios'
 import axiosRetry from 'axios-retry'
 
 import Files from './Files'
+import * as errors from './Errors'
 import Logger from './Logger'
 import { isEmpty, isObject } from './utils'
 
@@ -28,7 +29,7 @@ class Api {
     const baseUrl = Files.getBaseUrl()
 
     if (!isExternal && !baseUrl) {
-      throw new Error('Base URL has not been set - use Files.setBaseUrl() to set it')
+      throw new errors.ConfigurationError('Base URL has not been set - use Files.setBaseUrl() to set it')
     }
 
     const url = isExternal
@@ -62,12 +63,7 @@ class Api {
         data: response.data,
       }
     } catch (error) {
-      if (error.response) {
-        Logger.error('Exception >', error.response.status, error.response.statusText)
-      }
-
-      Logger.error('Exception >', error.toString())
-      return null
+      errors.handleErrorResponse(error)
     }
   }
 
@@ -141,7 +137,7 @@ class Api {
           const apiKey = options.apiKey || Files.getApiKey()
 
           if (!apiKey) {
-            throw new Error('API key has not been set - use Files.setApiKey() to set it')
+            throw new errors.ConfigurationError('API key has not been set - use Files.setApiKey() to set it')
           }
 
           headers['X-FilesAPI-Key'] = apiKey

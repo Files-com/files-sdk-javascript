@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -99,23 +100,23 @@ class HistoryExportResult {
   //   history_export_id (required) - int64 - ID of the associated history export.
   static list = async (params = {}, options = {}) => {
     if (!params['history_export_id']) {
-      throw new Error('Parameter missing: history_export_id')
+      throw new errors.MissingParameterError('Parameter missing: history_export_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['history_export_id'] && !isInt(params['history_export_id'])) {
-      throw new Error(`Bad parameter: history_export_id must be of type Int, received ${getType(history_export_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: history_export_id must be of type Int, received ${getType(history_export_id)}`)
     }
 
     const response = await Api.sendRequest(`/history_export_results`, 'GET', params, options)

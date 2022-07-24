@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -193,38 +194,38 @@ class Notification {
   //   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['send_interval'] && !isString(params['send_interval'])) {
-      throw new Error(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
     }
     if (params['message'] && !isString(params['message'])) {
-      throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(message)}`)
     }
     if (params['triggering_filenames'] && !isArray(params['triggering_filenames'])) {
-      throw new Error(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
     }
     if (params['triggering_group_ids'] && !isArray(params['triggering_group_ids'])) {
-      throw new Error(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
     }
     if (params['triggering_user_ids'] && !isArray(params['triggering_user_ids'])) {
-      throw new Error(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -235,23 +236,23 @@ class Notification {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -289,23 +290,23 @@ class Notification {
   //   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     const response = await Api.sendRequest(`/notifications`, 'GET', params, options)
@@ -320,17 +321,17 @@ class Notification {
   //   id (required) - int64 - Notification ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/notifications/${params['id']}`, 'GET', params, options)
@@ -361,39 +362,39 @@ class Notification {
   //   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
   static create = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['send_interval'] && !isString(params['send_interval'])) {
-      throw new Error(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
     }
 
     if (params['message'] && !isString(params['message'])) {
-      throw new Error(`Bad parameter: message must be of type String, received ${getType(message)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(message)}`)
     }
 
     if (params['triggering_filenames'] && !isArray(params['triggering_filenames'])) {
-      throw new Error(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
     }
 
     if (params['triggering_group_ids'] && !isArray(params['triggering_group_ids'])) {
-      throw new Error(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
     }
 
     if (params['triggering_user_ids'] && !isArray(params['triggering_user_ids'])) {
-      throw new Error(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
 
     const response = await Api.sendRequest(`/notifications`, 'POST', params, options)

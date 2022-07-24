@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -98,7 +99,7 @@ class ExternalEvent {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new Error('The ExternalEvent object doesn\'t support updates.')
+        throw new errors.NotImplementedError('The ExternalEvent object doesn\'t support updates.')
       } else {
         const newObject = ExternalEvent.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -118,11 +119,11 @@ class ExternalEvent {
   //   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`. Valid field combinations are `[ event_type, status, created_at ]`, `[ event_type, created_at ]` or `[ status, created_at ]`.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     const response = await Api.sendRequest(`/external_events`, 'GET', params, options)
@@ -137,17 +138,17 @@ class ExternalEvent {
   //   id (required) - int64 - External Event ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/external_events/${params['id']}`, 'GET', params, options)
@@ -163,19 +164,19 @@ class ExternalEvent {
   //   body (required) - string - Event body
   static create = async (params = {}, options = {}) => {
     if (!params['status']) {
-      throw new Error('Parameter missing: status')
+      throw new errors.MissingParameterError('Parameter missing: status')
     }
 
     if (!params['body']) {
-      throw new Error('Parameter missing: body')
+      throw new errors.MissingParameterError('Parameter missing: body')
     }
 
     if (params['status'] && !isString(params['status'])) {
-      throw new Error(`Bad parameter: status must be of type String, received ${getType(status)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(status)}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new Error(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
     }
 
     const response = await Api.sendRequest(`/external_events`, 'POST', params, options)

@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -121,35 +122,35 @@ class As2Partner {
   //   public_certificate - string
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['uri'] && !isString(params['uri'])) {
-      throw new Error(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
     }
     if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -160,23 +161,23 @@ class As2Partner {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -203,11 +204,11 @@ class As2Partner {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     const response = await Api.sendRequest(`/as2_partners`, 'GET', params, options)
@@ -222,17 +223,17 @@ class As2Partner {
   //   id (required) - int64 - As2 Partner ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'GET', params, options)
@@ -251,39 +252,39 @@ class As2Partner {
   //   server_certificate - string - Remote server certificate security setting
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
-      throw new Error('Parameter missing: name')
+      throw new errors.MissingParameterError('Parameter missing: name')
     }
 
     if (!params['uri']) {
-      throw new Error('Parameter missing: uri')
+      throw new errors.MissingParameterError('Parameter missing: uri')
     }
 
     if (!params['public_certificate']) {
-      throw new Error('Parameter missing: public_certificate')
+      throw new errors.MissingParameterError('Parameter missing: public_certificate')
     }
 
     if (!params['as2_station_id']) {
-      throw new Error('Parameter missing: as2_station_id')
+      throw new errors.MissingParameterError('Parameter missing: as2_station_id')
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['uri'] && !isString(params['uri'])) {
-      throw new Error(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
     }
 
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
     }
 
     if (params['as2_station_id'] && !isInt(params['as2_station_id'])) {
-      throw new Error(`Bad parameter: as2_station_id must be of type Int, received ${getType(as2_station_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: as2_station_id must be of type Int, received ${getType(as2_station_id)}`)
     }
 
     if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new Error(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
     }
 
     const response = await Api.sendRequest(`/as2_partners`, 'POST', params, options)

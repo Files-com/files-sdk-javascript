@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -60,23 +61,23 @@ class ActionNotificationExportResult {
   //   action_notification_export_id (required) - int64 - ID of the associated action notification export.
   static list = async (params = {}, options = {}) => {
     if (!params['action_notification_export_id']) {
-      throw new Error('Parameter missing: action_notification_export_id')
+      throw new errors.MissingParameterError('Parameter missing: action_notification_export_id')
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new Error(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['action_notification_export_id'] && !isInt(params['action_notification_export_id'])) {
-      throw new Error(`Bad parameter: action_notification_export_id must be of type Int, received ${getType(action_notification_export_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action_notification_export_id must be of type Int, received ${getType(action_notification_export_id)}`)
     }
 
     const response = await Api.sendRequest(`/action_notification_export_results`, 'GET', params, options)

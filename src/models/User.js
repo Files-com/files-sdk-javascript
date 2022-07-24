@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -428,23 +429,23 @@ class User {
   // Unlock user who has been locked out due to failed logins
   unlock = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -456,23 +457,23 @@ class User {
   // Resend user welcome email
   resendWelcomeEmail = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -484,23 +485,23 @@ class User {
   // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
   user2faReset = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -556,98 +557,98 @@ class User {
   //   username - string - User's username
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['change_password'] && !isString(params['change_password'])) {
-      throw new Error(`Bad parameter: change_password must be of type String, received ${getType(change_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: change_password must be of type String, received ${getType(change_password)}`)
     }
     if (params['change_password_confirmation'] && !isString(params['change_password_confirmation'])) {
-      throw new Error(`Bad parameter: change_password_confirmation must be of type String, received ${getType(change_password_confirmation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: change_password_confirmation must be of type String, received ${getType(change_password_confirmation)}`)
     }
     if (params['email'] && !isString(params['email'])) {
-      throw new Error(`Bad parameter: email must be of type String, received ${getType(email)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(email)}`)
     }
     if (params['grant_permission'] && !isString(params['grant_permission'])) {
-      throw new Error(`Bad parameter: grant_permission must be of type String, received ${getType(grant_permission)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: grant_permission must be of type String, received ${getType(grant_permission)}`)
     }
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
     if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
     }
     if (params['imported_password_hash'] && !isString(params['imported_password_hash'])) {
-      throw new Error(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
     }
     if (params['password'] && !isString(params['password'])) {
-      throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
     }
     if (params['password_confirmation'] && !isString(params['password_confirmation'])) {
-      throw new Error(`Bad parameter: password_confirmation must be of type String, received ${getType(password_confirmation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(password_confirmation)}`)
     }
     if (params['allowed_ips'] && !isString(params['allowed_ips'])) {
-      throw new Error(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
     }
     if (params['authenticate_until'] && !isString(params['authenticate_until'])) {
-      throw new Error(`Bad parameter: authenticate_until must be of type String, received ${getType(authenticate_until)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: authenticate_until must be of type String, received ${getType(authenticate_until)}`)
     }
     if (params['authentication_method'] && !isString(params['authentication_method'])) {
-      throw new Error(`Bad parameter: authentication_method must be of type String, received ${getType(authentication_method)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(authentication_method)}`)
     }
     if (params['header_text'] && !isString(params['header_text'])) {
-      throw new Error(`Bad parameter: header_text must be of type String, received ${getType(header_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(header_text)}`)
     }
     if (params['language'] && !isString(params['language'])) {
-      throw new Error(`Bad parameter: language must be of type String, received ${getType(language)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(language)}`)
     }
     if (params['notification_daily_send_time'] && !isInt(params['notification_daily_send_time'])) {
-      throw new Error(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(notification_daily_send_time)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(notification_daily_send_time)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['company'] && !isString(params['company'])) {
-      throw new Error(`Bad parameter: company must be of type String, received ${getType(company)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(company)}`)
     }
     if (params['notes'] && !isString(params['notes'])) {
-      throw new Error(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
     }
     if (params['password_validity_days'] && !isInt(params['password_validity_days'])) {
-      throw new Error(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
     }
     if (params['ssl_required'] && !isString(params['ssl_required'])) {
-      throw new Error(`Bad parameter: ssl_required must be of type String, received ${getType(ssl_required)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(ssl_required)}`)
     }
     if (params['sso_strategy_id'] && !isInt(params['sso_strategy_id'])) {
-      throw new Error(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(sso_strategy_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(sso_strategy_id)}`)
     }
     if (params['require_2fa'] && !isString(params['require_2fa'])) {
-      throw new Error(`Bad parameter: require_2fa must be of type String, received ${getType(require_2fa)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type String, received ${getType(require_2fa)}`)
     }
     if (params['time_zone'] && !isString(params['time_zone'])) {
-      throw new Error(`Bad parameter: time_zone must be of type String, received ${getType(time_zone)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: time_zone must be of type String, received ${getType(time_zone)}`)
     }
     if (params['user_root'] && !isString(params['user_root'])) {
-      throw new Error(`Bad parameter: user_root must be of type String, received ${getType(user_root)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(user_root)}`)
     }
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -658,23 +659,23 @@ class User {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -717,19 +718,19 @@ class User {
   //   search - string - Searches for partial matches of name, username, or email.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['ids'] && !isString(params['ids'])) {
-      throw new Error(`Bad parameter: ids must be of type String, received ${getType(ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ids must be of type String, received ${getType(ids)}`)
     }
 
     if (params['search'] && !isString(params['search'])) {
-      throw new Error(`Bad parameter: search must be of type String, received ${getType(search)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(search)}`)
     }
 
     const response = await Api.sendRequest(`/users`, 'GET', params, options)
@@ -744,17 +745,17 @@ class User {
   //   id (required) - int64 - User ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/users/${params['id']}`, 'GET', params, options)
@@ -812,103 +813,103 @@ class User {
   //   username - string - User's username
   static create = async (params = {}, options = {}) => {
     if (params['change_password'] && !isString(params['change_password'])) {
-      throw new Error(`Bad parameter: change_password must be of type String, received ${getType(change_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: change_password must be of type String, received ${getType(change_password)}`)
     }
 
     if (params['change_password_confirmation'] && !isString(params['change_password_confirmation'])) {
-      throw new Error(`Bad parameter: change_password_confirmation must be of type String, received ${getType(change_password_confirmation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: change_password_confirmation must be of type String, received ${getType(change_password_confirmation)}`)
     }
 
     if (params['email'] && !isString(params['email'])) {
-      throw new Error(`Bad parameter: email must be of type String, received ${getType(email)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(email)}`)
     }
 
     if (params['grant_permission'] && !isString(params['grant_permission'])) {
-      throw new Error(`Bad parameter: grant_permission must be of type String, received ${getType(grant_permission)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: grant_permission must be of type String, received ${getType(grant_permission)}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new Error(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
     }
 
     if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new Error(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(group_ids)}`)
     }
 
     if (params['imported_password_hash'] && !isString(params['imported_password_hash'])) {
-      throw new Error(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: imported_password_hash must be of type String, received ${getType(imported_password_hash)}`)
     }
 
     if (params['password'] && !isString(params['password'])) {
-      throw new Error(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
     }
 
     if (params['password_confirmation'] && !isString(params['password_confirmation'])) {
-      throw new Error(`Bad parameter: password_confirmation must be of type String, received ${getType(password_confirmation)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(password_confirmation)}`)
     }
 
     if (params['allowed_ips'] && !isString(params['allowed_ips'])) {
-      throw new Error(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(allowed_ips)}`)
     }
 
     if (params['authenticate_until'] && !isString(params['authenticate_until'])) {
-      throw new Error(`Bad parameter: authenticate_until must be of type String, received ${getType(authenticate_until)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: authenticate_until must be of type String, received ${getType(authenticate_until)}`)
     }
 
     if (params['authentication_method'] && !isString(params['authentication_method'])) {
-      throw new Error(`Bad parameter: authentication_method must be of type String, received ${getType(authentication_method)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(authentication_method)}`)
     }
 
     if (params['header_text'] && !isString(params['header_text'])) {
-      throw new Error(`Bad parameter: header_text must be of type String, received ${getType(header_text)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(header_text)}`)
     }
 
     if (params['language'] && !isString(params['language'])) {
-      throw new Error(`Bad parameter: language must be of type String, received ${getType(language)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(language)}`)
     }
 
     if (params['notification_daily_send_time'] && !isInt(params['notification_daily_send_time'])) {
-      throw new Error(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(notification_daily_send_time)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(notification_daily_send_time)}`)
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['company'] && !isString(params['company'])) {
-      throw new Error(`Bad parameter: company must be of type String, received ${getType(company)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(company)}`)
     }
 
     if (params['notes'] && !isString(params['notes'])) {
-      throw new Error(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
     }
 
     if (params['password_validity_days'] && !isInt(params['password_validity_days'])) {
-      throw new Error(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
     }
 
     if (params['ssl_required'] && !isString(params['ssl_required'])) {
-      throw new Error(`Bad parameter: ssl_required must be of type String, received ${getType(ssl_required)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(ssl_required)}`)
     }
 
     if (params['sso_strategy_id'] && !isInt(params['sso_strategy_id'])) {
-      throw new Error(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(sso_strategy_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(sso_strategy_id)}`)
     }
 
     if (params['require_2fa'] && !isString(params['require_2fa'])) {
-      throw new Error(`Bad parameter: require_2fa must be of type String, received ${getType(require_2fa)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type String, received ${getType(require_2fa)}`)
     }
 
     if (params['time_zone'] && !isString(params['time_zone'])) {
-      throw new Error(`Bad parameter: time_zone must be of type String, received ${getType(time_zone)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: time_zone must be of type String, received ${getType(time_zone)}`)
     }
 
     if (params['user_root'] && !isString(params['user_root'])) {
-      throw new Error(`Bad parameter: user_root must be of type String, received ${getType(user_root)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(user_root)}`)
     }
 
     if (params['username'] && !isString(params['username'])) {
-      throw new Error(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
     }
 
     const response = await Api.sendRequest(`/users`, 'POST', params, options)

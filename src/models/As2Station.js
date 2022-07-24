@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -142,35 +143,35 @@ class As2Station {
   //   private_key_password - string
   update = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
     }
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
     }
     if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new Error(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -181,23 +182,23 @@ class As2Station {
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
-      throw new Error('Current object has no id')
+      throw new errors.EmptyPropertyError('Current object has no id')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     if (!params['id']) {
       if (this.attributes.id) {
         params['id'] = this.id
       } else {
-        throw new Error('Parameter missing: id')
+        throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
@@ -224,11 +225,11 @@ class As2Station {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     const response = await Api.sendRequest(`/as2_stations`, 'GET', params, options)
@@ -243,17 +244,17 @@ class As2Station {
   //   id (required) - int64 - As2 Station ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['id'] = id
 
     if (!params['id']) {
-      throw new Error('Parameter missing: id')
+      throw new errors.MissingParameterError('Parameter missing: id')
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new Error(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
     }
 
     const response = await Api.sendRequest(`/as2_stations/${params['id']}`, 'GET', params, options)
@@ -271,31 +272,31 @@ class As2Station {
   //   private_key_password - string
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
-      throw new Error('Parameter missing: name')
+      throw new errors.MissingParameterError('Parameter missing: name')
     }
 
     if (!params['public_certificate']) {
-      throw new Error('Parameter missing: public_certificate')
+      throw new errors.MissingParameterError('Parameter missing: public_certificate')
     }
 
     if (!params['private_key']) {
-      throw new Error('Parameter missing: private_key')
+      throw new errors.MissingParameterError('Parameter missing: private_key')
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new Error(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
     }
 
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new Error(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
     }
 
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new Error(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
     }
 
     if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new Error(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
     }
 
     const response = await Api.sendRequest(`/as2_stations`, 'POST', params, options)

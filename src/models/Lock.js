@@ -1,4 +1,5 @@
 import Api from '../Api'
+import * as errors from '../Errors'
 import Logger from '../Logger'
 import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
 
@@ -111,26 +112,26 @@ class Lock {
   //   token (required) - string - Lock token
   delete = async (params = {}) => {
     if (!this.attributes.path) {
-      throw new Error('Current object has no path')
+      throw new errors.EmptyPropertyError('Current object has no path')
     }
 
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
     if (params['token'] && !isString(params['token'])) {
-      throw new Error(`Bad parameter: token must be of type String, received ${getType(token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(token)}`)
     }
 
     if (!params['path']) {
       if (this.attributes.path) {
         params['path'] = this.path
       } else {
-        throw new Error('Parameter missing: path')
+        throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
@@ -138,7 +139,7 @@ class Lock {
       if (this.attributes.token) {
         params['token'] = this.token
       } else {
-        throw new Error('Parameter missing: token')
+        throw new errors.MissingParameterError('Parameter missing: token')
       }
     }
 
@@ -163,25 +164,25 @@ class Lock {
   //   include_children - boolean - Include locks from children objects?
   static listFor = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new Error(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new Error(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     const response = await Api.sendRequest(`/locks/${params['path']}`, 'GET', params, options)
@@ -197,25 +198,25 @@ class Lock {
   //   timeout - int64 - Lock timeout length
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
-      throw new Error(`Bad parameter: params must be of type object, received ${getType(params)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
     params['path'] = path
 
     if (!params['path']) {
-      throw new Error('Parameter missing: path')
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new Error(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
     }
 
     if (params['recursive'] && !isString(params['recursive'])) {
-      throw new Error(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
     }
 
     if (params['timeout'] && !isInt(params['timeout'])) {
-      throw new Error(`Bad parameter: timeout must be of type Int, received ${getType(timeout)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(timeout)}`)
     }
 
     const response = await Api.sendRequest(`/locks/${params['path']}`, 'POST', params, options)
