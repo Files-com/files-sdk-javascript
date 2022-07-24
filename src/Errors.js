@@ -9,7 +9,7 @@ export class FilesError extends Error {
 
 export class FilesApiError extends FilesError {
   constructor(message, code) {
-    super(message, code)
+    super(message)
     this.name = 'FilesApiError'
     this.code = code
   }
@@ -28,11 +28,12 @@ export const handleErrorResponse = error => {
   const response = error.response
   let errorData = response?.data
 
+  const message = errorData?.error || response?.statusText || error.message
   const code = response?.status || errorData?.['http-code'] || 0
 
   if (!errorData) {
-    Logger.error('FilesApiError Exception >', code, response.statusText)
-    throw new FilesApiError(error.statusText, code)
+    Logger.error('FilesApiError Exception >', code, message)
+    throw new FilesApiError(message, code)
   }
 
   if (Array.isArray(errorData)) {
@@ -40,8 +41,8 @@ export const handleErrorResponse = error => {
   }
 
   if (!errorData.type) {
-    Logger.error('FilesApiError Exception >', code, response.statusText)
-    throw new FilesApiError(error.statusText, code)
+    Logger.error('FilesApiError Exception >', code, message)
+    throw new FilesApiError(message, code)
   }
 
   const parts = errorData.type.split('/')
@@ -60,8 +61,8 @@ export const handleErrorResponse = error => {
 
   const ErrorClass = errorClasses[className]
 
-  Logger.error(`${className} Exception >`, code, response.statusText)
-  throw new ErrorClass(error.statusText, code)
+  Logger.error(`${className} Exception >`, code, message)
+  throw new ErrorClass(message, code)
 }
   
 // general errors
