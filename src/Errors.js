@@ -47,15 +47,13 @@ export const handleErrorResponse = error => {
 
   const parts = errorData.type.split('/')
 
-  let errorFamily
-  let errorType
   let className
-
+  
   if (parts.length > 1) {
-    [errorFamily, errorType] = parts.map(toPascalCase)
+    const [errorFamily, errorType] = parts.map(toPascalCase)
     className = `${errorFamily}_${errorType}Error`
   } else {
-    errorFamily = toPascalCase(parts[0])
+    const errorType = toPascalCase(parts[0])
     className = `${errorType}Error`
   }
 
