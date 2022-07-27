@@ -131,6 +131,13 @@ class User {
     this.attributes.email = value
   }
 
+  // date-time # User's first login time
+  getFirstLoginAt = () => this.attributes.first_login_at
+
+  setFirstLoginAt = value => {
+    this.attributes.first_login_at = value
+  }
+
   // boolean # Can the user access with FTP/FTPS?
   getFtpPermission = () => this.attributes.ftp_permission
 
@@ -347,6 +354,9 @@ class User {
   setTypeOf2fa = value => {
     this.attributes.type_of_2fa = value
   }
+
+  // date-time # User record last updated at.  Note this may be incremented because of internal or external updates.
+  getUpdatedAt = () => this.attributes.updated_at
 
   // string # Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
   getUserRoot = () => this.attributes.user_root
