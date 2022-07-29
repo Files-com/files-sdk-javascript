@@ -20,7 +20,7 @@ const errorClasses = {
 }
 
 const toPascalCase = string =>
-  string.replace('-', ' ').split(' ')
+  string.replace(/-/g, ' ').split(' ')
     .map(part => part[0].toUpperCase() + part.substring(1))
     .join('')
 
@@ -57,9 +57,13 @@ export const handleErrorResponse = error => {
     className = `${errorType}Error`
   }
 
-  const ErrorClass = errorClasses[className]
+  const ErrorClass = errorClasses[className] || FilesApiError
 
-  Logger.error(`${className} Exception >`, code, message)
+  if (!errorClasses[className]) {
+    Logger.debug(`Unable to find exception with name of ${className} - falling back to FilesApiError`)
+  }
+
+  Logger.error(`${ErrorClass.name} Exception >`, code, message)
   throw new ErrorClass(message, code)
 }
   
