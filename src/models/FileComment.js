@@ -148,15 +148,15 @@ class FileComment {
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/file_comments/files/${params['path']}`, 'GET', params, options)
@@ -177,11 +177,11 @@ class FileComment {
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/file_comments`, 'POST', params, options)

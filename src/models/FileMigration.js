@@ -65,7 +65,7 @@ class FileMigration {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/file_migrations/${params['id']}`, 'GET', params, options)

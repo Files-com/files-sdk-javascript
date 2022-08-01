@@ -174,15 +174,15 @@ class Lock {
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/locks/${params['path']}`, 'GET', params, options)
@@ -208,15 +208,15 @@ class Lock {
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['recursive'] && !isString(params['recursive'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(recursive)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params['recursive'])}`)
     }
 
     if (params['timeout'] && !isInt(params['timeout'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(timeout)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(params['timeout'])}`)
     }
 
     const response = await Api.sendRequest(`/locks/${params['path']}`, 'POST', params, options)

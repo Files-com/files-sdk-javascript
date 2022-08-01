@@ -142,15 +142,15 @@ class As2IncomingMessage {
   //   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['as2_partner_id'] && !isInt(params['as2_partner_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: as2_partner_id must be of type Int, received ${getType(as2_partner_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: as2_partner_id must be of type Int, received ${getType(params['as2_partner_id'])}`)
     }
 
     const response = await Api.sendRequest(`/as2_incoming_messages`, 'GET', params, options)

@@ -647,43 +647,43 @@ class File {
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
     }
 
     if (params['length'] && !isInt(params['length'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: length must be of type Int, received ${getType(length)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: length must be of type Int, received ${getType(params['length'])}`)
     }
 
     if (params['part'] && !isInt(params['part'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(part)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(params['part'])}`)
     }
 
     if (params['parts'] && !isInt(params['parts'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(parts)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(params['parts'])}`)
     }
 
     if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(provided_mtime)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params['provided_mtime'])}`)
     }
 
     if (params['ref'] && !isString(params['ref'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(ref)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(params['ref'])}`)
     }
 
     if (params['restart'] && !isInt(params['restart'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(restart)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(params['restart'])}`)
     }
 
     if (params['size'] && !isInt(params['size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(params['size'])}`)
     }
 
     if (params['structure'] && !isString(params['structure'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(structure)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(params['structure'])}`)
     }
 
     const response = await Api.sendRequest(`/files/${params['path']}`, 'POST', params, options)
@@ -708,11 +708,11 @@ class File {
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
     }
 
     const response = await Api.sendRequest(`/file_actions/metadata/${params['path']}`, 'GET', params, options)

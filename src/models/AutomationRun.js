@@ -60,19 +60,19 @@ class AutomationRun {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['automation_id'] && !isInt(params['automation_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(automation_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(params['automation_id'])}`)
     }
 
     const response = await Api.sendRequest(`/automation_runs`, 'GET', params, options)
@@ -97,7 +97,7 @@ class AutomationRun {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/automation_runs/${params['id']}`, 'GET', params, options)

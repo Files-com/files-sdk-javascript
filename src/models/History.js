@@ -83,27 +83,27 @@ class History {
     }
 
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['display'] && !isString(params['display'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(display)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params['display'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/history/files/${params['path']}`, 'GET', params, options)
@@ -131,27 +131,27 @@ class History {
     }
 
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['display'] && !isString(params['display'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(display)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params['display'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/history/folders/${params['path']}`, 'GET', params, options)
@@ -179,27 +179,27 @@ class History {
     }
 
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['display'] && !isString(params['display'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(display)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params['display'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     const response = await Api.sendRequest(`/history/users/${params['user_id']}`, 'GET', params, options)
@@ -216,23 +216,23 @@ class History {
   //   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
   static listLogins = async (params = {}, options = {}) => {
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['display'] && !isString(params['display'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(display)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params['display'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/history/login`, 'GET', params, options)
@@ -255,23 +255,23 @@ class History {
   //   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
   static list = async (params = {}, options = {}) => {
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['display'] && !isString(params['display'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(display)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params['display'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/history`, 'GET', params, options)

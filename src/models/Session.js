@@ -97,19 +97,19 @@ class Session {
   //   partial_session_id - string - Identifier for a partially-completed login
   static create = async (params = {}, options = {}) => {
     if (params['username'] && !isString(params['username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params['username'])}`)
     }
 
     if (params['password'] && !isString(params['password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params['password'])}`)
     }
 
     if (params['otp'] && !isString(params['otp'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: otp must be of type String, received ${getType(otp)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: otp must be of type String, received ${getType(params['otp'])}`)
     }
 
     if (params['partial_session_id'] && !isString(params['partial_session_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: partial_session_id must be of type String, received ${getType(partial_session_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: partial_session_id must be of type String, received ${getType(params['partial_session_id'])}`)
     }
 
     const response = await Api.sendRequest(`/sessions`, 'POST', params, options)

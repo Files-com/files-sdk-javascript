@@ -159,11 +159,11 @@ class Clickwrap {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps`, 'GET', params, options)
@@ -188,7 +188,7 @@ class Clickwrap {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'GET', params, options)
@@ -207,23 +207,23 @@ class Clickwrap {
   //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
   static create = async (params = {}, options = {}) => {
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params['use_with_bundles'])}`)
     }
 
     if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params['use_with_inboxes'])}`)
     }
 
     if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params['use_with_users'])}`)
     }
 
     const response = await Api.sendRequest(`/clickwraps`, 'POST', params, options)

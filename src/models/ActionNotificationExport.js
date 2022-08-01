@@ -146,7 +146,7 @@ class ActionNotificationExport {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/action_notification_exports/${params['id']}`, 'GET', params, options)
@@ -170,39 +170,39 @@ class ActionNotificationExport {
   //   query_folder - string - Return notifications that were triggered by actions in this folder.
   static create = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(start_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
     }
 
     if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(end_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
     }
 
     if (params['query_message'] && !isString(params['query_message'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_message must be of type String, received ${getType(query_message)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_message must be of type String, received ${getType(params['query_message'])}`)
     }
 
     if (params['query_request_method'] && !isString(params['query_request_method'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_request_method must be of type String, received ${getType(query_request_method)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_request_method must be of type String, received ${getType(params['query_request_method'])}`)
     }
 
     if (params['query_request_url'] && !isString(params['query_request_url'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_request_url must be of type String, received ${getType(query_request_url)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_request_url must be of type String, received ${getType(params['query_request_url'])}`)
     }
 
     if (params['query_status'] && !isString(params['query_status'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_status must be of type String, received ${getType(query_status)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_status must be of type String, received ${getType(params['query_status'])}`)
     }
 
     if (params['query_path'] && !isString(params['query_path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_path must be of type String, received ${getType(query_path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_path must be of type String, received ${getType(params['query_path'])}`)
     }
 
     if (params['query_folder'] && !isString(params['query_folder'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_folder must be of type String, received ${getType(query_folder)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: query_folder must be of type String, received ${getType(params['query_folder'])}`)
     }
 
     const response = await Api.sendRequest(`/action_notification_exports`, 'POST', params, options)

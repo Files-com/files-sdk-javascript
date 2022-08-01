@@ -47,19 +47,19 @@ class InboxUpload {
   //   inbox_id - int64 - Inbox ID
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['inbox_registration_id'] && !isInt(params['inbox_registration_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: inbox_registration_id must be of type Int, received ${getType(inbox_registration_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_registration_id must be of type Int, received ${getType(params['inbox_registration_id'])}`)
     }
 
     if (params['inbox_id'] && !isInt(params['inbox_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(inbox_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
     }
 
     const response = await Api.sendRequest(`/inbox_uploads`, 'GET', params, options)

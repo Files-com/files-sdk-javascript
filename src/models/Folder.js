@@ -172,27 +172,27 @@ class Folder {
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['filter'] && !isString(params['filter'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: filter must be of type String, received ${getType(filter)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: filter must be of type String, received ${getType(params['filter'])}`)
     }
 
     if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(preview_size)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
     }
 
     if (params['search'] && !isString(params['search'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(search)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(params['search'])}`)
     }
 
     const response = await Api.sendRequest(`/folders/${params['path']}`, 'GET', params, options)
@@ -215,7 +215,7 @@ class Folder {
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/folders/${params['path']}`, 'POST', params, options)

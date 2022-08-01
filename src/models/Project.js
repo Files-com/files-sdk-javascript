@@ -123,11 +123,11 @@ class Project {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/projects`, 'GET', params, options)
@@ -152,7 +152,7 @@ class Project {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/projects/${params['id']}`, 'GET', params, options)
@@ -171,7 +171,7 @@ class Project {
     }
 
     if (params['global_access'] && !isString(params['global_access'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: global_access must be of type String, received ${getType(global_access)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: global_access must be of type String, received ${getType(params['global_access'])}`)
     }
 
     const response = await Api.sendRequest(`/projects`, 'POST', params, options)

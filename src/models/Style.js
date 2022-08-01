@@ -143,7 +143,7 @@ class Style {
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     const response = await Api.sendRequest(`/styles/${params['path']}`, 'GET', params, options)

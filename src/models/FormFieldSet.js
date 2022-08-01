@@ -165,15 +165,15 @@ class FormFieldSet {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/form_field_sets`, 'GET', params, options)
@@ -198,7 +198,7 @@ class FormFieldSet {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'GET', params, options)
@@ -218,15 +218,15 @@ class FormFieldSet {
   //   form_fields - array(object)
   static create = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['title'] && !isString(params['title'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(title)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params['title'])}`)
     }
 
     if (params['form_fields'] && !isArray(params['form_fields'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(form_fields)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params['form_fields'])}`)
     }
 
     const response = await Api.sendRequest(`/form_field_sets`, 'POST', params, options)

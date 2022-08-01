@@ -119,11 +119,11 @@ class ExternalEvent {
   //   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`. Valid field combinations are `[ event_type, status, created_at ]`, `[ event_type, created_at ]` or `[ status, created_at ]`.
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/external_events`, 'GET', params, options)
@@ -148,7 +148,7 @@ class ExternalEvent {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/external_events/${params['id']}`, 'GET', params, options)
@@ -172,11 +172,11 @@ class ExternalEvent {
     }
 
     if (params['status'] && !isString(params['status'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(status)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(params['status'])}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     const response = await Api.sendRequest(`/external_events`, 'POST', params, options)

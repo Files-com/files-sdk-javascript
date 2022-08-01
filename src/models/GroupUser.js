@@ -191,19 +191,19 @@ class GroupUser {
   //   group_id - int64 - Group ID.  If provided, will return group_users of this group.
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
     }
 
     const response = await Api.sendRequest(`/group_users`, 'GET', params, options)
@@ -228,11 +228,11 @@ class GroupUser {
     }
 
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     const response = await Api.sendRequest(`/group_users`, 'POST', params, options)

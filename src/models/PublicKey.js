@@ -148,15 +148,15 @@ class PublicKey {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/public_keys`, 'GET', params, options)
@@ -181,7 +181,7 @@ class PublicKey {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/public_keys/${params['id']}`, 'GET', params, options)
@@ -206,15 +206,15 @@ class PublicKey {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['title'] && !isString(params['title'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(title)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params['title'])}`)
     }
 
     if (params['public_key'] && !isString(params['public_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(public_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params['public_key'])}`)
     }
 
     const response = await Api.sendRequest(`/public_keys`, 'POST', params, options)

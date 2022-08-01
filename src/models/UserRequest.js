@@ -97,11 +97,11 @@ class UserRequest {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     const response = await Api.sendRequest(`/user_requests`, 'GET', params, options)
@@ -126,7 +126,7 @@ class UserRequest {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/user_requests/${params['id']}`, 'GET', params, options)
@@ -155,15 +155,15 @@ class UserRequest {
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     if (params['email'] && !isString(params['email'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(email)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params['email'])}`)
     }
 
     if (params['details'] && !isString(params['details'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: details must be of type String, received ${getType(details)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: details must be of type String, received ${getType(params['details'])}`)
     }
 
     const response = await Api.sendRequest(`/user_requests`, 'POST', params, options)

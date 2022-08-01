@@ -106,15 +106,15 @@ class FileCommentReaction {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['file_comment_id'] && !isInt(params['file_comment_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(file_comment_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(params['file_comment_id'])}`)
     }
 
     if (params['emoji'] && !isString(params['emoji'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(emoji)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params['emoji'])}`)
     }
 
     const response = await Api.sendRequest(`/file_comment_reactions`, 'POST', params, options)

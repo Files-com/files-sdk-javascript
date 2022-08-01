@@ -181,19 +181,19 @@ class Message {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['project_id'] && !isInt(params['project_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(params['project_id'])}`)
     }
 
     const response = await Api.sendRequest(`/messages`, 'GET', params, options)
@@ -218,7 +218,7 @@ class Message {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/messages/${params['id']}`, 'GET', params, options)
@@ -248,19 +248,19 @@ class Message {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['project_id'] && !isInt(params['project_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(project_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(params['project_id'])}`)
     }
 
     if (params['subject'] && !isString(params['subject'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(subject)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(params['subject'])}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     const response = await Api.sendRequest(`/messages`, 'POST', params, options)

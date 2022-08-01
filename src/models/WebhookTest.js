@@ -148,27 +148,27 @@ class WebhookTest {
     }
 
     if (params['url'] && !isString(params['url'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(url)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params['url'])}`)
     }
 
     if (params['method'] && !isString(params['method'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(method)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params['method'])}`)
     }
 
     if (params['encoding'] && !isString(params['encoding'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(encoding)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params['encoding'])}`)
     }
 
     if (params['raw_body'] && !isString(params['raw_body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(raw_body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(params['raw_body'])}`)
     }
 
     if (params['file_form_field'] && !isString(params['file_form_field'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(file_form_field)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(params['file_form_field'])}`)
     }
 
     if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(action)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
     }
 
     const response = await Api.sendRequest(`/webhook_tests`, 'POST', params, options)

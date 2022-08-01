@@ -143,19 +143,19 @@ class MessageComment {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['message_id'] && !isInt(params['message_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: message_id must be of type Int, received ${getType(message_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: message_id must be of type Int, received ${getType(params['message_id'])}`)
     }
 
     const response = await Api.sendRequest(`/message_comments`, 'GET', params, options)
@@ -180,7 +180,7 @@ class MessageComment {
     }
 
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'GET', params, options)
@@ -200,11 +200,11 @@ class MessageComment {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     const response = await Api.sendRequest(`/message_comments`, 'POST', params, options)

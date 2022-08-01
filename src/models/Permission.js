@@ -136,23 +136,23 @@ class Permission {
   //   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
   static list = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['group_id'] && !isString(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type String, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type String, received ${getType(params['group_id'])}`)
     }
 
     if (params['user_id'] && !isString(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type String, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type String, received ${getType(params['user_id'])}`)
     }
 
     const response = await Api.sendRequest(`/permissions`, 'GET', params, options)
@@ -172,23 +172,23 @@ class Permission {
   //   username - string - User username.  Provide `username` or `user_id`
   static create = async (params = {}, options = {}) => {
     if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(group_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
     }
 
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (params['permission'] && !isString(params['permission'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission must be of type String, received ${getType(permission)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: permission must be of type String, received ${getType(params['permission'])}`)
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['username'] && !isString(params['username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(username)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params['username'])}`)
     }
 
     const response = await Api.sendRequest(`/permissions`, 'POST', params, options)

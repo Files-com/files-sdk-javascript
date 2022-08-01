@@ -108,19 +108,19 @@ class BundleRecipient {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(cursor)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
     }
 
     if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(per_page)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params['bundle_id'])}`)
     }
 
     const response = await Api.sendRequest(`/bundle_recipients`, 'GET', params, options)
@@ -149,27 +149,27 @@ class BundleRecipient {
     }
 
     if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(user_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(bundle_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params['bundle_id'])}`)
     }
 
     if (params['recipient'] && !isString(params['recipient'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(recipient)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(params['recipient'])}`)
     }
 
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     if (params['company'] && !isString(params['company'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(company)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params['company'])}`)
     }
 
     if (params['note'] && !isString(params['note'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(note)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params['note'])}`)
     }
 
     const response = await Api.sendRequest(`/bundle_recipients`, 'POST', params, options)
