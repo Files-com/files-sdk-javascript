@@ -87,7 +87,7 @@ class MessageComment {
       }
     }
 
-    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new MessageComment(response?.data, this.options)
   }
@@ -114,7 +114,7 @@ class MessageComment {
       }
     }
 
-    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -183,7 +183,7 @@ class MessageComment {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/message_comments/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new MessageComment(response?.data, options)
   }

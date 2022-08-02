@@ -154,7 +154,7 @@ class As2Partner {
       }
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new As2Partner(response?.data, this.options)
   }
@@ -181,7 +181,7 @@ class As2Partner {
       }
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -236,7 +236,7 @@ class As2Partner {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new As2Partner(response?.data, options)
   }

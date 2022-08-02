@@ -260,7 +260,7 @@ class Automation {
       }
     }
 
-    const response = await Api.sendRequest(`/automations/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Automation(response?.data, this.options)
   }
@@ -287,7 +287,7 @@ class Automation {
       }
     }
 
-    const response = await Api.sendRequest(`/automations/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -355,7 +355,7 @@ class Automation {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/automations/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Automation(response?.data, options)
   }

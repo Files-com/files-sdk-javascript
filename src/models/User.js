@@ -459,7 +459,7 @@ class User {
       }
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}/unlock`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/unlock`, 'POST', params, this.options)
 
     return response?.data
   }
@@ -487,7 +487,7 @@ class User {
       }
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}/resend_welcome_email`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/resend_welcome_email`, 'POST', params, this.options)
 
     return response?.data
   }
@@ -515,7 +515,7 @@ class User {
       }
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}/2fa/reset`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/2fa/reset`, 'POST', params, this.options)
 
     return response?.data
   }
@@ -662,7 +662,7 @@ class User {
       }
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new User(response?.data, this.options)
   }
@@ -689,7 +689,7 @@ class User {
       }
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -768,7 +768,7 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/users/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new User(response?.data, options)
   }

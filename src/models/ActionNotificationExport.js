@@ -149,7 +149,7 @@ class ActionNotificationExport {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/action_notification_exports/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/action_notification_exports/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new ActionNotificationExport(response?.data, options)
   }

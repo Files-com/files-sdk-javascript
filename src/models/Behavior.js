@@ -132,7 +132,7 @@ class Behavior {
       }
     }
 
-    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Behavior(response?.data, this.options)
   }
@@ -159,7 +159,7 @@ class Behavior {
       }
     }
 
-    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -226,7 +226,7 @@ class Behavior {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Behavior(response?.data, options)
   }
@@ -278,7 +278,7 @@ class Behavior {
       throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params['behavior'])}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/folders/${params['path']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }

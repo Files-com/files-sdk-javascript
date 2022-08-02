@@ -102,7 +102,7 @@ class Request {
       }
     }
 
-    const response = await Api.sendRequest(`/requests/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/requests/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -176,7 +176,7 @@ class Request {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
-    const response = await Api.sendRequest(`/requests/folders/${params['path']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/requests/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
     return response?.data?.map(obj => new Request(obj, options)) || []
   }

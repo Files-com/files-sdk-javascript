@@ -125,7 +125,7 @@ class Message {
       }
     }
 
-    const response = await Api.sendRequest(`/messages/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/messages/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Message(response?.data, this.options)
   }
@@ -152,7 +152,7 @@ class Message {
       }
     }
 
-    const response = await Api.sendRequest(`/messages/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/messages/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -221,7 +221,7 @@ class Message {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/messages/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/messages/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Message(response?.data, options)
   }

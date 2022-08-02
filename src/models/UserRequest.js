@@ -74,7 +74,7 @@ class UserRequest {
       }
     }
 
-    const response = await Api.sendRequest(`/user_requests/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -129,7 +129,7 @@ class UserRequest {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/user_requests/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new UserRequest(response?.data, options)
   }

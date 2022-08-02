@@ -176,7 +176,7 @@ class SsoStrategy {
       }
     }
 
-    const response = await Api.sendRequest(`/sso_strategies/${params['id']}/sync`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/sso_strategies/${encodeURIComponent(params['id'])}/sync`, 'POST', params, this.options)
 
     return response?.data
   }
@@ -218,7 +218,7 @@ class SsoStrategy {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/sso_strategies/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/sso_strategies/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new SsoStrategy(response?.data, options)
   }

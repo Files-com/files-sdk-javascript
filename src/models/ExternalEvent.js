@@ -151,7 +151,7 @@ class ExternalEvent {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/external_events/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/external_events/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new ExternalEvent(response?.data, options)
   }

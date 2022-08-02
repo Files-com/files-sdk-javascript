@@ -100,7 +100,7 @@ class AutomationRun {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/automation_runs/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new AutomationRun(response?.data, options)
   }

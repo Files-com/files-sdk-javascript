@@ -68,7 +68,7 @@ class FileMigration {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/file_migrations/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_migrations/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new FileMigration(response?.data, options)
   }

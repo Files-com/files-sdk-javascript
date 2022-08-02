@@ -87,7 +87,7 @@ class FileComment {
       }
     }
 
-    const response = await Api.sendRequest(`/file_comments/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/file_comments/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new FileComment(response?.data, this.options)
   }
@@ -114,7 +114,7 @@ class FileComment {
       }
     }
 
-    const response = await Api.sendRequest(`/file_comments/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/file_comments/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -159,7 +159,7 @@ class FileComment {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
-    const response = await Api.sendRequest(`/file_comments/files/${params['path']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_comments/files/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
     return response?.data?.map(obj => new FileComment(obj, options)) || []
   }

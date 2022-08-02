@@ -233,7 +233,7 @@ class HistoryExport {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/history_exports/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history_exports/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new HistoryExport(response?.data, options)
   }

@@ -404,7 +404,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/files/${params['path']}`, 'GET', params, this.options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'GET', params, this.options)
 
     return new File(response?.data, this.options)
   }
@@ -440,7 +440,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/files/${params['path']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
 
     return new File(response?.data, this.options)
   }
@@ -469,7 +469,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/files/${params['path']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -515,7 +515,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/copy/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/copy/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
 
     return new FileAction(response?.data, this.options)
   }
@@ -557,7 +557,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/move/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/move/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
 
     return new FileAction(response?.data, this.options)
   }
@@ -609,7 +609,7 @@ class File {
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/begin_upload/${params['path']}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/begin_upload/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
 
     return response?.data?.map(obj => new FileUploadPart(obj, this.options)) || []
   }
@@ -686,7 +686,7 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(params['structure'])}`)
     }
 
-    const response = await Api.sendRequest(`/files/${params['path']}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'POST', params, options)
 
     return new File(response?.data, options)
   }
@@ -715,7 +715,7 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
     }
 
-    const response = await Api.sendRequest(`/file_actions/metadata/${params['path']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_actions/metadata/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
     return new File(response?.data, options)
   }

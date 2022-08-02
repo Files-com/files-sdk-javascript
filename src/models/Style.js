@@ -91,7 +91,7 @@ class Style {
       }
     }
 
-    const response = await Api.sendRequest(`/styles/${params['path']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
 
     return new Style(response?.data, this.options)
   }
@@ -118,7 +118,7 @@ class Style {
       }
     }
 
-    const response = await Api.sendRequest(`/styles/${params['path']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -146,7 +146,7 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
-    const response = await Api.sendRequest(`/styles/${params['path']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
     return new Style(response?.data, options)
   }

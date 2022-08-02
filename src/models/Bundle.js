@@ -260,7 +260,7 @@ class Bundle {
       }
     }
 
-    const response = await Api.sendRequest(`/bundles/${params['id']}/share`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}/share`, 'POST', params, this.options)
 
     return response?.data
   }
@@ -336,7 +336,7 @@ class Bundle {
       }
     }
 
-    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Bundle(response?.data, this.options)
   }
@@ -363,7 +363,7 @@ class Bundle {
       }
     }
 
-    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -430,7 +430,7 @@ class Bundle {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/bundles/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Bundle(response?.data, options)
   }

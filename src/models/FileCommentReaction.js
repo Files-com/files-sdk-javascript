@@ -74,7 +74,7 @@ class FileCommentReaction {
       }
     }
 
-    const response = await Api.sendRequest(`/file_comment_reactions/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/file_comment_reactions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }

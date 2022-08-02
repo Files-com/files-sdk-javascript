@@ -97,7 +97,7 @@ class PublicKey {
       }
     }
 
-    const response = await Api.sendRequest(`/public_keys/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/public_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new PublicKey(response?.data, this.options)
   }
@@ -124,7 +124,7 @@ class PublicKey {
       }
     }
 
-    const response = await Api.sendRequest(`/public_keys/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/public_keys/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -184,7 +184,7 @@ class PublicKey {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/public_keys/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/public_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new PublicKey(response?.data, options)
   }

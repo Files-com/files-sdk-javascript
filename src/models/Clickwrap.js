@@ -109,7 +109,7 @@ class Clickwrap {
       }
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Clickwrap(response?.data, this.options)
   }
@@ -136,7 +136,7 @@ class Clickwrap {
       }
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -191,7 +191,7 @@ class Clickwrap {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Clickwrap(response?.data, options)
   }

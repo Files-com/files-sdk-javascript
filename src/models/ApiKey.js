@@ -132,7 +132,7 @@ class ApiKey {
       }
     }
 
-    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new ApiKey(response?.data, this.options)
   }
@@ -159,7 +159,7 @@ class ApiKey {
       }
     }
 
-    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -232,7 +232,7 @@ class ApiKey {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/api_keys/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new ApiKey(response?.data, options)
   }

@@ -114,7 +114,7 @@ class GroupUser {
       }
     }
 
-    const response = await Api.sendRequest(`/group_users/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/group_users/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new GroupUser(response?.data, this.options)
   }
@@ -166,7 +166,7 @@ class GroupUser {
       }
     }
 
-    const response = await Api.sendRequest(`/group_users/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/group_users/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }

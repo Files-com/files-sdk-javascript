@@ -229,7 +229,7 @@ class Notification {
       }
     }
 
-    const response = await Api.sendRequest(`/notifications/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/notifications/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Notification(response?.data, this.options)
   }
@@ -256,7 +256,7 @@ class Notification {
       }
     }
 
-    const response = await Api.sendRequest(`/notifications/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/notifications/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -334,7 +334,7 @@ class Notification {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/notifications/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/notifications/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Notification(response?.data, options)
   }

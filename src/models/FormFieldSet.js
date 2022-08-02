@@ -114,7 +114,7 @@ class FormFieldSet {
       }
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new FormFieldSet(response?.data, this.options)
   }
@@ -141,7 +141,7 @@ class FormFieldSet {
       }
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -201,7 +201,7 @@ class FormFieldSet {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new FormFieldSet(response?.data, options)
   }

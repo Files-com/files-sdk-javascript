@@ -73,7 +73,7 @@ class Project {
       }
     }
 
-    const response = await Api.sendRequest(`/projects/${params['id']}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/projects/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
     return new Project(response?.data, this.options)
   }
@@ -100,7 +100,7 @@ class Project {
       }
     }
 
-    const response = await Api.sendRequest(`/projects/${params['id']}`, 'DELETE', params, this.options)
+    const response = await Api.sendRequest(`/projects/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
     return response?.data
   }
@@ -155,7 +155,7 @@ class Project {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
-    const response = await Api.sendRequest(`/projects/${params['id']}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/projects/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
     return new Project(response?.data, options)
   }
