@@ -37,7 +37,7 @@ class Group {
     this.attributes.name = value
   }
 
-  // string # List of user IDs who are group administrators (separated by commas)
+  // string # Comma-delimited list of user IDs who are group administrators (separated by commas)
   getAdminIds = () => this.attributes.admin_ids
 
   setAdminIds = value => {
@@ -51,14 +51,14 @@ class Group {
     this.attributes.notes = value
   }
 
-  // array # List of user IDs who belong to this group (separated by commas)
+  // string # Comma-delimited list of user IDs who belong to this group (separated by commas)
   getUserIds = () => this.attributes.user_ids
 
   setUserIds = value => {
     this.attributes.user_ids = value
   }
 
-  // array # List of usernames who belong to this group (separated by commas)
+  // string # Comma-delimited list of usernames who belong to this group (separated by commas)
   getUsernames = () => this.attributes.usernames
 
   setUsernames = value => {

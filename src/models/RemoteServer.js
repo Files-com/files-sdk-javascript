@@ -79,6 +79,20 @@ class RemoteServer {
     this.attributes.max_connections = value
   }
 
+  // boolean # If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+  getPinToSiteRegion = () => this.attributes.pin_to_site_region
+
+  setPinToSiteRegion = value => {
+    this.attributes.pin_to_site_region = value
+  }
+
+  // string # If set, all communciations with this remote server are made through the provided region.
+  getPinnedRegion = () => this.attributes.pinned_region
+
+  setPinnedRegion = value => {
+    this.attributes.pinned_region = value
+  }
+
   // string # S3 bucket name
   getS3Bucket = () => this.attributes.s3_bucket
 
@@ -428,6 +442,7 @@ class RemoteServer {
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
+  //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
   //   port - int64 - Port for remote server.  Not needed for S3.
   //   s3_bucket - string - S3 bucket name
   //   s3_region - string - S3 region
@@ -727,6 +742,7 @@ class RemoteServer {
   //   hostname - string - Hostname or IP address
   //   name - string - Internal name for your reference
   //   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
+  //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
   //   port - int64 - Port for remote server.  Not needed for S3.
   //   s3_bucket - string - S3 bucket name
   //   s3_region - string - S3 region

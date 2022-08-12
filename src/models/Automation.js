@@ -93,7 +93,7 @@ class Automation {
     this.attributes.source = value
   }
 
-  // string # Destination Path
+  // array # Destination Path
   getDestinations = () => this.attributes.destinations
 
   setDestinations = value => {
@@ -156,7 +156,7 @@ class Automation {
     this.attributes.webhook_url = value
   }
 
-  // string # If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+  // array # If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   getTriggerActions = () => this.attributes.trigger_actions
 
   setTriggerActions = value => {

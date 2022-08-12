@@ -37,14 +37,14 @@ class FormFieldSet {
     this.attributes.title = value
   }
 
-  // int64 # Layout of the form
+  // array # Layout of the form
   getFormLayout = () => this.attributes.form_layout
 
   setFormLayout = value => {
     this.attributes.form_layout = value
   }
 
-  // FormField # Associated form fields
+  // array # Associated form fields
   getFormFields = () => this.attributes.form_fields
 
   setFormFields = value => {

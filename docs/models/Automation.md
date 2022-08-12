@@ -42,7 +42,9 @@
     2
   ],
   "webhook_url": "https://app.files.com/api/webhooks/abc123",
-  "trigger_actions": "[ \"create\" ]",
+  "trigger_actions": [
+    "[ \"create\" ]"
+  ],
   "value": "{\"limit\": \"1\"}"
 }
 ```
@@ -57,7 +59,7 @@
 * `name` (string): Name for this automation.
 * `schedule` (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
 * `source` (string): Source Path
-* `destinations` (string): Destination Path
+* `destinations` (array): Destination Path
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `description` (string): Description for the this Automation.
@@ -66,7 +68,7 @@
 * `user_ids` (array): IDs of Users for the Automation (i.e. who to Request File from)
 * `group_ids` (array): IDs of Groups for the Automation (i.e. who to Request File from)
 * `webhook_url` (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
-* `trigger_actions` (string): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+* `trigger_actions` (array): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `destination` (string): DEPRECATED: Destination Path. Use `destinations` instead.
 
@@ -124,7 +126,7 @@ await Automation.create({
   'schedule': "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}",
   'disabled': true,
   'trigger': "realtime",
-  'trigger_actions': "[ \"create\" ]",
+  'trigger_actions': ["[ \"create\" ]"],
   'value': "{\"limit\": \"1\"}",
   'automation': "create_folder",
 })
@@ -167,7 +169,7 @@ await automation.update({
   'schedule': "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}",
   'disabled': true,
   'trigger': "realtime",
-  'trigger_actions': "[ \"create\" ]",
+  'trigger_actions': ["[ \"create\" ]"],
   'value': "{\"limit\": \"1\"}",
   'automation': "create_folder",
 })
@@ -236,7 +238,9 @@ await automation.update({
     2
   ],
   "webhook_url": "https://app.files.com/api/webhooks/abc123",
-  "trigger_actions": "[ \"create\" ]",
+  "trigger_actions": [
+    "[ \"create\" ]"
+  ],
   "value": "{\"limit\": \"1\"}"
 }
 ```

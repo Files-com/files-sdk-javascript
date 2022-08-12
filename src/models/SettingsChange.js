@@ -23,7 +23,7 @@ class SettingsChange {
   }
 
   isLoaded = () => !!this.attributes.id
-  // string # Markdown-formatted change messages.
+  // array # Markdown-formatted change messages.
   getChanges = () => this.attributes.changes
 
   // date-time # The time this change was made

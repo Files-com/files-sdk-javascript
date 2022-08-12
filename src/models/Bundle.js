@@ -51,6 +51,13 @@ class Bundle {
     this.attributes.password_protected = value
   }
 
+  // string # Permissions that apply to Folders in this Share Link.
+  getPermissions = () => this.attributes.permissions
+
+  setPermissions = value => {
+    this.attributes.permissions = value
+  }
+
   // boolean # Restrict users to previewing files only?
   getPreviewOnly = () => this.attributes.preview_only
 
@@ -276,6 +283,7 @@ class Bundle {
   //   inbox_id - int64 - ID of the associated inbox, if available.
   //   max_uses - int64 - Maximum number of times bundle can be accessed
   //   note - string - Bundle internal note
+  //   permissions - string - Permissions that apply to Folders in this Share Link.
   //   preview_only - boolean - Restrict users to previewing files only?
   //   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
@@ -326,6 +334,9 @@ class Bundle {
     }
     if (params['note'] && !isString(params['note'])) {
       throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(note)}`)
+    }
+    if (params['permissions'] && !isString(params['permissions'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: permissions must be of type String, received ${getType(permissions)}`)
     }
 
     if (!params['id']) {
@@ -448,6 +459,7 @@ class Bundle {
   //   description - string - Public description
   //   note - string - Bundle internal note
   //   code - string - Bundle code.  This code forms the end part of the Public URL.
+  //   permissions - string - Permissions that apply to Folders in this Share Link.
   //   preview_only - boolean - Restrict users to previewing files only?
   //   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
   //   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
@@ -496,6 +508,10 @@ class Bundle {
 
     if (params['code'] && !isString(params['code'])) {
       throw new errors.InvalidParameterError(`Bad parameter: code must be of type String, received ${getType(params['code'])}`)
+    }
+
+    if (params['permissions'] && !isString(params['permissions'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: permissions must be of type String, received ${getType(params['permissions'])}`)
     }
 
     if (params['clickwrap_id'] && !isInt(params['clickwrap_id'])) {

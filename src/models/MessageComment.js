@@ -37,7 +37,7 @@ class MessageComment {
     this.attributes.body = value
   }
 
-  // MessageCommentReaction # Reactions to this comment.
+  // array # Reactions to this comment.
   getReactions = () => this.attributes.reactions
 
   setReactions = value => {

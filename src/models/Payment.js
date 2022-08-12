@@ -41,13 +41,13 @@ class Payment {
   // string # Line item download uri
   getDownloadUri = () => this.attributes.download_uri
 
-  // InvoiceLineItem # Associated invoice line items
+  // array # Associated invoice line items
   getInvoiceLineItems = () => this.attributes.invoice_line_items
 
   // string # Line item payment method
   getMethod = () => this.attributes.method
 
-  // PaymentLineItem # Associated payment line items
+  // array # Associated payment line items
   getPaymentLineItems = () => this.attributes.payment_line_items
 
   // date-time # Date/time payment was reversed if applicable

@@ -12,20 +12,22 @@
     3,
     4
   ],
-  "form_fields": {
-    "id": 1,
-    "label": "Sample Label",
-    "required": true,
-    "help_text": "Help Text",
-    "field_type": "text",
-    "options_for_select": [
-      "red",
-      "green",
-      "blue"
-    ],
-    "default_option": "red",
-    "form_field_set_id": 1
-  },
+  "form_fields": [
+    {
+      "id": 1,
+      "label": "Sample Label",
+      "required": true,
+      "help_text": "Help Text",
+      "field_type": "text",
+      "options_for_select": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "default_option": "red",
+      "form_field_set_id": 1
+    }
+  ],
   "skip_name": true,
   "skip_email": true,
   "skip_company": true
@@ -34,8 +36,8 @@
 
 * `id` (int64): Form field set id
 * `title` (string): Title to be displayed
-* `form_layout` (int64): Layout of the form
-* `form_fields` (FormField): Associated form fields
+* `form_layout` (array): Layout of the form
+* `form_fields` (array): Associated form fields
 * `skip_name` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
 * `skip_email` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
 * `skip_company` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
@@ -83,7 +85,7 @@ await FormFieldSet.create({
   'skip_email': true,
   'skip_name': true,
   'skip_company': true,
-  'form_fields': {"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1},
+  'form_fields': [{"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
 })
 ```
 
@@ -109,7 +111,7 @@ await form_field_set.update({
   'skip_email': true,
   'skip_name': true,
   'skip_company': true,
-  'form_fields': {"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1},
+  'form_fields': [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
 })
 ```
 
@@ -134,20 +136,22 @@ await form_field_set.update({
     3,
     4
   ],
-  "form_fields": {
-    "id": 1,
-    "label": "Sample Label",
-    "required": true,
-    "help_text": "Help Text",
-    "field_type": "text",
-    "options_for_select": [
-      "red",
-      "green",
-      "blue"
-    ],
-    "default_option": "red",
-    "form_field_set_id": 1
-  },
+  "form_fields": [
+    {
+      "id": 1,
+      "label": "Sample Label",
+      "required": true,
+      "help_text": "Help Text",
+      "field_type": "text",
+      "options_for_select": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "default_option": "red",
+      "form_field_set_id": 1
+    }
+  ],
   "skip_name": true,
   "skip_email": true,
   "skip_company": true

@@ -37,7 +37,7 @@ class FileComment {
     this.attributes.body = value
   }
 
-  // FileCommentReaction # Reactions to this comment.
+  // array # Reactions to this comment.
   getReactions = () => this.attributes.reactions
 
   setReactions = value => {
