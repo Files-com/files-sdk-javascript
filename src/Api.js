@@ -159,8 +159,6 @@ class Api {
       }
     }
 
-    options.headers = headers
-
     if (Files.shouldDebugRequest()) {
       Logger.debug('Request Options:')
       Logger.debug({
@@ -175,9 +173,14 @@ class Api {
       })
     }
 
-    const response = await Api._sendVerbatim(requestPath, verb, options)
+    const updatedOptions = {
+      ...options,
+      headers,
+    }
 
-    return Api._autoPaginate(path, verb, params, options, response, metadata)
+    const response = await Api._sendVerbatim(requestPath, verb, updatedOptions)
+
+    return Api._autoPaginate(path, verb, params, updatedOptions, response, metadata)
   }
 }
 
