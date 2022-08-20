@@ -117,8 +117,8 @@ class Api {
 
   static sendRequest = async (path, verb, params = null, options = {}, metadata = null) => {
     const headers = {
-      ...options.headers,
       Accept: 'application/json',
+      ...options.headers,
       'User-Agent': 'Files.com JavaScript SDK v1.0',
     }
 
@@ -145,6 +145,11 @@ class Api {
       }
     }
 
+    const updatedOptions = {
+      ...options,
+      headers,
+    }
+
     let requestPath = path
     const hasParams = isObject(params) && !isEmpty(params)
 
@@ -154,7 +159,7 @@ class Api {
         requestPath += path.includes('?') ? '&' : '?'
         requestPath += pairs.join('&')
       } else {
-        options.data = JSON.stringify(params)
+        updatedOptions.data = JSON.stringify(params)
         headers['Content-Type'] = 'application/json'
       }
     }
@@ -162,7 +167,7 @@ class Api {
     if (Files.shouldDebugRequest()) {
       Logger.debug('Request Options:')
       Logger.debug({
-        ...options,
+        ...updatedOptions,
         data: hasParams
           ? `payload keys: ${Object.keys(params).join(', ')}`
           : '(none)',
@@ -171,11 +176,6 @@ class Api {
           'X-FilesAPI-Key': '<redacted>',
         },
       })
-    }
-
-    const updatedOptions = {
-      ...options,
-      headers,
     }
 
     const response = await Api._sendVerbatim(requestPath, verb, updatedOptions)
