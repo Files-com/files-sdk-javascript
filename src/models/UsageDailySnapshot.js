@@ -53,7 +53,7 @@ class UsageDailySnapshot {
   // int64 # GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
   getRootStorage = () => this.attributes.root_storage
 
-  // array # Usage broken down by each top-level folder
+  // object # Usage broken down by each top-level folder
   getUsageByTopLevelDir = () => this.attributes.usage_by_top_level_dir
 
 
