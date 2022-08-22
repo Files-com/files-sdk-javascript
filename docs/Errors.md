@@ -176,6 +176,7 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManyConcurrentRequestsError
 ### RateLimited_TooManyLoginAttemptsError
 ### RateLimited_TooManyRequestsError
+### RateLimited_TooManySharesError
 ### ServiceUnavailable_UploadsUnavailableError
 ### SiteConfiguration_AccountAlreadyExistsError
 ### SiteConfiguration_AccountOverdueError
