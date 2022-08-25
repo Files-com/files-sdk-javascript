@@ -28,8 +28,8 @@ class File {
   }
 
   isLoaded = () => !!this.attributes.path
-  static _openUpload = async path => {
-    const params = { action: 'put' }
+  static _openUpload = async (path, paramsRaw) => {
+    const params = { ...paramsRaw, action: 'put' }
     const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
 
     if (!response) {
@@ -76,8 +76,11 @@ class File {
     return Api.sendRequest(`/files/${encodeURIComponent(fileUploadPart.path)}`, 'POST', params)
   }
 
-  static uploadStream = async (destinationPath, readableStream) => {
-    const fileUploadPart = await File._openUpload(destinationPath)
+  /**
+   * @note see File.copy() for list of supported params
+   */
+  static uploadStream = async (destinationPath, readableStream, params) => {
+    const fileUploadPart = await File._openUpload(destinationPath, params)
 
     if (!fileUploadPart) {
       return
@@ -134,16 +137,20 @@ class File {
 
   /**
    * data - string, Buffer, Stream, any object implementing Symbol.iterator or Symbol.asyncIterator
+   * @note see File.copy() for list of supported params
    */
-  static uploadData = async (destinationPath, data) => {
+  static uploadData = async (destinationPath, data, params) => {
     if (!data) {
       throw new errors.MissingParameterError('Upload data was not provided')
     }
 
-    return File.uploadStream(destinationPath, Readable.from(data))
+    return File.uploadStream(destinationPath, Readable.from(data), params)
   }
 
-  static uploadFile = async (destinationPath, sourceFilePath) => {
+  /**
+   * @note see File.copy() for list of supported params
+   */
+  static uploadFile = async (destinationPath, sourceFilePath, params) => {
     if (isBrowser()) {
       throw new errors.NotImplementedError('Disk file uploads are only available in a NodeJS environment')
     }
@@ -151,7 +158,7 @@ class File {
     const { openDiskFileReadStream } = require('../isomorphic/File.node.js')
     const stream = openDiskFileReadStream(sourceFilePath)
 
-    return File.uploadStream(destinationPath, stream)
+    return File.uploadStream(destinationPath, stream, params)
   }
 
   downloadToStream = async writableStream => {
