@@ -95,37 +95,45 @@ class File {
         readableStream.on('error', error => { reject(error) })
 
         readableStream.on('data', async chunk => {
-          length += chunk.length
+          try {
+            length += chunk.length
 
-          if (length > fileUploadPart.partsize) {
-            readableStream.pause()
+            if (length > fileUploadPart.partsize) {
+              readableStream.pause()
 
-            const buffer = Buffer.concat(chunks)
-            const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
+              const buffer = Buffer.concat(chunks)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
 
-            await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+              await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
 
-            chunks = []
-            length = 0
+              chunks = []
+              length = 0
 
-            readableStream.resume()
+              readableStream.resume()
+            }
+
+            chunks.push(Buffer.from(chunk))
+          } catch (error) {
+            reject(error)
           }
-
-          chunks.push(Buffer.from(chunk))
         })
 
         readableStream.on('end', async () => {
-          if (chunks.length > 0) {
-            const buffer = Buffer.concat(chunks)
-            const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
+          try {
+            if (chunks.length > 0) {
+              const buffer = Buffer.concat(chunks)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
 
-            await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+              await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+            }
+
+            const response = await File._completeUpload(fileUploadPart)
+            const createdFile = new File(response.data)
+
+            resolve(createdFile)
+          } catch (error) {
+            reject(error)
           }
-
-          const response = await File._completeUpload(fileUploadPart)
-          const createdFile = new File(response.data)
-
-          resolve(createdFile)
         })
       })
 
