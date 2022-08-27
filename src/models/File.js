@@ -67,22 +67,22 @@ class File {
     return new FileUploadPart(partData)
   }
 
-  static _completeUpload = async fileUploadPart => {
+  static _completeUpload = async firstFileUploadPart => {
     const params = {
       action: 'end',
-      ref: fileUploadPart.ref,
+      ref: firstFileUploadPart.ref,
     }
 
-    return Api.sendRequest(`/files/${encodeURIComponent(fileUploadPart.path)}`, 'POST', params)
+    return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params)
   }
 
   /**
    * @note see File.copy() for list of supported params
    */
   static uploadStream = async (destinationPath, readableStream, params) => {
-    const fileUploadPart = await File._openUpload(destinationPath, params)
+    const firstFileUploadPart = await File._openUpload(destinationPath, params)
 
-    if (!fileUploadPart) {
+    if (!firstFileUploadPart) {
       return
     }
 
@@ -91,28 +91,38 @@ class File {
         let part = 0
         let chunks = []
         let length = 0
+        const concurrentUploads = []
 
         readableStream.on('error', error => { reject(error) })
 
         readableStream.on('data', async chunk => {
           try {
-            length += chunk.length
+            const nextLength = length + chunk.length
+            const excessLength = nextLength - firstFileUploadPart.partsize
 
-            if (length > fileUploadPart.partsize) {
+            const chunkBuffer = Buffer.from(chunk)
+
+            if (excessLength > 0) {
               readableStream.pause()
 
+              const lastChunkForPart = chunkBuffer.subarray(0, excessLength)
+              const firstChunkForNextPart = chunkBuffer.subarray(excessLength)
+
+              chunks.push(lastChunkForPart)
+
               const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart)
 
-              await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+              concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
 
-              chunks = []
-              length = 0
+              chunks = [firstChunkForNextPart]
+              length = 1
 
               readableStream.resume()
+            } else {
+              chunks.push(chunkBuffer)
+              length += chunk.length
             }
-
-            chunks.push(Buffer.from(chunk))
           } catch (error) {
             reject(error)
           }
@@ -122,12 +132,14 @@ class File {
           try {
             if (chunks.length > 0) {
               const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, fileUploadPart)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart)
 
-              await Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+              concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
             }
 
-            const response = await File._completeUpload(fileUploadPart)
+            await Promise.all(concurrentUploads)
+
+            const response = await File._completeUpload(firstFileUploadPart)
             const createdFile = new File(response.data)
 
             resolve(createdFile)
