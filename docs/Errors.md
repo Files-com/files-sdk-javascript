@@ -128,6 +128,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ZipDownloadIpMismatchError
 ### NotFound_ApiKeyNotFoundError
 ### NotFound_BundlePathNotFoundError
+### NotFound_BundleRegistrationNotFoundError
 ### NotFound_CodeNotFoundError
 ### NotFound_FileNotFoundError
 ### NotFound_FileUploadNotFoundError
