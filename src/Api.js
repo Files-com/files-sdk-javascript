@@ -119,7 +119,7 @@ class Api {
     const headers = {
       Accept: 'application/json',
       ...options.headers,
-      'User-Agent': 'Files.com JavaScript SDK v1.0',
+      'User-Agent': Files.getUserAgent(),
     }
 
     const isExternal = /^[a-zA-Z]+:\/\//.test(path)

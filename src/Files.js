@@ -5,6 +5,7 @@ const endpointPrefix = '/api/rest/v1'
 let apiKey
 let baseUrl = 'https://app.files.com'
 let sessionId = null
+let userAgent = 'Files.com JavaScript SDK v1.0'
 
 let logLevel = LogLevel.INFO
 let debugRequest = false
@@ -17,6 +18,9 @@ let networkTimeout = 30.0
 let autoPaginate = true
 
 class Files {
+  static setUserAgent = value => userAgent = value
+  static getUserAgent = () => userAgent
+
   static setApiKey = value => apiKey = value
   static getApiKey = () => apiKey
 
