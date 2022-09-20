@@ -55,6 +55,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_FolderMustNotBeAFileError
 ### BadRequest_InvalidBodyError
 ### BadRequest_InvalidCursorError
+### BadRequest_InvalidCursorTypeForSortError
 ### BadRequest_InvalidEtagsError
 ### BadRequest_InvalidFilterCombinationError
 ### BadRequest_InvalidFilterFieldError

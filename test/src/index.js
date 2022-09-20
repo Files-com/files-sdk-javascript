@@ -46,6 +46,7 @@ const testSuite = async () => {
     Files.configureNetwork({
       autoPaginate: false,
     })
+
     const firstPageItems = await Folder.listFor('/', { per_page: 1 })
 
     assert(firstPageItems.length === 1)
@@ -53,6 +54,7 @@ const testSuite = async () => {
     Files.configureNetwork({
       autoPaginate: true,
     })
+
     // note: this test will fail if the root folder has <= 1 file or folder
     const allPageItems = await Folder.listFor('/', { per_page: 1 })
 

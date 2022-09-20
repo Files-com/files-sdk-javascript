@@ -28,9 +28,9 @@ class File {
   }
 
   isLoaded = () => !!this.attributes.path
-  static _openUpload = async (path, paramsRaw) => {
+  static _openUpload = async (path, paramsRaw, options) => {
     const params = { ...paramsRaw, action: 'put' }
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params, options)
 
     if (!response) {
       return null
@@ -45,14 +45,14 @@ class File {
     return new FileUploadPart(partData)
   }
 
-  static _continueUpload = async (path, partNumber, firstFileUploadPart) => {
+  static _continueUpload = async (path, partNumber, firstFileUploadPart, options) => {
     const params = {
       action: 'put',
       part: partNumber,
       ref: firstFileUploadPart.ref,
     }
 
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params, options)
 
     if (!response) {
       return null
@@ -67,20 +67,20 @@ class File {
     return new FileUploadPart(partData)
   }
 
-  static _completeUpload = async firstFileUploadPart => {
+  static _completeUpload = async (firstFileUploadPart, options) => {
     const params = {
       action: 'end',
       ref: firstFileUploadPart.ref,
     }
 
-    return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params)
+    return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params, options)
   }
 
   /**
    * @note see File.copy() for list of supported params
    */
-  static uploadStream = async (destinationPath, readableStream, params) => {
-    const firstFileUploadPart = await File._openUpload(destinationPath, params)
+  static uploadStream = async (destinationPath, readableStream, params, options) => {
+    const firstFileUploadPart = await File._openUpload(destinationPath, params, options)
 
     if (!firstFileUploadPart) {
       return
@@ -111,7 +111,7 @@ class File {
               chunks.push(lastChunkForPart)
 
               const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
               concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
 
@@ -132,15 +132,15 @@ class File {
           try {
             if (chunks.length > 0) {
               const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
               concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
             }
 
             await Promise.all(concurrentUploads)
 
-            const response = await File._completeUpload(firstFileUploadPart)
-            const createdFile = new File(response.data)
+            const response = await File._completeUpload(firstFileUploadPart, options)
+            const createdFile = new File(response.data, options)
 
             resolve(createdFile)
           } catch (error) {
@@ -159,18 +159,18 @@ class File {
    * data - string, Buffer, Stream, any object implementing Symbol.iterator or Symbol.asyncIterator
    * @note see File.copy() for list of supported params
    */
-  static uploadData = async (destinationPath, data, params) => {
+  static uploadData = async (destinationPath, data, params, options) => {
     if (!data) {
       throw new errors.MissingParameterError('Upload data was not provided')
     }
 
-    return File.uploadStream(destinationPath, Readable.from(data), params)
+    return File.uploadStream(destinationPath, Readable.from(data), params, options)
   }
 
   /**
    * @note see File.copy() for list of supported params
    */
-  static uploadFile = async (destinationPath, sourceFilePath, params) => {
+  static uploadFile = async (destinationPath, sourceFilePath, params, options) => {
     if (isBrowser()) {
       throw new errors.NotImplementedError('Disk file uploads are only available in a NodeJS environment')
     }
@@ -178,7 +178,7 @@ class File {
     const { openDiskFileReadStream } = require('../isomorphic/File.node.js')
     const stream = openDiskFileReadStream(sourceFilePath)
 
-    return File.uploadStream(destinationPath, stream, params)
+    return File.uploadStream(destinationPath, stream, params, options)
   }
 
   downloadToStream = async writableStream => {
@@ -211,14 +211,14 @@ class File {
     return saveUrlToFile(downloadUri, destinationPath)
   }
 
-  copyTo = async destinationFilePath => {
+  copyTo = async (destinationFilePath, options) => {
     const params = { destination: destinationFilePath }
-    return Api.sendRequest(`/file_actions/copy/${encodeURIComponent(this.path)}`, 'POST', params)
+    return Api.sendRequest(`/file_actions/copy/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
 
-  moveTo = async destinationFilePath => {
+  moveTo = async (destinationFilePath, options) => {
     const params = { destination: destinationFilePath }
-    return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params)
+    return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
 
   // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.

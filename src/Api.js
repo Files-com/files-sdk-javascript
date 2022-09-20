@@ -37,7 +37,14 @@ class Api {
       : `${baseUrl}${Files.getEndpointPrefix()}${path}`
 
     Logger.debug(`Sending request: ${verb} ${url}`)
-    Logger.debug('Sending options:', options)
+
+    Logger.debug('Sending options:', {
+      ...options,
+      headers: {
+        ...options.headers,
+        'X-FilesAPI-Key': '<redacted>',
+      },
+    })
 
     Api._configureAutoRetry()
 
@@ -78,7 +85,7 @@ class Api {
   }
 
   static _autoPaginate = async (path, verb, params, options, response, metadata) => {
-    if (Files.getAutoPaginate()) {
+    if (options.autoPaginate ?? Files.getAutoPaginate()) {
       const nextCursor = response?.headers?.['x-files-cursor']
 
       const {
