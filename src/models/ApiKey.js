@@ -209,8 +209,8 @@ class ApiKey {
   static all = (params = {}, options = {}) =>
     ApiKey.list(params, options)
 
-  static findCurrent = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/api_key`, 'GET', options)
+  static findCurrent = async (options = {}) => {
+    const response = await Api.sendRequest(`/api_key`, 'GET', {}, options)
 
     return new ApiKey(response?.data, options)
   }
@@ -294,8 +294,8 @@ class ApiKey {
     return new ApiKey(response?.data, options)
   }
 
-  static deleteCurrent = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/api_key`, 'DELETE', options)
+  static deleteCurrent = async (options = {}) => {
+    const response = await Api.sendRequest(`/api_key`, 'DELETE', {}, options)
 
     return response?.data
   }

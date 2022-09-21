@@ -117,8 +117,8 @@ class Session {
     return new Session(response?.data, options)
   }
 
-  static delete = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/sessions`, 'DELETE', options)
+  static delete = async (options = {}) => {
+    const response = await Api.sendRequest(`/sessions`, 'DELETE', {}, options)
 
     return response?.data
   }

@@ -420,14 +420,14 @@ class Site {
   getDisableUsersFromInactivityPeriodDays = () => this.attributes.disable_users_from_inactivity_period_days
 
 
-  static get = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/site`, 'GET', options)
+  static get = async (options = {}) => {
+    const response = await Api.sendRequest(`/site`, 'GET', {}, options)
 
     return new Site(response?.data, options)
   }
 
-  static getUsage = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest(`/site/usage`, 'GET', options)
+  static getUsage = async (options = {}) => {
+    const response = await Api.sendRequest(`/site/usage`, 'GET', {}, options)
 
     return new UsageSnapshot(response?.data, options)
   }
