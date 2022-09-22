@@ -37,6 +37,13 @@ class ApiKey {
     this.attributes.descriptive_label = value
   }
 
+  // string # User-supplied description of API key.
+  getDescription = () => this.attributes.description
+
+  setDescription = value => {
+    this.attributes.description = value
+  }
+
   // date-time # Time which API Key was created
   getCreatedAt = () => this.attributes.created_at
 
@@ -99,6 +106,7 @@ class ApiKey {
 
   // Parameters:
   //   name - string - Internal name for the API Key.  For your use.
+  //   description - string - User-supplied description of API key.
   //   expires_at - string - API Key expiration date
   //   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   update = async (params = {}) => {
@@ -116,6 +124,9 @@ class ApiKey {
     }
     if (params['name'] && !isString(params['name'])) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+    }
+    if (params['description'] && !isString(params['description'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
     }
     if (params['expires_at'] && !isString(params['expires_at'])) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(expires_at)}`)
@@ -243,6 +254,7 @@ class ApiKey {
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   name - string - Internal name for the API Key.  For your use.
+  //   description - string - User-supplied description of API key.
   //   expires_at - string - API Key expiration date
   //   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   //   path - string - Folder path restriction for this api key.
@@ -253,6 +265,10 @@ class ApiKey {
 
     if (params['name'] && !isString(params['name'])) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    }
+
+    if (params['description'] && !isString(params['description'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
     }
 
     if (params['expires_at'] && !isString(params['expires_at'])) {
