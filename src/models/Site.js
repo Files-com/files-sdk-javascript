@@ -245,6 +245,15 @@ class Site {
   // int64 # Number of prior passwords to disallow
   getMaxPriorPasswords = () => this.attributes.max_prior_passwords
 
+  // string # A message to show users when they connect via FTP or SFTP.
+  getMotdText = () => this.attributes.motd_text
+
+  // boolean # Show message to users connecting via FTP
+  getMotdUseForFtp = () => this.attributes.motd_use_for_ftp
+
+  // boolean # Show message to users connecting via SFTP
+  getMotdUseForSftp = () => this.attributes.motd_use_for_sftp
+
   // double # Next billing amount
   getNextBillingAmount = () => this.attributes.next_billing_amount
 
@@ -462,6 +471,9 @@ class Site {
   //   welcome_screen - string - Does the welcome screen appear?
   //   office_integration_available - boolean - Allow users to use Office for the web?
   //   pin_all_remote_servers_to_site_region - boolean - If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
+  //   motd_text - string - A message to show users when they connect via FTP or SFTP.
+  //   motd_use_for_ftp - boolean - Show message to users connecting via FTP
+  //   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
@@ -615,6 +627,10 @@ class Site {
 
     if (params['welcome_screen'] && !isString(params['welcome_screen'])) {
       throw new errors.InvalidParameterError(`Bad parameter: welcome_screen must be of type String, received ${getType(params['welcome_screen'])}`)
+    }
+
+    if (params['motd_text'] && !isString(params['motd_text'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: motd_text must be of type String, received ${getType(params['motd_text'])}`)
     }
 
     if (params['user_lockout_tries'] && !isInt(params['user_lockout_tries'])) {
