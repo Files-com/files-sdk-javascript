@@ -7,9 +7,9 @@
   "id": 1,
   "name": "owners",
   "admin_ids": "1",
-  "notes": "",
+  "notes": "example",
   "user_ids": "1",
-  "usernames": "user"
+  "usernames": "example"
 }
 ```
 
@@ -64,6 +64,7 @@ await Group.find(id)
 ```
 await Group.create({
   'name': "owners",
+  'notes': "example",
   'user_ids': "1",
   'admin_ids': "1",
 })
@@ -86,6 +87,7 @@ const [group] = await Group.list()
 
 await group.update({
   'name': "owners",
+  'notes': "example",
   'user_ids': "1",
   'admin_ids': "1",
 })
@@ -106,9 +108,9 @@ await group.update({
   "id": 1,
   "name": "owners",
   "admin_ids": "1",
-  "notes": "",
+  "notes": "example",
   "user_ids": "1",
-  "usernames": "user"
+  "usernames": "example"
 }
 ```
 

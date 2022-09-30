@@ -7,10 +7,7 @@
   "id": 1,
   "body": "What a great file!",
   "reactions": [
-    {
-      "id": 1,
-      "emoji": "👍"
-    }
+    null
   ]
 }
 ```
@@ -78,10 +75,7 @@ await file_comment.update({
   "id": 1,
   "body": "What a great file!",
   "reactions": [
-    {
-      "id": 1,
-      "emoji": "👍"
-    }
+    null
   ]
 }
 ```

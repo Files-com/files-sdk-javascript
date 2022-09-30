@@ -7,9 +7,9 @@
   "id": 1,
   "name": "Example Site NDA for Files.com Use",
   "body": "[Legal body text]",
-  "use_with_users": "",
-  "use_with_bundles": "",
-  "use_with_inboxes": ""
+  "use_with_users": "example",
+  "use_with_bundles": "example",
+  "use_with_inboxes": "example"
 }
 ```
 
@@ -57,6 +57,9 @@ await Clickwrap.find(id)
 await Clickwrap.create({
   'name': "Example Site NDA for Files.com Use",
   'body': "[Legal body text]",
+  'use_with_bundles': "example",
+  'use_with_inboxes': "example",
+  'use_with_users': "example",
 })
 ```
 
@@ -79,6 +82,9 @@ const [clickwrap] = await Clickwrap.list()
 await clickwrap.update({
   'name': "Example Site NDA for Files.com Use",
   'body': "[Legal body text]",
+  'use_with_bundles': "example",
+  'use_with_inboxes': "example",
+  'use_with_users': "example",
 })
 ```
 
@@ -98,9 +104,9 @@ await clickwrap.update({
   "id": 1,
   "name": "Example Site NDA for Files.com Use",
   "body": "[Legal body text]",
-  "use_with_users": "",
-  "use_with_bundles": "",
-  "use_with_inboxes": ""
+  "use_with_users": "example",
+  "use_with_bundles": "example",
+  "use_with_inboxes": "example"
 }
 ```
 

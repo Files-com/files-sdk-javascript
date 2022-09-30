@@ -5,9 +5,9 @@
 ```
 {
   "id": 1,
-  "name": "",
-  "fingerprint_md5": "",
-  "fingerprint_sha256": ""
+  "name": "example",
+  "fingerprint_md5": "example",
+  "fingerprint_sha256": "example"
 }
 ```
 
@@ -52,8 +52,7 @@ await SftpHostKey.find(id)
 
 ```
 await SftpHostKey.create({
-  'name': "",
-  'private_key': "",
+  'name': "example",
 })
 ```
 
@@ -71,8 +70,7 @@ await SftpHostKey.create({
 const [sftp_host_key] = await SftpHostKey.list()
 
 await sftp_host_key.update({
-  'name': "",
-  'private_key': "",
+  'name': "example",
 })
 ```
 
@@ -87,9 +85,9 @@ await sftp_host_key.update({
 ```json
 {
   "id": 1,
-  "name": "",
-  "fingerprint_md5": "",
-  "fingerprint_sha256": ""
+  "name": "example",
+  "fingerprint_md5": "example",
+  "fingerprint_sha256": "example"
 }
 ```
 

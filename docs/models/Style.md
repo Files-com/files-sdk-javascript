@@ -5,9 +5,9 @@
 ```
 {
   "id": 1,
-  "path": "",
+  "path": "example",
   "logo": "https://mysite.files.com/...",
-  "thumbnail": ""
+  "thumbnail": "example"
 }
 ```
 
@@ -53,9 +53,9 @@ await style.update({
 ```json
 {
   "id": 1,
-  "path": "",
+  "path": "example",
   "logo": "https://mysite.files.com/...",
-  "thumbnail": ""
+  "thumbnail": "example"
 }
 ```
 

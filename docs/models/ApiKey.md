@@ -6,7 +6,7 @@
 {
   "id": 1,
   "descriptive_label": "Site-wide API key for https://site.files.com/ (key ID #1)",
-  "description": "",
+  "description": "example",
   "created_at": "2000-01-01T01:00:00Z",
   "expires_at": "2000-01-01T01:00:00Z",
   "key": "[key]",
@@ -87,6 +87,7 @@ await ApiKey.find(id)
 await ApiKey.create({
   'user_id': 1,
   'name': "My Main API Key",
+  'description': "example",
   'expires_at': "2000-01-01T01:00:00Z",
   'permission_set': "full",
   'path': "shared/docs",
@@ -140,6 +141,7 @@ const [api_key] = await ApiKey.list()
 
 await api_key.update({
   'name': "My Main API Key",
+  'description': "example",
   'expires_at': "2000-01-01T01:00:00Z",
   'permission_set': "full",
 })
@@ -159,7 +161,7 @@ await api_key.update({
 {
   "id": 1,
   "descriptive_label": "Site-wide API key for https://site.files.com/ (key ID #1)",
-  "description": "",
+  "description": "example",
   "created_at": "2000-01-01T01:00:00Z",
   "expires_at": "2000-01-01T01:00:00Z",
   "key": "[key]",

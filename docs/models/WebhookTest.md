@@ -7,7 +7,7 @@
   "code": 200,
   "message": "",
   "status": "",
-  "data": "",
+  "data": "example",
   "success": true
 }
 ```
@@ -36,10 +36,10 @@ await WebhookTest.create({
   'url': "https://www.site.com/...",
   'method': "GET",
   'encoding': "RAW",
-  'headers': "x-test-header => testvalue",
-  'body': "test-param => testvalue",
+  'headers': {"x-test-header":"testvalue"},
+  'body': {"test-param":"testvalue"},
   'raw_body': "test body",
-  'file_as_body': "false",
+  'file_as_body': true,
   'file_form_field': "upload_file_data",
   'action': "test",
 })

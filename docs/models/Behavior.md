@@ -5,13 +5,13 @@
 ```
 {
   "id": 1,
-  "path": "",
-  "attachment_url": "",
+  "path": "example",
+  "attachment_url": "example",
   "behavior": "webhook",
-  "name": "",
-  "description": "",
+  "name": "example",
+  "description": "example",
   "value": {
-    "method": "GET"
+    "key": "example value"
   }
 }
 ```
@@ -98,6 +98,8 @@ await Behavior.listFor(path, {
 ```
 await Behavior.create({
   'value': "{\"method\": \"GET\"}",
+  'name': "example",
+  'description': "example",
   'path': "path",
   'behavior': "webhook",
 })
@@ -122,8 +124,8 @@ await Behavior.webhookTest({
   'url': "https://www.site.com/...",
   'method': "GET",
   'encoding': "RAW",
-  'headers': "x-test-header => testvalue",
-  'body': "test-param => testvalue",
+  'headers': {"x-test-header":"testvalue"},
+  'body': {"test-param":"testvalue"},
   'action': "test",
 })
 ```
@@ -147,7 +149,10 @@ const [behavior] = await Behavior.list()
 
 await behavior.update({
   'value': "{\"method\": \"GET\"}",
+  'name': "example",
+  'description': "example",
   'behavior': "webhook",
+  'path': "example",
   'attachment_delete': true,
 })
 ```
@@ -168,13 +173,13 @@ await behavior.update({
 ```json
 {
   "id": 1,
-  "path": "",
-  "attachment_url": "",
+  "path": "example",
+  "attachment_url": "example",
   "behavior": "webhook",
-  "name": "",
-  "description": "",
+  "name": "example",
+  "description": "example",
   "value": {
-    "method": "GET"
+    "key": "example value"
   }
 }
 ```
