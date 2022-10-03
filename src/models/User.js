@@ -166,14 +166,70 @@ class User {
     this.attributes.language = value
   }
 
-  // date-time # User's last login time
+  // date-time # User's most recent login time via any protocol
   getLastLoginAt = () => this.attributes.last_login_at
 
   setLastLoginAt = value => {
     this.attributes.last_login_at = value
   }
 
-  // string # The last protocol and cipher used
+  // date-time # User's most recent login time via web
+  getLastWebLoginAt = () => this.attributes.last_web_login_at
+
+  setLastWebLoginAt = value => {
+    this.attributes.last_web_login_at = value
+  }
+
+  // date-time # User's most recent login time via FTP
+  getLastFtpLoginAt = () => this.attributes.last_ftp_login_at
+
+  setLastFtpLoginAt = value => {
+    this.attributes.last_ftp_login_at = value
+  }
+
+  // date-time # User's most recent login time via SFTP
+  getLastSftpLoginAt = () => this.attributes.last_sftp_login_at
+
+  setLastSftpLoginAt = value => {
+    this.attributes.last_sftp_login_at = value
+  }
+
+  // date-time # User's most recent login time via WebDAV
+  getLastDavLoginAt = () => this.attributes.last_dav_login_at
+
+  setLastDavLoginAt = value => {
+    this.attributes.last_dav_login_at = value
+  }
+
+  // date-time # User's most recent login time via Desktop app
+  getLastDesktopLoginAt = () => this.attributes.last_desktop_login_at
+
+  setLastDesktopLoginAt = value => {
+    this.attributes.last_desktop_login_at = value
+  }
+
+  // date-time # User's most recent login time via Rest API
+  getLastRestapiLoginAt = () => this.attributes.last_restapi_login_at
+
+  setLastRestapiLoginAt = value => {
+    this.attributes.last_restapi_login_at = value
+  }
+
+  // date-time # User's most recent API use time
+  getLastApiUseAt = () => this.attributes.last_api_use_at
+
+  setLastApiUseAt = value => {
+    this.attributes.last_api_use_at = value
+  }
+
+  // date-time # User's most recent activity time, which is the latest of most recent login, most recent API use, enablement, or creation
+  getLastActiveAt = () => this.attributes.last_active_at
+
+  setLastActiveAt = value => {
+    this.attributes.last_active_at = value
+  }
+
+  // string # The most recent protocol and cipher used
   getLastProtocolCipher = () => this.attributes.last_protocol_cipher
 
   setLastProtocolCipher = value => {
@@ -355,7 +411,7 @@ class User {
     this.attributes.type_of_2fa = value
   }
 
-  // date-time # User record last updated at.  Note this may be incremented because of internal or external updates.
+  // date-time # User record most recently updated at.  Note this may be incremented because of internal or external updates.
   getUpdatedAt = () => this.attributes.updated_at
 
   // string # Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
