@@ -96,6 +96,13 @@ class ApiKey {
     this.attributes.platform = value
   }
 
+  // string # URL for API host.
+  getUrl = () => this.attributes.url
+
+  setUrl = value => {
+    this.attributes.url = value
+  }
+
   // int64 # User ID for the owner of this API Key.  May be blank for Site-wide API Keys.
   getUserId = () => this.attributes.user_id
 
