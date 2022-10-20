@@ -165,7 +165,6 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_InvalidFilenameError
 ### ProcessingFailure_InvalidRangeError
 ### ProcessingFailure_ModelSaveErrorError
-### ProcessingFailure_MultipartUploadsRequiredForRemotesError
 ### ProcessingFailure_MultipleProcessingErrorsError
 ### ProcessingFailure_PathTooLongError
 ### ProcessingFailure_RecipientAlreadySharedError
