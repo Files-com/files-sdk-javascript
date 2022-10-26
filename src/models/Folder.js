@@ -111,6 +111,13 @@ class Folder {
     this.attributes.subfolders_locked = value
   }
 
+  // boolean # Is this folder locked and unable to be modified?
+  getIsLocked = () => this.attributes.is_locked
+
+  setIsLocked = value => {
+    this.attributes.is_locked = value
+  }
+
   // string # Link to download file. Provided only in response to a download request.
   getDownloadUri = () => this.attributes.download_uri
 
