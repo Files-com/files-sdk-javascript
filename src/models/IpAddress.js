@@ -59,6 +59,23 @@ class IpAddress {
   // Parameters:
   //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+  static getExavaultReserved = async (params = {}, options = {}) => {
+    if (params['cursor'] && !isString(params['cursor'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    }
+
+    if (params['per_page'] && !isInt(params['per_page'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    }
+
+    const response = await Api.sendRequest(`/ip_addresses/exavault-reserved`, 'GET', params, options)
+
+    return response?.data?.map(obj => new PublicIpAddress(obj, options)) || []
+  }
+
+  // Parameters:
+  //   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static getReserved = async (params = {}, options = {}) => {
     if (params['cursor'] && !isString(params['cursor'])) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
