@@ -324,6 +324,27 @@ class RemoteServer {
     this.attributes.enable_dedicated_ips = value
   }
 
+  // string # Local permissions for files agent. read_only, write_only, or read_write
+  getFilesAgentPermissionSet = () => this.attributes.files_agent_permission_set
+
+  setFilesAgentPermissionSet = value => {
+    this.attributes.files_agent_permission_set = value
+  }
+
+  // string # Agent local root path
+  getFilesAgentRoot = () => this.attributes.files_agent_root
+
+  setFilesAgentRoot = value => {
+    this.attributes.files_agent_root = value
+  }
+
+  // string # Files Agent API Token
+  getFilesAgentApiToken = () => this.attributes.files_agent_api_token
+
+  setFilesAgentApiToken = value => {
+    this.attributes.files_agent_api_token = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
@@ -423,6 +444,72 @@ class RemoteServer {
   }
 
 
+  // Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
+  //
+  // Parameters:
+  //   api_token - string - Files Agent API Token
+  //   permission_set - string -
+  //   root - string - Agent local root path
+  //   hostname - string
+  //   port - int64 - Incoming port for files agent connections
+  //   status - string - either running or shutdown
+  //   config_version - string - agent config version
+  //   private_key - string - private key
+  //   public_key - string - public key
+  configurationFile = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params['id'] && !isInt(params['id'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+    if (params['api_token'] && !isString(params['api_token'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: api_token must be of type String, received ${getType(api_token)}`)
+    }
+    if (params['permission_set'] && !isString(params['permission_set'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(permission_set)}`)
+    }
+    if (params['root'] && !isString(params['root'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: root must be of type String, received ${getType(root)}`)
+    }
+    if (params['hostname'] && !isString(params['hostname'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: hostname must be of type String, received ${getType(hostname)}`)
+    }
+    if (params['port'] && !isInt(params['port'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(port)}`)
+    }
+    if (params['status'] && !isString(params['status'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(status)}`)
+    }
+    if (params['config_version'] && !isString(params['config_version'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: config_version must be of type String, received ${getType(config_version)}`)
+    }
+    if (params['private_key'] && !isString(params['private_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+    }
+    if (params['public_key'] && !isString(params['public_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(public_key)}`)
+    }
+
+    if (!params['id']) {
+      if (this.attributes.id) {
+        params['id'] = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/remote_servers/${encodeURIComponent(params['id'])}/configuration_file`, 'POST', params, this.options)
+
+    return new RemoteServerConfigurationFile(response?.data, this.options)
+  }
+
   // Parameters:
   //   aws_access_key - string - AWS Access Key.
   //   aws_secret_key - string - AWS secret key.
@@ -473,6 +560,8 @@ class RemoteServer {
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
+  //   files_agent_root - string - Agent local root path
+  //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -624,6 +713,12 @@ class RemoteServer {
     if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(s3_compatible_secret_key)}`)
     }
+    if (params['files_agent_root'] && !isString(params['files_agent_root'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_agent_root must be of type String, received ${getType(files_agent_root)}`)
+    }
+    if (params['files_agent_permission_set'] && !isString(params['files_agent_permission_set'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_agent_permission_set must be of type String, received ${getType(files_agent_permission_set)}`)
+    }
 
     if (!params['id']) {
       if (this.attributes.id) {
@@ -724,6 +819,28 @@ class RemoteServer {
     RemoteServer.find(id, params, options)
 
   // Parameters:
+  //   id (required) - int64 - Remote Server ID.
+  static findConfigurationFile = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params['id'] = id
+
+    if (!params['id']) {
+      throw new errors.MissingParameterError('Parameter missing: id')
+    }
+
+    if (params['id'] && !isInt(params['id'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    }
+
+    const response = await Api.sendRequest(`/remote_servers/${encodeURIComponent(params['id'])}/configuration_file`, 'GET', params, options)
+
+    return new RemoteServerConfigurationFile(response?.data, options)
+  }
+
+  // Parameters:
   //   aws_access_key - string - AWS Access Key.
   //   aws_secret_key - string - AWS secret key.
   //   password - string - Password if needed.
@@ -773,6 +890,8 @@ class RemoteServer {
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   s3_compatible_access_key - string - S3-compatible Access Key.
   //   s3_compatible_secret_key - string - S3-compatible secret key
+  //   files_agent_root - string - Agent local root path
+  //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params['aws_access_key'])}`)
@@ -956,6 +1075,14 @@ class RemoteServer {
 
     if (params['s3_compatible_secret_key'] && !isString(params['s3_compatible_secret_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(params['s3_compatible_secret_key'])}`)
+    }
+
+    if (params['files_agent_root'] && !isString(params['files_agent_root'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_agent_root must be of type String, received ${getType(params['files_agent_root'])}`)
+    }
+
+    if (params['files_agent_permission_set'] && !isString(params['files_agent_permission_set'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_agent_permission_set must be of type String, received ${getType(params['files_agent_permission_set'])}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)

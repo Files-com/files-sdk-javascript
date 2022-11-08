@@ -65,6 +65,9 @@ class Site {
   // boolean # Do Bundles require password protection?
   getBundlePasswordRequired = () => this.attributes.bundle_password_required
 
+  // string # Do Bundle owners receive registration notification?
+  getBundleRegistrationNotifications = () => this.attributes.bundle_registration_notifications
+
   // boolean # Do Bundles require recipients for sharing?
   getBundleRequireShareRecipient = () => this.attributes.bundle_require_share_recipient
 
@@ -508,6 +511,7 @@ class Site {
   //   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
   //   bundle_password_required - boolean - Do Bundles require password protection?
   //   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
+  //   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
   //   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
   //   opt_out_global - boolean - Use servers in the USA only?
   //   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
@@ -679,6 +683,10 @@ class Site {
 
     if (params['password_min_length'] && !isInt(params['password_min_length'])) {
       throw new errors.InvalidParameterError(`Bad parameter: password_min_length must be of type Int, received ${getType(params['password_min_length'])}`)
+    }
+
+    if (params['bundle_registration_notifications'] && !isString(params['bundle_registration_notifications'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_notifications must be of type String, received ${getType(params['bundle_registration_notifications'])}`)
     }
 
     if (params['disable_users_from_inactivity_period_days'] && !isInt(params['disable_users_from_inactivity_period_days'])) {

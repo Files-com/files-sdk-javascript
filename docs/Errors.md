@@ -47,6 +47,7 @@ Each of these error classes is used as the base class for each associated error.
 
 These errors are derived from the error groups listed above.
 
+### BadRequest_AgentUpgradeRequiredError
 ### BadRequest_AttachmentTooLargeError
 ### BadRequest_CannotDownloadDirectoryError
 ### BadRequest_CantMoveWithMultipleLocationsError
@@ -84,6 +85,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_UserRequiredError
 ### NotAuthenticated_AuthenticationRequiredError
 ### NotAuthenticated_BundleRegistrationCodeFailedError
+### NotAuthenticated_FilesAgentTokenFailedError
 ### NotAuthenticated_InboxRegistrationCodeFailedError
 ### NotAuthenticated_InvalidCredentialsError
 ### NotAuthenticated_InvalidOauthError

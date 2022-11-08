@@ -35,7 +35,7 @@ class FileMigration {
   // int64 # Number of files processed
   getFilesMoved = () => this.attributes.files_moved
 
-  // int64 # Total number of files to process
+  // int64 # Deprecated: used to return a count of the applicable files.  Currently returns 0 always.  On remote servers, it is not possible to reliably determine the number of affected files for every migration operation.
   getFilesTotal = () => this.attributes.files_total
 
   // string # The type of operation
