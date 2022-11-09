@@ -29,10 +29,10 @@ class PublicIpAddress {
   // string # The name of the frontend server.
   getServerName = () => this.attributes.server_name
 
-  // string
+  // boolean
   getFtpEnabled = () => this.attributes.ftp_enabled
 
-  // string
+  // boolean
   getSftpEnabled = () => this.attributes.sftp_enabled
 
 }
