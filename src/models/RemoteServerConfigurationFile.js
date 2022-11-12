@@ -53,6 +53,9 @@ class RemoteServerConfigurationFile {
   // string # agent config version
   getConfigVersion = () => this.attributes.config_version
 
+  // string
+  getServerHostKey = () => this.attributes.server_host_key
+
 }
 
 export default RemoteServerConfigurationFile

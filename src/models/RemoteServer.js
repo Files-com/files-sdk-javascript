@@ -456,6 +456,7 @@ class RemoteServer {
   //   config_version - string - agent config version
   //   private_key - string - private key
   //   public_key - string - public key
+  //   server_host_key - string
   configurationFile = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -495,6 +496,9 @@ class RemoteServer {
     }
     if (params['public_key'] && !isString(params['public_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(public_key)}`)
+    }
+    if (params['server_host_key'] && !isString(params['server_host_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
     }
 
     if (!params['id']) {
