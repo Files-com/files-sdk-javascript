@@ -421,6 +421,20 @@ class User {
     this.attributes.user_root = value
   }
 
+  // date-time # Number of days remaining until password expires
+  getDaysRemainingUntilPasswordExpire = () => this.attributes.days_remaining_until_password_expire
+
+  setDaysRemainingUntilPasswordExpire = value => {
+    this.attributes.days_remaining_until_password_expire = value
+  }
+
+  // date-time # Password expiration datetime
+  getPasswordExpireAt = () => this.attributes.password_expire_at
+
+  setPasswordExpireAt = value => {
+    this.attributes.password_expire_at = value
+  }
+
   // file # An image file for your user avatar.
   getAvatarFile = () => this.attributes.avatar_file
 

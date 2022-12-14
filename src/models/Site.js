@@ -59,6 +59,9 @@ class Site {
   // boolean # If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   getAskAboutOverwrites = () => this.attributes.ask_about_overwrites
 
+  // string # Do Bundle owners receive activity notifications?
+  getBundleActivityNotifications = () => this.attributes.bundle_activity_notifications
+
   // int64 # Site-wide Bundle expiration in days
   getBundleExpiration = () => this.attributes.bundle_expiration
 
@@ -70,6 +73,9 @@ class Site {
 
   // boolean # Do Bundles require recipients for sharing?
   getBundleRequireShareRecipient = () => this.attributes.bundle_require_share_recipient
+
+  // string # Do Bundle uploaders receive upload confirmation notifications?
+  getBundleUploadReceiptNotifications = () => this.attributes.bundle_upload_receipt_notifications
 
   // Image # Preview watermark image applied to all bundle items.
   getBundleWatermarkAttachment = () => this.attributes.bundle_watermark_attachment
@@ -512,6 +518,8 @@ class Site {
   //   bundle_password_required - boolean - Do Bundles require password protection?
   //   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
   //   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
+  //   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
+  //   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
   //   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
   //   opt_out_global - boolean - Use servers in the USA only?
   //   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
@@ -687,6 +695,14 @@ class Site {
 
     if (params['bundle_registration_notifications'] && !isString(params['bundle_registration_notifications'])) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_notifications must be of type String, received ${getType(params['bundle_registration_notifications'])}`)
+    }
+
+    if (params['bundle_activity_notifications'] && !isString(params['bundle_activity_notifications'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_activity_notifications must be of type String, received ${getType(params['bundle_activity_notifications'])}`)
+    }
+
+    if (params['bundle_upload_receipt_notifications'] && !isString(params['bundle_upload_receipt_notifications'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_upload_receipt_notifications must be of type String, received ${getType(params['bundle_upload_receipt_notifications'])}`)
     }
 
     if (params['disable_users_from_inactivity_period_days'] && !isInt(params['disable_users_from_inactivity_period_days'])) {
