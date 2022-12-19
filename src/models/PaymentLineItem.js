@@ -35,9 +35,6 @@ class PaymentLineItem {
   // int64 # Payment ID
   getPaymentId = () => this.attributes.payment_id
 
-  // date-time # Payment line item updated at date/time
-  getUpdatedAt = () => this.attributes.updated_at
-
 }
 
 export default PaymentLineItem
