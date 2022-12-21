@@ -59,6 +59,9 @@ class BundleRegistration {
   // int64 # Id of associated bundle recipient
   getBundleRecipientId = () => this.attributes.bundle_recipient_id
 
+  // date-time # Registration creation date/time
+  getCreatedAt = () => this.attributes.created_at
+
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.

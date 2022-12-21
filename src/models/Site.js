@@ -377,6 +377,9 @@ class Site {
   // double # Session expiry in hours
   getSessionExpiry = () => this.attributes.session_expiry
 
+  // int64 # Session expiry in minutes
+  getSessionExpiryMinutes = () => this.attributes.session_expiry_minutes
+
   // boolean # Is SSL required?  Disabling this is insecure.
   getSslRequired = () => this.attributes.ssl_required
 
