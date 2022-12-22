@@ -44,6 +44,13 @@ class BundleNotification {
     this.attributes.notify_on_registration = value
   }
 
+  // boolean # Triggers bundle notification when a upload action occurs for it.
+  getNotifyOnUpload = () => this.attributes.notify_on_upload
+
+  setNotifyOnUpload = value => {
+    this.attributes.notify_on_upload = value
+  }
+
   // int64 # The id of the user to notify.
   getUserId = () => this.attributes.user_id
 
@@ -51,6 +58,36 @@ class BundleNotification {
     this.attributes.user_id = value
   }
 
+
+  // Parameters:
+  //   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+  //   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
+  update = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params['id'] && !isInt(params['id'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+    }
+
+    if (!params['id']) {
+      if (this.attributes.id) {
+        params['id'] = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+
+    return new BundleNotification(response?.data, this.options)
+  }
 
   delete = async (params = {}) => {
     if (!this.attributes.id) {
@@ -84,7 +121,7 @@ class BundleNotification {
 
   save = () => {
       if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The BundleNotification object doesn\'t support updates.')
+        return this.update(this.attributes)
       } else {
         const newObject = BundleNotification.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
@@ -150,6 +187,7 @@ class BundleNotification {
   // Parameters:
   //   user_id (required) - int64 - The id of the user to notify.
   //   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+  //   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
   //   bundle_id (required) - int64 - Bundle ID to notify on
   static create = async (params = {}, options = {}) => {
     if (!params['user_id']) {

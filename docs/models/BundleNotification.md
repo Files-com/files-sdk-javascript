@@ -7,6 +7,7 @@
   "bundle_id": 1,
   "id": 1,
   "notify_on_registration": true,
+  "notify_on_upload": true,
   "user_id": 1
 }
 ```
@@ -14,6 +15,7 @@
 * `bundle_id` (int64): Bundle ID to notify on
 * `id` (int64): Bundle Notification ID
 * `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
+* `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
 * `user_id` (int64): The id of the user to notify.
 
 ---
@@ -57,6 +59,7 @@ await BundleNotification.find(id)
 await BundleNotification.create({
   'user_id': 1,
   'notify_on_registration': true,
+  'notify_on_upload': true,
   'bundle_id': 1,
 })
 ```
@@ -66,7 +69,39 @@ await BundleNotification.create({
 
 * `user_id` (int64): Required - The id of the user to notify.
 * `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
+* `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
 * `bundle_id` (int64): Required - Bundle ID to notify on
+
+---
+
+## Update Bundle Notification
+
+```
+const [bundle_notification] = await BundleNotification.list()
+
+await bundle_notification.update({
+  'notify_on_registration': true,
+  'notify_on_upload': true,
+})
+```
+
+### Parameters
+
+* `id` (int64): Required - Bundle Notification ID.
+* `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
+* `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
+
+### Example Response
+
+```json
+{
+  "bundle_id": 1,
+  "id": 1,
+  "notify_on_registration": true,
+  "notify_on_upload": true,
+  "user_id": 1
+}
+```
 
 ---
 
