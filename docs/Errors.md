@@ -63,6 +63,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidInputEncodingError
 ### BadRequest_InvalidInterfaceError
 ### BadRequest_InvalidOauthProviderError
+### BadRequest_InvalidPathError
 ### BadRequest_InvalidReturnToUrlError
 ### BadRequest_InvalidUploadOffsetError
 ### BadRequest_InvalidUploadPartGapError
