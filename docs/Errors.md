@@ -144,6 +144,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_SiteNotFoundError
 ### NotFound_UserNotFoundError
 ### ProcessingFailure_BundleOnlyAllowsPreviewsError
+### ProcessingFailure_BundleOperationRequiresSubfolderError
 ### ProcessingFailure_CouldNotCreateParentError
 ### ProcessingFailure_DestinationExistsError
 ### ProcessingFailure_DestinationFolderLimitedError
