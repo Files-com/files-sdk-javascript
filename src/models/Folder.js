@@ -213,6 +213,7 @@ class Folder {
   // Parameters:
   //   path (required) - string - Path to operate on.
   //   mkdir_parents - boolean - Create parent directories if they do not exist?
+  //   provided_mtime - string - User provided modification time.
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -226,6 +227,10 @@ class Folder {
 
     if (params['path'] && !isString(params['path'])) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    }
+
+    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params['provided_mtime'])}`)
     }
 
     const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'POST', params, options)
