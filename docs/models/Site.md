@@ -438,6 +438,7 @@ await Site.update({
   'logo_delete': true,
   'bundle_watermark_attachment_delete': true,
   'disable_2fa_with_delay': true,
+  'session_expiry_minutes': 1,
 })
 ```
 
@@ -575,3 +576,4 @@ await Site.update({
 * `ldap_password_change` (string): New LDAP password.
 * `ldap_password_change_confirmation` (string): Confirm new LDAP password.
 * `smtp_password` (string): Password for SMTP server.
+* `session_expiry_minutes` (int64): Session expiry in minutes
