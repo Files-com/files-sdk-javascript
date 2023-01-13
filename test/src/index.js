@@ -102,6 +102,30 @@ const testSuite = async () => {
     Logger.info('***** testUploadAndDownload() succeeded! *****')
   }
 
+  /* to run this test, put a file (or symlink) at huge-file.ext * /
+  const testUploadHugeFile = async () => {
+    const sourceFilePath = '../huge-file.ext'
+
+    const displayName = `huge-file__${nonce}.ext`
+    const destinationPath = `${SDK_TEST_ROOT_FOLDER}/${displayName}`
+
+    const file = await File.uploadFile(destinationPath, sourceFilePath)
+
+    assert(!!file.path)
+    assert(file.display_name === displayName)
+
+    const foundFile = await File.find(destinationPath)
+
+    assert(foundFile.path === destinationPath)
+    assert(foundFile.display_name === displayName)
+    assert(typeof foundFile.getDownloadUri() === 'undefined')
+
+    await file.delete()
+
+    Logger.info('***** testUploadHugeFile() succeeded! *****')
+  }
+  /**/
+
   const testSession = async () => {
     const username = process.env.FILES_SESSION_USERNAME
     const password = process.env.FILES_SESSION_PASSWORD
@@ -177,6 +201,7 @@ const testSuite = async () => {
 
   await testFolderListAutoPagination()
   await testUploadAndDownload()
+  // await testUploadHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
   await testSession()
   await testFailure()
   await testUserListAndUpdate()

@@ -116,7 +116,7 @@ class File {
               concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
 
               chunks = [firstChunkForNextPart]
-              length = 1
+              length = firstChunkForNextPart.length
 
               readableStream.resume()
             } else {
