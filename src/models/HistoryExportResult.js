@@ -29,6 +29,9 @@ class HistoryExportResult {
   // int64 # When the action happened
   getCreatedAt = () => this.attributes.created_at
 
+  // int64 # When the action happened, in ISO8601 format.
+  getCreatedAtIso8601 = () => this.attributes.created_at_iso8601
+
   // int64 # User ID
   getUserId = () => this.attributes.user_id
 
