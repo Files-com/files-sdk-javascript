@@ -185,15 +185,11 @@ class BundleNotification {
     BundleNotification.find(id, params, options)
 
   // Parameters:
-  //   user_id (required) - int64 - The id of the user to notify.
+  //   user_id - int64 - The id of the user to notify.
   //   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
   //   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
   //   bundle_id (required) - int64 - Bundle ID to notify on
   static create = async (params = {}, options = {}) => {
-    if (!params['user_id']) {
-      throw new errors.MissingParameterError('Parameter missing: user_id')
-    }
-
     if (!params['bundle_id']) {
       throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
