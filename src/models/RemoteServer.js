@@ -457,6 +457,7 @@ class RemoteServer {
   //   private_key - string - private key
   //   public_key - string - public key
   //   server_host_key - string
+  //   subdomain - string
   configurationFile = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -499,6 +500,9 @@ class RemoteServer {
     }
     if (params['server_host_key'] && !isString(params['server_host_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: server_host_key must be of type String, received ${getType(server_host_key)}`)
+    }
+    if (params['subdomain'] && !isString(params['subdomain'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: subdomain must be of type String, received ${getType(subdomain)}`)
     }
 
     if (!params['id']) {

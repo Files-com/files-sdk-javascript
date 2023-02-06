@@ -56,6 +56,9 @@ class RemoteServerConfigurationFile {
   // string
   getServerHostKey = () => this.attributes.server_host_key
 
+  // string
+  getSubdomain = () => this.attributes.subdomain
+
 }
 
 export default RemoteServerConfigurationFile
