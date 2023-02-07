@@ -345,6 +345,13 @@ class RemoteServer {
     this.attributes.files_agent_api_token = value
   }
 
+  // string # Filebase Bucket name
+  getFilebaseBucket = () => this.attributes.filebase_bucket
+
+  setFilebaseBucket = value => {
+    this.attributes.filebase_bucket = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
