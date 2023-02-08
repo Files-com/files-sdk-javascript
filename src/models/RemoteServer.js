@@ -352,6 +352,13 @@ class RemoteServer {
     this.attributes.filebase_bucket = value
   }
 
+  // string # Filebase Access Key.
+  getFilebaseAccessKey = () => this.attributes.filebase_access_key
+
+  setFilebaseAccessKey = value => {
+    this.attributes.filebase_access_key = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
@@ -448,6 +455,13 @@ class RemoteServer {
 
   setS3CompatibleSecretKey = value => {
     this.attributes.s3_compatible_secret_key = value
+  }
+
+  // string # Filebase secret key
+  getFilebaseSecretKey = () => this.attributes.filebase_secret_key
+
+  setFilebaseSecretKey = value => {
+    this.attributes.filebase_secret_key = value
   }
 
 
@@ -577,6 +591,9 @@ class RemoteServer {
   //   s3_compatible_secret_key - string - S3-compatible secret key
   //   files_agent_root - string - Agent local root path
   //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+  //   filebase_access_key - string - Filebase Access Key.
+  //   filebase_secret_key - string - Filebase secret key
+  //   filebase_bucket - string - Filebase Bucket name
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -733,6 +750,15 @@ class RemoteServer {
     }
     if (params['files_agent_permission_set'] && !isString(params['files_agent_permission_set'])) {
       throw new errors.InvalidParameterError(`Bad parameter: files_agent_permission_set must be of type String, received ${getType(files_agent_permission_set)}`)
+    }
+    if (params['filebase_access_key'] && !isString(params['filebase_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_access_key must be of type String, received ${getType(filebase_access_key)}`)
+    }
+    if (params['filebase_secret_key'] && !isString(params['filebase_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_secret_key must be of type String, received ${getType(filebase_secret_key)}`)
+    }
+    if (params['filebase_bucket'] && !isString(params['filebase_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(filebase_bucket)}`)
     }
 
     if (!params['id']) {
@@ -907,6 +933,9 @@ class RemoteServer {
   //   s3_compatible_secret_key - string - S3-compatible secret key
   //   files_agent_root - string - Agent local root path
   //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+  //   filebase_access_key - string - Filebase Access Key.
+  //   filebase_secret_key - string - Filebase secret key
+  //   filebase_bucket - string - Filebase Bucket name
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params['aws_access_key'])}`)
@@ -1098,6 +1127,18 @@ class RemoteServer {
 
     if (params['files_agent_permission_set'] && !isString(params['files_agent_permission_set'])) {
       throw new errors.InvalidParameterError(`Bad parameter: files_agent_permission_set must be of type String, received ${getType(params['files_agent_permission_set'])}`)
+    }
+
+    if (params['filebase_access_key'] && !isString(params['filebase_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_access_key must be of type String, received ${getType(params['filebase_access_key'])}`)
+    }
+
+    if (params['filebase_secret_key'] && !isString(params['filebase_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_secret_key must be of type String, received ${getType(params['filebase_secret_key'])}`)
+    }
+
+    if (params['filebase_bucket'] && !isString(params['filebase_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(params['filebase_bucket'])}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)
