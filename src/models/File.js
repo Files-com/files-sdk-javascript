@@ -105,8 +105,11 @@ class File {
             if (excessLength > 0) {
               readableStream.pause()
 
-              const lastChunkForPart = chunkBuffer.subarray(0, excessLength)
-              const firstChunkForNextPart = chunkBuffer.subarray(excessLength)
+              // the amount to append this last part with to make it exactly the full partsize
+              const tailLength = chunkBuffer.length - excessLength
+
+              const lastChunkForPart = chunkBuffer.subarray(0, tailLength)
+              const firstChunkForNextPart = chunkBuffer.subarray(tailLength)
 
               chunks.push(lastChunkForPart)
 
