@@ -58,6 +58,13 @@ class As2Partner {
     this.attributes.server_certificate = value
   }
 
+  // boolean # `true` if remote server only accepts connections from dedicated IPs
+  getEnableDedicatedIps = () => this.attributes.enable_dedicated_ips
+
+  setEnableDedicatedIps = value => {
+    this.attributes.enable_dedicated_ips = value
+  }
+
   // string # Serial of public certificate used for message security in hex format.
   getHexPublicCertificateSerial = () => this.attributes.hex_public_certificate_serial
 
@@ -120,6 +127,7 @@ class As2Partner {
   //   uri - string - URL base for AS2 responses
   //   server_certificate - string - Remote server certificate security setting
   //   public_certificate - string
+  //   enable_dedicated_ips - boolean
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -250,6 +258,7 @@ class As2Partner {
   //   public_certificate (required) - string
   //   as2_station_id (required) - int64 - Id of As2Station for this partner
   //   server_certificate - string - Remote server certificate security setting
+  //   enable_dedicated_ips - boolean
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
       throw new errors.MissingParameterError('Parameter missing: name')

@@ -9,6 +9,7 @@
   "name": "AS2 Partner Name",
   "uri": "example",
   "server_certificate": "require_match",
+  "enable_dedicated_ips": true,
   "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "example",
   "public_certificate_subject": "example",
@@ -24,6 +25,7 @@
 * `name` (string): The partner's formal AS2 name.
 * `uri` (string): Public URI for sending AS2 message to.
 * `server_certificate` (string): Remote server certificate security setting
+* `enable_dedicated_ips` (boolean): `true` if remote server only accepts connections from dedicated IPs
 * `hex_public_certificate_serial` (string): Serial of public certificate used for message security in hex format.
 * `public_certificate_md5` (string): MD5 hash of public certificate used for message security.
 * `public_certificate_subject` (string): Subject of public certificate used for message security.
@@ -73,6 +75,7 @@ await As2Partner.create({
   'public_certificate': "public_certificate",
   'as2_station_id': 1,
   'server_certificate': "require_match",
+  'enable_dedicated_ips': true,
 })
 ```
 
@@ -84,6 +87,7 @@ await As2Partner.create({
 * `public_certificate` (string): Required - 
 * `as2_station_id` (int64): Required - Id of As2Station for this partner
 * `server_certificate` (string): Remote server certificate security setting
+* `enable_dedicated_ips` (boolean): 
 
 ---
 
@@ -96,6 +100,7 @@ await as2_partner.update({
   'name': "AS2 Partner Name",
   'uri': "example",
   'server_certificate': "require_match",
+  'enable_dedicated_ips': true,
 })
 ```
 
@@ -106,6 +111,7 @@ await as2_partner.update({
 * `uri` (string): URL base for AS2 responses
 * `server_certificate` (string): Remote server certificate security setting
 * `public_certificate` (string): 
+* `enable_dedicated_ips` (boolean): 
 
 ### Example Response
 
@@ -116,6 +122,7 @@ await as2_partner.update({
   "name": "AS2 Partner Name",
   "uri": "example",
   "server_certificate": "require_match",
+  "enable_dedicated_ips": true,
   "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "example",
   "public_certificate_subject": "example",
