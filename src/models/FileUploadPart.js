@@ -50,6 +50,9 @@ class FileUploadPart {
   // boolean # If `true`, multiple parts may be uploaded in parallel.  If `false`, be sure to only upload one part at a time, in order.
   getParallelParts = () => this.attributes.parallel_parts
 
+  // boolean # If `true`, parts may be retried. If `false`, a part cannot be retried and the upload should be restarted.
+  getRetryParts = () => this.attributes.retry_parts
+
   // object # Additional HTTP parameters to send with the upload
   getParameters = () => this.attributes.parameters
 
