@@ -21,6 +21,19 @@ const saveUrlToStream = async (url, stream) => new Promise((resolve, reject) => 
   })
 })
 
+const saveUrlToString = async url => new Promise((resolve, reject) => {
+  const https = require('https')
+
+  https.get(url, response => {
+    const chunks = []
+    response.on('data', chunk => chunks.push(Buffer.from(chunk)))
+    response.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+  })
+  .on('error', error => {
+    reject(error)
+  })
+})
+
 const saveUrlToFile = async (url, destinationPath) => {
   const stream = openDiskFileWriteStream(destinationPath)
   await saveUrlToStream(url, stream)
@@ -32,4 +45,5 @@ export {
   openDiskFileWriteStream,
   saveUrlToFile,
   saveUrlToStream,
+  saveUrlToString,
 }

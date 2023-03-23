@@ -64,7 +64,7 @@ const testSuite = async () => {
     Logger.info('***** testFolderListAutoPagination() succeeded! *****')
   }
 
-  const testUploadAndDownload = async () => {
+  const testUploadAndDownloadToFile = async () => {
     const sourceFilePath = '../files.com-logo.png'
 
     const displayName = `files.com-logo__${nonce}.png`
@@ -99,7 +99,37 @@ const testSuite = async () => {
 
     await file.delete()
 
-    Logger.info('***** testUploadAndDownload() succeeded! *****')
+    Logger.info('***** testUploadAndDownloadToFile() succeeded! *****')
+  }
+
+  const testUploadAndDownloadToString = async () => {
+    const displayName = `test-text__${nonce}.txt`
+    const destinationPath = `${SDK_TEST_ROOT_FOLDER}/${displayName}`
+
+    const sourceFileContents = 'The quick brown fox jumped over the lazy dogs.'
+    const file = await File.uploadData(destinationPath, sourceFileContents)
+
+    assert(!!file.path)
+    assert(file.display_name === displayName)
+
+    const foundFile = await File.find(destinationPath)
+
+    assert(foundFile.path === destinationPath)
+    assert(foundFile.display_name === displayName)
+    assert(typeof foundFile.getDownloadUri() === 'undefined')
+
+    if (!isBrowser()) {
+      const downloadableFile = await foundFile.download()
+      assert(typeof downloadableFile.getDownloadUri() !== 'undefined')
+
+      const downloadedFileContents = await downloadableFile.downloadToString()
+
+      assert(sourceFileContents === downloadedFileContents)
+    }
+
+    await file.delete()
+
+    Logger.info('***** testUploadAndDownloadToString() succeeded! *****')
   }
 
   /* to run this test, put a file (or symlink) at huge-file.ext * /
@@ -200,7 +230,8 @@ const testSuite = async () => {
   //
 
   await testFolderListAutoPagination()
-  await testUploadAndDownload()
+  await testUploadAndDownloadToFile()
+  await testUploadAndDownloadToString()
   // await testUploadHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
   await testSession()
   await testFailure()

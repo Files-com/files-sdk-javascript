@@ -152,6 +152,9 @@ You can set the following global properties using static methods on the `Files` 
 
       // download to a writable stream
       await downloadableFile.downloadToStream(stream)
+
+      // download in memory and return as a UTF-8 string
+      const textContent = await downloadableFile.downloadToString()
     }
 
 ### Additional Object Documentation

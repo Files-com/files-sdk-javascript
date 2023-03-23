@@ -199,6 +199,21 @@ class File {
     return saveUrlToStream(downloadUri, writableStream)
   }
 
+  downloadToString = async () => {
+    if (isBrowser()) {
+      throw new errors.NotImplementedError('String downloads are only available in a NodeJS environment')
+    }
+
+    const downloadUri = this.getDownloadUri()
+
+    if (!downloadUri) {
+      throw new errors.EmptyPropertyError('Current object has no download URI')
+    }
+
+    const { saveUrlToString } = require('../isomorphic/File.node.js')
+    return saveUrlToString(downloadUri)
+  }
+
   downloadToFile = async destinationPath => {
     if (isBrowser()) {
       throw new errors.NotImplementedError('Disk file downloads are only available in a NodeJS environment')
