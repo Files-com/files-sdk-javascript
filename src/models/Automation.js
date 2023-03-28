@@ -121,6 +121,13 @@ class Automation {
     this.attributes.description = value
   }
 
+  // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  getRecurringDay = () => this.attributes.recurring_day
+
+  setRecurringDay = value => {
+    this.attributes.recurring_day = value
+  }
+
   // string # Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
@@ -203,6 +210,7 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
+  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   //   automation - string - Automation type
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -258,6 +266,9 @@ class Automation {
     }
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
       throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(trigger_actions)}`)
+    }
+    if (params['recurring_day'] && !isInt(params['recurring_day'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(recurring_day)}`)
     }
     if (params['automation'] && !isString(params['automation'])) {
       throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(automation)}`)
@@ -391,6 +402,7 @@ class Automation {
   //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
+  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   //   automation (required) - string - Automation type
   static create = async (params = {}, options = {}) => {
     if (!params['automation']) {
@@ -451,6 +463,10 @@ class Automation {
 
     if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
       throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(params['trigger_actions'])}`)
+    }
+
+    if (params['recurring_day'] && !isInt(params['recurring_day'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params['recurring_day'])}`)
     }
 
     if (params['automation'] && !isString(params['automation'])) {
