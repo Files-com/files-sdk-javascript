@@ -284,12 +284,6 @@ class Site {
   // boolean # Use servers in the USA only?
   getOptOutGlobal = () => this.attributes.opt_out_global
 
-  // date-time # Last time the site was notified about an overage
-  getOverageNotifiedAt = () => this.attributes.overage_notified_at
-
-  // boolean # Notify site email of overages?
-  getOverageNotify = () => this.attributes.overage_notify
-
   // boolean # Is this site's billing overdue?
   getOverdue = () => this.attributes.overdue
 
@@ -475,7 +469,6 @@ class Site {
   //   reply_to_email - string - Reply-to email for this site
   //   allow_bundle_names - boolean - Are manual Bundle names allowed?
   //   bundle_expiration - int64 - Site-wide Bundle expiration in days
-  //   overage_notify - boolean - Notify site email of overages?
   //   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
   //   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   //   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
