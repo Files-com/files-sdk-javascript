@@ -58,6 +58,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidCursorError
 ### BadRequest_InvalidCursorTypeForSortError
 ### BadRequest_InvalidEtagsError
+### BadRequest_InvalidFilterAliasCombinationError
 ### BadRequest_InvalidFilterCombinationError
 ### BadRequest_InvalidFilterFieldError
 ### BadRequest_InvalidFilterParamError
