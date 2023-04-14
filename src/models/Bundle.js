@@ -215,7 +215,7 @@ class Bundle {
     this.attributes.has_inbox = value
   }
 
-  // array # A list of paths in this bundle
+  // array # A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
   getPaths = () => this.attributes.paths
 
   setPaths = value => {
