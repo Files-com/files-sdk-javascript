@@ -21,7 +21,13 @@
   "download_uri": "https://mysite.files.com/...",
   "priority_color": "red",
   "preview_id": 1,
-  "preview": ""
+  "preview": {
+    "id": 1,
+    "status": "complete",
+    "download_uri": "https://mysite.files.com/...",
+    "type": "image",
+    "size": "large"
+  }
 }
 ```
 
@@ -150,7 +156,13 @@ await file.download({
   "download_uri": "https://mysite.files.com/...",
   "priority_color": "red",
   "preview_id": 1,
-  "preview": ""
+  "preview": {
+    "id": 1,
+    "status": "complete",
+    "download_uri": "https://mysite.files.com/...",
+    "type": "image",
+    "size": "large"
+  }
 }
 ```
 
@@ -195,7 +207,13 @@ await file.update({
   "download_uri": "https://mysite.files.com/...",
   "priority_color": "red",
   "preview_id": 1,
-  "preview": ""
+  "preview": {
+    "id": 1,
+    "status": "complete",
+    "download_uri": "https://mysite.files.com/...",
+    "type": "image",
+    "size": "large"
+  }
 }
 ```
 
