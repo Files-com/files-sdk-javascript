@@ -40,6 +40,7 @@
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
   "send_email_receipt_to_uploader": true,
+  "snapshot_id": 1,
   "user_id": 1,
   "username": "user",
   "clickwrap_id": 1,
@@ -76,6 +77,7 @@
 * `note` (string): Bundle internal note
 * `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `send_email_receipt_to_uploader` (boolean): Send delivery receipt to the uploader. Note: For writable share only
+* `snapshot_id` (int64): ID of the snapshot containing this bundle's contents.
 * `user_id` (int64): Bundle creator user ID
 * `username` (string): Bundle creator username
 * `clickwrap_id` (int64): ID of the clickwrap to use with this bundle.
@@ -86,6 +88,8 @@
 * `paths` (array): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `password` (string): Password for this bundle.
 * `form_field_set_id` (int64): Id of Form Field Set to use with this bundle
+* `create_snapshot` (boolean): If true, create a snapshot of this bundle's contents.
+* `finalize_snapshot` (boolean): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `watermark_attachment_file` (file): Preview watermark image applied to all bundle items.
 * `watermark_attachment_delete` (boolean): If true, will delete the file stored in watermark_attachment
 
@@ -136,8 +140,10 @@ await Bundle.create({
   'paths': ["file.txt"],
   'password': "Password",
   'form_field_set_id': 1,
+  'create_snapshot': true,
   'dont_separate_submissions_by_folder': true,
   'expires_at': "2000-01-01T01:00:00Z",
+  'finalize_snapshot': true,
   'max_uses': 1,
   'description': "The public description of the bundle.",
   'note': "The internal note on the bundle.",
@@ -163,8 +169,10 @@ await Bundle.create({
 * `paths` (array(string)): Required - A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
 * `form_field_set_id` (int64): Id of Form Field Set to use with this bundle
+* `create_snapshot` (boolean): If true, create a snapshot of this bundle's contents.
 * `dont_separate_submissions_by_folder` (boolean): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
+* `finalize_snapshot` (boolean): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `max_uses` (int64): Maximum number of times bundle can be accessed
 * `description` (string): Public description
 * `note` (string): Bundle internal note
@@ -217,9 +225,11 @@ await bundle.update({
   'form_field_set_id': 1,
   'clickwrap_id': 1,
   'code': "abc123",
+  'create_snapshot': true,
   'description': "The public description of the bundle.",
   'dont_separate_submissions_by_folder': true,
   'expires_at': "2000-01-01T01:00:00Z",
+  'finalize_snapshot': true,
   'inbox_id': 1,
   'max_uses': 1,
   'note': "The internal note on the bundle.",
@@ -244,9 +254,11 @@ await bundle.update({
 * `form_field_set_id` (int64): Id of Form Field Set to use with this bundle
 * `clickwrap_id` (int64): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `create_snapshot` (boolean): If true, create a snapshot of this bundle's contents.
 * `description` (string): Public description
 * `dont_separate_submissions_by_folder` (boolean): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
+* `finalize_snapshot` (boolean): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (int64): ID of the associated inbox, if available.
 * `max_uses` (int64): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
@@ -302,6 +314,7 @@ await bundle.update({
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
   "send_email_receipt_to_uploader": true,
+  "snapshot_id": 1,
   "user_id": 1,
   "username": "user",
   "clickwrap_id": 1,
