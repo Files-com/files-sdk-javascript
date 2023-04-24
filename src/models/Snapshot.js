@@ -23,6 +23,41 @@ class Snapshot {
   }
 
   isLoaded = () => !!this.attributes.id
+  // date-time # When the snapshot expires.
+  getExpiresAt = () => this.attributes.expires_at
+
+  setExpiresAt = value => {
+    this.attributes.expires_at = value
+  }
+
+  // date-time # When the snapshot was finalized.
+  getFinalizedAt = () => this.attributes.finalized_at
+
+  setFinalizedAt = value => {
+    this.attributes.finalized_at = value
+  }
+
+  // string # A name for the snapshot.
+  getName = () => this.attributes.name
+
+  setName = value => {
+    this.attributes.name = value
+  }
+
+  // int64 # The user that created this snapshot, if applicable.
+  getUserId = () => this.attributes.user_id
+
+  setUserId = value => {
+    this.attributes.user_id = value
+  }
+
+  // int64 # The bundle using this snapshot, if applicable.
+  getBundleId = () => this.attributes.bundle_id
+
+  setBundleId = value => {
+    this.attributes.bundle_id = value
+  }
+
   // int64 # Snapshot ID.
   getId = () => this.attributes.id
 
@@ -55,7 +90,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
-    return response?.data
+    return new Snapshot(response?.data, this.options)
   }
 
   delete = async (params = {}) => {
@@ -112,7 +147,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots`, 'GET', params, options)
 
-    return response?.data
+    return response?.data?.map(obj => new Snapshot(obj, options)) || []
   }
 
   static all = (params = {}, options = {}) =>
@@ -137,7 +172,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
-    return response?.data
+    return new Snapshot(response?.data, options)
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -146,7 +181,7 @@ class Snapshot {
   static create = async (options = {}) => {
     const response = await Api.sendRequest(`/snapshots`, 'POST', {}, options)
 
-    return response?.data
+    return new Snapshot(response?.data, options)
   }
 }
 

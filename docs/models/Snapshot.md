@@ -1,5 +1,22 @@
 # Snapshot
 
+## Example Snapshot Object
+
+```
+{
+  "expires_at": "2000-01-01T01:00:00Z",
+  "finalized_at": "2000-01-01T01:00:00Z",
+  "name": "My Snapshot",
+  "user_id": 1,
+  "bundle_id": 1
+}
+```
+
+* `expires_at` (date-time): When the snapshot expires.
+* `finalized_at` (date-time): When the snapshot was finalized.
+* `name` (string): A name for the snapshot.
+* `user_id` (int64): The user that created this snapshot, if applicable.
+* `bundle_id` (int64): The bundle using this snapshot, if applicable.
 * `id` (int64): Snapshot ID.
 
 ---
@@ -54,6 +71,17 @@ await snapshot.update()
 
 * `id` (int64): Required - Snapshot ID.
 
+### Example Response
+
+```json
+{
+  "expires_at": "2000-01-01T01:00:00Z",
+  "finalized_at": "2000-01-01T01:00:00Z",
+  "name": "My Snapshot",
+  "user_id": 1,
+  "bundle_id": 1
+}
+```
 
 ---
 
