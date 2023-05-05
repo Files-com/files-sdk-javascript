@@ -446,6 +446,9 @@ class Site {
   // int64 # If greater than zero, users will unable to login if they do not show activity within this number of days.
   getDisableUsersFromInactivityPeriodDays = () => this.attributes.disable_users_from_inactivity_period_days
 
+  // boolean # Allow group admins set password authentication method
+  getGroupAdminsCanSetUserPassword = () => this.attributes.group_admins_can_set_user_password
+
 
   static get = async (options = {}) => {
     const response = await Api.sendRequest(`/site`, 'GET', {}, options)
@@ -538,6 +541,7 @@ class Site {
   //   sftp_host_key_type - string - Sftp Host Key Type
   //   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
   //   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+  //   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
   //   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
   //   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
   //   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
