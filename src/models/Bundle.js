@@ -522,6 +522,7 @@ class Bundle {
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
   //   skip_company - boolean - BundleRegistrations can be saved without providing company?
+  //   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   static create = async (params = {}, options = {}) => {
     if (!params['paths']) {
@@ -578,6 +579,10 @@ class Bundle {
 
     if (params['inbox_id'] && !isInt(params['inbox_id'])) {
       throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
+    }
+
+    if (params['snapshot_id'] && !isInt(params['snapshot_id'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: snapshot_id must be of type Int, received ${getType(params['snapshot_id'])}`)
     }
 
     const response = await Api.sendRequest(`/bundles`, 'POST', params, options)
