@@ -130,6 +130,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_SiteFilesAreImmutableError
 ### NotAuthorized_TwoFactorAuthenticationRequiredError
 ### NotAuthorized_UserIdWithoutSiteAdminError
+### NotAuthorized_WriteAndBundlePermissionRequiredError
 ### NotAuthorized_WritePermissionRequiredError
 ### NotAuthorized_ZipDownloadIpMismatchError
 ### NotFound_ApiKeyNotFoundError
