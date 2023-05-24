@@ -23,6 +23,13 @@ class Snapshot {
   }
 
   isLoaded = () => !!this.attributes.id
+  // int64 # The snapshot's unique ID.
+  getId = () => this.attributes.id
+
+  setId = value => {
+    this.attributes.id = value
+  }
+
   // date-time # When the snapshot expires.
   getExpiresAt = () => this.attributes.expires_at
 
@@ -63,13 +70,6 @@ class Snapshot {
 
   setPaths = value => {
     this.attributes.paths = value
-  }
-
-  // int64 # Snapshot ID.
-  getId = () => this.attributes.id
-
-  setId = value => {
-    this.attributes.id = value
   }
 
 
