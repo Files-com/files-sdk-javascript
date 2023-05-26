@@ -359,6 +359,13 @@ class RemoteServer {
     this.attributes.filebase_access_key = value
   }
 
+  // boolean # List Team folders in root
+  getDropboxTeams = () => this.attributes.dropbox_teams
+
+  setDropboxTeams = value => {
+    this.attributes.dropbox_teams = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
@@ -594,6 +601,7 @@ class RemoteServer {
   //   filebase_access_key - string - Filebase Access Key.
   //   filebase_secret_key - string - Filebase secret key
   //   filebase_bucket - string - Filebase Bucket name
+  //   dropbox_teams - boolean - List Team folders in root
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -936,6 +944,7 @@ class RemoteServer {
   //   filebase_access_key - string - Filebase Access Key.
   //   filebase_secret_key - string - Filebase secret key
   //   filebase_bucket - string - Filebase Bucket name
+  //   dropbox_teams - boolean - List Team folders in root
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params['aws_access_key'])}`)
