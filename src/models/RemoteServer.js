@@ -359,6 +359,27 @@ class RemoteServer {
     this.attributes.filebase_access_key = value
   }
 
+  // string # Cloudflare Bucket name
+  getCloudflareBucket = () => this.attributes.cloudflare_bucket
+
+  setCloudflareBucket = value => {
+    this.attributes.cloudflare_bucket = value
+  }
+
+  // string # Cloudflare Access Key.
+  getCloudflareAccessKey = () => this.attributes.cloudflare_access_key
+
+  setCloudflareAccessKey = value => {
+    this.attributes.cloudflare_access_key = value
+  }
+
+  // string # Cloudflare endpoint
+  getCloudflareEndpoint = () => this.attributes.cloudflare_endpoint
+
+  setCloudflareEndpoint = value => {
+    this.attributes.cloudflare_endpoint = value
+  }
+
   // boolean # List Team folders in root
   getDropboxTeams = () => this.attributes.dropbox_teams
 
@@ -469,6 +490,13 @@ class RemoteServer {
 
   setFilebaseSecretKey = value => {
     this.attributes.filebase_secret_key = value
+  }
+
+  // string # Cloudflare secret key
+  getCloudflareSecretKey = () => this.attributes.cloudflare_secret_key
+
+  setCloudflareSecretKey = value => {
+    this.attributes.cloudflare_secret_key = value
   }
 
 
@@ -601,6 +629,10 @@ class RemoteServer {
   //   filebase_access_key - string - Filebase Access Key.
   //   filebase_secret_key - string - Filebase secret key
   //   filebase_bucket - string - Filebase Bucket name
+  //   cloudflare_access_key - string - Cloudflare Access Key.
+  //   cloudflare_secret_key - string - Cloudflare secret key
+  //   cloudflare_bucket - string - Cloudflare Bucket name
+  //   cloudflare_endpoint - string - Cloudflare endpoint
   //   dropbox_teams - boolean - List Team folders in root
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -767,6 +799,18 @@ class RemoteServer {
     }
     if (params['filebase_bucket'] && !isString(params['filebase_bucket'])) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(filebase_bucket)}`)
+    }
+    if (params['cloudflare_access_key'] && !isString(params['cloudflare_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_access_key must be of type String, received ${getType(cloudflare_access_key)}`)
+    }
+    if (params['cloudflare_secret_key'] && !isString(params['cloudflare_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_secret_key must be of type String, received ${getType(cloudflare_secret_key)}`)
+    }
+    if (params['cloudflare_bucket'] && !isString(params['cloudflare_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_bucket must be of type String, received ${getType(cloudflare_bucket)}`)
+    }
+    if (params['cloudflare_endpoint'] && !isString(params['cloudflare_endpoint'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(cloudflare_endpoint)}`)
     }
 
     if (!params['id']) {
@@ -944,6 +988,10 @@ class RemoteServer {
   //   filebase_access_key - string - Filebase Access Key.
   //   filebase_secret_key - string - Filebase secret key
   //   filebase_bucket - string - Filebase Bucket name
+  //   cloudflare_access_key - string - Cloudflare Access Key.
+  //   cloudflare_secret_key - string - Cloudflare secret key
+  //   cloudflare_bucket - string - Cloudflare Bucket name
+  //   cloudflare_endpoint - string - Cloudflare endpoint
   //   dropbox_teams - boolean - List Team folders in root
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
@@ -1148,6 +1196,22 @@ class RemoteServer {
 
     if (params['filebase_bucket'] && !isString(params['filebase_bucket'])) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(params['filebase_bucket'])}`)
+    }
+
+    if (params['cloudflare_access_key'] && !isString(params['cloudflare_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_access_key must be of type String, received ${getType(params['cloudflare_access_key'])}`)
+    }
+
+    if (params['cloudflare_secret_key'] && !isString(params['cloudflare_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_secret_key must be of type String, received ${getType(params['cloudflare_secret_key'])}`)
+    }
+
+    if (params['cloudflare_bucket'] && !isString(params['cloudflare_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_bucket must be of type String, received ${getType(params['cloudflare_bucket'])}`)
+    }
+
+    if (params['cloudflare_endpoint'] && !isString(params['cloudflare_endpoint'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(params['cloudflare_endpoint'])}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)

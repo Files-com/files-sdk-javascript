@@ -52,6 +52,9 @@
   "files_agent_api_token": "example",
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
+  "cloudflare_bucket": "my-bucket",
+  "cloudflare_access_key": "example",
+  "cloudflare_endpoint": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   "dropbox_teams": true
 }
 ```
@@ -104,6 +107,9 @@
 * `files_agent_api_token` (string): Files Agent API Token
 * `filebase_bucket` (string): Filebase Bucket name
 * `filebase_access_key` (string): Filebase Access Key.
+* `cloudflare_bucket` (string): Cloudflare Bucket name
+* `cloudflare_access_key` (string): Cloudflare Access Key.
+* `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
 * `aws_secret_key` (string): AWS secret key.
 * `password` (string): Password if needed.
@@ -120,6 +126,7 @@
 * `azure_files_storage_access_key` (string): Azure File Storage access key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `filebase_secret_key` (string): Filebase secret key
+* `cloudflare_secret_key` (string): Cloudflare secret key
 
 ---
 
@@ -209,6 +216,9 @@ await RemoteServer.create({
   'files_agent_permission_set': "read_write",
   'filebase_access_key': "example",
   'filebase_bucket': "my-bucket",
+  'cloudflare_access_key': "example",
+  'cloudflare_bucket': "my-bucket",
+  'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   'dropbox_teams': true,
 })
 ```
@@ -270,6 +280,10 @@ await RemoteServer.create({
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
+* `cloudflare_access_key` (string): Cloudflare Access Key.
+* `cloudflare_secret_key` (string): Cloudflare secret key
+* `cloudflare_bucket` (string): Cloudflare Bucket name
+* `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
 
 ---
@@ -376,6 +390,9 @@ await remote_server.update({
   'files_agent_permission_set': "read_write",
   'filebase_access_key': "example",
   'filebase_bucket': "my-bucket",
+  'cloudflare_access_key': "example",
+  'cloudflare_bucket': "my-bucket",
+  'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   'dropbox_teams': true,
 })
 ```
@@ -437,6 +454,10 @@ await remote_server.update({
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
+* `cloudflare_access_key` (string): Cloudflare Access Key.
+* `cloudflare_secret_key` (string): Cloudflare secret key
+* `cloudflare_bucket` (string): Cloudflare Bucket name
+* `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
 
 ### Example Response
@@ -491,6 +512,9 @@ await remote_server.update({
   "files_agent_api_token": "example",
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
+  "cloudflare_bucket": "my-bucket",
+  "cloudflare_access_key": "example",
+  "cloudflare_endpoint": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   "dropbox_teams": true
 }
 ```
