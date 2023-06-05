@@ -58,7 +58,7 @@ class Bundle {
     this.attributes.permissions = value
   }
 
-  // boolean # Restrict users to previewing files only?
+  // boolean # DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
   getPreviewOnly = () => this.attributes.preview_only
 
   setPreviewOnly = value => {
@@ -330,7 +330,7 @@ class Bundle {
   //   note - string - Bundle internal note
   //   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
   //   permissions - string - Permissions that apply to Folders in this Share Link.
-  //   preview_only - boolean - Restrict users to previewing files only?
+  //   preview_only - boolean - DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
   //   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
   //   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
@@ -513,7 +513,7 @@ class Bundle {
   //   code - string - Bundle code.  This code forms the end part of the Public URL.
   //   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
   //   permissions - string - Permissions that apply to Folders in this Share Link.
-  //   preview_only - boolean - Restrict users to previewing files only?
+  //   preview_only - boolean - DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
   //   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
   //   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
   //   inbox_id - int64 - ID of the associated inbox, if available.
