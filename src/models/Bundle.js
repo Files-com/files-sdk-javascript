@@ -44,6 +44,13 @@ class Bundle {
     this.attributes.description = value
   }
 
+  // date-time # Bundle expiration date/time
+  getExpiresAt = () => this.attributes.expires_at
+
+  setExpiresAt = value => {
+    this.attributes.expires_at = value
+  }
+
   // boolean # Is this bundle password protected?
   getPasswordProtected = () => this.attributes.password_protected
 
@@ -129,13 +136,6 @@ class Bundle {
 
   setDontSeparateSubmissionsByFolder = value => {
     this.attributes.dont_separate_submissions_by_folder = value
-  }
-
-  // date-time # Bundle expiration date/time
-  getExpiresAt = () => this.attributes.expires_at
-
-  setExpiresAt = value => {
-    this.attributes.expires_at = value
   }
 
   // int64 # Maximum number of times bundle can be accessed
