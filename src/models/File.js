@@ -116,7 +116,13 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
+              const uploadPromise = Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+
+              if (firstFileUploadPart.parallel_parts) {
+                concurrentUploads.push(uploadPromise)
+              } else {
+                await uploadPromise
+              }
 
               chunks = [firstChunkForNextPart]
               length = firstChunkForNextPart.length
