@@ -55,7 +55,10 @@
   "cloudflare_bucket": "my-bucket",
   "cloudflare_access_key": "example",
   "cloudflare_endpoint": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
-  "dropbox_teams": true
+  "dropbox_teams": true,
+  "linode_bucket": "my-bucket",
+  "linode_access_key": "example",
+  "linode_region": "us-east-1"
 }
 ```
 
@@ -111,6 +114,9 @@
 * `cloudflare_access_key` (string): Cloudflare Access Key.
 * `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
+* `linode_bucket` (string): Linode Bucket name
+* `linode_access_key` (string): Linode Access Key.
+* `linode_region` (string): Linode region
 * `aws_secret_key` (string): AWS secret key.
 * `password` (string): Password if needed.
 * `private_key` (string): Private key if needed.
@@ -127,6 +133,7 @@
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `filebase_secret_key` (string): Filebase secret key
 * `cloudflare_secret_key` (string): Cloudflare secret key
+* `linode_secret_key` (string): Linode secret key
 
 ---
 
@@ -220,6 +227,9 @@ await RemoteServer.create({
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   'dropbox_teams': true,
+  'linode_access_key': "example",
+  'linode_bucket': "my-bucket",
+  'linode_region': "us-east-1",
 })
 ```
 
@@ -285,6 +295,10 @@ await RemoteServer.create({
 * `cloudflare_bucket` (string): Cloudflare Bucket name
 * `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
+* `linode_access_key` (string): Linode Access Key.
+* `linode_secret_key` (string): Linode secret key
+* `linode_bucket` (string): Linode Bucket name
+* `linode_region` (string): Linode region
 
 ---
 
@@ -394,6 +408,9 @@ await remote_server.update({
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
   'dropbox_teams': true,
+  'linode_access_key': "example",
+  'linode_bucket': "my-bucket",
+  'linode_region': "us-east-1",
 })
 ```
 
@@ -459,6 +476,10 @@ await remote_server.update({
 * `cloudflare_bucket` (string): Cloudflare Bucket name
 * `cloudflare_endpoint` (string): Cloudflare endpoint
 * `dropbox_teams` (boolean): List Team folders in root
+* `linode_access_key` (string): Linode Access Key.
+* `linode_secret_key` (string): Linode secret key
+* `linode_bucket` (string): Linode Bucket name
+* `linode_region` (string): Linode region
 
 ### Example Response
 
@@ -515,7 +536,10 @@ await remote_server.update({
   "cloudflare_bucket": "my-bucket",
   "cloudflare_access_key": "example",
   "cloudflare_endpoint": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
-  "dropbox_teams": true
+  "dropbox_teams": true,
+  "linode_bucket": "my-bucket",
+  "linode_access_key": "example",
+  "linode_region": "us-east-1"
 }
 ```
 

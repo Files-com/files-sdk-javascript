@@ -387,6 +387,27 @@ class RemoteServer {
     this.attributes.dropbox_teams = value
   }
 
+  // string # Linode Bucket name
+  getLinodeBucket = () => this.attributes.linode_bucket
+
+  setLinodeBucket = value => {
+    this.attributes.linode_bucket = value
+  }
+
+  // string # Linode Access Key.
+  getLinodeAccessKey = () => this.attributes.linode_access_key
+
+  setLinodeAccessKey = value => {
+    this.attributes.linode_access_key = value
+  }
+
+  // string # Linode region
+  getLinodeRegion = () => this.attributes.linode_region
+
+  setLinodeRegion = value => {
+    this.attributes.linode_region = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
@@ -497,6 +518,13 @@ class RemoteServer {
 
   setCloudflareSecretKey = value => {
     this.attributes.cloudflare_secret_key = value
+  }
+
+  // string # Linode secret key
+  getLinodeSecretKey = () => this.attributes.linode_secret_key
+
+  setLinodeSecretKey = value => {
+    this.attributes.linode_secret_key = value
   }
 
 
@@ -634,6 +662,10 @@ class RemoteServer {
   //   cloudflare_bucket - string - Cloudflare Bucket name
   //   cloudflare_endpoint - string - Cloudflare endpoint
   //   dropbox_teams - boolean - List Team folders in root
+  //   linode_access_key - string - Linode Access Key.
+  //   linode_secret_key - string - Linode secret key
+  //   linode_bucket - string - Linode Bucket name
+  //   linode_region - string - Linode region
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -811,6 +843,18 @@ class RemoteServer {
     }
     if (params['cloudflare_endpoint'] && !isString(params['cloudflare_endpoint'])) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(cloudflare_endpoint)}`)
+    }
+    if (params['linode_access_key'] && !isString(params['linode_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_access_key must be of type String, received ${getType(linode_access_key)}`)
+    }
+    if (params['linode_secret_key'] && !isString(params['linode_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(linode_secret_key)}`)
+    }
+    if (params['linode_bucket'] && !isString(params['linode_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_bucket must be of type String, received ${getType(linode_bucket)}`)
+    }
+    if (params['linode_region'] && !isString(params['linode_region'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_region must be of type String, received ${getType(linode_region)}`)
     }
 
     if (!params['id']) {
@@ -993,6 +1037,10 @@ class RemoteServer {
   //   cloudflare_bucket - string - Cloudflare Bucket name
   //   cloudflare_endpoint - string - Cloudflare endpoint
   //   dropbox_teams - boolean - List Team folders in root
+  //   linode_access_key - string - Linode Access Key.
+  //   linode_secret_key - string - Linode secret key
+  //   linode_bucket - string - Linode Bucket name
+  //   linode_region - string - Linode region
   static create = async (params = {}, options = {}) => {
     if (params['aws_access_key'] && !isString(params['aws_access_key'])) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params['aws_access_key'])}`)
@@ -1212,6 +1260,22 @@ class RemoteServer {
 
     if (params['cloudflare_endpoint'] && !isString(params['cloudflare_endpoint'])) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(params['cloudflare_endpoint'])}`)
+    }
+
+    if (params['linode_access_key'] && !isString(params['linode_access_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_access_key must be of type String, received ${getType(params['linode_access_key'])}`)
+    }
+
+    if (params['linode_secret_key'] && !isString(params['linode_secret_key'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(params['linode_secret_key'])}`)
+    }
+
+    if (params['linode_bucket'] && !isString(params['linode_bucket'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_bucket must be of type String, received ${getType(params['linode_bucket'])}`)
+    }
+
+    if (params['linode_region'] && !isString(params['linode_region'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: linode_region must be of type String, received ${getType(params['linode_region'])}`)
     }
 
     const response = await Api.sendRequest(`/remote_servers`, 'POST', params, options)
