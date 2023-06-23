@@ -159,6 +159,21 @@ await Automation.create({
 
 ---
 
+## Manually run automation
+
+```
+const [automation] = await Automation.list()
+
+await automation.manual_run()
+```
+
+### Parameters
+
+* `id` (int64): Required - Automation ID.
+
+
+---
+
 ## Update Automation
 
 ```
