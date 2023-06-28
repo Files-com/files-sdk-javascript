@@ -181,6 +181,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_SubfolderLockedError
 ### ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError
 ### ProcessingFailure_UpdatesNotAllowedForRemotesError
+### RateLimited_DuplicateShareRecipientError
 ### RateLimited_ReauthenticationRateLimitedError
 ### RateLimited_TooManyConcurrentRequestsError
 ### RateLimited_TooManyLoginAttemptsError
