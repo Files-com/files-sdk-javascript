@@ -120,7 +120,7 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const upload_uri = File._determinePartUploadUri(nextFileUploadPart)
+              const upload_uri = this._determinePartUploadUri(nextFileUploadPart)
               const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer)
 
               if (firstFileUploadPart.parallel_parts) {
@@ -148,7 +148,7 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const upload_uri = File._determinePartUploadUri(nextFileUploadPart)
+              const upload_uri = this._determinePartUploadUri(nextFileUploadPart)
               concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer))
             }
 
