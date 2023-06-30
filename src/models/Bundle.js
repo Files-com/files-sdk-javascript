@@ -86,6 +86,13 @@ class Bundle {
     this.attributes.require_share_recipient = value
   }
 
+  // boolean # If true, we will hide the 'Remember Me' box on the Bundle registration page, requiring that the user logout and log back in every time they visit the page.
+  getRequireLogout = () => this.attributes.require_logout
+
+  setRequireLogout = value => {
+    this.attributes.require_logout = value
+  }
+
   // string # Legal text that must be agreed to prior to accessing Bundle.
   getClickwrapBody = () => this.attributes.clickwrap_body
 
