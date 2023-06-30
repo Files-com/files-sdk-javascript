@@ -76,6 +76,10 @@ class File {
     return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params, options)
   }
 
+  static _determinePartUploadUri = fileUploadPart => {
+    return fileUploadPart.upload_uri
+  }
+
   /**
    * @note see File.copy() for list of supported params
    */
@@ -116,7 +120,8 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const uploadPromise = Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer)
+              const upload_uri = File._determinePartUploadUri(nextFileUploadPart)
+              const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer)
 
               if (firstFileUploadPart.parallel_parts) {
                 concurrentUploads.push(uploadPromise)
@@ -143,7 +148,8 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              concurrentUploads.push(Api.sendFilePart(nextFileUploadPart.upload_uri, 'PUT', buffer))
+              const upload_uri = File._determinePartUploadUri(nextFileUploadPart)
+              concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer))
             }
 
             await Promise.all(concurrentUploads)
