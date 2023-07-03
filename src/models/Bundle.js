@@ -30,6 +30,41 @@ class Bundle {
     this.attributes.code = value
   }
 
+  // string # Page link and button color
+  getColorLeft = () => this.attributes.color_left
+
+  setColorLeft = value => {
+    this.attributes.color_left = value
+  }
+
+  // string # Top bar link color
+  getColorLink = () => this.attributes.color_link
+
+  setColorLink = value => {
+    this.attributes.color_link = value
+  }
+
+  // string # Page link and button color
+  getColorText = () => this.attributes.color_text
+
+  setColorText = value => {
+    this.attributes.color_text = value
+  }
+
+  // string # Top bar background color
+  getColorTop = () => this.attributes.color_top
+
+  setColorTop = value => {
+    this.attributes.color_top = value
+  }
+
+  // string # Top bar text color
+  getColorTopText = () => this.attributes.color_top_text
+
+  setColorTopText = value => {
+    this.attributes.color_top_text = value
+  }
+
   // string # Public URL of Share Link
   getUrl = () => this.attributes.url
 
