@@ -76,19 +76,19 @@ class File {
     return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params, options)
   }
 
-  static _determinePartUploadUri = fileUploadPart => {
-    return fileUploadPart.upload_uri
-  }
-
   /**
    * @note see File.copy() for list of supported params
    */
-  static uploadStream = async (destinationPath, readableStream, params, options) => {
+  static uploadStream = async (destinationPath, readableStream, params, optionsRaw) => {
+    const { determinePartUploadUri: determinePartUploadUriRaw, ...options } = optionsRaw || {}
+
     const firstFileUploadPart = await File._openUpload(destinationPath, params, options)
 
     if (!firstFileUploadPart) {
       return
     }
+
+    const determinePartUploadUri = determinePartUploadUriRaw || (fileUploadPart => fileUploadPart.upload_uri)
 
     try {
       const file = await new Promise((resolve, reject) => {
@@ -120,7 +120,7 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const upload_uri = this._determinePartUploadUri(nextFileUploadPart)
+              const upload_uri = determinePartUploadUri(nextFileUploadPart)
               const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer)
 
               if (firstFileUploadPart.parallel_parts) {
@@ -148,7 +148,7 @@ class File {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const upload_uri = this._determinePartUploadUri(nextFileUploadPart)
+              const upload_uri = determinePartUploadUri(nextFileUploadPart)
               concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer))
             }
 
