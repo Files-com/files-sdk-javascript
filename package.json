@@ -20,8 +20,7 @@
   "main": "lib/files.js",
   "dependencies": {
     "@babel/runtime": "^7.10.3",
-    "axios": "^1.4.0",
-    "axios-retry": "^3.5.0",
+    "cross-fetch": "^4.0.0",
     "readable-stream": "^4.4.0",
     "safe-buffer": "^5.2.1"
   },

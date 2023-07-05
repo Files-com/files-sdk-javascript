@@ -32,7 +32,7 @@ export const handleErrorResponse = error => {
   const code = response?.status || errorData?.['http-code'] || 0
 
   if (!errorData) {
-    Logger.error('FilesApiError Exception >', code, message)
+    Logger.error('FilesApiError Exception:', code, message)
     throw new FilesApiError(message, code)
   }
 
@@ -41,7 +41,7 @@ export const handleErrorResponse = error => {
   }
 
   if (!errorData.type) {
-    Logger.error('FilesApiError Exception >', code, message)
+    Logger.error('FilesApiError Exception:', code, message)
     throw new FilesApiError(message, code)
   }
 

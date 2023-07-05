@@ -14,9 +14,13 @@ const saveUrlToStream = async (url, stream) => new Promise((resolve, reject) => 
   https.get(url, response => {
     response.pipe(stream)
 
-    stream.on('finish', resolve)
+    stream.on('finish', () => {
+      stream.close()
+      resolve()
+    })
   })
   .on('error', error => {
+    stream.close()
     reject(error)
   })
 })
@@ -37,7 +41,6 @@ const saveUrlToString = async url => new Promise((resolve, reject) => {
 const saveUrlToFile = async (url, destinationPath) => {
   const stream = openDiskFileWriteStream(destinationPath)
   await saveUrlToStream(url, stream)
-  stream.close()
 }
 
 export {

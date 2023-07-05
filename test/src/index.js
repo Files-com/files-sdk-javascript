@@ -1,6 +1,3 @@
-import assert from 'assert'
-// import * as errors from 'files.com/lib/Errors'
-const errors = require('files.com/lib/Errors')
 import Files from 'files.com/lib/Files'
 import Logger, { LogLevel } from 'files.com/lib/Logger'
 import ApiKey from 'files.com/lib/models/ApiKey'
@@ -9,6 +6,9 @@ import Folder from 'files.com/lib/models/Folder'
 import Session from 'files.com/lib/models/Session'
 import User from 'files.com/lib/models/User'
 import { isBrowser } from 'files.com/lib/utils'
+import invariant from 'tiny-invariant'
+
+const errors = require('files.com/lib/Errors')
 
 // name of an existing folder in your root to create/delete test files and folders
 const SDK_TEST_ROOT_FOLDER = 'sdk-test'
@@ -32,11 +32,17 @@ if (apiDomain.substr(-10) === 'staging.av') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
 }
 
-Files.setLogLevel(LogLevel.INFO)
+const DEBUG_MODE = false
+
+Files.setLogLevel(DEBUG_MODE ? LogLevel.DEBUG : LogLevel.INFO)
 
 Files.configureDebugging({
-  debugRequest: false,
-  debugResponseHeaders: false,
+  debugRequest: DEBUG_MODE,
+  debugResponseHeaders: DEBUG_MODE,
+})
+
+Files.configureNetwork({
+  networkTimeout: DEBUG_MODE ? 10 : 30,
 })
 
 const testSuite = async () => {
@@ -49,7 +55,7 @@ const testSuite = async () => {
 
     const firstPageItems = await Folder.listFor('/', { per_page: 1 })
 
-    assert(firstPageItems.length === 1)
+    invariant(firstPageItems.length === 1, 'First page should have 1 item')
 
     Files.configureNetwork({
       autoPaginate: true,
@@ -59,7 +65,7 @@ const testSuite = async () => {
     const allPageItems = await Folder.listFor('/', { per_page: 1 })
 
     // if auto-pagination executed, we'll have found more than just the 1 we requested
-    assert(allPageItems.length > 1)
+    invariant(allPageItems.length > 1, 'Auto-pagination should have found more than 1 item across all pages')
 
     Logger.info('***** testFolderListAutoPagination() succeeded! *****')
   }
@@ -72,18 +78,20 @@ const testSuite = async () => {
 
     const file = await File.uploadFile(destinationPath, sourceFilePath)
 
-    assert(!!file.path)
-    assert(file.display_name === displayName)
+    invariant(!!file.path, 'Uploaded file response object should have a path')
+    invariant(file.display_name === displayName, 'Uploaded file response object should have the same display_name as the file we uploaded')
 
     const foundFile = await File.find(destinationPath)
     
-    assert(foundFile.path === destinationPath)
-    assert(foundFile.display_name === displayName)
-    assert(typeof foundFile.getDownloadUri() === 'undefined')
+    invariant(foundFile.path === destinationPath, 'Found file should have the same path as the file we uploaded')
+    invariant(foundFile.display_name === displayName, 'Found file should have the same display_name as the file we uploaded')
+    invariant(typeof foundFile.getDownloadUri() === 'undefined', 'Found file should not have a download uri yet')
 
     if (!isBrowser()) {
       const downloadableFile = await foundFile.download()
-      assert(typeof downloadableFile.getDownloadUri() !== 'undefined')
+
+      invariant(downloadableFile.size > 0, 'Uploaded file should not be empty')
+      invariant(typeof downloadableFile.getDownloadUri() !== 'undefined', 'Downloadable file should have a download uri')
 
       const downloadPath = `./${displayName}`
       await downloadableFile.downloadToFile(downloadPath)
@@ -92,7 +100,8 @@ const testSuite = async () => {
       const originalBuffer = fs.readFileSync(sourceFilePath)
       const downloadedBuffer = fs.readFileSync(downloadPath)
 
-      assert(originalBuffer.equals(downloadedBuffer))
+      invariant(originalBuffer.length === downloadedBuffer.length, 'Source file length should match downloaded file length')
+      invariant(originalBuffer.equals(downloadedBuffer), 'Source file contents should match downloaded file contents')
 
       fs.unlinkSync(downloadPath)
     }
@@ -109,22 +118,22 @@ const testSuite = async () => {
     const sourceFileContents = 'The quick brown fox jumped over the lazy dogs.'
     const file = await File.uploadData(destinationPath, sourceFileContents)
 
-    assert(!!file.path)
-    assert(file.display_name === displayName)
+    invariant(!!file.path, 'Uploaded file response object should have a path')
+    invariant(file.display_name === displayName, 'Uploaded file response object should have the same display_name as the file we uploaded')
 
     const foundFile = await File.find(destinationPath)
 
-    assert(foundFile.path === destinationPath)
-    assert(foundFile.display_name === displayName)
-    assert(typeof foundFile.getDownloadUri() === 'undefined')
+    invariant(foundFile.path === destinationPath, 'Found file should have the same path as the file we uploaded')
+    invariant(foundFile.display_name === displayName, 'Found file should have the same display_name as the file we uploaded')
+    invariant(typeof foundFile.getDownloadUri() === 'undefined', 'Found file should not have a download uri yet')
 
     if (!isBrowser()) {
       const downloadableFile = await foundFile.download()
-      assert(typeof downloadableFile.getDownloadUri() !== 'undefined')
+      invariant(typeof downloadableFile.getDownloadUri() !== 'undefined', 'Downloadable file should have a download uri')
 
       const downloadedFileContents = await downloadableFile.downloadToString()
 
-      assert(sourceFileContents === downloadedFileContents)
+      invariant(sourceFileContents === downloadedFileContents, 'Source file contents should match downloaded file contents')
     }
 
     await file.delete()
@@ -141,14 +150,14 @@ const testSuite = async () => {
 
     const file = await File.uploadFile(destinationPath, sourceFilePath)
 
-    assert(!!file.path)
-    assert(file.display_name === displayName)
+    invariant(!!file.path, 'Uploaded file response object should have a path')
+    invariant(file.display_name === displayName, 'Uploaded file response object should have the same display_name as the file we uploaded')
 
     const foundFile = await File.find(destinationPath)
 
-    assert(foundFile.path === destinationPath)
-    assert(foundFile.display_name === displayName)
-    assert(typeof foundFile.getDownloadUri() === 'undefined')
+    invariant(foundFile.path === destinationPath, 'Found file should have the same path as the file we uploaded')
+    invariant(foundFile.display_name === displayName, 'Found file should have the same display_name as the file we uploaded')
+    invariant(typeof foundFile.getDownloadUri() === 'undefined', 'Found file should not have a download uri yet')
 
     await file.delete()
 
@@ -167,7 +176,7 @@ const testSuite = async () => {
 
     const session = await Session.create({ username, password })
 
-    assert(!!session.id)
+    invariant(!!session.id, 'Session should have an id')
 
     const manual = await ApiKey.list({ user_id: 0 }, { sessionId: session.id })
 
@@ -175,7 +184,7 @@ const testSuite = async () => {
 
     const auto = await ApiKey.list({ user_id: 0 })
 
-    assert(JSON.stringify(manual.attributes) === JSON.stringify(auto.attributes))
+    invariant(JSON.stringify(manual.attributes) === JSON.stringify(auto.attributes), 'Manual and auto session API key lists should match')
     
     await Session.destroy()
 
@@ -197,7 +206,7 @@ const testSuite = async () => {
       caughtInvalidCredentialsError = error instanceof errors.NotAuthenticated_InvalidCredentialsError
     }
 
-    assert(caughtInvalidCredentialsError === true)
+    invariant(caughtInvalidCredentialsError === true, 'should have caught an invalid credentials error')
 
     // restore valid api key
     Files.setApiKey(apiKey)
@@ -218,9 +227,9 @@ const testSuite = async () => {
   
     const updatedUser = await User.find(firstUser.id)
   
-    assert(updatedUser.isLoaded())
-    assert(oldName !== newName)
-    assert(updatedUser.name === newName)
+    invariant(updatedUser.isLoaded(), 'updated user should be loaded')
+    invariant(oldName !== newName, 'old name should not equal new name')
+    invariant(updatedUser.name === newName, 'updated user name should match new name')
   
     Logger.info('***** testUserListAndUpdate() succeeded! *****');
   }
@@ -229,13 +238,18 @@ const testSuite = async () => {
   // execute all tests
   //
 
-  await testFolderListAutoPagination()
-  await testUploadAndDownloadToFile()
-  await testUploadAndDownloadToString()
-  // await testUploadHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
-  await testSession()
-  await testFailure()
-  await testUserListAndUpdate()
+  try {
+    await testFolderListAutoPagination()
+    await testUploadAndDownloadToFile()
+    await testUploadAndDownloadToString()
+    // await testUploadHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
+    await testSession()
+    await testFailure()
+    await testUserListAndUpdate()
+  } catch (error) {
+    console.log('*** TEST SUITE FAILED ***')
+    console.error(error)
+  }
 }
 
 export default testSuite

@@ -1,29 +1,45 @@
-import axios from 'axios'
-import axiosRetry from 'axios-retry'
+import fetch from 'cross-fetch'
 
 import Files from './Files'
 import * as errors from './Errors'
 import Logger from './Logger'
 import { isEmpty, isObject } from './utils'
 
-class Api {
-  static _configureAutoRetry = () => {
-    axiosRetry(
-      axios,
-      {
-        retries: Files.getMaxNetworkRetries(),
-        retryDelay: retries => {
-          Logger.info(`Retrying request (retry ${retries} of ${Files.getMaxNetworkRetries()})`)
+const _fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) =>
+  timeoutSecs <= 0
+    ? fetch(url, options)
+    : Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => {
+          setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
+        })
+      ])
 
-          return Math.min(
-            retries * Files.getMinNetworkRetryDelay() * 1000,
-            Files.getMaxNetworkRetryDelay() * 1000
-          )
-        },
-      }
-    )
+const fetchWithRetry = async (url, options, retries = 0) => {
+  const maxRetries = Files.getMaxNetworkRetries()
+  const minRetryDelaySecs = Files.getMinNetworkRetryDelay()
+  const maxRetryDelaySecs = Files.getMaxNetworkRetryDelay()
+
+  try {
+    return await _fetchWithTimeout(url, options)
+  } catch (error) {
+    Logger.info(`Request #${retries + 1} failed: ${error.message}`)
+
+    if (retries >= maxRetries) {
+      throw error
+    } else {
+      const nextRetries = retries + 1
+      Logger.info(`Retrying request (retry ${nextRetries} of ${maxRetries})`)
+
+      const delaySecs = Math.min(minRetryDelaySecs * 2 ** retries, maxRetryDelaySecs) // exponential backoff
+      await new Promise(resolve => setTimeout(resolve, delaySecs * 1000))
+      
+      return fetchWithRetry(url, options, nextRetries)
+    }
   }
+}
 
+class Api {
   static _sendVerbatim = async (path, verb, options) => {
     const isExternal = /^[a-zA-Z]+:\/\//.test(path)
     const baseUrl = Files.getBaseUrl()
@@ -39,6 +55,7 @@ class Api {
     Logger.debug(`Sending request: ${verb} ${url}`)
 
     Logger.debug('Sending options:', {
+      method: verb,
       ...options,
       headers: {
         ...options.headers,
@@ -46,36 +63,57 @@ class Api {
       },
     })
 
-    Api._configureAutoRetry()
-
     try {
-      const response = await axios({
+      const agent = options?.agent || options?.httpsAgent || options?.httpAgent
+
+      const response = await fetchWithRetry(url, {
+        agent,
         method: verb,
-        timeout: Files.getNetworkTimeout() * 1000,
-        url,
+        timeoutSecs: Files.getNetworkTimeout(),
         ...options,
       })
+
+      const headers = Object.fromEntries(response.headers.entries())
 
       Logger.debug(`Status: ${response.status} ${response.statusText}`)
 
       if (Files.shouldDebugResponseHeaders()) {
         Logger.debug('Response Headers: ')
-        Logger.debug(response.headers)
+        Logger.debug(headers)
       }
 
-      return {
+      const contentType = headers['content-type'] || ''
+      let data
+
+      if (contentType.includes('application/json')) {
+        data = await response.json()
+      } else if (contentType.includes('text/')) {
+        data = await response.text()
+      } else if (contentType.includes('multipart/form-data')) {
+        data = await response.formData()
+      } else {
+        data = response.body
+      }
+
+      const normalizedResponse = {
         status: response.status,
         reason: response.statusText,
-        headers: response.headers,
-        data: response.data,
+        headers,
+        data,
       }
+
+      if (!response.ok) {
+        throw { response: normalizedResponse }
+      }
+
+      return normalizedResponse
     } catch (error) {
       errors.handleErrorResponse(error)
     }
   }
 
   static sendFilePart = (externalUrl, verb, data, headers = {}) => {
-    const params = { data }
+    const params = { body: data }
 
     if (headers) {
       params.headers = headers
@@ -166,7 +204,7 @@ class Api {
         requestPath += path.includes('?') ? '&' : '?'
         requestPath += pairs.join('&')
       } else {
-        updatedOptions.data = JSON.stringify(params)
+        updatedOptions.body = JSON.stringify(params)
         headers['Content-Type'] = 'application/json'
       }
     }
@@ -175,7 +213,7 @@ class Api {
       Logger.debug('Request Options:')
       Logger.debug({
         ...updatedOptions,
-        data: hasParams
+        body: hasParams
           ? `payload keys: ${Object.keys(params).join(', ')}`
           : '(none)',
         headers: {
