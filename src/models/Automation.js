@@ -51,7 +51,7 @@ class Automation {
     this.attributes.disabled = value
   }
 
-  // string # How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+  // string # How this automation is triggered to run.
   getTrigger = () => this.attributes.trigger
 
   setTrigger = value => {
@@ -93,7 +93,7 @@ class Automation {
     this.attributes.source = value
   }
 
-  // array # Destination Path
+  // array # Destination Paths
   getDestinations = () => this.attributes.destinations
 
   setDestinations = value => {
@@ -235,7 +235,7 @@ class Automation {
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   name - string - Name for this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+  //   trigger - string - How this automation is triggered to run.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -422,7 +422,7 @@ class Automation {
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   name - string - Name for this automation.
-  //   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+  //   trigger - string - How this automation is triggered to run.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
