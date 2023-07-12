@@ -32,8 +32,14 @@ class EmailIncomingMessage {
   // string # Sender of the email
   getSender = () => this.attributes.sender
 
+  // string # Sender name
+  getSenderName = () => this.attributes.sender_name
+
   // string # Status of the message
   getStatus = () => this.attributes.status
+
+  // string # Body of the email
+  getBody = () => this.attributes.body
 
   // string # Message describing the failure
   getMessage = () => this.attributes.message
