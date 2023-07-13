@@ -80,8 +80,11 @@ class HistoryExportResult {
   // boolean # Whether or not the action was recursive
   getTargetRecursive = () => this.attributes.target_recursive
 
-  // int64 # If searching for Histories about API keys, this is when the API key will expire
+  // int64 # If searching for Histories about API keys, this is when the API key will expire. Represented as a Unix timestamp.
   getTargetExpiresAt = () => this.attributes.target_expires_at
+
+  // string # If searching for Histories about API keys, this is when the API key will expire. Represented in ISO8601 format.
+  getTargetExpiresAtIso8601 = () => this.attributes.target_expires_at_iso8601
 
   // string # If searching for Histories about API keys, this represents the permission set of the associated  API key
   getTargetPermissionSet = () => this.attributes.target_permission_set
