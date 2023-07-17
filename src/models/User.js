@@ -313,6 +313,13 @@ class User {
     this.attributes.require_2fa = value
   }
 
+  // date-time # Require user to login by specified date otherwise it will be disabled.
+  getRequireLoginBy = () => this.attributes.require_login_by
+
+  setRequireLoginBy = value => {
+    this.attributes.require_login_by = value
+  }
+
   // boolean # Is 2fa active for the user?
   getActive2fa = () => this.attributes.active_2fa
 
