@@ -626,6 +626,7 @@ class User {
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+  //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
   //   restapi_permission - boolean - Can this user access the REST API?
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
@@ -708,6 +709,9 @@ class User {
     }
     if (params['password_validity_days'] && !isInt(params['password_validity_days'])) {
       throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(password_validity_days)}`)
+    }
+    if (params['require_login_by'] && !isString(params['require_login_by'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(require_login_by)}`)
     }
     if (params['ssl_required'] && !isString(params['ssl_required'])) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(ssl_required)}`)
@@ -882,6 +886,7 @@ class User {
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+  //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
   //   restapi_permission - boolean - Can this user access the REST API?
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
@@ -970,6 +975,10 @@ class User {
 
     if (params['password_validity_days'] && !isInt(params['password_validity_days'])) {
       throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(params['password_validity_days'])}`)
+    }
+
+    if (params['require_login_by'] && !isString(params['require_login_by'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(params['require_login_by'])}`)
     }
 
     if (params['ssl_required'] && !isString(params['ssl_required'])) {
