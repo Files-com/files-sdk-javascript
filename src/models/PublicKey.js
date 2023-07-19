@@ -231,3 +231,6 @@ class PublicKey {
 }
 
 export default PublicKey
+
+module.exports = PublicKey
+module.exports.default = PublicKey

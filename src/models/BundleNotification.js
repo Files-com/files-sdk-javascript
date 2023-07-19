@@ -206,3 +206,6 @@ class BundleNotification {
 }
 
 export default BundleNotification
+
+module.exports = BundleNotification
+module.exports.default = BundleNotification

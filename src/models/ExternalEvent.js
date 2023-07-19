@@ -186,3 +186,6 @@ class ExternalEvent {
 }
 
 export default ExternalEvent
+
+module.exports = ExternalEvent
+module.exports.default = ExternalEvent

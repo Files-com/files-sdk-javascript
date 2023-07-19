@@ -270,3 +270,6 @@ class Message {
 }
 
 export default Message
+
+module.exports = Message
+module.exports.default = Message

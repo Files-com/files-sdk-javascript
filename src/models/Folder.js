@@ -241,3 +241,6 @@ class Folder {
 }
 
 export default Folder
+
+module.exports = Folder
+module.exports.default = Folder

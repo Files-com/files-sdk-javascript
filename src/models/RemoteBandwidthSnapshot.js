@@ -67,3 +67,6 @@ class RemoteBandwidthSnapshot {
 }
 
 export default RemoteBandwidthSnapshot
+
+module.exports = RemoteBandwidthSnapshot
+module.exports.default = RemoteBandwidthSnapshot

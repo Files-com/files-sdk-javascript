@@ -74,3 +74,6 @@ class BundleDownload {
 }
 
 export default BundleDownload
+
+module.exports = BundleDownload
+module.exports.default = BundleDownload

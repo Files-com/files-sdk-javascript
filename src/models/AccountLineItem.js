@@ -68,3 +68,6 @@ class AccountLineItem {
 }
 
 export default AccountLineItem
+
+module.exports = AccountLineItem
+module.exports.default = AccountLineItem

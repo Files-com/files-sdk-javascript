@@ -29,3 +29,6 @@ class Auto {
 }
 
 export default Auto
+
+module.exports = Auto
+module.exports.default = Auto

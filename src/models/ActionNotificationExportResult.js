@@ -90,3 +90,6 @@ class ActionNotificationExportResult {
 }
 
 export default ActionNotificationExportResult
+
+module.exports = ActionNotificationExportResult
+module.exports.default = ActionNotificationExportResult

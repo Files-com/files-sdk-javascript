@@ -400,3 +400,6 @@ class Notification {
 }
 
 export default Notification
+
+module.exports = Notification
+module.exports.default = Notification

@@ -62,3 +62,6 @@ class RemoteServerConfigurationFile {
 }
 
 export default RemoteServerConfigurationFile
+
+module.exports = RemoteServerConfigurationFile
+module.exports.default = RemoteServerConfigurationFile

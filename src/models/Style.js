@@ -156,3 +156,6 @@ class Style {
 }
 
 export default Style
+
+module.exports = Style
+module.exports.default = Style

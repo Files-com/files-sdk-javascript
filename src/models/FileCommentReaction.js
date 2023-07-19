@@ -124,3 +124,6 @@ class FileCommentReaction {
 }
 
 export default FileCommentReaction
+
+module.exports = FileCommentReaction
+module.exports.default = FileCommentReaction

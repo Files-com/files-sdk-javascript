@@ -91,3 +91,6 @@ class UsageSnapshot {
 }
 
 export default UsageSnapshot
+
+module.exports = UsageSnapshot
+module.exports.default = UsageSnapshot

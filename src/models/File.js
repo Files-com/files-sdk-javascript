@@ -793,3 +793,6 @@ class File {
 }
 
 export default File
+
+module.exports = File
+module.exports.default = File

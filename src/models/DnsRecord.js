@@ -58,3 +58,6 @@ class DnsRecord {
 }
 
 export default DnsRecord
+
+module.exports = DnsRecord
+module.exports.default = DnsRecord

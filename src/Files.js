@@ -78,3 +78,6 @@ class Files {
 }
 
 export default Files
+
+module.exports = Files
+module.exports.default = Files

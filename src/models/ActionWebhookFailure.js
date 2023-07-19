@@ -54,3 +54,6 @@ class ActionWebhookFailure {
 }
 
 export default ActionWebhookFailure
+
+module.exports = ActionWebhookFailure
+module.exports.default = ActionWebhookFailure

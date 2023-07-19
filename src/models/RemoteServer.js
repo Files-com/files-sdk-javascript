@@ -1285,3 +1285,6 @@ class RemoteServer {
 }
 
 export default RemoteServer
+
+module.exports = RemoteServer
+module.exports.default = RemoteServer

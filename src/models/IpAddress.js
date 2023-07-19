@@ -92,3 +92,6 @@ class IpAddress {
 }
 
 export default IpAddress
+
+module.exports = IpAddress
+module.exports.default = IpAddress

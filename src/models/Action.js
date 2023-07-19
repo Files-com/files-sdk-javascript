@@ -65,3 +65,6 @@ class Action {
 }
 
 export default Action
+
+module.exports = Action
+module.exports.default = Action

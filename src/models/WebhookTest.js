@@ -178,3 +178,6 @@ class WebhookTest {
 }
 
 export default WebhookTest
+
+module.exports = WebhookTest
+module.exports.default = WebhookTest

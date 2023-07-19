@@ -218,3 +218,6 @@ class Request {
 }
 
 export default Request
+
+module.exports = Request
+module.exports.default = Request

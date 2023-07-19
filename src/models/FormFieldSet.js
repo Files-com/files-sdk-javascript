@@ -236,3 +236,6 @@ class FormFieldSet {
 }
 
 export default FormFieldSet
+
+module.exports = FormFieldSet
+module.exports.default = FormFieldSet

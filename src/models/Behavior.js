@@ -346,3 +346,6 @@ class Behavior {
 }
 
 export default Behavior
+
+module.exports = Behavior
+module.exports.default = Behavior

@@ -199,3 +199,6 @@ class SftpHostKey {
 }
 
 export default SftpHostKey
+
+module.exports = SftpHostKey
+module.exports.default = SftpHostKey

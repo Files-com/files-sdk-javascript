@@ -231,3 +231,6 @@ class SsoStrategy {
 }
 
 export default SsoStrategy
+
+module.exports = SsoStrategy
+module.exports.default = SsoStrategy

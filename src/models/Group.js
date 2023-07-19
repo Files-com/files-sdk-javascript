@@ -232,3 +232,6 @@ class Group {
 }
 
 export default Group
+
+module.exports = Group
+module.exports.default = Group

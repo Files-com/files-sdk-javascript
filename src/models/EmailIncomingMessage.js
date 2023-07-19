@@ -77,3 +77,6 @@ class EmailIncomingMessage {
 }
 
 export default EmailIncomingMessage
+
+module.exports = EmailIncomingMessage
+module.exports.default = EmailIncomingMessage

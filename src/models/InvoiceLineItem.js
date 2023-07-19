@@ -53,3 +53,6 @@ class InvoiceLineItem {
 }
 
 export default InvoiceLineItem
+
+module.exports = InvoiceLineItem
+module.exports.default = InvoiceLineItem

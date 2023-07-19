@@ -41,3 +41,6 @@ class Preview {
 }
 
 export default Preview
+
+module.exports = Preview
+module.exports.default = Preview

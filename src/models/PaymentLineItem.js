@@ -38,3 +38,6 @@ class PaymentLineItem {
 }
 
 export default PaymentLineItem
+
+module.exports = PaymentLineItem
+module.exports.default = PaymentLineItem

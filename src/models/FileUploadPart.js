@@ -74,3 +74,6 @@ class FileUploadPart {
 }
 
 export default FileUploadPart
+
+module.exports = FileUploadPart
+module.exports.default = FileUploadPart

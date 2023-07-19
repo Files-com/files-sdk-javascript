@@ -66,3 +66,6 @@ class SettingsChange {
 }
 
 export default SettingsChange
+
+module.exports = SettingsChange
+module.exports.default = SettingsChange

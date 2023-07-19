@@ -78,3 +78,6 @@ class FileMigration {
 }
 
 export default FileMigration
+
+module.exports = FileMigration
+module.exports.default = FileMigration

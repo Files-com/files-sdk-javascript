@@ -360,3 +360,6 @@ class HistoryExport {
 }
 
 export default HistoryExport
+
+module.exports = HistoryExport
+module.exports.default = HistoryExport

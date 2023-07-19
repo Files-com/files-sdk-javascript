@@ -67,3 +67,6 @@ class Priority {
 }
 
 export default Priority
+
+module.exports = Priority
+module.exports.default = Priority

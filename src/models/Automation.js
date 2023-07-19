@@ -503,3 +503,6 @@ class Automation {
 }
 
 export default Automation
+
+module.exports = Automation
+module.exports.default = Automation

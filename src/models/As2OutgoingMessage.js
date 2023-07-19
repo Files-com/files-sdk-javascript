@@ -150,3 +150,6 @@ class As2OutgoingMessage {
 }
 
 export default As2OutgoingMessage
+
+module.exports = As2OutgoingMessage
+module.exports.default = As2OutgoingMessage

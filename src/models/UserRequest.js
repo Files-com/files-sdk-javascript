@@ -173,3 +173,6 @@ class UserRequest {
 }
 
 export default UserRequest
+
+module.exports = UserRequest
+module.exports.default = UserRequest

@@ -32,3 +32,6 @@ class FileAction {
 }
 
 export default FileAction
+
+module.exports = FileAction
+module.exports.default = FileAction

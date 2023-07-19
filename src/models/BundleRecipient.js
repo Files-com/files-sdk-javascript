@@ -174,3 +174,6 @@ class BundleRecipient {
 }
 
 export default BundleRecipient
+
+module.exports = BundleRecipient
+module.exports.default = BundleRecipient

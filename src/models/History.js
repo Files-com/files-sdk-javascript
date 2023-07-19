@@ -280,3 +280,6 @@ class History {
 }
 
 export default History
+
+module.exports = History
+module.exports.default = History

@@ -873,3 +873,6 @@ class Site {
 }
 
 export default Site
+
+module.exports = Site
+module.exports.default = Site

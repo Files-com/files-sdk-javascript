@@ -214,3 +214,6 @@ class MessageComment {
 }
 
 export default MessageComment
+
+module.exports = MessageComment
+module.exports.default = MessageComment

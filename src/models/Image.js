@@ -32,3 +32,6 @@ class Image {
 }
 
 export default Image
+
+module.exports = Image
+module.exports.default = Image

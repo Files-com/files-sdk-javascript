@@ -324,3 +324,6 @@ class ApiKey {
 }
 
 export default ApiKey
+
+module.exports = ApiKey
+module.exports.default = ApiKey

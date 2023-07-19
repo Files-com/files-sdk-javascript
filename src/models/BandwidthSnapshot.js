@@ -79,3 +79,6 @@ class BandwidthSnapshot {
 }
 
 export default BandwidthSnapshot
+
+module.exports = BandwidthSnapshot
+module.exports.default = BandwidthSnapshot

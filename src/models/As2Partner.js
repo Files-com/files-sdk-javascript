@@ -303,3 +303,6 @@ class As2Partner {
 }
 
 export default As2Partner
+
+module.exports = As2Partner
+module.exports.default = As2Partner

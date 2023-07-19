@@ -194,3 +194,6 @@ class Permission {
 }
 
 export default Permission
+
+module.exports = Permission
+module.exports.default = Permission

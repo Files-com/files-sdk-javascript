@@ -167,3 +167,6 @@ class MessageReaction {
 }
 
 export default MessageReaction
+
+module.exports = MessageReaction
+module.exports.default = MessageReaction

@@ -38,3 +38,6 @@ class PublicIpAddress {
 }
 
 export default PublicIpAddress
+
+module.exports = PublicIpAddress
+module.exports.default = PublicIpAddress

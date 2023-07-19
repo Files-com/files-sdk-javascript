@@ -128,3 +128,6 @@ class Session {
 }
 
 export default Session
+
+module.exports = Session
+module.exports.default = Session

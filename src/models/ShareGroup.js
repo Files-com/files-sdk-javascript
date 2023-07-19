@@ -233,3 +233,6 @@ class ShareGroup {
 }
 
 export default ShareGroup
+
+module.exports = ShareGroup
+module.exports.default = ShareGroup

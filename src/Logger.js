@@ -75,3 +75,6 @@ class Logger {
 export const LogLevel = Logger.LogLevel
 
 export default Logger
+
+module.exports = Logger
+module.exports.default = Logger

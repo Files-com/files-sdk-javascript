@@ -212,3 +212,6 @@ class ActionNotificationExport {
 }
 
 export default ActionNotificationExport
+
+module.exports = ActionNotificationExport
+module.exports.default = ActionNotificationExport

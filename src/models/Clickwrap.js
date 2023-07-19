@@ -233,3 +233,6 @@ class Clickwrap {
 }
 
 export default Clickwrap
+
+module.exports = Clickwrap
+module.exports.default = Clickwrap

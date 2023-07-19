@@ -105,3 +105,6 @@ class AutomationRun {
 }
 
 export default AutomationRun
+
+module.exports = AutomationRun
+module.exports.default = AutomationRun

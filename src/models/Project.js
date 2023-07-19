@@ -181,3 +181,6 @@ class Project {
 }
 
 export default Project
+
+module.exports = Project
+module.exports.default = Project

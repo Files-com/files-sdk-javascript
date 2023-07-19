@@ -95,3 +95,6 @@ class BundleRegistration {
 }
 
 export default BundleRegistration
+
+module.exports = BundleRegistration
+module.exports.default = BundleRegistration

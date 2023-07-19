@@ -71,3 +71,6 @@ class InboxUpload {
 }
 
 export default InboxUpload
+
+module.exports = InboxUpload
+module.exports.default = InboxUpload

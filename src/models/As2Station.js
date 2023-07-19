@@ -306,3 +306,6 @@ class As2Station {
 }
 
 export default As2Station
+
+module.exports = As2Station
+module.exports.default = As2Station

@@ -634,3 +634,6 @@ class Bundle {
 }
 
 export default Bundle
+
+module.exports = Bundle
+module.exports.default = Bundle

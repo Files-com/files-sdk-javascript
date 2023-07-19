@@ -135,3 +135,6 @@ class HistoryExportResult {
 }
 
 export default HistoryExportResult
+
+module.exports = HistoryExportResult
+module.exports.default = HistoryExportResult

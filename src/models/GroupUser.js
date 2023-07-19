@@ -242,3 +242,6 @@ class GroupUser {
 }
 
 export default GroupUser
+
+module.exports = GroupUser
+module.exports.default = GroupUser

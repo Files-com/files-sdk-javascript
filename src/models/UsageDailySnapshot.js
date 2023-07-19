@@ -85,3 +85,6 @@ class UsageDailySnapshot {
 }
 
 export default UsageDailySnapshot
+
+module.exports = UsageDailySnapshot
+module.exports.default = UsageDailySnapshot

@@ -32,3 +32,6 @@ class Errors {
 }
 
 export default Errors
+
+module.exports = Errors
+module.exports.default = Errors

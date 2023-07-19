@@ -222,3 +222,6 @@ class Snapshot {
 }
 
 export default Snapshot
+
+module.exports = Snapshot
+module.exports.default = Snapshot

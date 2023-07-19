@@ -226,3 +226,6 @@ class Lock {
 }
 
 export default Lock
+
+module.exports = Lock
+module.exports.default = Lock

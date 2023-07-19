@@ -191,3 +191,6 @@ class FileComment {
 }
 
 export default FileComment
+
+module.exports = FileComment
+module.exports.default = FileComment

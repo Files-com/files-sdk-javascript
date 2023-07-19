@@ -35,3 +35,6 @@ class ShareGroupMember {
 }
 
 export default ShareGroupMember
+
+module.exports = ShareGroupMember
+module.exports.default = ShareGroupMember

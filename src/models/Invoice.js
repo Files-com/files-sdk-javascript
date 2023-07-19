@@ -113,3 +113,6 @@ class Invoice {
 }
 
 export default Invoice
+
+module.exports = Invoice
+module.exports.default = Invoice

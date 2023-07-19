@@ -50,3 +50,6 @@ class FormField {
 }
 
 export default FormField
+
+module.exports = FormField
+module.exports.default = FormField

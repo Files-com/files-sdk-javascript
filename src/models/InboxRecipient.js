@@ -157,3 +157,6 @@ class InboxRecipient {
 }
 
 export default InboxRecipient
+
+module.exports = InboxRecipient
+module.exports.default = InboxRecipient

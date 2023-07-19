@@ -230,3 +230,6 @@ class Api {
 }
 
 export default Api
+
+module.exports = Api
+module.exports.default = Api

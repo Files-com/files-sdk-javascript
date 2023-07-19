@@ -167,3 +167,6 @@ class MessageCommentReaction {
 }
 
 export default MessageCommentReaction
+
+module.exports = MessageCommentReaction
+module.exports.default = MessageCommentReaction

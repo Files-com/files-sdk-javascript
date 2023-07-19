@@ -69,3 +69,6 @@ class UserCipherUse {
 }
 
 export default UserCipherUse
+
+module.exports = UserCipherUse
+module.exports.default = UserCipherUse

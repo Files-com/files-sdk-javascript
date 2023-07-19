@@ -84,3 +84,6 @@ class InboxRegistration {
 }
 
 export default InboxRegistration
+
+module.exports = InboxRegistration
+module.exports.default = InboxRegistration

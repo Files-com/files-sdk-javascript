@@ -162,3 +162,6 @@ class As2IncomingMessage {
 }
 
 export default As2IncomingMessage
+
+module.exports = As2IncomingMessage
+module.exports.default = As2IncomingMessage
