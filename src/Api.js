@@ -40,7 +40,9 @@ const fetchWithRetry = async (url, options, retries = 0) => {
 }
 
 class Api {
-  static _sendVerbatim = async (path, verb, options) => {
+  static _sendVerbatim = async (path, verb, optionsRaw) => {
+    const { getAgentForUrl, ...options } = optionsRaw || {}
+
     const isExternal = /^[a-zA-Z]+:\/\//.test(path)
     const baseUrl = Files.getBaseUrl()
 
@@ -64,7 +66,7 @@ class Api {
     })
 
     try {
-      const agent = options?.agent || options?.httpsAgent || options?.httpAgent
+      const agent = getAgentForUrl?.(url) || options?.agent || options?.httpsAgent || options?.httpAgent
 
       const response = await fetchWithRetry(url, {
         agent,
