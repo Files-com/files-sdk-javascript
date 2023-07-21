@@ -121,7 +121,11 @@ class File {
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
               const upload_uri = determinePartUploadUri(nextFileUploadPart)
-              const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer)
+
+              // instantiate an httpsAgent dynamically if needed
+              const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
+
+              const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer, { agent })
 
               if (firstFileUploadPart.parallel_parts) {
                 concurrentUploads.push(uploadPromise)
@@ -149,7 +153,11 @@ class File {
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
               const upload_uri = determinePartUploadUri(nextFileUploadPart)
-              concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer))
+
+              // instantiate an httpsAgent dynamically if needed
+              const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
+
+              concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer, { agent }))
             }
 
             await Promise.all(concurrentUploads)

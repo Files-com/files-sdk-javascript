@@ -114,14 +114,13 @@ class Api {
     }
   }
 
-  static sendFilePart = (externalUrl, verb, data, headers = {}) => {
-    const params = { body: data }
-
-    if (headers) {
-      params.headers = headers
+  static sendFilePart = (externalUrl, verb, data, optionsRaw = {}) => {
+    const options = {
+      ...optionsRaw,
+      body: data,
     }
 
-    return Api._sendVerbatim(externalUrl, verb, params)
+    return Api._sendVerbatim(externalUrl, verb, options)
   }
 
   static _autoPaginate = async (path, verb, params, options, response, metadata) => {
