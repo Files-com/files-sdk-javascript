@@ -88,7 +88,11 @@ class Api {
       let data
 
       if (contentType.includes('application/json')) {
-        data = await response.json()
+        if (headers['content-length'] === '0') {
+          data = response.body
+        } else {
+          data = await response.json()
+        }
       } else if (contentType.includes('text/')) {
         data = await response.text()
       } else if (contentType.includes('multipart/form-data')) {
