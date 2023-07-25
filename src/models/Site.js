@@ -71,6 +71,9 @@ class Site {
   // string # Do Bundle owners receive registration notification?
   getBundleRegistrationNotifications = () => this.attributes.bundle_registration_notifications
 
+  // boolean # Do Bundles require registration?
+  getBundleRequireRegistration = () => this.attributes.bundle_require_registration
+
   // boolean # Do Bundles require recipients for sharing?
   getBundleRequireShareRecipient = () => this.attributes.bundle_require_share_recipient
 
@@ -529,6 +532,7 @@ class Site {
   //   immutable_files - boolean - Are files protected from modification?
   //   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
   //   bundle_password_required - boolean - Do Bundles require password protection?
+  //   bundle_require_registration - boolean - Do Bundles require registration?
   //   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
   //   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
   //   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?

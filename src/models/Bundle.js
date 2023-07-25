@@ -156,6 +156,13 @@ class Bundle {
     this.attributes.skip_email = value
   }
 
+  // date-time # Date when share will start to be accessible. If `nil` access granted right after create.
+  getStartAccessOnDate = () => this.attributes.start_access_on_date
+
+  setStartAccessOnDate = value => {
+    this.attributes.start_access_on_date = value
+  }
+
   // boolean # BundleRegistrations can be saved without providing company?
   getSkipCompany = () => this.attributes.skip_company
 
@@ -564,6 +571,7 @@ class Bundle {
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
   //   skip_company - boolean - BundleRegistrations can be saved without providing company?
+  //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   static create = async (params = {}, options = {}) => {
@@ -621,6 +629,10 @@ class Bundle {
 
     if (params['inbox_id'] && !isInt(params['inbox_id'])) {
       throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
+    }
+
+    if (params['start_access_on_date'] && !isString(params['start_access_on_date'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(params['start_access_on_date'])}`)
     }
 
     if (params['snapshot_id'] && !isInt(params['snapshot_id'])) {
