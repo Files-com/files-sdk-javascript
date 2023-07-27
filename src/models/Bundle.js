@@ -384,6 +384,7 @@ class Bundle {
   //   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
   //   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
   //   skip_company - boolean - BundleRegistrations can be saved without providing company?
+  //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
   //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
@@ -436,6 +437,9 @@ class Bundle {
     }
     if (params['permissions'] && !isString(params['permissions'])) {
       throw new errors.InvalidParameterError(`Bad parameter: permissions must be of type String, received ${getType(permissions)}`)
+    }
+    if (params['start_access_on_date'] && !isString(params['start_access_on_date'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(start_access_on_date)}`)
     }
 
     if (!params['id']) {
