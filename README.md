@@ -16,7 +16,7 @@ or
 
 ### Import and initialize
 
-    import Files from 'files.com/lib/Files'
+    import Files from 'files.com/lib/Files.js'
 
     // set your subdomain or custom domain
     Files.setBaseUrl('https://MY-SUBDOMAIN.files.com')
@@ -27,11 +27,11 @@ The examples provided in the documentation here use the newer ES6 `import` synta
 instead use the older CommonJS module syntax with `require()`, ensure that `.default`
 is included. For example:
 
-    const Files = require('files.com/lib/Files').default
-    const User = require('files.com/lib/models/User').default
+    const Files = require('files.com/lib/Files.js').default
+    const User = require('files.com/lib/models/User.js').default
 
     // destructure to directly assign a named export
-    const { LogLevel } = require('files.com/lib/Logger').default
+    const { LogLevel } = require('files.com/lib/Logger.js').default
 
 ### Authentication
 
@@ -47,14 +47,14 @@ You can set an API key globally like this:
 
 Or, you can pass an API key per-request, in the options object at the end of every method like this:
 
-    import User from 'files.com/lib/models/User'
+    import User from 'files.com/lib/models/User.js'
     const user = new User(params, { apiKey: 'my-api-key' })
 
 #### User Session
 
 Or, you can open a user session by calling `Session.create()`
 
-    import Session from 'files.com/lib/models/Session'
+    import Session from 'files.com/lib/models/Session.js'
     const session = await Session.create({ username, password })
 
 Then use it globally for all subsequent API calls like this:
@@ -63,7 +63,7 @@ Then use it globally for all subsequent API calls like this:
 
 Or, you can pass the session ID per-request, in the options array at the end of every method like this:
 
-    import User from 'files.com/lib/models/User'
+    import User from 'files.com/lib/models/User.js'
     const user = new User(params, { sessionId: session.id })
 
 ### Setting Global Options
@@ -72,7 +72,7 @@ You can set the following global properties using static methods on the `Files` 
 
 #### Log Level
 
-    import { LogLevel } from 'files.com/lib/Logger'
+    import { LogLevel } from 'files.com/lib/Logger.js'
     Files.setLogLevel(LogLevel.INFO)
 
     /*
@@ -117,13 +117,13 @@ You can set the following global properties using static methods on the `Files` 
 
 #### List root folder
 
-    import Folder from 'files.com/lib/models/Folder'
+    import Folder from 'files.com/lib/models/Folder.js'
     const dirFiles = await Folder.listFor('/')
 
 #### Uploading a file
 
-    import File from 'files.com/lib/models/File'
-    import { isBrowser } from 'files.com/lib/utils'
+    import File from 'files.com/lib/models/File.js'
+    import { isBrowser } from 'files.com/lib/utils.js'
 
     // uploading raw file data
     await File.uploadData(destinationFileName, data)
@@ -137,14 +137,14 @@ You can set the following global properties using static methods on the `Files` 
 
 ##### Get a downloadable file object by path
 
-    import File from 'files.com/lib/models/File'
+    import File from 'files.com/lib/models/File.js'
 
     const foundFile = await File.find(remoteFilePath)
     const downloadableFile = await foundFile.download()
 
 ##### Download a file (not available in browser)
 
-    import { isBrowser } from 'files.com/lib/utils'
+    import { isBrowser } from 'files.com/lib/utils.js'
 
     if (!isBrowser()) {
       // download to a file on disk
