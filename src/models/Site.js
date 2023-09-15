@@ -257,6 +257,9 @@ class Site {
   // Image # Branded logo
   getLogo = () => this.attributes.logo
 
+  // Image # Branded login page background
+  getLoginPageBackgroundImage = () => this.attributes.login_page_background_image
+
   // int64 # Number of prior passwords to disallow
   getMaxPriorPasswords = () => this.attributes.max_prior_passwords
 
@@ -604,6 +607,8 @@ class Site {
   //   logo_delete - boolean - If true, will delete the file stored in logo
   //   bundle_watermark_attachment_file - file
   //   bundle_watermark_attachment_delete - boolean - If true, will delete the file stored in bundle_watermark_attachment
+  //   login_page_background_image_file - file
+  //   login_page_background_image_delete - boolean - If true, will delete the file stored in login_page_background_image
   //   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
   //   ldap_password_change - string - New LDAP password.
   //   ldap_password_change_confirmation - string - Confirm new LDAP password.
