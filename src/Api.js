@@ -5,15 +5,17 @@ import * as errors from './Errors'
 import Logger from './Logger'
 import { isEmpty, isObject } from './utils'
 
-const _fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) =>
-  timeoutSecs <= 0
+const _fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) => {
+  let timeoutId
+  return timeoutSecs <= 0
     ? fetch(url, options)
     : Promise.race([
         fetch(url, options),
         new Promise((_, reject) => {
-          setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
+          timeoutId = setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
         })
-      ])
+      ]).finally(() => clearTimeout(timeoutId))
+}
 
 const fetchWithRetry = async (url, options, retries = 0) => {
   const maxRetries = Files.getMaxNetworkRetries()
