@@ -97,78 +97,120 @@ class File {
         let length = 0
         const concurrentUploads = []
 
+        let chunkBuffer = null
+        let streamEnded = false
+
+        const handleStreamEnd = async () => {
+          if (chunkBuffer !== null || !streamEnded) {
+            return
+          }
+    
+          try {
+            if (chunks.length > 0) {
+              const buffer = Buffer.concat(chunks)
+              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
+    
+              const upload_uri = determinePartUploadUri(nextFileUploadPart)
+    
+              // instantiate an httpsAgent dynamically if needed
+              const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
+    
+              concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer, { agent }))
+            }
+    
+            await Promise.all(concurrentUploads)
+    
+            const response = await File._completeUpload(firstFileUploadPart, options)
+            const createdFile = new File(response.data, options)
+    
+            resolve(createdFile)
+          } catch (error) {
+            reject(error)
+          }
+        }
+
         readableStream.on('error', error => { reject(error) })
 
+        // note that for a network stream, each chunk is typically less than partsize * 2, but
+        // if a stream has been created based on very large data, it's possible for a chunk to
+        // contain the entire file and we could get a single chunk with length >= partsize * 3
         readableStream.on('data', async chunk => {
           try {
-            const nextLength = length + chunk.length
-            const excessLength = nextLength - firstFileUploadPart.partsize
+            let excessLength = (length + chunk.length) - firstFileUploadPart.partsize
 
-            const chunkBuffer = Buffer.from(chunk)
+            chunkBuffer = Buffer.from(chunk)
 
             if (excessLength > 0) {
               readableStream.pause()
 
-              // the amount to append this last part with to make it exactly the full partsize
-              const tailLength = chunkBuffer.length - excessLength
+              while (chunkBuffer) {
+                // the amount to append this last part with to make it exactly the full partsize
+                const lengthForEndOfCurrentPart = chunkBuffer.length - excessLength
 
-              const lastChunkForPart = chunkBuffer.subarray(0, tailLength)
-              const firstChunkForNextPart = chunkBuffer.subarray(tailLength)
+                const lastChunkForCurrentPart = chunkBuffer.subarray(0, lengthForEndOfCurrentPart)
+                const chunkBufferAfterCurrentPart = chunkBuffer.subarray(lengthForEndOfCurrentPart)
 
-              chunks.push(lastChunkForPart)
+                chunks.push(lastChunkForCurrentPart)
 
-              const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
+                const buffer = Buffer.concat(chunks)
+                const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
 
-              const upload_uri = determinePartUploadUri(nextFileUploadPart)
+                const upload_uri = determinePartUploadUri(nextFileUploadPart)
 
-              // instantiate an httpsAgent dynamically if needed
-              const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
+                // instantiate an httpsAgent dynamically if needed
+                const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
 
-              const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer, { agent })
+                const uploadPromise = Api.sendFilePart(upload_uri, 'PUT', buffer, { agent })
 
-              if (firstFileUploadPart.parallel_parts) {
-                concurrentUploads.push(uploadPromise)
-              } else {
-                await uploadPromise
+                if (firstFileUploadPart.parallel_parts) {
+                  concurrentUploads.push(uploadPromise)
+                } else {
+                  await uploadPromise
+                }
+
+                // determine if the remainder of the excess chunk data is too large to be a single part
+                const isNextChunkAtLeastOnePart = chunkBufferAfterCurrentPart.length >= firstFileUploadPart.partsize
+
+                // the excess data contains >= 1 full part, so we'll loop again to enqueue
+                // the next part for upload and continue processing any excess beyond that
+                if (isNextChunkAtLeastOnePart) {
+                  chunks = []
+                  length = 0
+
+                  chunkBuffer = chunkBufferAfterCurrentPart
+                  excessLength = chunkBuffer.length - firstFileUploadPart.partsize
+                // the excess data is less than a full part, so we'll enqueue it
+                } else if (chunkBufferAfterCurrentPart.length > 0) {
+                  chunks = [chunkBufferAfterCurrentPart]
+                  length = chunkBufferAfterCurrentPart.length
+
+                  chunkBuffer = null
+                } else {
+                  chunkBuffer = null
+                }
               }
-
-              chunks = [firstChunkForNextPart]
-              length = firstChunkForNextPart.length
 
               readableStream.resume()
             } else {
               chunks.push(chunkBuffer)
               length += chunk.length
+
+              chunkBuffer = null
+            }
+
+            if (streamEnded) {
+              handleStreamEnd()
             }
           } catch (error) {
             reject(error)
           }
         })
 
-        readableStream.on('end', async () => {
-          try {
-            if (chunks.length > 0) {
-              const buffer = Buffer.concat(chunks)
-              const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
-
-              const upload_uri = determinePartUploadUri(nextFileUploadPart)
-
-              // instantiate an httpsAgent dynamically if needed
-              const agent = options.getAgentForUrl?.(upload_uri) || options?.agent
-
-              concurrentUploads.push(Api.sendFilePart(upload_uri, 'PUT', buffer, { agent }))
-            }
-
-            await Promise.all(concurrentUploads)
-
-            const response = await File._completeUpload(firstFileUploadPart, options)
-            const createdFile = new File(response.data, options)
-
-            resolve(createdFile)
-          } catch (error) {
-            reject(error)
-          }
+        // note that this event may occur while there is still data being processed above
+        readableStream.on('end', () => {
+          streamEnded = true
+  
+          handleStreamEnd()
         })
       })
 

@@ -142,7 +142,7 @@ const testSuite = async () => {
   }
 
   /* to run this test, put a file (or symlink) at huge-file.ext * /
-  const testUploadHugeFile = async () => {
+  const testUploadFileForHugeFile = async () => {
     const sourceFilePath = '../huge-file.ext'
 
     const displayName = `huge-file__${nonce}.ext`
@@ -161,7 +161,33 @@ const testSuite = async () => {
 
     await file.delete()
 
-    Logger.info('***** testUploadHugeFile() succeeded! *****')
+    Logger.info('***** testUploadFileForHugeFile() succeeded! *****')
+  }
+
+  /* to run this test, put a file (or symlink) at huge-file.ext * /
+  const testUploadDataForHugeFile = async () => {
+    const sourceFilePath = '../huge-file.ext'
+
+    const displayName = `huge-file__${nonce}.ext`
+    const destinationPath = `${SDK_TEST_ROOT_FOLDER}/${displayName}`
+
+    const fs = require('fs/promises')
+    const data = await fs.readFile(sourceFilePath, { encoding: "utf8" })
+
+    const file = await File.uploadData(destinationPath, data)
+
+    invariant(!!file.path, 'Uploaded file response object should have a path')
+    invariant(file.display_name === displayName, 'Uploaded file response object should have the same display_name as the file we uploaded')
+
+    const foundFile = await File.find(destinationPath)
+
+    invariant(foundFile.path === destinationPath, 'Found file should have the same path as the file we uploaded')
+    invariant(foundFile.display_name === displayName, 'Found file should have the same display_name as the file we uploaded')
+    invariant(typeof foundFile.getDownloadUri() === 'undefined', 'Found file should not have a download uri yet')
+
+    await file.delete()
+
+    Logger.info('***** testUploadDataForHugeFile() succeeded! *****')
   }
   /**/
 
@@ -242,7 +268,8 @@ const testSuite = async () => {
     await testFolderListAutoPagination()
     await testUploadAndDownloadToFile()
     await testUploadAndDownloadToString()
-    // await testUploadHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
+    // await testUploadDataForHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
+    // await testUploadFileForHugeFile() // to run this test, put a file (or symlink) at huge-file.ext
     await testSession()
     await testFailure()
     await testUserListAndUpdate()
