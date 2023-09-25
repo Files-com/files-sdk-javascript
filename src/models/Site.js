@@ -65,6 +65,9 @@ class Site {
   // int64 # Site-wide Bundle expiration in days
   getBundleExpiration = () => this.attributes.bundle_expiration
 
+  // string # Custom error message to show when bundle is not found.
+  getBundleNotFoundMessage = () => this.attributes.bundle_not_found_message
+
   // boolean # Do Bundles require password protection?
   getBundlePasswordRequired = () => this.attributes.bundle_password_required
 
@@ -534,6 +537,7 @@ class Site {
   //   disable_password_reset - boolean - Is password reset disabled?
   //   immutable_files - boolean - Are files protected from modification?
   //   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
+  //   bundle_not_found_message - string - Custom error message to show when bundle is not found.
   //   bundle_password_required - boolean - Do Bundles require password protection?
   //   bundle_require_registration - boolean - Do Bundles require registration?
   //   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
@@ -721,6 +725,10 @@ class Site {
 
     if (params['password_min_length'] && !isInt(params['password_min_length'])) {
       throw new errors.InvalidParameterError(`Bad parameter: password_min_length must be of type Int, received ${getType(params['password_min_length'])}`)
+    }
+
+    if (params['bundle_not_found_message'] && !isString(params['bundle_not_found_message'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_not_found_message must be of type String, received ${getType(params['bundle_not_found_message'])}`)
     }
 
     if (params['bundle_registration_notifications'] && !isString(params['bundle_registration_notifications'])) {
