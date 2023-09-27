@@ -157,6 +157,16 @@ You can set the following global properties using static methods on the `Files` 
       const textContent = await downloadableFile.downloadToString()
     }
 
+#### Comparing Case insensitive files and paths
+
+For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/topics/file-system-semantics#case-sensitivity).
+
+    import { pathNormalizer } from 'files.com/lib/utils.js'
+
+    if (pathNormalizer.same('Fïłèńämê.Txt', 'filename.txt')) {
+      // the paths are the same
+    }
+
 ### Additional Object Documentation
 
 Additional docs are available at https://developers.files.com

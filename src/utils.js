@@ -1,3 +1,5 @@
+import pathNormalizer from './utils/pathNormalizer'
+
 const isArray = value => Array.isArray(value)
 
 const isInt = value => typeof value === 'number'
@@ -25,4 +27,5 @@ export {
   isInt,
   isObject,
   isString,
+  pathNormalizer,
 }

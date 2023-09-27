@@ -1,6 +1,6 @@
 {
   "name": "files.com",
-  "version": "1.0.418",
+  "version": "1.0.419",
   "description": "Files.com SDK for JavaScript",
   "keywords": [
     "files.com",
@@ -32,9 +32,12 @@
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.10.3",
-    "@babel/preset-env": "^7.10.3"
+    "@babel/preset-env": "^7.10.3",
+    "jest": "^29.7.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/babel src -d lib"
+    "build": "./node_modules/.bin/babel src -d lib",
+    "test": "jest",
+    "watch": "jest --watch"
   }
 }
