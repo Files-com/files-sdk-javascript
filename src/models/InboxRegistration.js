@@ -35,6 +35,9 @@ class InboxRegistration {
   // string # Registrant email address
   getEmail = () => this.attributes.email
 
+  // string # Registrant IP Address
+  getIp = () => this.attributes.ip
+
   // string # Clickwrap text that was shown to the registrant
   getClickwrapBody = () => this.attributes.clickwrap_body
 
