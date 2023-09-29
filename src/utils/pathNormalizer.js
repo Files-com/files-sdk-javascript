@@ -193,7 +193,7 @@ const transliterate = str =>
 // converting the path to UTF-8 is not necessary in JS as it's the default
 const normalize = path => {
   // Remove any characters with byte value of 0
-  let cleaned = (path || '').replace(/\0/g, '')
+  let cleaned = (typeof path === 'string' ? path : '').replace(/\0/g, '')
 
   // Convert any backslash (\) characters to a forward slash (/)
   cleaned = cleaned.replace(/\\/g, '/')
@@ -237,20 +237,21 @@ const normalizeForComparison = path => {
   return normalized
 }
 
-const same = (path1, path2) =>
-  normalizeForComparison(path1) === normalizeForComparison(path2)
+const same = (path1, path2) => typeof path1 === 'string' && typeof path2 === 'string'
+  && normalizeForComparison(path1) === normalizeForComparison(path2)
 
-const startsWith = (path1, path2) =>
-  normalizeForComparison(path1).startsWith(normalizeForComparison(path2))
+const startsWith = (path1, path2) => typeof path1 === 'string' && typeof path2 === 'string'
+  && normalizeForComparison(path1).startsWith(normalizeForComparison(path2))
 
 const keyLookup = (object, path) => {
-  const key = Object.keys(object).find(key => same(key, path))
+  const key = Object.keys(object || {}).find(key => same(key, path))
   return typeof key === 'string' ? object[key] : undefined
 }
 
 const pathNormalizer = {
   keyLookup,
   normalize,
+  normalizeForComparison,
   same,
   startsWith,
 }

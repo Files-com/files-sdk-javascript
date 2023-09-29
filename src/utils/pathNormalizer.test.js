@@ -12,6 +12,28 @@ describe('pathNormalizer', () => {
     })
   })
 
+  it('handles non-string params', () => {
+    expect(pathNormalizer.normalize([])).toBe('')
+    expect(pathNormalizer.normalize({})).toBe('')
+    expect(pathNormalizer.normalize(null)).toBe('')
+    expect(pathNormalizer.normalize(undefined)).toBe('')
+
+    expect(pathNormalizer.same([], '')).toBe(false)
+    expect(pathNormalizer.same(null, '')).toBe(false)
+    expect(pathNormalizer.same([], null)).toBe(false)
+    expect(pathNormalizer.same(undefined, undefined)).toBe(false)
+
+    expect(pathNormalizer.startsWith(null, '')).toBe(false)
+    expect(pathNormalizer.startsWith(null, [])).toBe(false)
+    expect(pathNormalizer.startsWith([], null)).toBe(false)
+    expect(pathNormalizer.startsWith(undefined, undefined)).toBe(false)
+
+    expect(pathNormalizer.keyLookup(null, '')).toBe(undefined)
+    expect(pathNormalizer.keyLookup(null, [])).toBe(undefined)
+    expect(pathNormalizer.keyLookup([], null)).toBe(undefined)
+    expect(pathNormalizer.keyLookup(undefined, undefined)).toBe(undefined)
+  })
+
   it('looks up keys in a map', () => {
     const map = {
       '': { list: true },
