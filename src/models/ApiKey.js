@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class ApiKey
@@ -127,19 +128,19 @@ class ApiKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
     }
     if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(expires_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
     }
     if (params['permission_set'] && !isString(params['permission_set'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(permission_set)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
     }
 
     if (!params['id']) {
@@ -152,6 +153,7 @@ class ApiKey {
 
     const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new ApiKey(response?.data, this.options)
   }
 
@@ -166,7 +168,7 @@ class ApiKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -220,6 +222,7 @@ class ApiKey {
 
     const response = await Api.sendRequest(`/api_keys`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new ApiKey(obj, options)) || []
   }
 
@@ -229,6 +232,7 @@ class ApiKey {
   static findCurrent = async (options = {}) => {
     const response = await Api.sendRequest(`/api_key`, 'GET', {}, options)
 
+    
     return new ApiKey(response?.data, options)
   }
 
@@ -251,6 +255,7 @@ class ApiKey {
 
     const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new ApiKey(response?.data, options)
   }
 
@@ -291,6 +296,7 @@ class ApiKey {
 
     const response = await Api.sendRequest(`/api_keys`, 'POST', params, options)
 
+    
     return new ApiKey(response?.data, options)
   }
 
@@ -313,6 +319,7 @@ class ApiKey {
 
     const response = await Api.sendRequest(`/api_key`, 'PATCH', params, options)
 
+    
     return new ApiKey(response?.data, options)
   }
 

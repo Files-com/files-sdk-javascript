@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class IpAddress
@@ -50,6 +51,7 @@ class IpAddress {
 
     const response = await Api.sendRequest(`/ip_addresses`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new IpAddress(obj, options)) || []
   }
 
@@ -70,6 +72,7 @@ class IpAddress {
 
     const response = await Api.sendRequest(`/ip_addresses/exavault-reserved`, 'GET', params, options)
 
+    const PublicIpAddress = require("./PublicIpAddress.js").default
     return response?.data?.map(obj => new PublicIpAddress(obj, options)) || []
   }
 
@@ -87,6 +90,7 @@ class IpAddress {
 
     const response = await Api.sendRequest(`/ip_addresses/reserved`, 'GET', params, options)
 
+    const PublicIpAddress = require("./PublicIpAddress.js").default
     return response?.data?.map(obj => new PublicIpAddress(obj, options)) || []
   }
 }

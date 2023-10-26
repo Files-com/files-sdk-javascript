@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class ActionNotificationExport
@@ -151,6 +152,7 @@ class ActionNotificationExport {
 
     const response = await Api.sendRequest(`/action_notification_exports/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new ActionNotificationExport(response?.data, options)
   }
 
@@ -207,6 +209,7 @@ class ActionNotificationExport {
 
     const response = await Api.sendRequest(`/action_notification_exports`, 'POST', params, options)
 
+    
     return new ActionNotificationExport(response?.data, options)
   }
 }

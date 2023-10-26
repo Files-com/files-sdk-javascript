@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Clickwrap
@@ -83,22 +84,22 @@ class Clickwrap {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
     if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(use_with_bundles)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params['use_with_bundles'])}`)
     }
     if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(use_with_inboxes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params['use_with_inboxes'])}`)
     }
     if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(use_with_users)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params['use_with_users'])}`)
     }
 
     if (!params['id']) {
@@ -111,6 +112,7 @@ class Clickwrap {
 
     const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Clickwrap(response?.data, this.options)
   }
 
@@ -125,7 +127,7 @@ class Clickwrap {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -168,6 +170,7 @@ class Clickwrap {
 
     const response = await Api.sendRequest(`/clickwraps`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Clickwrap(obj, options)) || []
   }
 
@@ -193,6 +196,7 @@ class Clickwrap {
 
     const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Clickwrap(response?.data, options)
   }
 
@@ -228,6 +232,7 @@ class Clickwrap {
 
     const response = await Api.sendRequest(`/clickwraps`, 'POST', params, options)
 
+    
     return new Clickwrap(response?.data, options)
   }
 }

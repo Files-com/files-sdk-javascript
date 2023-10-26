@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
-import File from './File'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Folder
@@ -208,6 +208,7 @@ class Folder {
 
     const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    const File = require("./File.js").default
     return response?.data?.map(obj => new File(obj, options)) || []
   }
 
@@ -236,6 +237,7 @@ class Folder {
 
     const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'POST', params, options)
 
+    const File = require("./File.js").default
     return new File(response?.data, options)
   }
 }

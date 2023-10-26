@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Site
@@ -468,12 +469,14 @@ class Site {
   static get = async (options = {}) => {
     const response = await Api.sendRequest(`/site`, 'GET', {}, options)
 
+    
     return new Site(response?.data, options)
   }
 
   static getUsage = async (options = {}) => {
     const response = await Api.sendRequest(`/site/usage`, 'GET', {}, options)
 
+    const UsageSnapshot = require("./UsageSnapshot.js").default
     return new UsageSnapshot(response?.data, options)
   }
 
@@ -885,6 +888,7 @@ class Site {
 
     const response = await Api.sendRequest(`/site`, 'PATCH', params, options)
 
+    
     return new Site(response?.data, options)
   }
 }

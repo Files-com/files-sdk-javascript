@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Bundle
@@ -338,16 +339,16 @@ class Bundle {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['to'] && !isArray(params['to'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: to must be of type Array, received ${getType(to)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: to must be of type Array, received ${getType(params['to'])}`)
     }
     if (params['note'] && !isString(params['note'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(note)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params['note'])}`)
     }
     if (params['recipients'] && !isArray(params['recipients'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recipients must be of type Array, received ${getType(recipients)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: recipients must be of type Array, received ${getType(params['recipients'])}`)
     }
 
     if (!params['id']) {
@@ -400,46 +401,46 @@ class Bundle {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['paths'] && !isArray(params['paths'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(paths)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params['paths'])}`)
     }
     if (params['password'] && !isString(params['password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params['password'])}`)
     }
     if (params['form_field_set_id'] && !isInt(params['form_field_set_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: form_field_set_id must be of type Int, received ${getType(form_field_set_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: form_field_set_id must be of type Int, received ${getType(params['form_field_set_id'])}`)
     }
     if (params['clickwrap_id'] && !isInt(params['clickwrap_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: clickwrap_id must be of type Int, received ${getType(clickwrap_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: clickwrap_id must be of type Int, received ${getType(params['clickwrap_id'])}`)
     }
     if (params['code'] && !isString(params['code'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: code must be of type String, received ${getType(code)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: code must be of type String, received ${getType(params['code'])}`)
     }
     if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
     }
     if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(expires_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
     }
     if (params['inbox_id'] && !isInt(params['inbox_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(inbox_id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
     }
     if (params['max_uses'] && !isInt(params['max_uses'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: max_uses must be of type Int, received ${getType(max_uses)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: max_uses must be of type Int, received ${getType(params['max_uses'])}`)
     }
     if (params['note'] && !isString(params['note'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(note)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params['note'])}`)
     }
     if (params['path_template'] && !isString(params['path_template'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path_template must be of type String, received ${getType(path_template)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path_template must be of type String, received ${getType(params['path_template'])}`)
     }
     if (params['permissions'] && !isString(params['permissions'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permissions must be of type String, received ${getType(permissions)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: permissions must be of type String, received ${getType(params['permissions'])}`)
     }
     if (params['start_access_on_date'] && !isString(params['start_access_on_date'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(start_access_on_date)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(params['start_access_on_date'])}`)
     }
 
     if (!params['id']) {
@@ -452,6 +453,7 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Bundle(response?.data, this.options)
   }
 
@@ -466,7 +468,7 @@ class Bundle {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -520,6 +522,7 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Bundle(obj, options)) || []
   }
 
@@ -545,6 +548,7 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Bundle(response?.data, options)
   }
 
@@ -645,6 +649,7 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles`, 'POST', params, options)
 
+    
     return new Bundle(response?.data, options)
   }
 }

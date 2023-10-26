@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class FileComment
@@ -65,10 +66,10 @@ class FileComment {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     if (!params['id']) {
@@ -89,6 +90,7 @@ class FileComment {
 
     const response = await Api.sendRequest(`/file_comments/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new FileComment(response?.data, this.options)
   }
 
@@ -103,7 +105,7 @@ class FileComment {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -161,6 +163,7 @@ class FileComment {
 
     const response = await Api.sendRequest(`/file_comments/files/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new FileComment(obj, options)) || []
   }
 
@@ -186,6 +189,7 @@ class FileComment {
 
     const response = await Api.sendRequest(`/file_comments`, 'POST', params, options)
 
+    
     return new FileComment(response?.data, options)
   }
 }

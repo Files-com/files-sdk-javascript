@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class SftpHostKey
@@ -73,13 +74,13 @@ class SftpHostKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
     }
 
     if (!params['id']) {
@@ -92,6 +93,7 @@ class SftpHostKey {
 
     const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new SftpHostKey(response?.data, this.options)
   }
 
@@ -106,7 +108,7 @@ class SftpHostKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -149,6 +151,7 @@ class SftpHostKey {
 
     const response = await Api.sendRequest(`/sftp_host_keys`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new SftpHostKey(obj, options)) || []
   }
 
@@ -174,6 +177,7 @@ class SftpHostKey {
 
     const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new SftpHostKey(response?.data, options)
   }
 
@@ -194,6 +198,7 @@ class SftpHostKey {
 
     const response = await Api.sendRequest(`/sftp_host_keys`, 'POST', params, options)
 
+    
     return new SftpHostKey(response?.data, options)
   }
 }

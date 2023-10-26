@@ -5,16 +5,16 @@ import * as errors from './Errors'
 import Logger from './Logger'
 import { isEmpty, isObject } from './utils'
 
-const _fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) => {
+const fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) => {
   let timeoutId
   return timeoutSecs <= 0
     ? fetch(url, options)
     : Promise.race([
-        fetch(url, options),
-        new Promise((_, reject) => {
-          timeoutId = setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
-        })
-      ]).finally(() => clearTimeout(timeoutId))
+      fetch(url, options),
+      new Promise((_, reject) => {
+        timeoutId = setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
+      }),
+    ]).finally(() => clearTimeout(timeoutId))
 }
 
 const fetchWithRetry = async (url, options, retries = 0) => {
@@ -23,7 +23,7 @@ const fetchWithRetry = async (url, options, retries = 0) => {
   const maxRetryDelaySecs = Files.getMaxNetworkRetryDelay()
 
   try {
-    return await _fetchWithTimeout(url, options)
+    return await fetchWithTimeout(url, options)
   } catch (error) {
     Logger.info(`Request #${retries + 1} failed: ${error.message}`)
 
@@ -34,8 +34,8 @@ const fetchWithRetry = async (url, options, retries = 0) => {
       Logger.info(`Retrying request (retry ${nextRetries} of ${maxRetries})`)
 
       const delaySecs = Math.min(minRetryDelaySecs * 2 ** retries, maxRetryDelaySecs) // exponential backoff
-      await new Promise(resolve => setTimeout(resolve, delaySecs * 1000))
-      
+      await new Promise(resolve => { setTimeout(resolve, delaySecs * 1000) })
+
       return fetchWithRetry(url, options, nextRetries)
     }
   }
@@ -104,19 +104,21 @@ class Api {
       }
 
       const normalizedResponse = {
-        status: response.status,
-        reason: response.statusText,
-        headers,
         data,
+        headers,
+        reason: response.statusText,
+        status: response.status,
       }
 
       if (!response.ok) {
+        /* eslint-disable-next-line no-throw-literal */
         throw { response: normalizedResponse }
       }
 
       return normalizedResponse
     } catch (error) {
       errors.handleErrorResponse(error)
+      return null
     }
   }
 
@@ -155,7 +157,9 @@ class Api {
         }
 
         return Api.sendRequest(path, verb, nextParams, options, nextMetadata)
-      } else if (previousAutoPaginateData) {
+      }
+
+      if (previousAutoPaginateData) {
         return {
           ...response,
           autoPaginateRequests: autoPaginateCount,

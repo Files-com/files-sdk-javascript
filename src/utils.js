@@ -8,15 +8,16 @@ const isObject = value => value && typeof value === 'object' && !Array.isArray(v
 
 const isString = value => typeof value === 'string'
 
-const isEmpty = value => !value ||
-  (isArray(value) && value.length === 0) ||
-  (isObject(value) && Object.keys(value).length === 0)
+const isEmpty = value => !value
+  || (isArray(value) && value.length === 0)
+  || (isObject(value) && Object.keys(value).length === 0)
 
 const getType = value =>
-  isArray(value)
+  (isArray(value)
     ? 'array'
-    : typeof value
+    : typeof value)
 
+// eslint-disable-next-line no-restricted-globals
 const isBrowser = () => typeof self !== 'undefined' && typeof self.document !== 'undefined'
 
 export {

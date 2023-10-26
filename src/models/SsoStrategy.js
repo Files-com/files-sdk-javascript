@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class SsoStrategy
@@ -168,7 +169,7 @@ class SsoStrategy {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -198,6 +199,7 @@ class SsoStrategy {
 
     const response = await Api.sendRequest(`/sso_strategies`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new SsoStrategy(obj, options)) || []
   }
 
@@ -223,6 +225,7 @@ class SsoStrategy {
 
     const response = await Api.sendRequest(`/sso_strategies/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new SsoStrategy(response?.data, options)
   }
 

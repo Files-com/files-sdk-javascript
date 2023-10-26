@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class FormFieldSet
@@ -97,13 +98,13 @@ class FormFieldSet {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['title'] && !isString(params['title'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(title)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params['title'])}`)
     }
     if (params['form_fields'] && !isArray(params['form_fields'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(form_fields)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params['form_fields'])}`)
     }
 
     if (!params['id']) {
@@ -116,6 +117,7 @@ class FormFieldSet {
 
     const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new FormFieldSet(response?.data, this.options)
   }
 
@@ -130,7 +132,7 @@ class FormFieldSet {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -178,6 +180,7 @@ class FormFieldSet {
 
     const response = await Api.sendRequest(`/form_field_sets`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new FormFieldSet(obj, options)) || []
   }
 
@@ -203,6 +206,7 @@ class FormFieldSet {
 
     const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new FormFieldSet(response?.data, options)
   }
 
@@ -231,6 +235,7 @@ class FormFieldSet {
 
     const response = await Api.sendRequest(`/form_field_sets`, 'POST', params, options)
 
+    
     return new FormFieldSet(response?.data, options)
   }
 }

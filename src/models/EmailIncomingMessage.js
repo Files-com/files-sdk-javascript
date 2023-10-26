@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class EmailIncomingMessage
@@ -69,6 +70,7 @@ class EmailIncomingMessage {
 
     const response = await Api.sendRequest(`/email_incoming_messages`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new EmailIncomingMessage(obj, options)) || []
   }
 

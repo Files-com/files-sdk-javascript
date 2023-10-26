@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class MessageComment
@@ -65,10 +66,10 @@ class MessageComment {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(body)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
     }
 
     if (!params['id']) {
@@ -89,6 +90,7 @@ class MessageComment {
 
     const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new MessageComment(response?.data, this.options)
   }
 
@@ -103,7 +105,7 @@ class MessageComment {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -160,6 +162,7 @@ class MessageComment {
 
     const response = await Api.sendRequest(`/message_comments`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new MessageComment(obj, options)) || []
   }
 
@@ -185,6 +188,7 @@ class MessageComment {
 
     const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new MessageComment(response?.data, options)
   }
 
@@ -209,6 +213,7 @@ class MessageComment {
 
     const response = await Api.sendRequest(`/message_comments`, 'POST', params, options)
 
+    
     return new MessageComment(response?.data, options)
   }
 }

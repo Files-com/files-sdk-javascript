@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Request
@@ -91,7 +92,7 @@ class Request {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -141,6 +142,7 @@ class Request {
 
     const response = await Api.sendRequest(`/requests`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Request(obj, options)) || []
   }
 
@@ -178,6 +180,7 @@ class Request {
 
     const response = await Api.sendRequest(`/requests/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Request(obj, options)) || []
   }
 
@@ -213,6 +216,7 @@ class Request {
 
     const response = await Api.sendRequest(`/requests`, 'POST', params, options)
 
+    
     return new Request(response?.data, options)
   }
 }

@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class As2Station
@@ -152,19 +153,19 @@ class As2Station {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params['public_certificate'])}`)
     }
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
     }
     if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params['private_key_password'])}`)
     }
 
     if (!params['id']) {
@@ -177,6 +178,7 @@ class As2Station {
 
     const response = await Api.sendRequest(`/as2_stations/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new As2Station(response?.data, this.options)
   }
 
@@ -191,7 +193,7 @@ class As2Station {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -234,6 +236,7 @@ class As2Station {
 
     const response = await Api.sendRequest(`/as2_stations`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new As2Station(obj, options)) || []
   }
 
@@ -259,6 +262,7 @@ class As2Station {
 
     const response = await Api.sendRequest(`/as2_stations/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new As2Station(response?.data, options)
   }
 
@@ -301,6 +305,7 @@ class As2Station {
 
     const response = await Api.sendRequest(`/as2_stations`, 'POST', params, options)
 
+    
     return new As2Station(response?.data, options)
   }
 }

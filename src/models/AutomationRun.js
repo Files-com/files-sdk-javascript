@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class AutomationRun
@@ -72,6 +73,7 @@ class AutomationRun {
 
     const response = await Api.sendRequest(`/automation_runs`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new AutomationRun(obj, options)) || []
   }
 
@@ -97,6 +99,7 @@ class AutomationRun {
 
     const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new AutomationRun(response?.data, options)
   }
 

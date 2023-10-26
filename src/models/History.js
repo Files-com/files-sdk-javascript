@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class History
@@ -108,6 +109,7 @@ class History {
 
     const response = await Api.sendRequest(`/history/files/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    const Action = require("./Action.js").default
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
 
@@ -156,6 +158,7 @@ class History {
 
     const response = await Api.sendRequest(`/history/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    const Action = require("./Action.js").default
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
 
@@ -167,12 +170,12 @@ class History {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
   //   user_id (required) - int64 - User ID.
-  static listForUser = async (user_id, params = {}, options = {}) => {
+  static listForUser = async (userId, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['user_id'] = user_id
+    params['user_id'] = userId
 
     if (!params['user_id']) {
       throw new errors.MissingParameterError('Parameter missing: user_id')
@@ -204,6 +207,7 @@ class History {
 
     const response = await Api.sendRequest(`/history/users/${encodeURIComponent(params['user_id'])}`, 'GET', params, options)
 
+    const Action = require("./Action.js").default
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
 
@@ -237,6 +241,7 @@ class History {
 
     const response = await Api.sendRequest(`/history/login`, 'GET', params, options)
 
+    const Action = require("./Action.js").default
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
 
@@ -272,6 +277,7 @@ class History {
 
     const response = await Api.sendRequest(`/history`, 'GET', params, options)
 
+    const Action = require("./Action.js").default
     return response?.data?.map(obj => new Action(obj, options)) || []
   }
 

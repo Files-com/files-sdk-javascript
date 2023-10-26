@@ -244,7 +244,7 @@ const startsWith = (path1, path2) => typeof path1 === 'string' && typeof path2 =
   && normalizeForComparison(path1).startsWith(normalizeForComparison(path2))
 
 const keyLookup = (object, path) => {
-  const key = Object.keys(object || {}).find(key => same(key, path))
+  const key = Object.keys(object || {}).find(itemKey => same(itemKey, path))
   return typeof key === 'string' ? object[key] : undefined
 }
 

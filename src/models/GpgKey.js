@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class GpgKey
@@ -89,19 +90,19 @@ class GpgKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['public_key'] && !isString(params['public_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(public_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params['public_key'])}`)
     }
     if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(private_key)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
     }
     if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(private_key_password)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params['private_key_password'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     if (!params['id']) {
@@ -114,6 +115,7 @@ class GpgKey {
 
     const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new GpgKey(response?.data, this.options)
   }
 
@@ -128,7 +130,7 @@ class GpgKey {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -177,6 +179,7 @@ class GpgKey {
 
     const response = await Api.sendRequest(`/gpg_keys`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new GpgKey(obj, options)) || []
   }
 
@@ -202,6 +205,7 @@ class GpgKey {
 
     const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new GpgKey(response?.data, options)
   }
 
@@ -241,6 +245,7 @@ class GpgKey {
 
     const response = await Api.sendRequest(`/gpg_keys`, 'POST', params, options)
 
+    
     return new GpgKey(response?.data, options)
   }
 }

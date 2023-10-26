@@ -1,6 +1,6 @@
 {
   "name": "files.com",
-  "version": "1.0.421",
+  "version": "1.0.422",
   "description": "Files.com SDK for JavaScript",
   "keywords": [
     "files.com",
@@ -29,15 +29,21 @@
   "devDependencies": {
     "@babel/cli": "^7.10.3",
     "@babel/core": "^7.10.3",
+    "@babel/eslint-parser": "^7.22.15",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.10.3",
     "@babel/preset-env": "^7.10.3",
+    "eslint": "^8.51.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jest": "^27.4.2",
     "jest": "^29.7.0"
   },
   "scripts": {
     "build": "./node_modules/.bin/babel src -d lib",
     "test": "jest",
+    "lint": "eslint --fix src/",
     "watch": "jest --watch"
   }
 }

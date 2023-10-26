@@ -1,6 +1,6 @@
 import pathNormalizer from './pathNormalizer'
 
-import normalizationForComparisonTestData from '../../../common/shared/normalization_for_comparison_test_data.json'
+import normalizationForComparisonTestData from '../../shared/normalization_for_comparison_test_data.json'
 
 describe('pathNormalizer', () => {
   it('normalizes paths for comparison', () => {

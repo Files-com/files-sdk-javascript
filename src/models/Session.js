@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Session
@@ -114,6 +115,7 @@ class Session {
 
     const response = await Api.sendRequest(`/sessions`, 'POST', params, options)
 
+    
     return new Session(response?.data, options)
   }
 

@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class As2Partner
@@ -139,19 +140,19 @@ class As2Partner {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['uri'] && !isString(params['uri'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(uri)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(params['uri'])}`)
     }
     if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(server_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params['server_certificate'])}`)
     }
     if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(public_certificate)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params['public_certificate'])}`)
     }
 
     if (!params['id']) {
@@ -164,6 +165,7 @@ class As2Partner {
 
     const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new As2Partner(response?.data, this.options)
   }
 
@@ -178,7 +180,7 @@ class As2Partner {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -221,6 +223,7 @@ class As2Partner {
 
     const response = await Api.sendRequest(`/as2_partners`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new As2Partner(obj, options)) || []
   }
 
@@ -246,6 +249,7 @@ class As2Partner {
 
     const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new As2Partner(response?.data, options)
   }
 
@@ -298,6 +302,7 @@ class As2Partner {
 
     const response = await Api.sendRequest(`/as2_partners`, 'POST', params, options)
 
+    
     return new As2Partner(response?.data, options)
   }
 }

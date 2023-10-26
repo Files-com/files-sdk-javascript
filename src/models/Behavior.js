@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Behavior
@@ -106,22 +107,22 @@ class Behavior {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['value'] && !isString(params['value'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(value)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params['value'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(description)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
     }
     if (params['behavior'] && !isString(params['behavior'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(behavior)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params['behavior'])}`)
     }
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
 
     if (!params['id']) {
@@ -134,6 +135,7 @@ class Behavior {
 
     const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Behavior(response?.data, this.options)
   }
 
@@ -148,7 +150,7 @@ class Behavior {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -194,6 +196,7 @@ class Behavior {
 
     const response = await Api.sendRequest(`/behaviors`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }
 
@@ -219,6 +222,7 @@ class Behavior {
 
     const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Behavior(response?.data, options)
   }
 
@@ -267,6 +271,7 @@ class Behavior {
 
     const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }
 
@@ -308,6 +313,7 @@ class Behavior {
 
     const response = await Api.sendRequest(`/behaviors`, 'POST', params, options)
 
+    
     return new Behavior(response?.data, options)
   }
 

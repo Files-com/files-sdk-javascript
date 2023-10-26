@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class BundleNotification
@@ -73,7 +74,7 @@ class BundleNotification {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -86,6 +87,7 @@ class BundleNotification {
 
     const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new BundleNotification(response?.data, this.options)
   }
 
@@ -100,7 +102,7 @@ class BundleNotification {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -150,6 +152,7 @@ class BundleNotification {
 
     const response = await Api.sendRequest(`/bundle_notifications`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new BundleNotification(obj, options)) || []
   }
 
@@ -175,6 +178,7 @@ class BundleNotification {
 
     const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new BundleNotification(response?.data, options)
   }
 
@@ -201,6 +205,7 @@ class BundleNotification {
 
     const response = await Api.sendRequest(`/bundle_notifications`, 'POST', params, options)
 
+    
     return new BundleNotification(response?.data, options)
   }
 }

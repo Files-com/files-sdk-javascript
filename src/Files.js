@@ -5,7 +5,7 @@ const endpointPrefix = '/api/rest/v1'
 let apiKey
 let baseUrl = 'https://app.files.com'
 let sessionId = null
-let version = "1.0.421"
+const version = '1.0'
 let userAgent = `Files.com JavaScript SDK v${version}`
 
 let logLevel = LogLevel.INFO
@@ -19,21 +19,26 @@ let networkTimeout = 30.0
 let autoPaginate = true
 
 class Files {
-  static setUserAgent = value => userAgent = value
+  static setUserAgent = value => { userAgent = value }
+
   static getUserAgent = () => userAgent
 
-  static setApiKey = value => apiKey = value
+  static setApiKey = value => { apiKey = value }
+
   static getApiKey = () => apiKey
 
-  static setBaseUrl = value => baseUrl = value
+  static setBaseUrl = value => { baseUrl = value }
+
   static getBaseUrl = () => baseUrl
 
-  static setSessionId = value => sessionId = value
+  static setSessionId = value => { sessionId = value }
+
   static getSessionId = () => sessionId
 
   static getEndpointPrefix = () => endpointPrefix
 
-  static setLogLevel = value => logLevel = value
+  static setLogLevel = value => { logLevel = value }
+
   static getLogLevel = () => logLevel
 
   static configureDebugging = options => {
@@ -47,6 +52,7 @@ class Files {
   }
 
   static shouldDebugRequest = () => debugRequest
+
   static shouldDebugResponseHeaders = () => debugResponseHeaders
 
   static configureNetwork = options => {
@@ -72,9 +78,13 @@ class Files {
   }
 
   static getMaxNetworkRetries = () => maxNetworkRetries
+
   static getMinNetworkRetryDelay = () => minNetworkRetryDelay
+
   static getMaxNetworkRetryDelay = () => maxNetworkRetryDelay
+
   static getNetworkTimeout = () => networkTimeout
+
   static getAutoPaginate = () => autoPaginate
 }
 

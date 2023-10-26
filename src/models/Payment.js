@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Payment
@@ -80,6 +81,7 @@ class Payment {
 
     const response = await Api.sendRequest(`/payments`, 'GET', params, options)
 
+    const AccountLineItem = require("./AccountLineItem.js").default
     return response?.data?.map(obj => new AccountLineItem(obj, options)) || []
   }
 
@@ -105,6 +107,7 @@ class Payment {
 
     const response = await Api.sendRequest(`/payments/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    const AccountLineItem = require("./AccountLineItem.js").default
     return new AccountLineItem(response?.data, options)
   }
 

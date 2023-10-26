@@ -19,10 +19,10 @@ const saveUrlToStream = async (url, stream) => new Promise((resolve, reject) => 
       resolve()
     })
   })
-  .on('error', error => {
-    stream.close()
-    reject(error)
-  })
+    .on('error', error => {
+      stream.close()
+      reject(error)
+    })
 })
 
 const saveUrlToString = async url => new Promise((resolve, reject) => {
@@ -33,9 +33,9 @@ const saveUrlToString = async url => new Promise((resolve, reject) => {
     response.on('data', chunk => chunks.push(Buffer.from(chunk)))
     response.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
   })
-  .on('error', error => {
-    reject(error)
-  })
+    .on('error', error => {
+      reject(error)
+    })
 })
 
 const saveUrlToFile = async (url, destinationPath) => {

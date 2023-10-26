@@ -1,3 +1,4 @@
+/* eslint-disable camelcase, max-classes-per-file */
 import Logger from './Logger'
 
 export class FilesError extends Error {
@@ -37,7 +38,7 @@ export const handleErrorResponse = error => {
   }
 
   if (Array.isArray(errorData)) {
-    errorData = errorData[0]
+    [ errorData ] = errorData
   }
 
   if (!errorData.type) {

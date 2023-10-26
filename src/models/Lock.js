@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Lock
@@ -121,10 +122,10 @@ class Lock {
 
     params.path = this.attributes.path
     if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(path)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
     }
     if (params['token'] && !isString(params['token'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(token)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params['token'])}`)
     }
 
     if (!params['path']) {
@@ -187,6 +188,7 @@ class Lock {
 
     const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Lock(obj, options)) || []
   }
 
@@ -221,6 +223,7 @@ class Lock {
 
     const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'POST', params, options)
 
+    
     return new Lock(response?.data, options)
   }
 }

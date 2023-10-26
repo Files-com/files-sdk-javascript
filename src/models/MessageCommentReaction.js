@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class MessageCommentReaction
@@ -56,7 +57,7 @@ class MessageCommentReaction {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -113,6 +114,7 @@ class MessageCommentReaction {
 
     const response = await Api.sendRequest(`/message_comment_reactions`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new MessageCommentReaction(obj, options)) || []
   }
 
@@ -138,6 +140,7 @@ class MessageCommentReaction {
 
     const response = await Api.sendRequest(`/message_comment_reactions/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new MessageCommentReaction(response?.data, options)
   }
 
@@ -162,6 +165,7 @@ class MessageCommentReaction {
 
     const response = await Api.sendRequest(`/message_comment_reactions`, 'POST', params, options)
 
+    
     return new MessageCommentReaction(response?.data, options)
   }
 }

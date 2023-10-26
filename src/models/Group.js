@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Group
@@ -82,19 +83,19 @@ class Group {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['notes'] && !isString(params['notes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params['notes'])}`)
     }
     if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params['user_ids'])}`)
     }
     if (params['admin_ids'] && !isString(params['admin_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(admin_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(params['admin_ids'])}`)
     }
 
     if (!params['id']) {
@@ -107,6 +108,7 @@ class Group {
 
     const response = await Api.sendRequest(`/groups/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Group(response?.data, this.options)
   }
 
@@ -121,7 +123,7 @@ class Group {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -172,6 +174,7 @@ class Group {
 
     const response = await Api.sendRequest(`/groups`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Group(obj, options)) || []
   }
 
@@ -197,6 +200,7 @@ class Group {
 
     const response = await Api.sendRequest(`/groups/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Group(response?.data, options)
   }
 
@@ -227,6 +231,7 @@ class Group {
 
     const response = await Api.sendRequest(`/groups`, 'POST', params, options)
 
+    
     return new Group(response?.data, options)
   }
 }

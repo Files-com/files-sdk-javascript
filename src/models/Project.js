@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Project
@@ -51,10 +52,10 @@ class Project {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['global_access'] && !isString(params['global_access'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: global_access must be of type String, received ${getType(global_access)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: global_access must be of type String, received ${getType(params['global_access'])}`)
     }
 
     if (!params['id']) {
@@ -75,6 +76,7 @@ class Project {
 
     const response = await Api.sendRequest(`/projects/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Project(response?.data, this.options)
   }
 
@@ -89,7 +91,7 @@ class Project {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -132,6 +134,7 @@ class Project {
 
     const response = await Api.sendRequest(`/projects`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Project(obj, options)) || []
   }
 
@@ -157,6 +160,7 @@ class Project {
 
     const response = await Api.sendRequest(`/projects/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Project(response?.data, options)
   }
 
@@ -176,6 +180,7 @@ class Project {
 
     const response = await Api.sendRequest(`/projects`, 'POST', params, options)
 
+    
     return new Project(response?.data, options)
   }
 }

@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Snapshot
@@ -88,16 +89,16 @@ class Snapshot {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(expires_at)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['paths'] && !isArray(params['paths'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(paths)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params['paths'])}`)
     }
 
     if (!params['id']) {
@@ -110,6 +111,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Snapshot(response?.data, this.options)
   }
 
@@ -124,7 +126,7 @@ class Snapshot {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -167,6 +169,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Snapshot(obj, options)) || []
   }
 
@@ -192,6 +195,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Snapshot(response?.data, options)
   }
 
@@ -217,6 +221,7 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots`, 'POST', params, options)
 
+    
     return new Snapshot(response?.data, options)
   }
 }

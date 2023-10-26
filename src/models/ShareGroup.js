@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class ShareGroup
@@ -81,16 +82,16 @@ class ShareGroup {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['notes'] && !isString(params['notes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(notes)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params['notes'])}`)
     }
     if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(name)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
     if (params['members'] && !isArray(params['members'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: members must be of type Array, received ${getType(members)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: members must be of type Array, received ${getType(params['members'])}`)
     }
 
     if (!params['id']) {
@@ -103,6 +104,7 @@ class ShareGroup {
 
     const response = await Api.sendRequest(`/share_groups/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new ShareGroup(response?.data, this.options)
   }
 
@@ -117,7 +119,7 @@ class ShareGroup {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -165,6 +167,7 @@ class ShareGroup {
 
     const response = await Api.sendRequest(`/share_groups`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new ShareGroup(obj, options)) || []
   }
 
@@ -190,6 +193,7 @@ class ShareGroup {
 
     const response = await Api.sendRequest(`/share_groups/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new ShareGroup(response?.data, options)
   }
 
@@ -228,6 +232,7 @@ class ShareGroup {
 
     const response = await Api.sendRequest(`/share_groups`, 'POST', params, options)
 
+    
     return new ShareGroup(response?.data, options)
   }
 }

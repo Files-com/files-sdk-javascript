@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import Logger from '../Logger'
-import { getType, isArray, isBrowser, isInt, isObject, isString } from '../utils'
+import { getType, isArray, isInt, isObject, isString } from '../utils'
+/* eslint-enable no-unused-vars */
 
 /**
  * Class Notification
@@ -203,22 +204,22 @@ class Notification {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
     if (params['send_interval'] && !isString(params['send_interval'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(send_interval)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(params['send_interval'])}`)
     }
     if (params['message'] && !isString(params['message'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(message)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(params['message'])}`)
     }
     if (params['triggering_filenames'] && !isArray(params['triggering_filenames'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: triggering_filenames must be of type Array, received ${getType(triggering_filenames)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_filenames must be of type Array, received ${getType(params['triggering_filenames'])}`)
     }
     if (params['triggering_group_ids'] && !isArray(params['triggering_group_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(triggering_group_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_group_ids must be of type Array, received ${getType(params['triggering_group_ids'])}`)
     }
     if (params['triggering_user_ids'] && !isArray(params['triggering_user_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(triggering_user_ids)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: triggering_user_ids must be of type Array, received ${getType(params['triggering_user_ids'])}`)
     }
 
     if (!params['id']) {
@@ -231,6 +232,7 @@ class Notification {
 
     const response = await Api.sendRequest(`/notifications/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
 
+    
     return new Notification(response?.data, this.options)
   }
 
@@ -245,7 +247,7 @@ class Notification {
 
     params.id = this.attributes.id
     if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(id)}`)
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
 
     if (!params['id']) {
@@ -307,6 +309,7 @@ class Notification {
 
     const response = await Api.sendRequest(`/notifications`, 'GET', params, options)
 
+    
     return response?.data?.map(obj => new Notification(obj, options)) || []
   }
 
@@ -332,6 +335,7 @@ class Notification {
 
     const response = await Api.sendRequest(`/notifications/${encodeURIComponent(params['id'])}`, 'GET', params, options)
 
+    
     return new Notification(response?.data, options)
   }
 
@@ -395,6 +399,7 @@ class Notification {
 
     const response = await Api.sendRequest(`/notifications`, 'POST', params, options)
 
+    
     return new Notification(response?.data, options)
   }
 }

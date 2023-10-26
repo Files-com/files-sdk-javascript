@@ -1,4 +1,5 @@
 class Logger {
+  /* eslint-disable sort-keys */
   static LogLevel = {
     NONE: 0,
     ERROR: 1,
@@ -6,6 +7,7 @@ class Logger {
     INFO: 3,
     DEBUG: 4,
   }
+  /* eslint-enable sort-keys */
 
   static getLogLevelMethod = level => {
     switch (level) {
@@ -13,41 +15,39 @@ class Logger {
       case Logger.LogLevel.WARN: return 'warn'
       case Logger.LogLevel.INFO: return 'info'
       case Logger.LogLevel.DEBUG: return 'log'
+      default: return 'log'
     }
-  
-    return 'log'
   }
 
   static isPaused = false
 
   static getLogLevelName = level => {
     switch (level) {
-      case LogLevel.ERROR: return 'error'
-      case LogLevel.WARN: return 'warn'
-      case LogLevel.INFO: return 'info'
-      case LogLevel.DEBUG: return 'debug'
+      case Logger.LogLevel.ERROR: return 'error'
+      case Logger.LogLevel.WARN: return 'warn'
+      case Logger.LogLevel.INFO: return 'info'
+      case Logger.LogLevel.DEBUG: return 'debug'
+      default: return level
     }
-
-    return level
   }
 
   static error = (...messages) => {
-    Logger.log(LogLevel.ERROR, ...messages)
+    Logger.log(Logger.LogLevel.ERROR, ...messages)
   }
 
   static warn = (...messages) => {
-    Logger.log(LogLevel.WARN, ...messages)
+    Logger.log(Logger.LogLevel.WARN, ...messages)
   }
 
   static info = (...messages) => {
-    Logger.log(LogLevel.INFO, ...messages)
+    Logger.log(Logger.LogLevel.INFO, ...messages)
   }
 
   static debug = (...messages) => {
-    Logger.log(LogLevel.DEBUG, ...messages)
+    Logger.log(Logger.LogLevel.DEBUG, ...messages)
   }
 
-  static log = (level = LogLevel.INFO, ...messages) => {
+  static log = (level = Logger.LogLevel.INFO, ...messages) => {
     if (Logger.isPaused || messages.length === 0) {
       return
     }
@@ -55,12 +55,12 @@ class Logger {
     const Files = require('./Files').default
 
     if (Files.getLogLevel() < level) {
-      return;
+      return
     }
 
     const prefix = `[${Logger.getLogLevelName(level)}]: `
     const method = Logger.getLogLevelMethod(level)
-    console[method](prefix, ...messages)
+    console[method](prefix, ...messages) // eslint-disable-line no-console
   }
 
   static pause = () => {
@@ -72,7 +72,7 @@ class Logger {
   }
 }
 
-export const LogLevel = Logger.LogLevel
+export const { LogLevel } = Logger
 
 export default Logger
 
