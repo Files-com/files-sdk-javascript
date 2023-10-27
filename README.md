@@ -176,3 +176,4 @@ Additional docs are available at https://developers.files.com
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email support@files.com and we'll get the process started.
+
