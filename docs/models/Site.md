@@ -20,6 +20,10 @@
   "bundle_expiration": 1,
   "bundle_not_found_message": "example",
   "bundle_password_required": true,
+  "bundle_recipient_blacklist_domains": [
+    "example"
+  ],
+  "bundle_recipient_blacklist_free_email_domains": true,
   "bundle_registration_notifications": "never",
   "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
@@ -240,6 +244,8 @@
 * `bundle_expiration` (int64): Site-wide Bundle expiration in days
 * `bundle_not_found_message` (string): Custom error message to show when bundle is not found.
 * `bundle_password_required` (boolean): Do Bundles require password protection?
+* `bundle_recipient_blacklist_domains` (array): List of email domains to disallow when entering a Bundle/Inbox recipients
+* `bundle_recipient_blacklist_free_email_domains` (boolean): Disallow free email domains for Bundle/Inbox recipients?
 * `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
 * `bundle_require_registration` (boolean): Do Bundles require registration?
 * `bundle_require_share_recipient` (boolean): Do Bundles require recipients for sharing?
@@ -479,6 +485,8 @@ await Site.update({
   'active_sftp_host_key_id': 1,
   'bundle_watermark_value': {"key":"example value"},
   'group_admins_can_set_user_password': true,
+  'bundle_recipient_blacklist_free_email_domains': true,
+  'bundle_recipient_blacklist_domains': ["example"],
   'allowed_2fa_method_sms': true,
   'allowed_2fa_method_u2f': true,
   'allowed_2fa_method_totp': true,
@@ -615,6 +623,8 @@ await Site.update({
 * `active_sftp_host_key_id` (int64): Id of the currently selected custom SFTP Host Key
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `group_admins_can_set_user_password` (boolean): Allow group admins set password authentication method
+* `bundle_recipient_blacklist_free_email_domains` (boolean): Disallow free email domains for Bundle/Inbox recipients?
+* `bundle_recipient_blacklist_domains` (array(string)): List of email domains to disallow when entering a Bundle/Inbox recipients
 * `allowed_2fa_method_sms` (boolean): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_u2f` (boolean): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_totp` (boolean): Is TOTP two factor authentication allowed?

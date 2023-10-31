@@ -72,6 +72,12 @@ class Site {
   // boolean # Do Bundles require password protection?
   getBundlePasswordRequired = () => this.attributes.bundle_password_required
 
+  // array # List of email domains to disallow when entering a Bundle/Inbox recipients
+  getBundleRecipientBlacklistDomains = () => this.attributes.bundle_recipient_blacklist_domains
+
+  // boolean # Disallow free email domains for Bundle/Inbox recipients?
+  getBundleRecipientBlacklistFreeEmailDomains = () => this.attributes.bundle_recipient_blacklist_free_email_domains
+
   // string # Do Bundle owners receive registration notification?
   getBundleRegistrationNotifications = () => this.attributes.bundle_registration_notifications
 
@@ -564,6 +570,8 @@ class Site {
   //   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
   //   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   //   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
+  //   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
+  //   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
   //   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
   //   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
   //   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
@@ -756,6 +764,10 @@ class Site {
 
     if (params['active_sftp_host_key_id'] && !isInt(params['active_sftp_host_key_id'])) {
       throw new errors.InvalidParameterError(`Bad parameter: active_sftp_host_key_id must be of type Int, received ${getType(params['active_sftp_host_key_id'])}`)
+    }
+
+    if (params['bundle_recipient_blacklist_domains'] && !isArray(params['bundle_recipient_blacklist_domains'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_recipient_blacklist_domains must be of type Array, received ${getType(params['bundle_recipient_blacklist_domains'])}`)
     }
 
     if (params['require_2fa_user_type'] && !isString(params['require_2fa_user_type'])) {
