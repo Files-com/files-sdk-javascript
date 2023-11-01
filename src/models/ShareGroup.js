@@ -53,13 +53,6 @@ class ShareGroup {
   }
 
   // array # A list of share group members
-  getShareGroupMembers = () => this.attributes.share_group_members
-
-  setShareGroupMembers = value => {
-    this.attributes.share_group_members = value
-  }
-
-  // array(object) # A list of share group members.
   getMembers = () => this.attributes.members
 
   setMembers = value => {
