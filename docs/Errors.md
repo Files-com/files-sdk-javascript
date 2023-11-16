@@ -180,6 +180,8 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_ResourceLockedError
 ### ProcessingFailure_SubfolderLockedError
 ### ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError
+### ProcessingFailure_TwoFactorAuthenticationCountryBlacklistedError
+### ProcessingFailure_TwoFactorAuthenticationGeneralErrorError
 ### ProcessingFailure_UpdatesNotAllowedForRemotesError
 ### RateLimited_DuplicateShareRecipientError
 ### RateLimited_ReauthenticationRateLimitedError
