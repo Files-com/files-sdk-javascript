@@ -59,13 +59,6 @@ class BundleRecipient {
     this.attributes.sent_at = value
   }
 
-  // int64 # User ID.  Provide a value of `0` to operate the current session's user.
-  getUserId = () => this.attributes.user_id
-
-  setUserId = value => {
-    this.attributes.user_id = value
-  }
-
   // int64 # Bundle to share.
   getBundleId = () => this.attributes.bundle_id
 
@@ -92,7 +85,6 @@ class BundleRecipient {
   }
 
   // Parameters:
-  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[has_registrations]=desc`). Valid fields are `has_registrations`.
@@ -101,10 +93,6 @@ class BundleRecipient {
   static list = async (params = {}, options = {}) => {
     if (!params['bundle_id']) {
       throw new errors.MissingParameterError('Parameter missing: bundle_id')
-    }
-
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['cursor'] && !isString(params['cursor'])) {
@@ -129,7 +117,6 @@ class BundleRecipient {
     BundleRecipient.list(params, options)
 
   // Parameters:
-  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   bundle_id (required) - int64 - Bundle to share.
   //   recipient (required) - string - Email addresses to share this bundle with.
   //   name - string - Name of recipient.
@@ -143,10 +130,6 @@ class BundleRecipient {
 
     if (!params['recipient']) {
       throw new errors.MissingParameterError('Parameter missing: recipient')
-    }
-
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['bundle_id'] && !isInt(params['bundle_id'])) {
