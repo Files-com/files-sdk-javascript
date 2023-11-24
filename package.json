@@ -21,7 +21,7 @@
   "module": "src/files.js",
   "dependencies": {
     "@babel/runtime": "^7.10.3",
-    "cross-fetch": "^4.0.0",
+    "cross-fetch": "^2.2.6",
     "readable-stream": "^4.4.0",
     "safe-buffer": "^5.2.1"
   },
