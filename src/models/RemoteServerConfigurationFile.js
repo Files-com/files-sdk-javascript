@@ -30,11 +30,17 @@ class RemoteServerConfigurationFile {
   // string #
   getPermissionSet = () => this.attributes.permission_set
 
-  // string # Files Agent API Token
-  getApiToken = () => this.attributes.api_token
+  // string # private key
+  getPrivateKey = () => this.attributes.private_key
+
+  // string
+  getSubdomain = () => this.attributes.subdomain
 
   // string # Agent local root path
   getRoot = () => this.attributes.root
+
+  // string # Files Agent API Token
+  getApiToken = () => this.attributes.api_token
 
   // int64 # Incoming port for files agent connections
   getPort = () => this.attributes.port
@@ -45,20 +51,14 @@ class RemoteServerConfigurationFile {
   // string # public key
   getPublicKey = () => this.attributes.public_key
 
-  // string # private key
-  getPrivateKey = () => this.attributes.private_key
-
   // string # either running or shutdown
   getStatus = () => this.attributes.status
-
-  // string # agent config version
-  getConfigVersion = () => this.attributes.config_version
 
   // string
   getServerHostKey = () => this.attributes.server_host_key
 
-  // string
-  getSubdomain = () => this.attributes.subdomain
+  // string # agent config version
+  getConfigVersion = () => this.attributes.config_version
 
 }
 

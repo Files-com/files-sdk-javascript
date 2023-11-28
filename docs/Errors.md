@@ -109,6 +109,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_CannotLoginWhileUsingKeyError
 ### NotAuthorized_CantActForOtherUserError
 ### NotAuthorized_ContactAdminForPasswordChangeHelpError
+### NotAuthorized_FilesAgentFailedAuthorizationError
 ### NotAuthorized_FolderAdminOrBillingPermissionRequiredError
 ### NotAuthorized_FolderAdminPermissionRequiredError
 ### NotAuthorized_FullPermissionRequiredError
@@ -189,6 +190,7 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManyLoginAttemptsError
 ### RateLimited_TooManyRequestsError
 ### RateLimited_TooManySharesError
+### ServiceUnavailable_AgentUnavailableError
 ### ServiceUnavailable_AutomationsUnavailableError
 ### ServiceUnavailable_UploadsUnavailableError
 ### SiteConfiguration_AccountAlreadyExistsError
