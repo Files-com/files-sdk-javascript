@@ -16,10 +16,12 @@ or
 
 ### Import and initialize
 
-    import Files from 'files.com/lib/Files.js'
+```js
+import Files from "files.com/lib/Files.js";
 
-    // set your subdomain or custom domain
-    Files.setBaseUrl('https://MY-SUBDOMAIN.files.com')
+// set your subdomain or custom domain
+Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
+```
 
 #### `require()` vs. `import`
 
@@ -27,11 +29,13 @@ The examples provided in the documentation here use the newer ES6 `import` synta
 instead use the older CommonJS module syntax with `require()`, ensure that `.default`
 is included. For example:
 
-    const Files = require('files.com/lib/Files.js').default
-    const User = require('files.com/lib/models/User.js').default
+```js
+const Files = require("files.com/lib/Files.js").default;
+const User = require("files.com/lib/models/User.js").default;
 
-    // destructure to directly assign a named export
-    const { LogLevel } = require('files.com/lib/Logger.js').default
+// destructure to directly assign a named export
+const { LogLevel } = require("files.com/lib/Logger.js").default;
+```
 
 ### Authentication
 
@@ -169,11 +173,10 @@ For related documentation see [Case Sensitivity Documentation](https://www.files
 
 ### Additional Object Documentation
 
-Additional docs are available at https://developers.files.com
+Additional docs are available at <https://developers.files.com>
 
 ## Getting Support
 
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
-Just email support@files.com and we'll get the process started.
-
+Just email <support@files.com> and we'll get the process started.
