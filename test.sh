@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+rm -f ~/.npmrc && rm -f ~/.yarnrc
+
 # Execute running tests from same directory as current script
 cd "$(dirname "$0")"
 
