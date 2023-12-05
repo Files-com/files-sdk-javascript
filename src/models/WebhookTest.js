@@ -130,11 +130,11 @@ class WebhookTest {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The WebhookTest object doesn\'t support updates.')
       } else {
-        const newObject = WebhookTest.create(this.attributes, this.options)
+        const newObject = await WebhookTest.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

@@ -361,7 +361,7 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}/share`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 
   // Parameters:
@@ -481,17 +481,19 @@ class Bundle {
 
     const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
-        return this.update(this.attributes)
+        const newObject = await this.update(this.attributes)
+        this.attributes = { ...newObject.attributes }
+        return true
       } else {
-        const newObject = Bundle.create(this.attributes, this.options)
+        const newObject = await Bundle.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

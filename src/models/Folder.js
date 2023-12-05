@@ -154,8 +154,8 @@ class Folder {
   }
 
 
-  save = () => {
-      const newObject = Folder.create(this.attributes.path, this.attributes, this.options)
+  save = async () => {
+      const newObject = await Folder.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
   }

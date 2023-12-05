@@ -98,11 +98,11 @@ class ExternalEvent {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The ExternalEvent object doesn\'t support updates.')
       } else {
-        const newObject = ExternalEvent.create(this.attributes, this.options)
+        const newObject = await ExternalEvent.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

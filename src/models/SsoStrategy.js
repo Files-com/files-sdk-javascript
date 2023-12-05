@@ -182,7 +182,7 @@ class SsoStrategy {
 
     const response = await Api.sendRequest(`/sso_strategies/${encodeURIComponent(params['id'])}/sync`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 
   // Parameters:

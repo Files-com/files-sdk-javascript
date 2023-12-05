@@ -74,11 +74,11 @@ class InboxRecipient {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The InboxRecipient object doesn\'t support updates.')
       } else {
-        const newObject = InboxRecipient.create(this.attributes, this.options)
+        const newObject = await InboxRecipient.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

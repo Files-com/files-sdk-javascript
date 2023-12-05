@@ -146,14 +146,14 @@ class Lock {
 
     const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
-      const newObject = Lock.create(this.attributes.path, this.attributes, this.options)
+  save = async () => {
+      const newObject = await Lock.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
   }

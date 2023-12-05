@@ -122,14 +122,17 @@ class Style {
 
     const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () =>
-    this.update(this.attributes)
+  save = async () => {
+    const newObject = await this.update(this.attributes)
+    this.attributes = { ...newObject.attributes }
+    return true
+  }
 
   // Parameters:
   //   path (required) - string - Style path.

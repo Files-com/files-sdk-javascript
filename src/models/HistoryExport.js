@@ -207,11 +207,11 @@ class HistoryExport {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The HistoryExport object doesn\'t support updates.')
       } else {
-        const newObject = HistoryExport.create(this.attributes, this.options)
+        const newObject = await HistoryExport.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

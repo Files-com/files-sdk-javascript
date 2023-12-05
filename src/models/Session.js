@@ -81,11 +81,11 @@ class Session {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The Session object doesn\'t support updates.')
       } else {
-        const newObject = Session.create(this.attributes, this.options)
+        const newObject = await Session.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }
@@ -122,7 +122,7 @@ class Session {
   static delete = async (options = {}) => {
     const response = await Api.sendRequest(`/sessions`, 'DELETE', {}, options)
 
-    return response?.data
+    return
   }
 
   static destroy = (params = {}, options = {}) =>

@@ -140,17 +140,19 @@ class Clickwrap {
 
     const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
-        return this.update(this.attributes)
+        const newObject = await this.update(this.attributes)
+        this.attributes = { ...newObject.attributes }
+        return true
       } else {
-        const newObject = Clickwrap.create(this.attributes, this.options)
+        const newObject = await Clickwrap.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

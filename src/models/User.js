@@ -536,7 +536,7 @@ class User {
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/unlock`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 
   // Resend user welcome email
@@ -564,7 +564,7 @@ class User {
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/resend_welcome_email`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 
   // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
@@ -592,7 +592,7 @@ class User {
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}/2fa/reset`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 
   // Parameters:
@@ -771,17 +771,19 @@ class User {
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
-        return this.update(this.attributes)
+        const newObject = await this.update(this.attributes)
+        this.attributes = { ...newObject.attributes }
+        return true
       } else {
-        const newObject = User.create(this.attributes, this.options)
+        const newObject = await User.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

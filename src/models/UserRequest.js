@@ -77,17 +77,17 @@ class UserRequest {
 
     const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The UserRequest object doesn\'t support updates.')
       } else {
-        const newObject = UserRequest.create(this.attributes, this.options)
+        const newObject = await UserRequest.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

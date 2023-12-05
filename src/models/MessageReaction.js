@@ -70,17 +70,17 @@ class MessageReaction {
 
     const response = await Api.sendRequest(`/message_reactions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The MessageReaction object doesn\'t support updates.')
       } else {
-        const newObject = MessageReaction.create(this.attributes, this.options)
+        const newObject = await MessageReaction.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

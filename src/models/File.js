@@ -595,7 +595,7 @@ class File {
 
     const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
@@ -741,8 +741,8 @@ class File {
     return response?.data?.map(obj => new FileUploadPart(obj, this.options)) || []
   }
 
-  save = () => {
-      const newObject = File.create(this.attributes.path, this.attributes, this.options)
+  save = async () => {
+      const newObject = await File.create(this.attributes.path, this.attributes, this.options)
       this.attributes = { ...newObject.attributes }
       return true
   }

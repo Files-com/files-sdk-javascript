@@ -77,17 +77,17 @@ class FileCommentReaction {
 
     const response = await Api.sendRequest(`/file_comment_reactions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
 
-    return response?.data
+    return
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The FileCommentReaction object doesn\'t support updates.')
       } else {
-        const newObject = FileCommentReaction.create(this.attributes, this.options)
+        const newObject = await FileCommentReaction.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

@@ -74,11 +74,11 @@ class BundleRecipient {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The BundleRecipient object doesn\'t support updates.')
       } else {
-        const newObject = BundleRecipient.create(this.attributes, this.options)
+        const newObject = await BundleRecipient.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

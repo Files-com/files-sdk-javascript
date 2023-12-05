@@ -123,11 +123,11 @@ class ActionNotificationExport {
   }
 
 
-  save = () => {
+  save = async () => {
       if (this.attributes['id']) {
         throw new errors.NotImplementedError('The ActionNotificationExport object doesn\'t support updates.')
       } else {
-        const newObject = ActionNotificationExport.create(this.attributes, this.options)
+        const newObject = await ActionNotificationExport.create(this.attributes, this.options)
         this.attributes = { ...newObject.attributes }
         return true
       }

@@ -50,7 +50,7 @@ class ActionWebhookFailure {
 
     const response = await Api.sendRequest(`/action_webhook_failures/${encodeURIComponent(params['id'])}/retry`, 'POST', params, this.options)
 
-    return response?.data
+    return
   }
 }
 
