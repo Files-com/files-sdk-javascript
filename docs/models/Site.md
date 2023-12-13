@@ -12,6 +12,7 @@
   "allowed_2fa_method_yubi": true,
   "allowed_2fa_method_bypass_for_ftp_sftp_dav": true,
   "admin_user_id": 1,
+  "admins_bypass_locked_subfolders": true,
   "allow_bundle_names": true,
   "allowed_countries": "US,DE",
   "allowed_ips": "example",
@@ -236,6 +237,7 @@
 * `allowed_2fa_method_yubi` (boolean): Is yubikey two factor authentication allowed?
 * `allowed_2fa_method_bypass_for_ftp_sftp_dav` (boolean): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `admin_user_id` (int64): User ID for the main site administrator
+* `admins_bypass_locked_subfolders` (boolean): Allow admins to bypass the locked subfolders setting.
 * `allow_bundle_names` (boolean): Are manual Bundle names allowed?
 * `allowed_countries` (string): Comma seperated list of allowed Country codes
 * `allowed_ips` (string): List of allowed IP addresses
@@ -487,6 +489,7 @@ await Site.update({
   'group_admins_can_set_user_password': true,
   'bundle_recipient_blacklist_free_email_domains': true,
   'bundle_recipient_blacklist_domains': ["example"],
+  'admins_bypass_locked_subfolders': true,
   'allowed_2fa_method_sms': true,
   'allowed_2fa_method_u2f': true,
   'allowed_2fa_method_totp': true,
@@ -625,6 +628,7 @@ await Site.update({
 * `group_admins_can_set_user_password` (boolean): Allow group admins set password authentication method
 * `bundle_recipient_blacklist_free_email_domains` (boolean): Disallow free email domains for Bundle/Inbox recipients?
 * `bundle_recipient_blacklist_domains` (array(string)): List of email domains to disallow when entering a Bundle/Inbox recipients
+* `admins_bypass_locked_subfolders` (boolean): Allow admins to bypass the locked subfolders setting.
 * `allowed_2fa_method_sms` (boolean): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_u2f` (boolean): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_totp` (boolean): Is TOTP two factor authentication allowed?
