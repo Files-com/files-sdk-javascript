@@ -39,6 +39,9 @@ class SsoStrategy {
   // int64 # ID
   getId = () => this.attributes.id
 
+  // int64 # Count of users with this SSO Strategy
+  getUserCount = () => this.attributes.user_count
+
   // string # Identity provider sha256 cert fingerprint if saml_provider_metadata_url is not available.
   getSamlProviderCertFingerprint = () => this.attributes.saml_provider_cert_fingerprint
 
