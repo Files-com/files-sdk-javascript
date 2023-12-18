@@ -1,6 +1,6 @@
 {
   "name": "files.com",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Files.com SDK for JavaScript",
   "keywords": [
     "files.com",
@@ -17,8 +17,8 @@
   "engines": {
     "node": "^6 || ^8.1 || >=10.*"
   },
-  "main": "lib/files.js",
-  "module": "src/files.js",
+  "main": "lib/Files.js",
+  "module": "src/Files.js",
   "dependencies": {
     "@babel/runtime": "^7.10.3",
     "cross-fetch": "^4.0.0",
