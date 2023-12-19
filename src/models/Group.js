@@ -66,11 +66,43 @@ class Group {
     this.attributes.usernames = value
   }
 
+  // boolean # If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+  getFtpPermission = () => this.attributes.ftp_permission
+
+  setFtpPermission = value => {
+    this.attributes.ftp_permission = value
+  }
+
+  // boolean # If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+  getSftpPermission = () => this.attributes.sftp_permission
+
+  setSftpPermission = value => {
+    this.attributes.sftp_permission = value
+  }
+
+  // boolean # If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+  getDavPermission = () => this.attributes.dav_permission
+
+  setDavPermission = value => {
+    this.attributes.dav_permission = value
+  }
+
+  // boolean # If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+  getRestapiPermission = () => this.attributes.restapi_permission
+
+  setRestapiPermission = value => {
+    this.attributes.restapi_permission = value
+  }
+
 
   // Parameters:
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+  //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+  //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+  //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+  //   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
   //   name - string - Group name.
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -213,6 +245,10 @@ class Group {
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+  //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+  //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+  //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+  //   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
   //   name (required) - string - Group name.
   static create = async (params = {}, options = {}) => {
     if (!params['name']) {
