@@ -31,6 +31,13 @@ class Automation {
     this.attributes.id = value
   }
 
+  // boolean # Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
+  getAlwaysOverwriteSizeMatchingFiles = () => this.attributes.always_overwrite_size_matching_files
+
+  setAlwaysOverwriteSizeMatchingFiles = value => {
+    this.attributes.always_overwrite_size_matching_files = value
+  }
+
   // string # Automation type
   getAutomation = () => this.attributes.automation
 
@@ -45,6 +52,34 @@ class Automation {
     this.attributes.deleted = value
   }
 
+  // string # Description for the this Automation.
+  getDescription = () => this.attributes.description
+
+  setDescription = value => {
+    this.attributes.description = value
+  }
+
+  // string # If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
+  getDestinationReplaceFrom = () => this.attributes.destination_replace_from
+
+  setDestinationReplaceFrom = value => {
+    this.attributes.destination_replace_from = value
+  }
+
+  // string # If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
+  getDestinationReplaceTo = () => this.attributes.destination_replace_to
+
+  setDestinationReplaceTo = value => {
+    this.attributes.destination_replace_to = value
+  }
+
+  // array # Destination Paths
+  getDestinations = () => this.attributes.destinations
+
+  setDestinations = value => {
+    this.attributes.destinations = value
+  }
+
   // boolean # If true, this automation will not run.
   getDisabled = () => this.attributes.disabled
 
@@ -52,11 +87,11 @@ class Automation {
     this.attributes.disabled = value
   }
 
-  // string # How this automation is triggered to run.
-  getTrigger = () => this.attributes.trigger
+  // array # IDs of Groups for the Automation (i.e. who to Request File from)
+  getGroupIds = () => this.attributes.group_ids
 
-  setTrigger = value => {
-    this.attributes.trigger = value
+  setGroupIds = value => {
+    this.attributes.group_ids = value
   }
 
   // string # If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -80,6 +115,20 @@ class Automation {
     this.attributes.name = value
   }
 
+  // string # Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  getPath = () => this.attributes.path
+
+  setPath = value => {
+    this.attributes.path = value
+  }
+
+  // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  getRecurringDay = () => this.attributes.recurring_day
+
+  setRecurringDay = value => {
+    this.attributes.recurring_day = value
+  }
+
   // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
   getSchedule = () => this.attributes.schedule
 
@@ -94,81 +143,11 @@ class Automation {
     this.attributes.source = value
   }
 
-  // array # Destination Paths
-  getDestinations = () => this.attributes.destinations
-
-  setDestinations = value => {
-    this.attributes.destinations = value
-  }
-
-  // string # If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
-  getDestinationReplaceFrom = () => this.attributes.destination_replace_from
-
-  setDestinationReplaceFrom = value => {
-    this.attributes.destination_replace_from = value
-  }
-
-  // string # If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
-  getDestinationReplaceTo = () => this.attributes.destination_replace_to
-
-  setDestinationReplaceTo = value => {
-    this.attributes.destination_replace_to = value
-  }
-
-  // string # Description for the this Automation.
-  getDescription = () => this.attributes.description
-
-  setDescription = value => {
-    this.attributes.description = value
-  }
-
-  // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-  getRecurringDay = () => this.attributes.recurring_day
-
-  setRecurringDay = value => {
-    this.attributes.recurring_day = value
-  }
-
-  // string # Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
-  getPath = () => this.attributes.path
-
-  setPath = value => {
-    this.attributes.path = value
-  }
-
-  // int64 # User ID of the Automation's creator.
-  getUserId = () => this.attributes.user_id
-
-  setUserId = value => {
-    this.attributes.user_id = value
-  }
-
   // array # IDs of remote sync folder behaviors to run by this Automation
   getSyncIds = () => this.attributes.sync_ids
 
   setSyncIds = value => {
     this.attributes.sync_ids = value
-  }
-
-  // array # IDs of Users for the Automation (i.e. who to Request File from)
-  getUserIds = () => this.attributes.user_ids
-
-  setUserIds = value => {
-    this.attributes.user_ids = value
-  }
-
-  // array # IDs of Groups for the Automation (i.e. who to Request File from)
-  getGroupIds = () => this.attributes.group_ids
-
-  setGroupIds = value => {
-    this.attributes.group_ids = value
-  }
-
-  // string # If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
-  getWebhookUrl = () => this.attributes.webhook_url
-
-  setWebhookUrl = value => {
-    this.attributes.webhook_url = value
   }
 
   // array # If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -178,11 +157,39 @@ class Automation {
     this.attributes.trigger_actions = value
   }
 
+  // string # How this automation is triggered to run.
+  getTrigger = () => this.attributes.trigger
+
+  setTrigger = value => {
+    this.attributes.trigger = value
+  }
+
+  // int64 # User ID of the Automation's creator.
+  getUserId = () => this.attributes.user_id
+
+  setUserId = value => {
+    this.attributes.user_id = value
+  }
+
+  // array # IDs of Users for the Automation (i.e. who to Request File from)
+  getUserIds = () => this.attributes.user_ids
+
+  setUserIds = value => {
+    this.attributes.user_ids = value
+  }
+
   // object # A Hash of attributes specific to the automation type.
   getValue = () => this.attributes.value
 
   setValue = value => {
     this.attributes.value = value
+  }
+
+  // string # If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
+  getWebhookUrl = () => this.attributes.webhook_url
+
+  setWebhookUrl = value => {
+    this.attributes.webhook_url = value
   }
 
   // string # DEPRECATED: Destination Path. Use `destinations` instead.
@@ -233,6 +240,7 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
+  //   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   name - string - Name for this automation.
@@ -425,6 +433,7 @@ class Automation {
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   schedule - object - Custom schedule for running this automation.
+  //   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   name - string - Name for this automation.
