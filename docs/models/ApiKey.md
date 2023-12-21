@@ -27,11 +27,10 @@
 * `key` (string): API Key actual key string
 * `last_use_at` (date-time): API Key last used - note this value is only updated once per 3 hour period, so the 'actual' time of last use may be up to 3 hours later than this timestamp.
 * `name` (string): Internal name for the API Key.  For your use.
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 * `platform` (string): If this API key represents a Desktop app, what platform was it created on?
 * `url` (string): URL for API host.
 * `user_id` (int64): User ID for the owner of this API Key.  May be blank for Site-wide API Keys.
-* `path` (string): Folder path restriction for this api key.
 
 ---
 
@@ -90,7 +89,6 @@ await ApiKey.create({
   'description': "example",
   'expires_at': "2000-01-01T01:00:00Z",
   'permission_set': "full",
-  'path': "shared/docs",
 })
 ```
 
@@ -101,8 +99,7 @@ await ApiKey.create({
 * `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
-* `path` (string): Folder path restriction for this api key.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 ---
 
@@ -121,7 +118,7 @@ await ApiKey.updateCurrent({
 
 * `expires_at` (string): API Key expiration date
 * `name` (string): Internal name for the API Key.  For your use.
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 ---
 
@@ -153,7 +150,7 @@ await api_key.update({
 * `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 ### Example Response
 
