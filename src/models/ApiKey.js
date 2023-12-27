@@ -106,10 +106,10 @@ class ApiKey {
 
 
   // Parameters:
-  //   name - string - Internal name for the API Key.  For your use.
   //   description - string - User-supplied description of API key.
   //   expires_at - string - API Key expiration date
   //   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+  //   name - string - Internal name for the API Key.  For your use.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -123,9 +123,6 @@ class ApiKey {
     if (params['id'] && !isInt(params['id'])) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
     }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
     if (params['description'] && !isString(params['description'])) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
     }
@@ -134,6 +131,9 @@ class ApiKey {
     }
     if (params['permission_set'] && !isString(params['permission_set'])) {
       throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
+    }
+    if (params['name'] && !isString(params['name'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     if (!params['id']) {
@@ -259,17 +259,17 @@ class ApiKey {
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   name - string - Internal name for the API Key.  For your use.
   //   description - string - User-supplied description of API key.
   //   expires_at - string - API Key expiration date
   //   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+  //   name (required) - string - Internal name for the API Key.  For your use.
   static create = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (!params['name']) {
+      throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params['user_id'] && !isInt(params['user_id'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
     }
 
     if (params['description'] && !isString(params['description'])) {
@@ -282,6 +282,10 @@ class ApiKey {
 
     if (params['permission_set'] && !isString(params['permission_set'])) {
       throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
+    }
+
+    if (params['name'] && !isString(params['name'])) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
     }
 
     const response = await Api.sendRequest(`/api_keys`, 'POST', params, options)

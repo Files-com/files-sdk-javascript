@@ -85,10 +85,10 @@ await ApiKey.find(id)
 ```
 await ApiKey.create({
   'user_id': 1,
-  'name': "My Main API Key",
   'description': "example",
   'expires_at': "2000-01-01T01:00:00Z",
   'permission_set': "full",
+  'name': "My Main API Key",
 })
 ```
 
@@ -96,10 +96,10 @@ await ApiKey.create({
 ### Parameters
 
 * `user_id` (int64): User ID.  Provide a value of `0` to operate the current session's user.
-* `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `name` (string): Required - Internal name for the API Key.  For your use.
 
 ---
 
@@ -137,20 +137,20 @@ await ApiKey.deleteCurrent
 const [api_key] = await ApiKey.list()
 
 await api_key.update({
-  'name': "My Main API Key",
   'description': "example",
   'expires_at': "2000-01-01T01:00:00Z",
   'permission_set': "full",
+  'name': "My Main API Key",
 })
 ```
 
 ### Parameters
 
 * `id` (int64): Required - Api Key ID.
-* `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `name` (string): Internal name for the API Key.  For your use.
 
 ### Example Response
 
