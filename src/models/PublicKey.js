@@ -41,11 +41,18 @@ class PublicKey {
   // date-time # Public key created at date/time
   getCreatedAt = () => this.attributes.created_at
 
-  // string # Public key fingerprint
+  // string # Public key fingerprint (MD5)
   getFingerprint = () => this.attributes.fingerprint
 
   setFingerprint = value => {
     this.attributes.fingerprint = value
+  }
+
+  // string # Public key fingerprint (SHA256)
+  getFingerprintSha256 = () => this.attributes.fingerprint_sha256
+
+  setFingerprintSha256 = value => {
+    this.attributes.fingerprint_sha256 = value
   }
 
   // string # Username of the user this public key is associated with
