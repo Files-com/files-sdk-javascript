@@ -62,6 +62,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidFilterCombinationError
 ### BadRequest_InvalidFilterFieldError
 ### BadRequest_InvalidFilterParamError
+### BadRequest_InvalidFilterParamValueError
 ### BadRequest_InvalidInputEncodingError
 ### BadRequest_InvalidInterfaceError
 ### BadRequest_InvalidOauthProviderError
