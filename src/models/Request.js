@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Request {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Request {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Request ID
   getId = () => this.attributes.id
 
@@ -80,7 +84,6 @@ class Request {
     this.attributes.group_ids = value
   }
 
-
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -91,34 +94,32 @@ class Request {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/requests/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/requests/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The Request object doesn\'t support updates.')
-      } else {
-        const newObject = await Request.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The Request object doesn\'t support updates.')
+    } else {
+      const newObject = await Request.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -128,21 +129,20 @@ class Request {
   //   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
   //   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    const response = await Api.sendRequest(`/requests`, 'GET', params, options)
+    const response = await Api.sendRequest('/requests', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Request(obj, options)) || []
   }
 
@@ -160,27 +160,26 @@ class Request {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    const response = await Api.sendRequest(`/requests/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/requests/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Request(obj, options)) || []
   }
 
@@ -190,33 +189,32 @@ class Request {
   //   user_ids - string - A list of user IDs to request the file from. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs to request the file from. If sent as a string, it should be comma-delimited.
   static create = async (params = {}, options = {}) => {
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (!params['destination']) {
+    if (!params.destination) {
       throw new errors.MissingParameterError('Parameter missing: destination')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['destination'] && !isString(params['destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params['destination'])}`)
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params['user_ids'])}`)
+    if (params.user_ids && !isString(params.user_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params.user_ids)}`)
     }
 
-    if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params['group_ids'])}`)
+    if (params.group_ids && !isString(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
-    const response = await Api.sendRequest(`/requests`, 'POST', params, options)
+    const response = await Api.sendRequest('/requests', 'POST', params, options)
 
-    
     return new Request(response?.data, options)
   }
 }

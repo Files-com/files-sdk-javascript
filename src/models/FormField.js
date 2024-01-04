@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FormField {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class FormField {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Form field id
   getId = () => this.attributes.id
 
@@ -47,7 +51,6 @@ class FormField {
 
   // int64 # Form field set id
   getFormFieldSetId = () => this.attributes.form_field_set_id
-
 }
 
 export default FormField

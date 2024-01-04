@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class BundleDownload {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class BundleDownload {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // BundleRegistration
   getBundleRegistration = () => this.attributes.bundle_registration
 
@@ -35,7 +39,6 @@ class BundleDownload {
 
   // date-time # Download date/time
   getCreatedAt = () => this.attributes.created_at
-
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -49,25 +52,24 @@ class BundleDownload {
   //   bundle_id - int64 - Bundle ID
   //   bundle_registration_id - int64 - BundleRegistration ID
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params['bundle_id'])}`)
+    if (params.bundle_id && !isInt(params.bundle_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
-    if (params['bundle_registration_id'] && !isInt(params['bundle_registration_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_id must be of type Int, received ${getType(params['bundle_registration_id'])}`)
+    if (params.bundle_registration_id && !isInt(params.bundle_registration_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_id must be of type Int, received ${getType(params.bundle_registration_id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_downloads`, 'GET', params, options)
+    const response = await Api.sendRequest('/bundle_downloads', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new BundleDownload(obj, options)) || []
   }
 

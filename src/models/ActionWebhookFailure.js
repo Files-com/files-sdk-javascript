@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class ActionWebhookFailure {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -36,21 +39,19 @@ class ActionWebhookFailure {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/action_webhook_failures/${encodeURIComponent(params['id'])}/retry`, 'POST', params, this.options)
-
-    return
+    await Api.sendRequest(`/action_webhook_failures/${encodeURIComponent(params.id)}/retry`, 'POST', params, this.options)
   }
 }
 

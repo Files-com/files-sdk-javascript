@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class WebhookTest {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class WebhookTest {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Status HTTP code
   getCode = () => this.attributes.code
 
@@ -129,15 +133,14 @@ class WebhookTest {
     this.attributes.use_dedicated_ips = value
   }
 
-
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The WebhookTest object doesn\'t support updates.')
-      } else {
-        const newObject = await WebhookTest.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The WebhookTest object doesn\'t support updates.')
+    } else {
+      const newObject = await WebhookTest.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -152,37 +155,36 @@ class WebhookTest {
   //   action - string - action for test body
   //   use_dedicated_ips - boolean - Use dedicated IPs for sending the webhook?
   static create = async (params = {}, options = {}) => {
-    if (!params['url']) {
+    if (!params.url) {
       throw new errors.MissingParameterError('Parameter missing: url')
     }
 
-    if (params['url'] && !isString(params['url'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params['url'])}`)
+    if (params.url && !isString(params.url)) {
+      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params.url)}`)
     }
 
-    if (params['method'] && !isString(params['method'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params['method'])}`)
+    if (params.method && !isString(params.method)) {
+      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params.method)}`)
     }
 
-    if (params['encoding'] && !isString(params['encoding'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params['encoding'])}`)
+    if (params.encoding && !isString(params.encoding)) {
+      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params.encoding)}`)
     }
 
-    if (params['raw_body'] && !isString(params['raw_body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(params['raw_body'])}`)
+    if (params.raw_body && !isString(params.raw_body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(params.raw_body)}`)
     }
 
-    if (params['file_form_field'] && !isString(params['file_form_field'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(params['file_form_field'])}`)
+    if (params.file_form_field && !isString(params.file_form_field)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(params.file_form_field)}`)
     }
 
-    if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
+    if (params.action && !isString(params.action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
     }
 
-    const response = await Api.sendRequest(`/webhook_tests`, 'POST', params, options)
+    const response = await Api.sendRequest('/webhook_tests', 'POST', params, options)
 
-    
     return new WebhookTest(response?.data, options)
   }
 }

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class UserRequest {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class UserRequest {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # ID
   getId = () => this.attributes.id
 
@@ -52,7 +56,6 @@ class UserRequest {
     this.attributes.details = value
   }
 
-
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -63,51 +66,48 @@ class UserRequest {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/user_requests/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The UserRequest object doesn\'t support updates.')
-      } else {
-        const newObject = await UserRequest.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The UserRequest object doesn\'t support updates.')
+    } else {
+      const newObject = await UserRequest.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/user_requests`, 'GET', params, options)
+    const response = await Api.sendRequest('/user_requests', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new UserRequest(obj, options)) || []
   }
 
@@ -121,19 +121,18 @@ class UserRequest {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/user_requests/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new UserRequest(response?.data, options)
   }
 
@@ -145,33 +144,32 @@ class UserRequest {
   //   email (required) - string - Email of user requested
   //   details (required) - string - Details of the user request
   static create = async (params = {}, options = {}) => {
-    if (!params['name']) {
+    if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (!params['email']) {
+    if (!params.email) {
       throw new errors.MissingParameterError('Parameter missing: email')
     }
 
-    if (!params['details']) {
+    if (!params.details) {
       throw new errors.MissingParameterError('Parameter missing: details')
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['email'] && !isString(params['email'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params['email'])}`)
+    if (params.email && !isString(params.email)) {
+      throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params.email)}`)
     }
 
-    if (params['details'] && !isString(params['details'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: details must be of type String, received ${getType(params['details'])}`)
+    if (params.details && !isString(params.details)) {
+      throw new errors.InvalidParameterError(`Bad parameter: details must be of type String, received ${getType(params.details)}`)
     }
 
-    const response = await Api.sendRequest(`/user_requests`, 'POST', params, options)
+    const response = await Api.sendRequest('/user_requests', 'POST', params, options)
 
-    
     return new UserRequest(response?.data, options)
   }
 }

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class BundleNotification {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class BundleNotification {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Bundle ID to notify on
   getBundleId = () => this.attributes.bundle_id
 
@@ -59,7 +63,6 @@ class BundleNotification {
     this.attributes.user_id = value
   }
 
-
   // Parameters:
   //   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
   //   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
@@ -73,21 +76,20 @@ class BundleNotification {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new BundleNotification(response?.data, this.options)
   }
 
@@ -101,36 +103,34 @@ class BundleNotification {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await BundleNotification.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await BundleNotification.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -139,17 +139,16 @@ class BundleNotification {
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[bundle_id]=desc`). Valid fields are `bundle_id`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_notifications`, 'GET', params, options)
+    const response = await Api.sendRequest('/bundle_notifications', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new BundleNotification(obj, options)) || []
   }
 
@@ -163,19 +162,18 @@ class BundleNotification {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new BundleNotification(response?.data, options)
   }
 
@@ -188,21 +186,20 @@ class BundleNotification {
   //   bundle_id (required) - int64 - Bundle ID to notify on
   //   user_id - int64 - The id of the user to notify.
   static create = async (params = {}, options = {}) => {
-    if (!params['bundle_id']) {
+    if (!params.bundle_id) {
       throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
 
-    if (params['bundle_id'] && !isInt(params['bundle_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params['bundle_id'])}`)
+    if (params.bundle_id && !isInt(params.bundle_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    const response = await Api.sendRequest(`/bundle_notifications`, 'POST', params, options)
+    const response = await Api.sendRequest('/bundle_notifications', 'POST', params, options)
 
-    
     return new BundleNotification(response?.data, options)
   }
 }

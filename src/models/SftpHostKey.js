@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class SftpHostKey {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class SftpHostKey {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Sftp Host Key ID
   getId = () => this.attributes.id
 
@@ -59,7 +63,6 @@ class SftpHostKey {
     this.attributes.private_key = value
   }
 
-
   // Parameters:
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
@@ -73,27 +76,28 @@ class SftpHostKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
-    if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.private_key && !isString(params.private_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new SftpHostKey(response?.data, this.options)
   }
 
@@ -107,53 +111,50 @@ class SftpHostKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await SftpHostKey.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await SftpHostKey.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/sftp_host_keys`, 'GET', params, options)
+    const response = await Api.sendRequest('/sftp_host_keys', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new SftpHostKey(obj, options)) || []
   }
 
@@ -167,19 +168,18 @@ class SftpHostKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/sftp_host_keys/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new SftpHostKey(response?.data, options)
   }
 
@@ -190,17 +190,16 @@ class SftpHostKey {
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
   static create = async (params = {}, options = {}) => {
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
+    if (params.private_key && !isString(params.private_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    const response = await Api.sendRequest(`/sftp_host_keys`, 'POST', params, options)
+    const response = await Api.sendRequest('/sftp_host_keys', 'POST', params, options)
 
-    
     return new SftpHostKey(response?.data, options)
   }
 }

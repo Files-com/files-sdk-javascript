@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class AutomationRun {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class AutomationRun {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # ID.
   getId = () => this.attributes.id
 
@@ -42,7 +46,6 @@ class AutomationRun {
   // string # Link to status messages log file.
   getStatusMessagesUrl = () => this.attributes.status_messages_url
 
-
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
@@ -50,25 +53,24 @@ class AutomationRun {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `automation_id`. Valid field combinations are `[ automation_id, status ]`.
   //   automation_id (required) - int64 - ID of the associated Automation.
   static list = async (params = {}, options = {}) => {
-    if (!params['automation_id']) {
+    if (!params.automation_id) {
       throw new errors.MissingParameterError('Parameter missing: automation_id')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['automation_id'] && !isInt(params['automation_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(params['automation_id'])}`)
+    if (params.automation_id && !isInt(params.automation_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(params.automation_id)}`)
     }
 
-    const response = await Api.sendRequest(`/automation_runs`, 'GET', params, options)
+    const response = await Api.sendRequest('/automation_runs', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new AutomationRun(obj, options)) || []
   }
 
@@ -82,19 +84,18 @@ class AutomationRun {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new AutomationRun(response?.data, options)
   }
 

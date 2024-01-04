@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Behavior {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Behavior {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Folder behavior ID
   getId = () => this.attributes.id
 
@@ -87,7 +91,6 @@ class Behavior {
     this.attributes.attachment_delete = value
   }
 
-
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
@@ -106,36 +109,40 @@ class Behavior {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['value'] && !isString(params['value'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params['value'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
-    }
-    if (params['behavior'] && !isString(params['behavior'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params['behavior'])}`)
-    }
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.value && !isString(params.value)) {
+      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
+    }
+
+    if (params.behavior && !isString(params.behavior)) {
+      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params.behavior)}`)
+    }
+
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new Behavior(response?.data, this.options)
   }
 
@@ -149,36 +156,34 @@ class Behavior {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/behaviors/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await Behavior.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await Behavior.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -188,17 +193,16 @@ class Behavior {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors`, 'GET', params, options)
+    const response = await Api.sendRequest('/behaviors', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }
 
@@ -212,19 +216,18 @@ class Behavior {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new Behavior(response?.data, options)
   }
 
@@ -245,35 +248,34 @@ class Behavior {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['recursive'] && !isString(params['recursive'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params['recursive'])}`)
+    if (params.recursive && !isString(params.recursive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params.recursive)}`)
     }
 
-    if (params['behavior'] && !isString(params['behavior'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params['behavior'])}`)
+    if (params.behavior && !isString(params.behavior)) {
+      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params.behavior)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Behavior(obj, options)) || []
   }
 
@@ -285,37 +287,36 @@ class Behavior {
   //   path (required) - string - Folder behaviors path.
   //   behavior (required) - string - Behavior type.
   static create = async (params = {}, options = {}) => {
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (!params['behavior']) {
+    if (!params.behavior) {
       throw new errors.MissingParameterError('Parameter missing: behavior')
     }
 
-    if (params['value'] && !isString(params['value'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params['value'])}`)
+    if (params.value && !isString(params.value)) {
+      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['behavior'] && !isString(params['behavior'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params['behavior'])}`)
+    if (params.behavior && !isString(params.behavior)) {
+      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params.behavior)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors`, 'POST', params, options)
+    const response = await Api.sendRequest('/behaviors', 'POST', params, options)
 
-    
     return new Behavior(response?.data, options)
   }
 
@@ -327,29 +328,27 @@ class Behavior {
   //   body - object - Additional body parameters.
   //   action - string - action for test body
   static webhookTest = async (params = {}, options = {}) => {
-    if (!params['url']) {
+    if (!params.url) {
       throw new errors.MissingParameterError('Parameter missing: url')
     }
 
-    if (params['url'] && !isString(params['url'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params['url'])}`)
+    if (params.url && !isString(params.url)) {
+      throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params.url)}`)
     }
 
-    if (params['method'] && !isString(params['method'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params['method'])}`)
+    if (params.method && !isString(params.method)) {
+      throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params.method)}`)
     }
 
-    if (params['encoding'] && !isString(params['encoding'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params['encoding'])}`)
+    if (params.encoding && !isString(params.encoding)) {
+      throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params.encoding)}`)
     }
 
-    if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
+    if (params.action && !isString(params.action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
     }
 
-    const response = await Api.sendRequest(`/behaviors/webhook/test`, 'POST', params, options)
-
-    return
+    await Api.sendRequest('/behaviors/webhook/test', 'POST', params, options)
   }
 }
 

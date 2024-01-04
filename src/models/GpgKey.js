@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class GpgKey {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class GpgKey {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Your GPG key ID.
   getId = () => this.attributes.id
 
@@ -73,7 +77,6 @@ class GpgKey {
     this.attributes.private_key_password = value
   }
 
-
   // Parameters:
   //   public_key - string - Your GPG public key
   //   private_key - string - Your GPG private key.
@@ -89,33 +92,36 @@ class GpgKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['public_key'] && !isString(params['public_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params['public_key'])}`)
-    }
-    if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
-    }
-    if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params['private_key_password'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.public_key && !isString(params.public_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params.public_key)}`)
+    }
+
+    if (params.private_key && !isString(params.private_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
+    }
+
+    if (params.private_key_password && !isString(params.private_key_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new GpgKey(response?.data, this.options)
   }
 
@@ -129,36 +135,34 @@ class GpgKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await GpgKey.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await GpgKey.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -167,21 +171,20 @@ class GpgKey {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[name]=desc`). Valid fields are `name` and `expires_at`.
   static list = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/gpg_keys`, 'GET', params, options)
+    const response = await Api.sendRequest('/gpg_keys', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new GpgKey(obj, options)) || []
   }
 
@@ -195,19 +198,18 @@ class GpgKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/gpg_keys/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new GpgKey(response?.data, options)
   }
 
@@ -221,33 +223,32 @@ class GpgKey {
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
   //   name (required) - string - Your GPG key name.
   static create = async (params = {}, options = {}) => {
-    if (!params['name']) {
+    if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['public_key'] && !isString(params['public_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params['public_key'])}`)
+    if (params.public_key && !isString(params.public_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params.public_key)}`)
     }
 
-    if (params['private_key'] && !isString(params['private_key'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params['private_key'])}`)
+    if (params.private_key && !isString(params.private_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    if (params['private_key_password'] && !isString(params['private_key_password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params['private_key_password'])}`)
+    if (params.private_key_password && !isString(params.private_key_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    const response = await Api.sendRequest(`/gpg_keys`, 'POST', params, options)
+    const response = await Api.sendRequest('/gpg_keys', 'POST', params, options)
 
-    
     return new GpgKey(response?.data, options)
   }
 }

@@ -4,7 +4,9 @@ import { Buffer } from 'safe-buffer'
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { isBrowser, getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  isBrowser, getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -12,6 +14,7 @@ import { isBrowser, getType, isArray, isInt, isObject, isString } from '../utils
  */
 class File {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -27,6 +30,7 @@ class File {
   }
 
   isLoaded = () => !!this.attributes.path
+
   static _openUpload = async (path, paramsRaw, options) => {
     const params = { ...paramsRaw, action: 'put' }
     const response = await Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params, options)
@@ -105,25 +109,25 @@ class File {
           if (chunkBuffer !== null || !streamEnded) {
             return
           }
-    
+
           try {
             if (chunks.length > 0) {
               const buffer = Buffer.concat(chunks)
               const nextFileUploadPart = await File._continueUpload(destinationPath, ++part, firstFileUploadPart, options)
-    
+
               const uploadUri = determinePartUploadUri(nextFileUploadPart)
-    
+
               // instantiate an httpsAgent dynamically if needed
               const agent = options.getAgentForUrl?.(uploadUri) || options?.agent
-    
+
               concurrentUploads.push(Api.sendFilePart(uploadUri, 'PUT', buffer, { agent }))
             }
-    
+
             await Promise.all(concurrentUploads)
-    
+
             const response = await File._completeUpload(firstFileUploadPart, options)
             const createdFile = new File(response.data, options)
-    
+
             resolve(createdFile)
           } catch (error) {
             reject(error)
@@ -212,7 +216,7 @@ class File {
         // note that this event may occur while there is still data being processed above
         readableStream.on('end', () => {
           streamEnded = true
-  
+
           handleStreamEnd()
         })
       })
@@ -490,7 +494,6 @@ class File {
     this.attributes.with_rename = value
   }
 
-
   // Download file
   //
   // Parameters:
@@ -508,27 +511,28 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
-    }
-    if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.action && !isString(params.action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
+    }
+
+    if (params.preview_size && !isString(params.preview_size)) {
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params.preview_size)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'GET', params, this.options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params.path)}`, 'GET', params, this.options)
 
-    
     return new File(response?.data, this.options)
   }
 
@@ -545,27 +549,28 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params['provided_mtime'])}`)
-    }
-    if (params['priority_color'] && !isString(params['priority_color'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: priority_color must be of type String, received ${getType(params['priority_color'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.provided_mtime && !isString(params.provided_mtime)) {
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params.provided_mtime)}`)
+    }
+
+    if (params.priority_color && !isString(params.priority_color)) {
+      throw new errors.InvalidParameterError(`Bad parameter: priority_color must be of type String, received ${getType(params.priority_color)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params.path)}`, 'PATCH', params, this.options)
 
-    
     return new File(response?.data, this.options)
   }
 
@@ -581,21 +586,19 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/files/${encodeURIComponent(params.path)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -616,32 +619,33 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['destination'] && !isString(params['destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params['destination'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    if (!params['destination']) {
+    if (!params.destination) {
       if (this.attributes.destination) {
-        params['destination'] = this.destination
+        params.destination = this.destination
       } else {
         throw new errors.MissingParameterError('Parameter missing: destination')
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/copy/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/copy/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
-    const FileAction = require("./FileAction.js").default
+    const FileAction = require('./FileAction.js').default
     return new FileAction(response?.data, this.options)
   }
 
@@ -659,32 +663,33 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['destination'] && !isString(params['destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params['destination'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    if (!params['destination']) {
+    if (!params.destination) {
       if (this.attributes.destination) {
-        params['destination'] = this.destination
+        params.destination = this.destination
       } else {
         throw new errors.MissingParameterError('Parameter missing: destination')
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/move/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/move/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
-    const FileAction = require("./FileAction.js").default
+    const FileAction = require('./FileAction.js').default
     return new FileAction(response?.data, this.options)
   }
 
@@ -708,43 +713,48 @@ class File {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['part'] && !isInt(params['part'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(params['part'])}`)
-    }
-    if (params['parts'] && !isInt(params['parts'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(params['parts'])}`)
-    }
-    if (params['ref'] && !isString(params['ref'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(params['ref'])}`)
-    }
-    if (params['restart'] && !isInt(params['restart'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(params['restart'])}`)
-    }
-    if (params['size'] && !isInt(params['size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(params['size'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.part && !isInt(params.part)) {
+      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(params.part)}`)
+    }
+
+    if (params.parts && !isInt(params.parts)) {
+      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(params.parts)}`)
+    }
+
+    if (params.ref && !isString(params.ref)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(params.ref)}`)
+    }
+
+    if (params.restart && !isInt(params.restart)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(params.restart)}`)
+    }
+
+    if (params.size && !isInt(params.size)) {
+      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(params.size)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    const response = await Api.sendRequest(`/file_actions/begin_upload/${encodeURIComponent(params['path'])}`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/file_actions/begin_upload/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
-    const FileUploadPart = require("./FileUploadPart.js").default
+    const FileUploadPart = require('./FileUploadPart.js').default
     return response?.data?.map(obj => new FileUploadPart(obj, this.options)) || []
   }
 
   save = async () => {
-      const newObject = await File.create(this.attributes.path, this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
+    const newObject = await File.create(this.attributes.path, this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -767,55 +777,54 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['action'] && !isString(params['action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params['action'])}`)
+    if (params.action && !isString(params.action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
     }
 
-    if (params['length'] && !isInt(params['length'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: length must be of type Int, received ${getType(params['length'])}`)
+    if (params.length && !isInt(params.length)) {
+      throw new errors.InvalidParameterError(`Bad parameter: length must be of type Int, received ${getType(params.length)}`)
     }
 
-    if (params['part'] && !isInt(params['part'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(params['part'])}`)
+    if (params.part && !isInt(params.part)) {
+      throw new errors.InvalidParameterError(`Bad parameter: part must be of type Int, received ${getType(params.part)}`)
     }
 
-    if (params['parts'] && !isInt(params['parts'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(params['parts'])}`)
+    if (params.parts && !isInt(params.parts)) {
+      throw new errors.InvalidParameterError(`Bad parameter: parts must be of type Int, received ${getType(params.parts)}`)
     }
 
-    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params['provided_mtime'])}`)
+    if (params.provided_mtime && !isString(params.provided_mtime)) {
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params.provided_mtime)}`)
     }
 
-    if (params['ref'] && !isString(params['ref'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(params['ref'])}`)
+    if (params.ref && !isString(params.ref)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ref must be of type String, received ${getType(params.ref)}`)
     }
 
-    if (params['restart'] && !isInt(params['restart'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(params['restart'])}`)
+    if (params.restart && !isInt(params.restart)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restart must be of type Int, received ${getType(params.restart)}`)
     }
 
-    if (params['size'] && !isInt(params['size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(params['size'])}`)
+    if (params.size && !isInt(params.size)) {
+      throw new errors.InvalidParameterError(`Bad parameter: size must be of type Int, received ${getType(params.size)}`)
     }
 
-    if (params['structure'] && !isString(params['structure'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(params['structure'])}`)
+    if (params.structure && !isString(params.structure)) {
+      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type String, received ${getType(params.structure)}`)
     }
 
-    const response = await Api.sendRequest(`/files/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/files/${encodeURIComponent(params.path)}`, 'POST', params, options)
 
-    
     return new File(response?.data, options)
   }
 
@@ -829,23 +838,22 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
+    if (params.preview_size && !isString(params.preview_size)) {
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params.preview_size)}`)
     }
 
-    const response = await Api.sendRequest(`/file_actions/metadata/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_actions/metadata/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    
     return new File(response?.data, options)
   }
 

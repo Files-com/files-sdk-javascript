@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class InboxRecipient {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class InboxRecipient {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # The recipient's company.
   getCompany = () => this.attributes.company
 
@@ -73,15 +77,14 @@ class InboxRecipient {
     this.attributes.share_after_create = value
   }
 
-
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The InboxRecipient object doesn\'t support updates.')
-      } else {
-        const newObject = await InboxRecipient.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The InboxRecipient object doesn\'t support updates.')
+    } else {
+      const newObject = await InboxRecipient.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -91,25 +94,24 @@ class InboxRecipient {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
   //   inbox_id (required) - int64 - List recipients for the inbox with this ID.
   static list = async (params = {}, options = {}) => {
-    if (!params['inbox_id']) {
+    if (!params.inbox_id) {
       throw new errors.MissingParameterError('Parameter missing: inbox_id')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['inbox_id'] && !isInt(params['inbox_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
+    if (params.inbox_id && !isInt(params.inbox_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params.inbox_id)}`)
     }
 
-    const response = await Api.sendRequest(`/inbox_recipients`, 'GET', params, options)
+    const response = await Api.sendRequest('/inbox_recipients', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new InboxRecipient(obj, options)) || []
   }
 
@@ -124,37 +126,36 @@ class InboxRecipient {
   //   note - string - Note to include in email.
   //   share_after_create - boolean - Set to true to share the link with the recipient upon creation.
   static create = async (params = {}, options = {}) => {
-    if (!params['inbox_id']) {
+    if (!params.inbox_id) {
       throw new errors.MissingParameterError('Parameter missing: inbox_id')
     }
 
-    if (!params['recipient']) {
+    if (!params.recipient) {
       throw new errors.MissingParameterError('Parameter missing: recipient')
     }
 
-    if (params['inbox_id'] && !isInt(params['inbox_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params['inbox_id'])}`)
+    if (params.inbox_id && !isInt(params.inbox_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params.inbox_id)}`)
     }
 
-    if (params['recipient'] && !isString(params['recipient'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(params['recipient'])}`)
+    if (params.recipient && !isString(params.recipient)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(params.recipient)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['company'] && !isString(params['company'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params['company'])}`)
+    if (params.company && !isString(params.company)) {
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params.company)}`)
     }
 
-    if (params['note'] && !isString(params['note'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params['note'])}`)
+    if (params.note && !isString(params.note)) {
+      throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params.note)}`)
     }
 
-    const response = await Api.sendRequest(`/inbox_recipients`, 'POST', params, options)
+    const response = await Api.sendRequest('/inbox_recipients', 'POST', params, options)
 
-    
     return new InboxRecipient(response?.data, options)
   }
 }

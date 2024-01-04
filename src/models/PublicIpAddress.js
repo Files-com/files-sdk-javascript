@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class PublicIpAddress {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class PublicIpAddress {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # The public IP address.
   getIpAddress = () => this.attributes.ip_address
 
@@ -35,7 +39,6 @@ class PublicIpAddress {
 
   // boolean
   getSftpEnabled = () => this.attributes.sftp_enabled
-
 }
 
 export default PublicIpAddress

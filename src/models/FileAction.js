@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FileAction {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,12 +27,12 @@ class FileAction {
   }
 
   isLoaded = () => !!this.attributes.path
+
   // string # Status of file operation.
   getStatus = () => this.attributes.status
 
   // int64 # If status is pending, this is the id of the FileMigration to check for status updates.
   getFileMigrationId = () => this.attributes.file_migration_id
-
 }
 
 export default FileAction

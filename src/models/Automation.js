@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Automation {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Automation {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Automation ID
   getId = () => this.attributes.id
 
@@ -199,7 +203,6 @@ class Automation {
     this.attributes.destination = value
   }
 
-
   // Manually run automation
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {
@@ -211,21 +214,19 @@ class Automation {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}/manual_run`, 'POST', params, this.options)
-
-    return
+    await Api.sendRequest(`/automations/${encodeURIComponent(params.id)}/manual_run`, 'POST', params, this.options)
   }
 
   // Parameters:
@@ -259,69 +260,84 @@ class Automation {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['source'] && !isString(params['source'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(params['source'])}`)
-    }
-    if (params['destination'] && !isString(params['destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params['destination'])}`)
-    }
-    if (params['destinations'] && !isArray(params['destinations'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(params['destinations'])}`)
-    }
-    if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(params['destination_replace_from'])}`)
-    }
-    if (params['destination_replace_to'] && !isString(params['destination_replace_to'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(params['destination_replace_to'])}`)
-    }
-    if (params['interval'] && !isString(params['interval'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params['interval'])}`)
-    }
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['sync_ids'] && !isString(params['sync_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: sync_ids must be of type String, received ${getType(params['sync_ids'])}`)
-    }
-    if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params['user_ids'])}`)
-    }
-    if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params['group_ids'])}`)
-    }
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
-    if (params['trigger'] && !isString(params['trigger'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(params['trigger'])}`)
-    }
-    if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(params['trigger_actions'])}`)
-    }
-    if (params['recurring_day'] && !isInt(params['recurring_day'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params['recurring_day'])}`)
-    }
-    if (params['automation'] && !isString(params['automation'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(params['automation'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.source && !isString(params.source)) {
+      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(params.source)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.destinations && !isArray(params.destinations)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(params.destinations)}`)
+    }
+
+    if (params.destination_replace_from && !isString(params.destination_replace_from)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(params.destination_replace_from)}`)
+    }
+
+    if (params.destination_replace_to && !isString(params.destination_replace_to)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(params.destination_replace_to)}`)
+    }
+
+    if (params.interval && !isString(params.interval)) {
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
+    }
+
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.sync_ids && !isString(params.sync_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sync_ids must be of type String, received ${getType(params.sync_ids)}`)
+    }
+
+    if (params.user_ids && !isString(params.user_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params.user_ids)}`)
+    }
+
+    if (params.group_ids && !isString(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.trigger && !isString(params.trigger)) {
+      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(params.trigger)}`)
+    }
+
+    if (params.trigger_actions && !isArray(params.trigger_actions)) {
+      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(params.trigger_actions)}`)
+    }
+
+    if (params.recurring_day && !isInt(params.recurring_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.automation && !isString(params.automation)) {
+      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(params.automation)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new Automation(response?.data, this.options)
   }
 
@@ -335,36 +351,34 @@ class Automation {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/automations/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await Automation.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await Automation.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -378,17 +392,16 @@ class Automation {
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
   //   with_deleted - boolean - Set to true to include deleted automations in the results.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/automations`, 'GET', params, options)
+    const response = await Api.sendRequest('/automations', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Automation(obj, options)) || []
   }
 
@@ -402,19 +415,18 @@ class Automation {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new Automation(response?.data, options)
   }
 
@@ -443,77 +455,76 @@ class Automation {
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   //   automation (required) - string - Automation type
   static create = async (params = {}, options = {}) => {
-    if (!params['automation']) {
+    if (!params.automation) {
       throw new errors.MissingParameterError('Parameter missing: automation')
     }
 
-    if (params['source'] && !isString(params['source'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(params['source'])}`)
+    if (params.source && !isString(params.source)) {
+      throw new errors.InvalidParameterError(`Bad parameter: source must be of type String, received ${getType(params.source)}`)
     }
 
-    if (params['destination'] && !isString(params['destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params['destination'])}`)
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (params['destinations'] && !isArray(params['destinations'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(params['destinations'])}`)
+    if (params.destinations && !isArray(params.destinations)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destinations must be of type Array, received ${getType(params.destinations)}`)
     }
 
-    if (params['destination_replace_from'] && !isString(params['destination_replace_from'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(params['destination_replace_from'])}`)
+    if (params.destination_replace_from && !isString(params.destination_replace_from)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_from must be of type String, received ${getType(params.destination_replace_from)}`)
     }
 
-    if (params['destination_replace_to'] && !isString(params['destination_replace_to'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(params['destination_replace_to'])}`)
+    if (params.destination_replace_to && !isString(params.destination_replace_to)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination_replace_to must be of type String, received ${getType(params.destination_replace_to)}`)
     }
 
-    if (params['interval'] && !isString(params['interval'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params['interval'])}`)
+    if (params.interval && !isString(params.interval)) {
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['sync_ids'] && !isString(params['sync_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: sync_ids must be of type String, received ${getType(params['sync_ids'])}`)
+    if (params.sync_ids && !isString(params.sync_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sync_ids must be of type String, received ${getType(params.sync_ids)}`)
     }
 
-    if (params['user_ids'] && !isString(params['user_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params['user_ids'])}`)
+    if (params.user_ids && !isString(params.user_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_ids must be of type String, received ${getType(params.user_ids)}`)
     }
 
-    if (params['group_ids'] && !isString(params['group_ids'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params['group_ids'])}`)
+    if (params.group_ids && !isString(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['trigger'] && !isString(params['trigger'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(params['trigger'])}`)
+    if (params.trigger && !isString(params.trigger)) {
+      throw new errors.InvalidParameterError(`Bad parameter: trigger must be of type String, received ${getType(params.trigger)}`)
     }
 
-    if (params['trigger_actions'] && !isArray(params['trigger_actions'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(params['trigger_actions'])}`)
+    if (params.trigger_actions && !isArray(params.trigger_actions)) {
+      throw new errors.InvalidParameterError(`Bad parameter: trigger_actions must be of type Array, received ${getType(params.trigger_actions)}`)
     }
 
-    if (params['recurring_day'] && !isInt(params['recurring_day'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params['recurring_day'])}`)
+    if (params.recurring_day && !isInt(params.recurring_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
     }
 
-    if (params['automation'] && !isString(params['automation'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(params['automation'])}`)
+    if (params.automation && !isString(params.automation)) {
+      throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(params.automation)}`)
     }
 
-    const response = await Api.sendRequest(`/automations`, 'POST', params, options)
+    const response = await Api.sendRequest('/automations', 'POST', params, options)
 
-    
     return new Automation(response?.data, options)
   }
 }

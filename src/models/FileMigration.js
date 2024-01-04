@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FileMigration {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class FileMigration {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # File migration ID
   getId = () => this.attributes.id
 
@@ -51,7 +55,6 @@ class FileMigration {
   // string # Link to download the log file for this migration.
   getLogUrl = () => this.attributes.log_url
 
-
   // Parameters:
   //   id (required) - int64 - File Migration ID.
   static find = async (id, params = {}, options = {}) => {
@@ -59,19 +62,18 @@ class FileMigration {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/file_migrations/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/file_migrations/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new FileMigration(response?.data, options)
   }
 

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class AccountLineItem {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class AccountLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Line item Id
   getId = () => this.attributes.id
 
@@ -65,7 +69,6 @@ class AccountLineItem {
 
   // date-time # Line item updated at
   getUpdatedAt = () => this.attributes.updated_at
-
 }
 
 export default AccountLineItem

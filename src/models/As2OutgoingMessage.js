@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class As2OutgoingMessage {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class As2OutgoingMessage {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Id of the AS2 Partner.
   getId = () => this.attributes.id
 
@@ -117,7 +121,6 @@ class As2OutgoingMessage {
   // string # URL to download the http response body
   getMdnResponseUri = () => this.attributes.mdn_response_uri
 
-
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
@@ -129,21 +132,20 @@ class As2OutgoingMessage {
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
   //   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['as2_partner_id'] && !isInt(params['as2_partner_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: as2_partner_id must be of type Int, received ${getType(params['as2_partner_id'])}`)
+    if (params.as2_partner_id && !isInt(params.as2_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: as2_partner_id must be of type Int, received ${getType(params.as2_partner_id)}`)
     }
 
-    const response = await Api.sendRequest(`/as2_outgoing_messages`, 'GET', params, options)
+    const response = await Api.sendRequest('/as2_outgoing_messages', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new As2OutgoingMessage(obj, options)) || []
   }
 

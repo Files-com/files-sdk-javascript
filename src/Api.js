@@ -215,12 +215,13 @@ class Api {
         for (const [key, value] of Object.entries(params)) {
           if (isObject(value)) {
             for (const [key2, value2] of Object.entries(value)) {
-              _params[key + '[' + key2 + "]"] = value2
+              _params[`${key}[${key2}]`] = value2
             }
           } else {
             _params[key] = value
           }
         }
+
         const pairs = Object.entries(_params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         requestPath += path.includes('?') ? '&' : '?'
         requestPath += pairs.join('&')

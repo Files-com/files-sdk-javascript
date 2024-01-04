@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FormFieldSet {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class FormFieldSet {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Form field set id
   getId = () => this.attributes.id
 
@@ -80,7 +84,6 @@ class FormFieldSet {
     this.attributes.user_id = value
   }
 
-
   // Parameters:
   //   title - string - Title to be displayed
   //   skip_email - boolean - Skip validating form email
@@ -97,27 +100,28 @@ class FormFieldSet {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['title'] && !isString(params['title'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params['title'])}`)
-    }
-    if (params['form_fields'] && !isArray(params['form_fields'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params['form_fields'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.title && !isString(params.title)) {
+      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
+    }
+
+    if (params.form_fields && !isArray(params.form_fields)) {
+      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params.form_fields)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new FormFieldSet(response?.data, this.options)
   }
 
@@ -131,36 +135,34 @@ class FormFieldSet {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await FormFieldSet.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await FormFieldSet.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -168,21 +170,20 @@ class FormFieldSet {
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/form_field_sets`, 'GET', params, options)
+    const response = await Api.sendRequest('/form_field_sets', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new FormFieldSet(obj, options)) || []
   }
 
@@ -196,19 +197,18 @@ class FormFieldSet {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/form_field_sets/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new FormFieldSet(response?.data, options)
   }
 
@@ -223,21 +223,20 @@ class FormFieldSet {
   //   skip_company - boolean - Skip validating company
   //   form_fields - array(object)
   static create = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['title'] && !isString(params['title'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params['title'])}`)
+    if (params.title && !isString(params.title)) {
+      throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
     }
 
-    if (params['form_fields'] && !isArray(params['form_fields'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params['form_fields'])}`)
+    if (params.form_fields && !isArray(params.form_fields)) {
+      throw new errors.InvalidParameterError(`Bad parameter: form_fields must be of type Array, received ${getType(params.form_fields)}`)
     }
 
-    const response = await Api.sendRequest(`/form_field_sets`, 'POST', params, options)
+    const response = await Api.sendRequest('/form_field_sets', 'POST', params, options)
 
-    
     return new FormFieldSet(response?.data, options)
   }
 }

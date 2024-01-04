@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class As2Partner {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class As2Partner {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Id of the AS2 Partner.
   getId = () => this.attributes.id
 
@@ -122,7 +126,6 @@ class As2Partner {
     this.attributes.public_certificate = value
   }
 
-
   // Parameters:
   //   name - string - AS2 Name
   //   uri - string - URL base for AS2 responses
@@ -139,33 +142,36 @@ class As2Partner {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
-    if (params['uri'] && !isString(params['uri'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(params['uri'])}`)
-    }
-    if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params['server_certificate'])}`)
-    }
-    if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params['public_certificate'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.uri && !isString(params.uri)) {
+      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(params.uri)}`)
+    }
+
+    if (params.server_certificate && !isString(params.server_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params.server_certificate)}`)
+    }
+
+    if (params.public_certificate && !isString(params.public_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new As2Partner(response?.data, this.options)
   }
 
@@ -179,53 +185,50 @@ class As2Partner {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/as2_partners/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await As2Partner.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await As2Partner.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/as2_partners`, 'GET', params, options)
+    const response = await Api.sendRequest('/as2_partners', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new As2Partner(obj, options)) || []
   }
 
@@ -239,19 +242,18 @@ class As2Partner {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/as2_partners/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new As2Partner(response?.data, options)
   }
 
@@ -266,45 +268,44 @@ class As2Partner {
   //   server_certificate - string - Remote server certificate security setting
   //   enable_dedicated_ips - boolean
   static create = async (params = {}, options = {}) => {
-    if (!params['name']) {
+    if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (!params['uri']) {
+    if (!params.uri) {
       throw new errors.MissingParameterError('Parameter missing: uri')
     }
 
-    if (!params['public_certificate']) {
+    if (!params.public_certificate) {
       throw new errors.MissingParameterError('Parameter missing: public_certificate')
     }
 
-    if (!params['as2_station_id']) {
+    if (!params.as2_station_id) {
       throw new errors.MissingParameterError('Parameter missing: as2_station_id')
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['uri'] && !isString(params['uri'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(params['uri'])}`)
+    if (params.uri && !isString(params.uri)) {
+      throw new errors.InvalidParameterError(`Bad parameter: uri must be of type String, received ${getType(params.uri)}`)
     }
 
-    if (params['public_certificate'] && !isString(params['public_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params['public_certificate'])}`)
+    if (params.public_certificate && !isString(params.public_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
     }
 
-    if (params['as2_station_id'] && !isInt(params['as2_station_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: as2_station_id must be of type Int, received ${getType(params['as2_station_id'])}`)
+    if (params.as2_station_id && !isInt(params.as2_station_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: as2_station_id must be of type Int, received ${getType(params.as2_station_id)}`)
     }
 
-    if (params['server_certificate'] && !isString(params['server_certificate'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params['server_certificate'])}`)
+    if (params.server_certificate && !isString(params.server_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params.server_certificate)}`)
     }
 
-    const response = await Api.sendRequest(`/as2_partners`, 'POST', params, options)
+    const response = await Api.sendRequest('/as2_partners', 'POST', params, options)
 
-    
     return new As2Partner(response?.data, options)
   }
 }

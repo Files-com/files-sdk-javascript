@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class ShareGroupMember {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class ShareGroupMember {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # Name of the share group member
   getName = () => this.attributes.name
 
@@ -32,7 +36,6 @@ class ShareGroupMember {
 
   // string # Email of the share group member
   getEmail = () => this.attributes.email
-
 }
 
 export default ShareGroupMember

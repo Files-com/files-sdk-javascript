@@ -143,9 +143,6 @@ module.exports = {
     // react/, and import/
     'airbnb',
 
-    // Rule names prefixed with react-hooks/
-    'airbnb/hooks',
-
     // Rule names prefixed with jest/
     'plugin:jest/recommended',
   ],

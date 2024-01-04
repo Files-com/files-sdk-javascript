@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Clickwrap {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Clickwrap {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Clickwrap ID
   getId = () => this.attributes.id
 
@@ -66,7 +70,6 @@ class Clickwrap {
     this.attributes.use_with_inboxes = value
   }
 
-
   // Parameters:
   //   name - string - Name of the Clickwrap agreement (used when selecting from multiple Clickwrap agreements.)
   //   body - string - Body text of Clickwrap (supports Markdown formatting).
@@ -83,36 +86,40 @@ class Clickwrap {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
-    }
-    if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
-    }
-    if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params['use_with_bundles'])}`)
-    }
-    if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params['use_with_inboxes'])}`)
-    }
-    if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params['use_with_users'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.body && !isString(params.body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
+    }
+
+    if (params.use_with_bundles && !isString(params.use_with_bundles)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params.use_with_bundles)}`)
+    }
+
+    if (params.use_with_inboxes && !isString(params.use_with_inboxes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params.use_with_inboxes)}`)
+    }
+
+    if (params.use_with_users && !isString(params.use_with_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params.use_with_users)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new Clickwrap(response?.data, this.options)
   }
 
@@ -126,53 +133,50 @@ class Clickwrap {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/clickwraps/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await Clickwrap.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await Clickwrap.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/clickwraps`, 'GET', params, options)
+    const response = await Api.sendRequest('/clickwraps', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Clickwrap(obj, options)) || []
   }
 
@@ -186,19 +190,18 @@ class Clickwrap {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/clickwraps/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new Clickwrap(response?.data, options)
   }
 
@@ -212,29 +215,28 @@ class Clickwrap {
   //   use_with_inboxes - string - Use this Clickwrap for Inboxes?
   //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
   static create = async (params = {}, options = {}) => {
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
+    if (params.body && !isString(params.body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
     }
 
-    if (params['use_with_bundles'] && !isString(params['use_with_bundles'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params['use_with_bundles'])}`)
+    if (params.use_with_bundles && !isString(params.use_with_bundles)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_bundles must be of type String, received ${getType(params.use_with_bundles)}`)
     }
 
-    if (params['use_with_inboxes'] && !isString(params['use_with_inboxes'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params['use_with_inboxes'])}`)
+    if (params.use_with_inboxes && !isString(params.use_with_inboxes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_inboxes must be of type String, received ${getType(params.use_with_inboxes)}`)
     }
 
-    if (params['use_with_users'] && !isString(params['use_with_users'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params['use_with_users'])}`)
+    if (params.use_with_users && !isString(params.use_with_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_with_users must be of type String, received ${getType(params.use_with_users)}`)
     }
 
-    const response = await Api.sendRequest(`/clickwraps`, 'POST', params, options)
+    const response = await Api.sendRequest('/clickwraps', 'POST', params, options)
 
-    
     return new Clickwrap(response?.data, options)
   }
 }

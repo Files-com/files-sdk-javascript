@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class MessageCommentReaction {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class MessageCommentReaction {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Reaction ID
   getId = () => this.attributes.id
 
@@ -45,7 +49,6 @@ class MessageCommentReaction {
     this.attributes.user_id = value
   }
 
-
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -56,34 +59,32 @@ class MessageCommentReaction {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/message_comment_reactions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/message_comment_reactions/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The MessageCommentReaction object doesn\'t support updates.')
-      } else {
-        const newObject = await MessageCommentReaction.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The MessageCommentReaction object doesn\'t support updates.')
+    } else {
+      const newObject = await MessageCommentReaction.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -92,29 +93,28 @@ class MessageCommentReaction {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   message_comment_id (required) - int64 - Message comment to return reactions for.
   static list = async (params = {}, options = {}) => {
-    if (!params['message_comment_id']) {
+    if (!params.message_comment_id) {
       throw new errors.MissingParameterError('Parameter missing: message_comment_id')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['message_comment_id'] && !isInt(params['message_comment_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: message_comment_id must be of type Int, received ${getType(params['message_comment_id'])}`)
+    if (params.message_comment_id && !isInt(params.message_comment_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: message_comment_id must be of type Int, received ${getType(params.message_comment_id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comment_reactions`, 'GET', params, options)
+    const response = await Api.sendRequest('/message_comment_reactions', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new MessageCommentReaction(obj, options)) || []
   }
 
@@ -128,19 +128,18 @@ class MessageCommentReaction {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comment_reactions/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/message_comment_reactions/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new MessageCommentReaction(response?.data, options)
   }
 
@@ -151,21 +150,20 @@ class MessageCommentReaction {
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   emoji (required) - string - Emoji to react with.
   static create = async (params = {}, options = {}) => {
-    if (!params['emoji']) {
+    if (!params.emoji) {
       throw new errors.MissingParameterError('Parameter missing: emoji')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['emoji'] && !isString(params['emoji'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params['emoji'])}`)
+    if (params.emoji && !isString(params.emoji)) {
+      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params.emoji)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comment_reactions`, 'POST', params, options)
+    const response = await Api.sendRequest('/message_comment_reactions', 'POST', params, options)
 
-    
     return new MessageCommentReaction(response?.data, options)
   }
 }

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Action {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Action {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Action ID
   getId = () => this.attributes.id
 
@@ -62,7 +66,6 @@ class Action {
 
   // string # Interface on which this action occurred.
   getInterface = () => this.attributes.interface
-
 }
 
 export default Action

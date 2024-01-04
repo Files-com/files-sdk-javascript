@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FileCommentReaction {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class FileCommentReaction {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Reaction ID
   getId = () => this.attributes.id
 
@@ -52,7 +56,6 @@ class FileCommentReaction {
     this.attributes.file_comment_id = value
   }
 
-
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -63,34 +66,32 @@ class FileCommentReaction {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/file_comment_reactions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/file_comment_reactions/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The FileCommentReaction object doesn\'t support updates.')
-      } else {
-        const newObject = await FileCommentReaction.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The FileCommentReaction object doesn\'t support updates.')
+    } else {
+      const newObject = await FileCommentReaction.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -98,29 +99,28 @@ class FileCommentReaction {
   //   file_comment_id (required) - int64 - ID of file comment to attach reaction to.
   //   emoji (required) - string - Emoji to react with.
   static create = async (params = {}, options = {}) => {
-    if (!params['file_comment_id']) {
+    if (!params.file_comment_id) {
       throw new errors.MissingParameterError('Parameter missing: file_comment_id')
     }
 
-    if (!params['emoji']) {
+    if (!params.emoji) {
       throw new errors.MissingParameterError('Parameter missing: emoji')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['file_comment_id'] && !isInt(params['file_comment_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(params['file_comment_id'])}`)
+    if (params.file_comment_id && !isInt(params.file_comment_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(params.file_comment_id)}`)
     }
 
-    if (params['emoji'] && !isString(params['emoji'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params['emoji'])}`)
+    if (params.emoji && !isString(params.emoji)) {
+      throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params.emoji)}`)
     }
 
-    const response = await Api.sendRequest(`/file_comment_reactions`, 'POST', params, options)
+    const response = await Api.sendRequest('/file_comment_reactions', 'POST', params, options)
 
-    
     return new FileCommentReaction(response?.data, options)
   }
 }

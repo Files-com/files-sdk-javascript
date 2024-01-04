@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class InvoiceLineItem {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class InvoiceLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // double # Invoice line item amount
   getAmount = () => this.attributes.amount
 
@@ -50,7 +54,6 @@ class InvoiceLineItem {
 
   // string # Site name
   getSite = () => this.attributes.site
-
 }
 
 export default InvoiceLineItem

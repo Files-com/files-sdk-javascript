@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class ApiKey {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class ApiKey {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # API Key ID
   getId = () => this.attributes.id
 
@@ -104,7 +108,6 @@ class ApiKey {
     this.attributes.user_id = value
   }
 
-
   // Parameters:
   //   description - string - User-supplied description of API key.
   //   expires_at - string - API Key expiration date
@@ -120,33 +123,36 @@ class ApiKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
-    }
-    if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
-    }
-    if (params['permission_set'] && !isString(params['permission_set'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
-    }
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
+    }
+
+    if (params.expires_at && !isString(params.expires_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
+    }
+
+    if (params.permission_set && !isString(params.permission_set)) {
+      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params.permission_set)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new ApiKey(response?.data, this.options)
   }
 
@@ -160,36 +166,34 @@ class ApiKey {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/api_keys/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await ApiKey.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await ApiKey.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -203,21 +207,20 @@ class ApiKey {
   //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
   static list = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/api_keys`, 'GET', params, options)
+    const response = await Api.sendRequest('/api_keys', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new ApiKey(obj, options)) || []
   }
 
@@ -225,9 +228,8 @@ class ApiKey {
     ApiKey.list(params, options)
 
   static findCurrent = async (options = {}) => {
-    const response = await Api.sendRequest(`/api_key`, 'GET', {}, options)
+    const response = await Api.sendRequest('/api_key', 'GET', {}, options)
 
-    
     return new ApiKey(response?.data, options)
   }
 
@@ -238,19 +240,18 @@ class ApiKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/api_keys/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new ApiKey(response?.data, options)
   }
 
@@ -264,33 +265,32 @@ class ApiKey {
   //   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   //   name (required) - string - Internal name for the API Key.  For your use.
   static create = async (params = {}, options = {}) => {
-    if (!params['name']) {
+    if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['description'] && !isString(params['description'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params['description'])}`)
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
-    if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
+    if (params.expires_at && !isString(params.expires_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
     }
 
-    if (params['permission_set'] && !isString(params['permission_set'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
+    if (params.permission_set && !isString(params.permission_set)) {
+      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params.permission_set)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    const response = await Api.sendRequest(`/api_keys`, 'POST', params, options)
+    const response = await Api.sendRequest('/api_keys', 'POST', params, options)
 
-    
     return new ApiKey(response?.data, options)
   }
 
@@ -299,28 +299,25 @@ class ApiKey {
   //   name - string - Internal name for the API Key.  For your use.
   //   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
   static updateCurrent = async (params = {}, options = {}) => {
-    if (params['expires_at'] && !isString(params['expires_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params['expires_at'])}`)
+    if (params.expires_at && !isString(params.expires_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
     }
 
-    if (params['name'] && !isString(params['name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params['name'])}`)
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params['permission_set'] && !isString(params['permission_set'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params['permission_set'])}`)
+    if (params.permission_set && !isString(params.permission_set)) {
+      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params.permission_set)}`)
     }
 
-    const response = await Api.sendRequest(`/api_key`, 'PATCH', params, options)
+    const response = await Api.sendRequest('/api_key', 'PATCH', params, options)
 
-    
     return new ApiKey(response?.data, options)
   }
 
   static deleteCurrent = async (options = {}) => {
-    const response = await Api.sendRequest(`/api_key`, 'DELETE', {}, options)
-
-    return
+    await Api.sendRequest('/api_key', 'DELETE', {}, options)
   }
 }
 

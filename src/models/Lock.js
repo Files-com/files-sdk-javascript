@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Lock {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Lock {
   }
 
   isLoaded = () => !!this.attributes.path
+
   // string # Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
@@ -108,7 +112,6 @@ class Lock {
     this.attributes.username = value
   }
 
-
   // Parameters:
   //   token (required) - string - Lock token
   delete = async (params = {}) => {
@@ -121,41 +124,40 @@ class Lock {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
-    }
-    if (params['token'] && !isString(params['token'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params['token'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (params.token && !isString(params.token)) {
+      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params.token)}`)
+    }
+
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    if (!params['token']) {
+    if (!params.token) {
       if (this.attributes.token) {
-        params['token'] = this.token
+        params.token = this.token
       } else {
         throw new errors.MissingParameterError('Parameter missing: token')
       }
     }
 
-    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/locks/${encodeURIComponent(params.path)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      const newObject = await Lock.create(this.attributes.path, this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
+    const newObject = await Lock.create(this.attributes.path, this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -168,27 +170,26 @@ class Lock {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Lock(obj, options)) || []
   }
 
@@ -203,27 +204,26 @@ class Lock {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['recursive'] && !isString(params['recursive'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params['recursive'])}`)
+    if (params.recursive && !isString(params.recursive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params.recursive)}`)
     }
 
-    if (params['timeout'] && !isInt(params['timeout'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(params['timeout'])}`)
+    if (params.timeout && !isInt(params.timeout)) {
+      throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(params.timeout)}`)
     }
 
-    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/locks/${encodeURIComponent(params.path)}`, 'POST', params, options)
 
-    
     return new Lock(response?.data, options)
   }
 }

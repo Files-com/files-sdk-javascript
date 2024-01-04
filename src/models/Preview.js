@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Preview {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Preview {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Preview ID
   getId = () => this.attributes.id
 
@@ -38,7 +42,6 @@ class Preview {
 
   // string # Preview size
   getSize = () => this.attributes.size
-
 }
 
 export default Preview

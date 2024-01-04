@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class ActionNotificationExportResult {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class ActionNotificationExportResult {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Notification ID
   getId = () => this.attributes.id
 
@@ -54,36 +58,34 @@ class ActionNotificationExportResult {
   // string # The folder associated with the triggering action for this notification.
   getFolder = () => this.attributes.folder
 
-
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   action_notification_export_id (required) - int64 - ID of the associated action notification export.
   static list = async (params = {}, options = {}) => {
-    if (!params['action_notification_export_id']) {
+    if (!params.action_notification_export_id) {
       throw new errors.MissingParameterError('Parameter missing: action_notification_export_id')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['action_notification_export_id'] && !isInt(params['action_notification_export_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: action_notification_export_id must be of type Int, received ${getType(params['action_notification_export_id'])}`)
+    if (params.action_notification_export_id && !isInt(params.action_notification_export_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action_notification_export_id must be of type Int, received ${getType(params.action_notification_export_id)}`)
     }
 
-    const response = await Api.sendRequest(`/action_notification_export_results`, 'GET', params, options)
+    const response = await Api.sendRequest('/action_notification_export_results', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new ActionNotificationExportResult(obj, options)) || []
   }
 

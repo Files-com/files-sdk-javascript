@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class GroupUser {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class GroupUser {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # Group name
   getGroupName = () => this.attributes.group_name
 
@@ -66,7 +70,6 @@ class GroupUser {
     this.attributes.id = value
   }
 
-
   // Parameters:
   //   group_id (required) - int64 - Group ID to add user to.
   //   user_id (required) - int64 - User ID to add to group.
@@ -81,43 +84,44 @@ class GroupUser {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
-    }
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
+    }
+
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    if (!params['group_id']) {
+    if (!params.group_id) {
       if (this.attributes.group_id) {
-        params['group_id'] = this.group_id
+        params.group_id = this.group_id
       } else {
         throw new errors.MissingParameterError('Parameter missing: group_id')
       }
     }
 
-    if (!params['user_id']) {
+    if (!params.user_id) {
       if (this.attributes.user_id) {
-        params['user_id'] = this.user_id
+        params.user_id = this.user_id
       } else {
         throw new errors.MissingParameterError('Parameter missing: user_id')
       }
     }
 
-    const response = await Api.sendRequest(`/group_users/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/group_users/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new GroupUser(response?.data, this.options)
   }
 
@@ -134,58 +138,58 @@ class GroupUser {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
-    }
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
+    }
+
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    if (!params['group_id']) {
+    if (!params.group_id) {
       if (this.attributes.group_id) {
-        params['group_id'] = this.group_id
+        params.group_id = this.group_id
       } else {
         throw new errors.MissingParameterError('Parameter missing: group_id')
       }
     }
 
-    if (!params['user_id']) {
+    if (!params.user_id) {
       if (this.attributes.user_id) {
-        params['user_id'] = this.user_id
+        params.user_id = this.user_id
       } else {
         throw new errors.MissingParameterError('Parameter missing: user_id')
       }
     }
 
-    const response = await Api.sendRequest(`/group_users/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/group_users/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await GroupUser.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await GroupUser.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -194,25 +198,24 @@ class GroupUser {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   group_id - int64 - Group ID.  If provided, will return group_users of this group.
   static list = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
-    const response = await Api.sendRequest(`/group_users`, 'GET', params, options)
+    const response = await Api.sendRequest('/group_users', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new GroupUser(obj, options)) || []
   }
 
@@ -224,25 +227,24 @@ class GroupUser {
   //   user_id (required) - int64 - User ID to add to group.
   //   admin - boolean - Is the user a group administrator?
   static create = async (params = {}, options = {}) => {
-    if (!params['group_id']) {
+    if (!params.group_id) {
       throw new errors.MissingParameterError('Parameter missing: group_id')
     }
 
-    if (!params['user_id']) {
+    if (!params.user_id) {
       throw new errors.MissingParameterError('Parameter missing: user_id')
     }
 
-    if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    const response = await Api.sendRequest(`/group_users`, 'POST', params, options)
+    const response = await Api.sendRequest('/group_users', 'POST', params, options)
 
-    
     return new GroupUser(response?.data, options)
   }
 }

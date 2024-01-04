@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Image {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,12 +27,12 @@ class Image {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # Image name
   getName = () => this.attributes.name
 
   // string # Image URI
   getUri = () => this.attributes.uri
-
 }
 
 export default Image

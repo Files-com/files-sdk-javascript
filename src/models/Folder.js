@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Folder {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Folder {
   }
 
   isLoaded = () => !!this.attributes.path
+
   // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
@@ -153,11 +157,10 @@ class Folder {
     this.attributes.mkdir_parents = value
   }
 
-
   save = async () => {
-      const newObject = await Folder.create(this.attributes.path, this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
+    const newObject = await Folder.create(this.attributes.path, this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -176,39 +179,39 @@ class Folder {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['filter'] && !isString(params['filter'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: filter must be of type String, received ${getType(params['filter'])}`)
+    if (params.filter && !isString(params.filter)) {
+      throw new errors.InvalidParameterError(`Bad parameter: filter must be of type String, received ${getType(params.filter)}`)
     }
 
-    if (params['preview_size'] && !isString(params['preview_size'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params['preview_size'])}`)
+    if (params.preview_size && !isString(params.preview_size)) {
+      throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params.preview_size)}`)
     }
 
-    if (params['search'] && !isString(params['search'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(params['search'])}`)
+    if (params.search && !isString(params.search)) {
+      throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(params.search)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    const File = require("./File.js").default
+    const File = require('./File.js').default
     return response?.data?.map(obj => new File(obj, options)) || []
   }
 
@@ -221,23 +224,23 @@ class Folder {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['provided_mtime'] && !isString(params['provided_mtime'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params['provided_mtime'])}`)
+    if (params.provided_mtime && !isString(params.provided_mtime)) {
+      throw new errors.InvalidParameterError(`Bad parameter: provided_mtime must be of type String, received ${getType(params.provided_mtime)}`)
     }
 
-    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params['path'])}`, 'POST', params, options)
+    const response = await Api.sendRequest(`/folders/${encodeURIComponent(params.path)}`, 'POST', params, options)
 
-    const File = require("./File.js").default
+    const File = require('./File.js').default
     return new File(response?.data, options)
   }
 }

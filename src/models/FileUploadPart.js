@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class FileUploadPart {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class FileUploadPart {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // object # Content-Type and File to send
   getSend = () => this.attributes.send
 
@@ -71,7 +75,6 @@ class FileUploadPart {
 
   // string # URI to upload this part to
   getUploadUri = () => this.attributes.upload_uri
-
 }
 
 export default FileUploadPart

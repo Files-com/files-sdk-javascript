@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class ExternalEvent {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class ExternalEvent {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Event ID
   getId = () => this.attributes.id
 
@@ -97,15 +101,14 @@ class ExternalEvent {
     this.attributes.remote_server_type = value
   }
 
-
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The ExternalEvent object doesn\'t support updates.')
-      } else {
-        const newObject = await ExternalEvent.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The ExternalEvent object doesn\'t support updates.')
+    } else {
+      const newObject = await ExternalEvent.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -119,17 +122,16 @@ class ExternalEvent {
   //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest(`/external_events`, 'GET', params, options)
+    const response = await Api.sendRequest('/external_events', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new ExternalEvent(obj, options)) || []
   }
 
@@ -143,19 +145,18 @@ class ExternalEvent {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/external_events/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/external_events/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new ExternalEvent(response?.data, options)
   }
 
@@ -166,25 +167,24 @@ class ExternalEvent {
   //   status (required) - string - Status of event.
   //   body (required) - string - Event body
   static create = async (params = {}, options = {}) => {
-    if (!params['status']) {
+    if (!params.status) {
       throw new errors.MissingParameterError('Parameter missing: status')
     }
 
-    if (!params['body']) {
+    if (!params.body) {
       throw new errors.MissingParameterError('Parameter missing: body')
     }
 
-    if (params['status'] && !isString(params['status'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(params['status'])}`)
+    if (params.status && !isString(params.status)) {
+      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(params.status)}`)
     }
 
-    if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
+    if (params.body && !isString(params.body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
     }
 
-    const response = await Api.sendRequest(`/external_events`, 'POST', params, options)
+    const response = await Api.sendRequest('/external_events', 'POST', params, options)
 
-    
     return new ExternalEvent(response?.data, options)
   }
 }

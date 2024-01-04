@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Permission {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Permission {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Permission ID
   getId = () => this.attributes.id
 
@@ -80,7 +84,6 @@ class Permission {
     this.attributes.recursive = value
   }
 
-
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -91,34 +94,32 @@ class Permission {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/permissions/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/permissions/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The Permission object doesn\'t support updates.')
-      } else {
-        const newObject = await Permission.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The Permission object doesn\'t support updates.')
+    } else {
+      const newObject = await Permission.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -132,29 +133,28 @@ class Permission {
   //   group_id - string
   //   user_id - string
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['group_id'] && !isString(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type String, received ${getType(params['group_id'])}`)
+    if (params.group_id && !isString(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type String, received ${getType(params.group_id)}`)
     }
 
-    if (params['user_id'] && !isString(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type String, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isString(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type String, received ${getType(params.user_id)}`)
     }
 
-    const response = await Api.sendRequest(`/permissions`, 'GET', params, options)
+    const response = await Api.sendRequest('/permissions', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new Permission(obj, options)) || []
   }
 
@@ -169,29 +169,28 @@ class Permission {
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
   static create = async (params = {}, options = {}) => {
-    if (params['group_id'] && !isInt(params['group_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params['group_id'])}`)
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params['permission'] && !isString(params['permission'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission must be of type String, received ${getType(params['permission'])}`)
+    if (params.permission && !isString(params.permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: permission must be of type String, received ${getType(params.permission)}`)
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['username'] && !isString(params['username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params['username'])}`)
+    if (params.username && !isString(params.username)) {
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    const response = await Api.sendRequest(`/permissions`, 'POST', params, options)
+    const response = await Api.sendRequest('/permissions', 'POST', params, options)
 
-    
     return new Permission(response?.data, options)
   }
 }

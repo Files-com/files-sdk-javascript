@@ -71,7 +71,7 @@ const testSuite = async () => {
   }
 
   const testUploadAndDownloadToFile = async () => {
-    const sourceFilePath = '../files.com-logo.png'
+    const sourceFilePath = '../../files.com-logo.png'
 
     const displayName = `files.com-logo__${nonce}.png`
     const destinationPath = `${SDK_TEST_ROOT_FOLDER}/${displayName}`

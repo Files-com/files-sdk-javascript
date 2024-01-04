@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Errors {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,12 +27,12 @@ class Errors {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // array # A list of fields where errors occur
   getFields = () => this.attributes.fields
 
   // array # A list of error messages
   getMessages = () => this.attributes.messages
-
 }
 
 export default Errors

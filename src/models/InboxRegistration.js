@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class InboxRegistration {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class InboxRegistration {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # Registration cookie code
   getCode = () => this.attributes.code
 
@@ -60,27 +64,25 @@ class InboxRegistration {
   // date-time # Registration creation date/time
   getCreatedAt = () => this.attributes.created_at
 
-
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   folder_behavior_id - int64 - ID of the associated Inbox.
   static list = async (params = {}, options = {}) => {
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['folder_behavior_id'] && !isInt(params['folder_behavior_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(params['folder_behavior_id'])}`)
+    if (params.folder_behavior_id && !isInt(params.folder_behavior_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(params.folder_behavior_id)}`)
     }
 
-    const response = await Api.sendRequest(`/inbox_registrations`, 'GET', params, options)
+    const response = await Api.sendRequest('/inbox_registrations', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new InboxRegistration(obj, options)) || []
   }
 

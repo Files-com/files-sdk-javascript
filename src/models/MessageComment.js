@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class MessageComment {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class MessageComment {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Message Comment ID
   getId = () => this.attributes.id
 
@@ -52,7 +56,6 @@ class MessageComment {
     this.attributes.user_id = value
   }
 
-
   // Parameters:
   //   body (required) - string - Comment body.
   update = async (params = {}) => {
@@ -65,32 +68,32 @@ class MessageComment {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
-    }
-    if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (params.body && !isString(params.body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
+    }
+
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    if (!params['body']) {
+    if (!params.body) {
       if (this.attributes.body) {
-        params['body'] = this.body
+        params.body = this.body
       } else {
         throw new errors.MissingParameterError('Parameter missing: body')
       }
     }
 
-    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    
     return new MessageComment(response?.data, this.options)
   }
 
@@ -104,36 +107,34 @@ class MessageComment {
     }
 
     params.id = this.attributes.id
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (!params['id']) {
+    if (!params.id) {
       if (this.attributes.id) {
-        params['id'] = this.id
+        params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
       }
     }
 
-    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/message_comments/${encodeURIComponent(params.id)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
     this.delete(params)
 
   save = async () => {
-      if (this.attributes['id']) {
-        const newObject = await this.update(this.attributes)
-        this.attributes = { ...newObject.attributes }
-        return true
-      } else {
-        const newObject = await MessageComment.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      const newObject = await this.update(this.attributes)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
+
+    const newObject = await MessageComment.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
@@ -142,29 +143,28 @@ class MessageComment {
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
   //   message_id (required) - int64 - Message comment to return comments for.
   static list = async (params = {}, options = {}) => {
-    if (!params['message_id']) {
+    if (!params.message_id) {
       throw new errors.MissingParameterError('Parameter missing: message_id')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['cursor'] && !isString(params['cursor'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params['cursor'])}`)
+    if (params.cursor && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params['per_page'] && !isInt(params['per_page'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params['per_page'])}`)
+    if (params.per_page && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params['message_id'] && !isInt(params['message_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: message_id must be of type Int, received ${getType(params['message_id'])}`)
+    if (params.message_id && !isInt(params.message_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: message_id must be of type Int, received ${getType(params.message_id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comments`, 'GET', params, options)
+    const response = await Api.sendRequest('/message_comments', 'GET', params, options)
 
-    
     return response?.data?.map(obj => new MessageComment(obj, options)) || []
   }
 
@@ -178,19 +178,18 @@ class MessageComment {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/message_comments/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new MessageComment(response?.data, options)
   }
 
@@ -201,21 +200,20 @@ class MessageComment {
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   body (required) - string - Comment body.
   static create = async (params = {}, options = {}) => {
-    if (!params['body']) {
+    if (!params.body) {
       throw new errors.MissingParameterError('Parameter missing: body')
     }
 
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['body'] && !isString(params['body'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params['body'])}`)
+    if (params.body && !isString(params.body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
     }
 
-    const response = await Api.sendRequest(`/message_comments`, 'POST', params, options)
+    const response = await Api.sendRequest('/message_comments', 'POST', params, options)
 
-    
     return new MessageComment(response?.data, options)
   }
 }

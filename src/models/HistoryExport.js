@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class HistoryExport {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class HistoryExport {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # History Export ID
   getId = () => this.attributes.id
 
@@ -206,15 +210,14 @@ class HistoryExport {
     this.attributes.user_id = value
   }
 
-
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The HistoryExport object doesn\'t support updates.')
-      } else {
-        const newObject = await HistoryExport.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The HistoryExport object doesn\'t support updates.')
+    } else {
+      const newObject = await HistoryExport.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -224,19 +227,18 @@ class HistoryExport {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['id'] = id
+    params.id = id
 
-    if (!params['id']) {
+    if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params['id'] && !isInt(params['id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params['id'])}`)
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/history_exports/${encodeURIComponent(params['id'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/history_exports/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    
     return new HistoryExport(response?.data, options)
   }
 
@@ -267,97 +269,96 @@ class HistoryExport {
   //   query_target_platform - string - If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
   //   query_target_permission_set - string - If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
   static create = async (params = {}, options = {}) => {
-    if (params['user_id'] && !isInt(params['user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params['user_id'])}`)
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params['start_at'] && !isString(params['start_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params['start_at'])}`)
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
     }
 
-    if (params['end_at'] && !isString(params['end_at'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params['end_at'])}`)
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
     }
 
-    if (params['query_action'] && !isString(params['query_action'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_action must be of type String, received ${getType(params['query_action'])}`)
+    if (params.query_action && !isString(params.query_action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_action must be of type String, received ${getType(params.query_action)}`)
     }
 
-    if (params['query_interface'] && !isString(params['query_interface'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_interface must be of type String, received ${getType(params['query_interface'])}`)
+    if (params.query_interface && !isString(params.query_interface)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_interface must be of type String, received ${getType(params.query_interface)}`)
     }
 
-    if (params['query_user_id'] && !isString(params['query_user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_user_id must be of type String, received ${getType(params['query_user_id'])}`)
+    if (params.query_user_id && !isString(params.query_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_user_id must be of type String, received ${getType(params.query_user_id)}`)
     }
 
-    if (params['query_file_id'] && !isString(params['query_file_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_file_id must be of type String, received ${getType(params['query_file_id'])}`)
+    if (params.query_file_id && !isString(params.query_file_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_file_id must be of type String, received ${getType(params.query_file_id)}`)
     }
 
-    if (params['query_parent_id'] && !isString(params['query_parent_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_parent_id must be of type String, received ${getType(params['query_parent_id'])}`)
+    if (params.query_parent_id && !isString(params.query_parent_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_parent_id must be of type String, received ${getType(params.query_parent_id)}`)
     }
 
-    if (params['query_path'] && !isString(params['query_path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_path must be of type String, received ${getType(params['query_path'])}`)
+    if (params.query_path && !isString(params.query_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_path must be of type String, received ${getType(params.query_path)}`)
     }
 
-    if (params['query_folder'] && !isString(params['query_folder'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_folder must be of type String, received ${getType(params['query_folder'])}`)
+    if (params.query_folder && !isString(params.query_folder)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_folder must be of type String, received ${getType(params.query_folder)}`)
     }
 
-    if (params['query_src'] && !isString(params['query_src'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_src must be of type String, received ${getType(params['query_src'])}`)
+    if (params.query_src && !isString(params.query_src)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_src must be of type String, received ${getType(params.query_src)}`)
     }
 
-    if (params['query_destination'] && !isString(params['query_destination'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_destination must be of type String, received ${getType(params['query_destination'])}`)
+    if (params.query_destination && !isString(params.query_destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_destination must be of type String, received ${getType(params.query_destination)}`)
     }
 
-    if (params['query_ip'] && !isString(params['query_ip'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_ip must be of type String, received ${getType(params['query_ip'])}`)
+    if (params.query_ip && !isString(params.query_ip)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_ip must be of type String, received ${getType(params.query_ip)}`)
     }
 
-    if (params['query_username'] && !isString(params['query_username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_username must be of type String, received ${getType(params['query_username'])}`)
+    if (params.query_username && !isString(params.query_username)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_username must be of type String, received ${getType(params.query_username)}`)
     }
 
-    if (params['query_failure_type'] && !isString(params['query_failure_type'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_failure_type must be of type String, received ${getType(params['query_failure_type'])}`)
+    if (params.query_failure_type && !isString(params.query_failure_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_failure_type must be of type String, received ${getType(params.query_failure_type)}`)
     }
 
-    if (params['query_target_id'] && !isString(params['query_target_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_id must be of type String, received ${getType(params['query_target_id'])}`)
+    if (params.query_target_id && !isString(params.query_target_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_id must be of type String, received ${getType(params.query_target_id)}`)
     }
 
-    if (params['query_target_name'] && !isString(params['query_target_name'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_name must be of type String, received ${getType(params['query_target_name'])}`)
+    if (params.query_target_name && !isString(params.query_target_name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_name must be of type String, received ${getType(params.query_target_name)}`)
     }
 
-    if (params['query_target_permission'] && !isString(params['query_target_permission'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_permission must be of type String, received ${getType(params['query_target_permission'])}`)
+    if (params.query_target_permission && !isString(params.query_target_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_permission must be of type String, received ${getType(params.query_target_permission)}`)
     }
 
-    if (params['query_target_user_id'] && !isString(params['query_target_user_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_user_id must be of type String, received ${getType(params['query_target_user_id'])}`)
+    if (params.query_target_user_id && !isString(params.query_target_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_user_id must be of type String, received ${getType(params.query_target_user_id)}`)
     }
 
-    if (params['query_target_username'] && !isString(params['query_target_username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_username must be of type String, received ${getType(params['query_target_username'])}`)
+    if (params.query_target_username && !isString(params.query_target_username)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_username must be of type String, received ${getType(params.query_target_username)}`)
     }
 
-    if (params['query_target_platform'] && !isString(params['query_target_platform'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_platform must be of type String, received ${getType(params['query_target_platform'])}`)
+    if (params.query_target_platform && !isString(params.query_target_platform)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_platform must be of type String, received ${getType(params.query_target_platform)}`)
     }
 
-    if (params['query_target_permission_set'] && !isString(params['query_target_permission_set'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: query_target_permission_set must be of type String, received ${getType(params['query_target_permission_set'])}`)
+    if (params.query_target_permission_set && !isString(params.query_target_permission_set)) {
+      throw new errors.InvalidParameterError(`Bad parameter: query_target_permission_set must be of type String, received ${getType(params.query_target_permission_set)}`)
     }
 
-    const response = await Api.sendRequest(`/history_exports`, 'POST', params, options)
+    const response = await Api.sendRequest('/history_exports', 'POST', params, options)
 
-    
     return new HistoryExport(response?.data, options)
   }
 }

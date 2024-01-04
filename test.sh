@@ -7,5 +7,6 @@ cd "$(dirname "$0")"
 
 # Install dependencies
 npm install
-npm run lint
+npm run lint && \
+npm run build && \
 npm run test

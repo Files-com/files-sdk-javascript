@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Style {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Style {
   }
 
   isLoaded = () => !!this.attributes.path
+
   // int64 # Style ID
   getId = () => this.attributes.id
 
@@ -59,7 +63,6 @@ class Style {
     this.attributes.file = value
   }
 
-
   // Parameters:
   //   file (required) - file - Logo for custom branding.
   update = async (params = {}) => {
@@ -72,29 +75,28 @@ class Style {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    if (!params['file']) {
+    if (!params.file) {
       if (this.attributes.file) {
-        params['file'] = this.file
+        params.file = this.file
       } else {
         throw new errors.MissingParameterError('Parameter missing: file')
       }
     }
 
-    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'PATCH', params, this.options)
+    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params.path)}`, 'PATCH', params, this.options)
 
-    
     return new Style(response?.data, this.options)
   }
 
@@ -108,21 +110,19 @@ class Style {
     }
 
     params.path = this.attributes.path
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (!params['path']) {
+    if (!params.path) {
       if (this.attributes.path) {
-        params['path'] = this.path
+        params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
       }
     }
 
-    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'DELETE', params, this.options)
-
-    return
+    await Api.sendRequest(`/styles/${encodeURIComponent(params.path)}`, 'DELETE', params, this.options)
   }
 
   destroy = (params = {}) =>
@@ -141,19 +141,18 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
-    params['path'] = path
+    params.path = path
 
-    if (!params['path']) {
+    if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params['path'] && !isString(params['path'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params['path'])}`)
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params['path'])}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/styles/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    
     return new Style(response?.data, options)
   }
 

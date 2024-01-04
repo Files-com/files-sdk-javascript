@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class PaymentLineItem {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class PaymentLineItem {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // double # Payment line item amount
   getAmount = () => this.attributes.amount
 
@@ -35,7 +39,6 @@ class PaymentLineItem {
 
   // int64 # Payment ID
   getPaymentId = () => this.attributes.payment_id
-
 }
 
 export default PaymentLineItem

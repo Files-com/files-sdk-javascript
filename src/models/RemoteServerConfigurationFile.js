@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class RemoteServerConfigurationFile {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class RemoteServerConfigurationFile {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // int64 # Agent ID
   getId = () => this.attributes.id
 
@@ -59,7 +63,6 @@ class RemoteServerConfigurationFile {
 
   // string # agent config version
   getConfigVersion = () => this.attributes.config_version
-
 }
 
 export default RemoteServerConfigurationFile

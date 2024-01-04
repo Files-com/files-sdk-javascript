@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 import Api from '../Api'
 import * as errors from '../Errors'
-import { getType, isArray, isInt, isObject, isString } from '../utils'
+import {
+  getType, isArray, isInt, isObject, isString,
+} from '../utils'
 /* eslint-enable no-unused-vars */
 
 /**
@@ -9,6 +11,7 @@ import { getType, isArray, isInt, isObject, isString } from '../utils'
  */
 class Session {
   attributes = {}
+
   options = {}
 
   constructor(attributes = {}, options = {}) {
@@ -24,6 +27,7 @@ class Session {
   }
 
   isLoaded = () => !!this.attributes.id
+
   // string # Session ID
   getId = () => this.attributes.id
 
@@ -80,15 +84,14 @@ class Session {
     this.attributes.partial_session_id = value
   }
 
-
   save = async () => {
-      if (this.attributes['id']) {
-        throw new errors.NotImplementedError('The Session object doesn\'t support updates.')
-      } else {
-        const newObject = await Session.create(this.attributes, this.options)
-        this.attributes = { ...newObject.attributes }
-        return true
-      }
+    if (this.attributes.id) {
+      throw new errors.NotImplementedError('The Session object doesn\'t support updates.')
+    } else {
+      const newObject = await Session.create(this.attributes, this.options)
+      this.attributes = { ...newObject.attributes }
+      return true
+    }
   }
 
   // Parameters:
@@ -97,32 +100,29 @@ class Session {
   //   otp - string - If this user has a 2FA device, provide its OTP or code here.
   //   partial_session_id - string - Identifier for a partially-completed login
   static create = async (params = {}, options = {}) => {
-    if (params['username'] && !isString(params['username'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params['username'])}`)
+    if (params.username && !isString(params.username)) {
+      throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    if (params['password'] && !isString(params['password'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params['password'])}`)
+    if (params.password && !isString(params.password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
     }
 
-    if (params['otp'] && !isString(params['otp'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: otp must be of type String, received ${getType(params['otp'])}`)
+    if (params.otp && !isString(params.otp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: otp must be of type String, received ${getType(params.otp)}`)
     }
 
-    if (params['partial_session_id'] && !isString(params['partial_session_id'])) {
-      throw new errors.InvalidParameterError(`Bad parameter: partial_session_id must be of type String, received ${getType(params['partial_session_id'])}`)
+    if (params.partial_session_id && !isString(params.partial_session_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partial_session_id must be of type String, received ${getType(params.partial_session_id)}`)
     }
 
-    const response = await Api.sendRequest(`/sessions`, 'POST', params, options)
+    const response = await Api.sendRequest('/sessions', 'POST', params, options)
 
-    
     return new Session(response?.data, options)
   }
 
   static delete = async (options = {}) => {
-    const response = await Api.sendRequest(`/sessions`, 'DELETE', {}, options)
-
-    return
+    await Api.sendRequest('/sessions', 'DELETE', {}, options)
   }
 
   static destroy = (params = {}, options = {}) =>
