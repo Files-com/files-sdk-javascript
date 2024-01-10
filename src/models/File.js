@@ -382,7 +382,7 @@ class File {
     this.attributes.region = value
   }
 
-  // string # A short string representing the current user's permissions.  Can be `r`,`w`,`d`, `l` or any combination
+  // string # A short string representing the current user's permissions.  Can be `r` (Read),`w` (Write),`d` (Delete), `l` (List) or any combination
   getPermissions = () => this.attributes.permissions
 
   setPermissions = value => {
