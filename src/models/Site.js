@@ -133,6 +133,12 @@ class Site {
   // boolean # Is this site using a custom namespace for users?
   getCustomNamespace = () => this.attributes.custom_namespace
 
+  // boolean # Is WebDAV enabled?
+  getDavEnabled = () => this.attributes.dav_enabled
+
+  // boolean # Use user FTP roots also for WebDAV?
+  getDavUserRootEnabled = () => this.attributes.dav_user_root_enabled
+
   // int64 # Number of days to keep deleted files
   getDaysToRetainBackups = () => this.attributes.days_to_retain_backups
 
@@ -547,6 +553,7 @@ class Site {
   //   password_require_number - boolean - Require a number in passwords?
   //   password_require_unbreached - boolean - Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
   //   require_logout_from_bundles_and_inboxes - boolean - If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
+  //   dav_user_root_enabled - boolean - Use user FTP roots also for WebDAV?
   //   sftp_user_root_enabled - boolean - Use user FTP roots also for SFTP?
   //   disable_password_reset - boolean - Is password reset disabled?
   //   immutable_files - boolean - Are files protected from modification?
@@ -569,6 +576,7 @@ class Site {
   //   sharing_enabled - boolean - Allow bundle creation
   //   user_requests_enabled - boolean - Enable User Requests feature
   //   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
+  //   dav_enabled - boolean - Is WebDAV enabled?
   //   ftp_enabled - boolean - Is FTP enabled?
   //   sftp_enabled - boolean - Is SFTP enabled?
   //   sftp_host_key_type - string - Sftp Host Key Type

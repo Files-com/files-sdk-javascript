@@ -43,6 +43,8 @@
   "created_at": "2000-01-01T01:00:00Z",
   "currency": "USD",
   "custom_namespace": true,
+  "dav_enabled": true,
+  "dav_user_root_enabled": true,
   "days_to_retain_backups": 30,
   "default_time_zone": "Pacific Time (US & Canada)",
   "desktop_app": true,
@@ -264,6 +266,8 @@
 * `created_at` (date-time): Time this site was created
 * `currency` (string): Preferred currency
 * `custom_namespace` (boolean): Is this site using a custom namespace for users?
+* `dav_enabled` (boolean): Is WebDAV enabled?
+* `dav_user_root_enabled` (boolean): Use user FTP roots also for WebDAV?
 * `days_to_retain_backups` (int64): Number of days to keep deleted files
 * `default_time_zone` (string): Site default time zone
 * `desktop_app` (boolean): Is the desktop app enabled?
@@ -459,6 +463,7 @@ await Site.update({
   'password_require_number': true,
   'password_require_unbreached': true,
   'require_logout_from_bundles_and_inboxes': true,
+  'dav_user_root_enabled': true,
   'sftp_user_root_enabled': true,
   'disable_password_reset': true,
   'immutable_files': true,
@@ -481,6 +486,7 @@ await Site.update({
   'sharing_enabled': true,
   'user_requests_enabled': true,
   'user_requests_notify_admins': true,
+  'dav_enabled': true,
   'ftp_enabled': true,
   'sftp_enabled': true,
   'sftp_host_key_type': "default",
@@ -599,6 +605,7 @@ await Site.update({
 * `password_require_number` (boolean): Require a number in passwords?
 * `password_require_unbreached` (boolean): Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
 * `require_logout_from_bundles_and_inboxes` (boolean): If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
+* `dav_user_root_enabled` (boolean): Use user FTP roots also for WebDAV?
 * `sftp_user_root_enabled` (boolean): Use user FTP roots also for SFTP?
 * `disable_password_reset` (boolean): Is password reset disabled?
 * `immutable_files` (boolean): Are files protected from modification?
@@ -621,6 +628,7 @@ await Site.update({
 * `sharing_enabled` (boolean): Allow bundle creation
 * `user_requests_enabled` (boolean): Enable User Requests feature
 * `user_requests_notify_admins` (boolean): Send email to site admins when a user request is received?
+* `dav_enabled` (boolean): Is WebDAV enabled?
 * `ftp_enabled` (boolean): Is FTP enabled?
 * `sftp_enabled` (boolean): Is SFTP enabled?
 * `sftp_host_key_type` (string): Sftp Host Key Type
