@@ -55,20 +55,20 @@ await BundleNotification.find(id)
 
 ```
 await BundleNotification.create({
-  'notify_on_registration': true,
-  'notify_on_upload': true,
   'bundle_id': 1,
   'user_id': 1,
+  'notify_on_registration': true,
+  'notify_on_upload': true,
 })
 ```
 
 
 ### Parameters
 
-* `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
-* `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
 * `bundle_id` (int64): Required - Bundle ID to notify on
 * `user_id` (int64): The id of the user to notify.
+* `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
+* `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
 
 ---
 
