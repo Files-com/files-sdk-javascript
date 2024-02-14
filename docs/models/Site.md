@@ -10,6 +10,7 @@
   "allowed_2fa_method_u2f": true,
   "allowed_2fa_method_webauthn": true,
   "allowed_2fa_method_yubi": true,
+  "allowed_2fa_method_email": true,
   "allowed_2fa_method_bypass_for_ftp_sftp_dav": true,
   "admin_user_id": 1,
   "admins_bypass_locked_subfolders": true,
@@ -237,6 +238,7 @@
 * `allowed_2fa_method_u2f` (boolean): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_webauthn` (boolean): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` (boolean): Is yubikey two factor authentication allowed?
+* `allowed_2fa_method_email` (boolean): Is OTP via email two factor authentication allowed?
 * `allowed_2fa_method_bypass_for_ftp_sftp_dav` (boolean): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `admin_user_id` (int64): User ID for the main site administrator
 * `admins_bypass_locked_subfolders` (boolean): Allow admins to bypass the locked subfolders setting.
@@ -502,6 +504,7 @@ await Site.update({
   'allowed_2fa_method_totp': true,
   'allowed_2fa_method_webauthn': true,
   'allowed_2fa_method_yubi': true,
+  'allowed_2fa_method_email': true,
   'allowed_2fa_method_bypass_for_ftp_sftp_dav': true,
   'require_2fa': true,
   'require_2fa_user_type': "`site_admins`",
@@ -644,6 +647,7 @@ await Site.update({
 * `allowed_2fa_method_totp` (boolean): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_webauthn` (boolean): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` (boolean): Is yubikey two factor authentication allowed?
+* `allowed_2fa_method_email` (boolean): Is OTP via email two factor authentication allowed?
 * `allowed_2fa_method_bypass_for_ftp_sftp_dav` (boolean): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `require_2fa` (boolean): Require two-factor authentication for all users?
 * `require_2fa_user_type` (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?

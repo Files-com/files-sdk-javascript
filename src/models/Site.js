@@ -46,6 +46,9 @@ class Site {
   // boolean # Is yubikey two factor authentication allowed?
   getAllowed2faMethodYubi = () => this.attributes.allowed_2fa_method_yubi
 
+  // boolean # Is OTP via email two factor authentication allowed?
+  getAllowed2faMethodEmail = () => this.attributes.allowed_2fa_method_email
+
   // boolean # Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
   getAllowed2faMethodBypassForFtpSftpDav = () => this.attributes.allowed_2fa_method_bypass_for_ftp_sftp_dav
 
@@ -592,6 +595,7 @@ class Site {
   //   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
   //   allowed_2fa_method_webauthn - boolean - Is WebAuthn two factor authentication allowed?
   //   allowed_2fa_method_yubi - boolean - Is yubikey two factor authentication allowed?
+  //   allowed_2fa_method_email - boolean - Is OTP via email two factor authentication allowed?
   //   allowed_2fa_method_bypass_for_ftp_sftp_dav - boolean - Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
   //   require_2fa - boolean - Require two-factor authentication for all users?
   //   require_2fa_user_type - string - What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
