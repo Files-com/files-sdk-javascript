@@ -46,9 +46,6 @@ class InvoiceLineItem {
   // date-time # Invoice line item service start date/time
   getServiceStartAt = () => this.attributes.service_start_at
 
-  // date-time # Invoice line item updated date/time
-  getUpdatedAt = () => this.attributes.updated_at
-
   // string # Plan name
   getPlan = () => this.attributes.plan
 

@@ -66,9 +66,6 @@ class AccountLineItem {
 
   // string # Type of line item, either payment or invoice
   getType = () => this.attributes.type
-
-  // date-time # Line item updated at
-  getUpdatedAt = () => this.attributes.updated_at
 }
 
 export default AccountLineItem

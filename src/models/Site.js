@@ -436,9 +436,6 @@ class Site {
   // date-time # When does this Site trial expire?
   getTrialUntil = () => this.attributes.trial_until
 
-  // date-time # Last time this Site was updated
-  getUpdatedAt = () => this.attributes.updated_at
-
   // boolean # Allow uploaders to set `provided_modified_at` for uploaded files?
   getUseProvidedModifiedAt = () => this.attributes.use_provided_modified_at
 
