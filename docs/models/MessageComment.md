@@ -7,7 +7,10 @@
   "id": 1,
   "body": "What a great idea, thank you!",
   "reactions": [
-    null
+    {
+      "id": 1,
+      "emoji": "👍"
+    }
   ]
 }
 ```
@@ -91,7 +94,10 @@ await message_comment.update({
   "id": 1,
   "body": "What a great idea, thank you!",
   "reactions": [
-    null
+    {
+      "id": 1,
+      "emoji": "👍"
+    }
   ]
 }
 ```

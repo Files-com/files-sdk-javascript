@@ -133,11 +133,25 @@ class Automation {
     this.attributes.recurring_day = value
   }
 
-  // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
-  getSchedule = () => this.attributes.schedule
+  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  getScheduleDaysOfWeek = () => this.attributes.schedule_days_of_week
 
-  setSchedule = value => {
-    this.attributes.schedule = value
+  setScheduleDaysOfWeek = value => {
+    this.attributes.schedule_days_of_week = value
+  }
+
+  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  getScheduleTimesOfDay = () => this.attributes.schedule_times_of_day
+
+  setScheduleTimesOfDay = value => {
+    this.attributes.schedule_times_of_day = value
+  }
+
+  // string # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  getScheduleTimeZone = () => this.attributes.schedule_time_zone
+
+  setScheduleTimeZone = value => {
+    this.attributes.schedule_time_zone = value
   }
 
   // string # Source Path
@@ -240,7 +254,9 @@ class Automation {
   //   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-  //   schedule - object - Custom schedule for running this automation.
+  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
+  //   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
   //   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
@@ -302,6 +318,18 @@ class Automation {
 
     if (params.group_ids && !isString(params.group_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
+    }
+
+    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
+    }
+
+    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
     }
 
     if (params.description && !isString(params.description)) {
@@ -444,7 +472,9 @@ class Automation {
   //   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
   //   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-  //   schedule - object - Custom schedule for running this automation.
+  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
+  //   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
   //   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
@@ -497,6 +527,18 @@ class Automation {
 
     if (params.group_ids && !isString(params.group_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
+    }
+
+    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
+    }
+
+    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
     }
 
     if (params.description && !isString(params.description)) {
