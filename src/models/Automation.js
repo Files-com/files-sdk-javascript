@@ -133,21 +133,35 @@ class Automation {
     this.attributes.recurring_day = value
   }
 
-  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  // object # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run in json format.
+  getSchedule = () => this.attributes.schedule
+
+  setSchedule = value => {
+    this.attributes.schedule = value
+  }
+
+  // string # If trigger is `custom_schedule`, Human readable Custom schedule description for when the automation should be run.
+  getHumanReadableSchedule = () => this.attributes.human_readable_schedule
+
+  setHumanReadableSchedule = value => {
+    this.attributes.human_readable_schedule = value
+  }
+
+  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
   getScheduleDaysOfWeek = () => this.attributes.schedule_days_of_week
 
   setScheduleDaysOfWeek = value => {
     this.attributes.schedule_days_of_week = value
   }
 
-  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  // array # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. Times of day in HH:MM format.
   getScheduleTimesOfDay = () => this.attributes.schedule_times_of_day
 
   setScheduleTimesOfDay = value => {
     this.attributes.schedule_times_of_day = value
   }
 
-  // string # If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+  // string # If trigger is `custom_schedule`, Custom schedule Time Zone for when the automation should be run.
   getScheduleTimeZone = () => this.attributes.schedule_time_zone
 
   setScheduleTimeZone = value => {
