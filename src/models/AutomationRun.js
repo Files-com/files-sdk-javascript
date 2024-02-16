@@ -40,8 +40,20 @@ class AutomationRun {
   // date-time # Automation run start date/time.
   getCreatedAt = () => this.attributes.created_at
 
+  // date-time # Automation run runtime.
+  getRuntime = () => this.attributes.runtime
+
   // string # The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
   getStatus = () => this.attributes.status
+
+  // string # The stage currently being executed in the execution environment.  One of `queued_for_planning`, `planning`, `queued_for_execution`, `executing`, or `finished`.
+  getRunStage = () => this.attributes.run_stage
+
+  // int64 # Count of successful operations.
+  getSuccessfulOperations = () => this.attributes.successful_operations
+
+  // int64 # Count of failed operations.
+  getFailedOperations = () => this.attributes.failed_operations
 
   // string # Link to status messages log file.
   getStatusMessagesUrl = () => this.attributes.status_messages_url
