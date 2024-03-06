@@ -352,6 +352,9 @@ class Site {
   // boolean # If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
   getPreventRootPermissionsForNonSiteAdmins = () => this.attributes.prevent_root_permissions_for_non_site_admins
 
+  // boolean # If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
+  getProtocolAccessGroupsOnly = () => this.attributes.protocol_access_groups_only
+
   // boolean # Require two-factor authentication for all users?
   getRequire2fa = () => this.attributes.require_2fa
 
@@ -582,7 +585,7 @@ class Site {
   //   sftp_enabled - boolean - Is SFTP enabled?
   //   sftp_host_key_type - string - Sftp Host Key Type
   //   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
-  //   protocol_access_groups_only - boolean - If `true`, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
+  //   protocol_access_groups_only - boolean - If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
   //   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   //   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
   //   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
