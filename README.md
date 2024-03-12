@@ -2,6 +2,7 @@
 
 The Files.com JavaScript SDK provides convenient access to the Files.com API from applications written in JavaScript.
 
+
 ## Installation
 
 To install the package:
@@ -12,7 +13,9 @@ or
 
     npm install files.com
 
+
 ## Usage
+
 
 ### Import and initialize
 
@@ -22,6 +25,7 @@ import Files from "files.com/lib/Files.js";
 // set your subdomain or custom domain
 Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
+
 
 #### `require()` vs. `import`
 
@@ -37,9 +41,11 @@ const User = require("files.com/lib/models/User.js").default;
 const { LogLevel } = require("files.com/lib/Logger.js").default;
 ```
 
+
 ### Authentication
 
-There are multiple ways to authenticate to the API.
+There are multiple ways to authenticate to the Files.com SDK for Javascript.
+
 
 #### Global API Key
 
@@ -47,12 +53,14 @@ You can set an API key globally like this:
 
     Files.setApiKey('my-api-key')
 
+
 #### Per-Request API Key
 
 Or, you can pass an API key per-request, in the options object at the end of every method like this:
 
     import User from 'files.com/lib/models/User.js'
     const user = new User(params, { apiKey: 'my-api-key' })
+
 
 #### User Session
 
@@ -70,9 +78,11 @@ Or, you can pass the session ID per-request, in the options array at the end of 
     import User from 'files.com/lib/models/User.js'
     const user = new User(params, { sessionId: session.id })
 
+
 ### Setting Global Options
 
 You can set the following global properties using static methods on the `Files` class:
+
 
 #### Log Level
 
@@ -88,6 +98,7 @@ You can set the following global properties using static methods on the `Files` 
       LogLevel.DEBUG
     */
 
+
 #### Debugging
 
     Files.configureDebugging({
@@ -97,6 +108,7 @@ You can set the following global properties using static methods on the `Files` 
       // enable debug logging of API response headers (default: false)
       debugResponseHeaders: false,
     })
+
 
 #### Network
 
@@ -117,12 +129,15 @@ You can set the following global properties using static methods on the `Files` 
       autoPaginate: true,
     })
 
+
 ### File Operations
+
 
 #### List root folder
 
     import Folder from 'files.com/lib/models/Folder.js'
     const dirFiles = await Folder.listFor('/')
+
 
 #### Uploading a file
 
@@ -137,6 +152,7 @@ You can set the following global properties using static methods on the `Files` 
       await File.uploadFile(destinationFileName, sourceFilePath)
     }
 
+
 #### Downloading a file
 
 ##### Get a downloadable file object by path
@@ -145,6 +161,7 @@ You can set the following global properties using static methods on the `Files` 
 
     const foundFile = await File.find(remoteFilePath)
     const downloadableFile = await foundFile.download()
+
 
 ##### Download a file (not available in browser)
 
@@ -161,6 +178,7 @@ You can set the following global properties using static methods on the `Files` 
       const textContent = await downloadableFile.downloadToString()
     }
 
+
 #### Comparing Case insensitive files and paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
@@ -171,13 +189,14 @@ For related documentation see [Case Sensitivity Documentation](https://www.files
       // the paths are the same
     }
 
+
 ### Additional Object Documentation
 
 Additional docs are available at <https://developers.files.com>
+
 
 ## Getting Support
 
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email <support@files.com> and we'll get the process started.
-
