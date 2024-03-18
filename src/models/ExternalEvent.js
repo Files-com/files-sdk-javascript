@@ -94,6 +94,20 @@ class ExternalEvent {
     this.attributes.bytes_synced = value
   }
 
+  // int64 # For sync events, the number of files considered for the sync.
+  getComparedFiles = () => this.attributes.compared_files
+
+  setComparedFiles = value => {
+    this.attributes.compared_files = value
+  }
+
+  // int64 # For sync events, the number of folders listed and considered for the sync.
+  getComparedFolders = () => this.attributes.compared_folders
+
+  setComparedFolders = value => {
+    this.attributes.compared_folders = value
+  }
+
   // string # Associated Remote Server type, if any
   getRemoteServerType = () => this.attributes.remote_server_type
 
