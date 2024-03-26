@@ -127,6 +127,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ReauthenticationFailedError
 ### NotAuthorized_ReauthenticationFailedFinalError
 ### NotAuthorized_ReauthenticationNeededActionError
+### NotAuthorized_RecaptchaFailedError
 ### NotAuthorized_SelfManagedRequiredError
 ### NotAuthorized_SiteAdminRequiredError
 ### NotAuthorized_SiteFilesAreImmutableError
