@@ -133,6 +133,9 @@ class SsoStrategy {
   // string # Default company for auto provisioned users.
   getProvisionCompany = () => this.attributes.provision_company
 
+  // string # 2FA required setting for auto provisioned users.
+  getProvisionRequire2fa = () => this.attributes.provision_require_2fa
+
   // string # Base DN for looking up users in LDAP server
   getLdapBaseDn = () => this.attributes.ldap_base_dn
 
