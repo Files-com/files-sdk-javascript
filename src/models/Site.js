@@ -382,7 +382,7 @@ class Site {
   // int64 # Id of the currently selected custom SFTP Host Key
   getActiveSftpHostKeyId = () => this.attributes.active_sftp_host_key_id
 
-  // boolean # Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+  // boolean # Are Insecure Ciphers allowed for SFTP?  Note:  Setting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
   getSftpInsecureCiphers = () => this.attributes.sftp_insecure_ciphers
 
   // boolean # Use user FTP roots also for SFTP?
@@ -537,7 +537,7 @@ class Site {
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
-  //   sftp_insecure_ciphers - boolean - Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+  //   sftp_insecure_ciphers - boolean - Are Insecure Ciphers allowed for SFTP?  Note:  Setting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
   //   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
   //   user_lockout - boolean - Will users be locked out after incorrect login attempts?
   //   user_lockout_tries - int64 - Number of login tries within `user_lockout_within` hours before users are locked out
