@@ -77,6 +77,13 @@ class Behavior {
     this.attributes.value = value
   }
 
+  // boolean # If true, the parent folder's behavior will be disabled for this folder.
+  getDisableParentFolderBehavior = () => this.attributes.disable_parent_folder_behavior
+
+  setDisableParentFolderBehavior = value => {
+    this.attributes.disable_parent_folder_behavior = value
+  }
+
   // file # Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
   getAttachmentFile = () => this.attributes.attachment_file
 
