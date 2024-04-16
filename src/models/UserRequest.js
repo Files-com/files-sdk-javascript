@@ -56,6 +56,13 @@ class UserRequest {
     this.attributes.details = value
   }
 
+  // string # User's company name
+  getCompany = () => this.attributes.company
+
+  setCompany = value => {
+    this.attributes.company = value
+  }
+
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -143,6 +150,7 @@ class UserRequest {
   //   name (required) - string - Name of user requested
   //   email (required) - string - Email of user requested
   //   details (required) - string - Details of the user request
+  //   company - string - Company of the user requested
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
@@ -166,6 +174,10 @@ class UserRequest {
 
     if (params.details && !isString(params.details)) {
       throw new errors.InvalidParameterError(`Bad parameter: details must be of type String, received ${getType(params.details)}`)
+    }
+
+    if (params.company && !isString(params.company)) {
+      throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params.company)}`)
     }
 
     const response = await Api.sendRequest('/user_requests', 'POST', params, options)
