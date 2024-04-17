@@ -88,6 +88,27 @@ class RemoteServerConfigurationFile {
   // * 1000 requests/hour: '1000-H'
   // * 2000 requests/day: '2000-D'
   getTransferRateLimit = () => this.attributes.transfer_rate_limit
+
+  // string # Files Agent API Token
+  getApiToken = () => this.attributes.api_token
+
+  // int64 # Incoming port for files agent connections
+  getPort = () => this.attributes.port
+
+  // string
+  getHostname = () => this.attributes.hostname
+
+  // string # public key
+  getPublicKey = () => this.attributes.public_key
+
+  // string # either running or shutdown
+  getStatus = () => this.attributes.status
+
+  // string
+  getServerHostKey = () => this.attributes.server_host_key
+
+  // string # agent config version
+  getConfigVersion = () => this.attributes.config_version
 }
 
 export default RemoteServerConfigurationFile

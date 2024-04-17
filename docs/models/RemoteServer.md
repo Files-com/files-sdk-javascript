@@ -316,9 +316,16 @@ await RemoteServer.create({
 const [remote_server] = await RemoteServer.list()
 
 await remote_server.configuration_file({
+  'api_token': "example",
   'permission_set': "example",
   'root': "C:\\Users\\",
+  'hostname': "example",
+  'port': 1,
+  'status': "example",
+  'config_version': "example",
   'private_key': "example",
+  'public_key': "example",
+  'server_host_key': "example",
   'subdomain': "example",
 })
 ```
@@ -326,9 +333,16 @@ await remote_server.configuration_file({
 ### Parameters
 
 * `id` (int64): Required - Remote Server ID.
+* `api_token` (string): Files Agent API Token
 * `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
 * `root` (string): The root directory for the agent
+* `hostname` (string): 
+* `port` (int64): Incoming port for files agent connections
+* `status` (string): either running or shutdown
+* `config_version` (string): agent config version
 * `private_key` (string): The private key for the agent
+* `public_key` (string): public key
+* `server_host_key` (string): 
 * `subdomain` (string): Files.com subdomain site name
 
 ### Example Response
@@ -351,7 +365,14 @@ await remote_server.configuration_file({
   "log_rotate_size": 1,
   "max_concurrent_jobs": 1,
   "graceful_shutdown_timeout": 1,
-  "transfer_rate_limit": "example"
+  "transfer_rate_limit": "example",
+  "api_token": "example",
+  "port": 1,
+  "hostname": "example",
+  "public_key": "example",
+  "status": "example",
+  "server_host_key": "example",
+  "config_version": "example"
 }
 ```
 
