@@ -168,6 +168,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_FileTooBigToDecryptError
 ### ProcessingFailure_FileTooBigToEncryptError
 ### ProcessingFailure_FileUploadedToWrongRegionError
+### ProcessingFailure_FilenameTooLongError
 ### ProcessingFailure_FolderLockedError
 ### ProcessingFailure_FolderNotEmptyError
 ### ProcessingFailure_HistoryUnavailableError
