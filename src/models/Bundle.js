@@ -290,6 +290,13 @@ class Bundle {
     this.attributes.paths = value
   }
 
+  // BundlePath # A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
+  getBundlepaths = () => this.attributes.bundlepaths
+
+  setBundlepaths = value => {
+    this.attributes.bundlepaths = value
+  }
+
   // string # Password for this bundle.
   getPassword = () => this.attributes.password
 

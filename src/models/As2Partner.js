@@ -63,7 +63,7 @@ class As2Partner {
     this.attributes.server_certificate = value
   }
 
-  // string # MDN Validation Level
+  // string # MDN Validation Level controls how to evaluate message transfer success based on a partner's MDN response. NOTE: This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
   getMdnValidationLevel = () => this.attributes.mdn_validation_level
 
   setMdnValidationLevel = value => {
