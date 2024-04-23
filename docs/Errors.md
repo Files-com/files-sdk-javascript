@@ -149,6 +149,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_PlanNotFoundError
 ### NotFound_SiteNotFoundError
 ### NotFound_UserNotFoundError
+### ProcessingFailure_AlreadyCompletedError
 ### ProcessingFailure_AutomationCannotBeRunManuallyError
 ### ProcessingFailure_BundleOnlyAllowsPreviewsError
 ### ProcessingFailure_BundleOperationRequiresSubfolderError

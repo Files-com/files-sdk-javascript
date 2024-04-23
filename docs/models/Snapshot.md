@@ -70,6 +70,21 @@ await Snapshot.create({
 
 ---
 
+## Finalize Snapshot
+
+```
+const [snapshot] = await Snapshot.list()
+
+await snapshot.finalize()
+```
+
+### Parameters
+
+* `id` (int64): Required - Snapshot ID.
+
+
+---
+
 ## Update Snapshot
 
 ```
