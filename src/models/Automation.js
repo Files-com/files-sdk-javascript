@@ -140,6 +140,13 @@ class Automation {
     this.attributes.path = value
   }
 
+  // string # Timezone to use when rendering timestamps in paths.
+  getPathTimeZone = () => this.attributes.path_time_zone
+
+  setPathTimeZone = value => {
+    this.attributes.path_time_zone = value
+  }
+
   // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   getRecurringDay = () => this.attributes.recurring_day
 
@@ -291,6 +298,7 @@ class Automation {
   //   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
   //   name - string - Name for this automation.
   //   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+  //   path_time_zone - string - Timezone to use when rendering timestamps in paths.
   //   trigger - string - How this automation is triggered to run.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
@@ -368,6 +376,10 @@ class Automation {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.path_time_zone && !isString(params.path_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path_time_zone must be of type String, received ${getType(params.path_time_zone)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
@@ -511,6 +523,7 @@ class Automation {
   //   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
   //   name - string - Name for this automation.
   //   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+  //   path_time_zone - string - Timezone to use when rendering timestamps in paths.
   //   trigger - string - How this automation is triggered to run.
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
   //   value - object - A Hash of attributes specific to the automation type.
@@ -579,6 +592,10 @@ class Automation {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.path_time_zone && !isString(params.path_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path_time_zone must be of type String, received ${getType(params.path_time_zone)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
