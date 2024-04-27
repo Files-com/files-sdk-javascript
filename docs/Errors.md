@@ -87,6 +87,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_UserIdInvalidError
 ### BadRequest_UserIdOnUserEndpointError
 ### BadRequest_UserRequiredError
+### NotAuthenticated_AdditionalAuthenticationRequiredError
 ### NotAuthenticated_AuthenticationRequiredError
 ### NotAuthenticated_BundleRegistrationCodeFailedError
 ### NotAuthenticated_FilesAgentTokenFailedError
