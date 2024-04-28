@@ -609,6 +609,7 @@ class File {
   // Parameters:
   //   destination (required) - string - Copy destination path.
   //   structure - boolean - Copy structure only?
+  //   overwrite - boolean - Overwrite existing file(s) in the destination?
   copy = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
@@ -653,6 +654,7 @@ class File {
   //
   // Parameters:
   //   destination (required) - string - Move destination path.
+  //   overwrite - boolean - Overwrite existing file(s) in the destination?
   move = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')

@@ -247,6 +247,7 @@ file.path = myFilePath
 await file.copy({
   'destination': "destination",
   'structure': true,
+  'overwrite': true,
 })
 ```
 
@@ -255,6 +256,7 @@ await file.copy({
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Copy destination path.
 * `structure` (boolean): Copy structure only?
+* `overwrite` (boolean): Overwrite existing file(s) in the destination?
 
 ### Example Response
 
@@ -275,6 +277,7 @@ file.path = myFilePath
 
 await file.move({
   'destination': "destination",
+  'overwrite': true,
 })
 ```
 
@@ -282,6 +285,7 @@ await file.move({
 
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
+* `overwrite` (boolean): Overwrite existing file(s) in the destination?
 
 ### Example Response
 
