@@ -31,6 +31,9 @@ class Site {
   // string # Site name
   getName = () => this.attributes.name
 
+  // array # Additional extensions that are considered text files
+  getAdditionalTextFileTypes = () => this.attributes.additional_text_file_types
+
   // boolean # Is SMS two factor authentication allowed?
   getAllowed2faMethodSms = () => this.attributes.allowed_2fa_method_sms
 
@@ -543,6 +546,7 @@ class Site {
   //   motd_use_for_ftp - boolean - Show message to users connecting via FTP
   //   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
   //   left_navigation_visibility - object - Visibility settings for account navigation
+  //   additional_text_file_types - array(string) - Additional extensions that are considered text files
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -728,6 +732,10 @@ class Site {
 
     if (params.motd_text && !isString(params.motd_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: motd_text must be of type String, received ${getType(params.motd_text)}`)
+    }
+
+    if (params.additional_text_file_types && !isArray(params.additional_text_file_types)) {
+      throw new errors.InvalidParameterError(`Bad parameter: additional_text_file_types must be of type Array, received ${getType(params.additional_text_file_types)}`)
     }
 
     if (params.user_lockout_tries && !isInt(params.user_lockout_tries)) {

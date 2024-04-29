@@ -5,6 +5,9 @@
 ```
 {
   "name": "My Site",
+  "additional_text_file_types": [
+    "example"
+  ],
   "allowed_2fa_method_sms": true,
   "allowed_2fa_method_totp": true,
   "allowed_2fa_method_u2f": true,
@@ -275,6 +278,7 @@
 ```
 
 * `name` (string): Site name
+* `additional_text_file_types` (array): Additional extensions that are considered text files
 * `allowed_2fa_method_sms` (boolean): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` (boolean): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_u2f` (boolean): Is U2F two factor authentication allowed?
@@ -487,6 +491,7 @@ await Site.update({
   'motd_text': "example",
   'motd_use_for_ftp': true,
   'motd_use_for_sftp': true,
+  'additional_text_file_types': ["example"],
   'session_expiry': 1.0,
   'ssl_required': true,
   'tls_disabled': true,
@@ -634,6 +639,7 @@ await Site.update({
 * `motd_use_for_ftp` (boolean): Show message to users connecting via FTP
 * `motd_use_for_sftp` (boolean): Show message to users connecting via SFTP
 * `left_navigation_visibility` (object): Visibility settings for account navigation
+* `additional_text_file_types` (array(string)): Additional extensions that are considered text files
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (boolean): DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
