@@ -55,6 +55,9 @@ class ExavaultApiRequestLog {
   // int64 # HTTP Response Code
   getResponseCode = () => this.attributes.response_code
 
+  // boolean # `false` if HTTP Response Code is 4xx or 5xx
+  getSuccess = () => this.attributes.success
+
   // int64 # Duration (in milliseconds)
   getDurationMs = () => this.attributes.duration_ms
 
