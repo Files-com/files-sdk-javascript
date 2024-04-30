@@ -40,7 +40,7 @@ class AutomationRun {
   // date-time # Automation run start date/time.
   getCreatedAt = () => this.attributes.created_at
 
-  // date-time # Automation run runtime.
+  // double # Automation run runtime.
   getRuntime = () => this.attributes.runtime
 
   // string # The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
