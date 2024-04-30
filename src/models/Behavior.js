@@ -84,6 +84,13 @@ class Behavior {
     this.attributes.disable_parent_folder_behavior = value
   }
 
+  // boolean # Is behavior recursive?
+  getRecursive = () => this.attributes.recursive
+
+  setRecursive = value => {
+    this.attributes.recursive = value
+  }
+
   // file # Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
   getAttachmentFile = () => this.attributes.attachment_file
 
@@ -102,6 +109,7 @@ class Behavior {
   //   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
   //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+  //   recursive - boolean - Is behavior recursive?
   //   name - string - Name for this behavior.
   //   description - string - Description for this behavior.
   //   behavior - string - Behavior type.
@@ -249,7 +257,7 @@ class Behavior {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
   //   path (required) - string - Path to operate on.
-  //   recursive - string - Show behaviors above this path?
+  //   ancestor_behaviors - string - Show behaviors above this path?
   //   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
   static listFor = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -274,8 +282,8 @@ class Behavior {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.recursive && !isString(params.recursive)) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params.recursive)}`)
+    if (params.ancestor_behaviors && !isString(params.ancestor_behaviors)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ancestor_behaviors must be of type String, received ${getType(params.ancestor_behaviors)}`)
     }
 
     if (params.behavior && !isString(params.behavior)) {
@@ -291,6 +299,7 @@ class Behavior {
   //   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
   //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+  //   recursive - boolean - Is behavior recursive?
   //   name - string - Name for this behavior.
   //   description - string - Description for this behavior.
   //   path (required) - string - Folder behaviors path.
