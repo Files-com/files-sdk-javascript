@@ -34,6 +34,9 @@ class SftpActionLog {
   // string # IP Address of SFTP Client
   getRemoteIp = () => this.attributes.remote_ip
 
+  // string # IP Address of SFTP Server
+  getServerIp = () => this.attributes.server_ip
+
   // string # Username
   getUsername = () => this.attributes.username
 
