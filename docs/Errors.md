@@ -75,8 +75,8 @@ These errors are derived from the error groups listed above.
 ### BadRequest_NoValidInputParamsError
 ### BadRequest_OperationOnNonScimResourceError
 ### BadRequest_PartNumberTooLargeError
+### BadRequest_PathCannotHaveTrailingWhitespaceError
 ### BadRequest_ReauthenticationNeededFieldsError
-### BadRequest_RequestParamPathCannotHaveTrailingWhitespaceError
 ### BadRequest_RequestParamsContainInvalidCharacterError
 ### BadRequest_RequestParamsInvalidError
 ### BadRequest_RequestParamsRequiredError
@@ -167,6 +167,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_FileLockedError
 ### ProcessingFailure_FileNotUploadedError
 ### ProcessingFailure_FilePendingProcessingError
+### ProcessingFailure_FileProcessingErrorError
 ### ProcessingFailure_FileTooBigToDecryptError
 ### ProcessingFailure_FileTooBigToEncryptError
 ### ProcessingFailure_FileUploadedToWrongRegionError
