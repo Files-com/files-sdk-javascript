@@ -178,6 +178,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_InvalidBundleCodeError
 ### ProcessingFailure_InvalidFileTypeError
 ### ProcessingFailure_InvalidFilenameError
+### ProcessingFailure_InvalidPriorityColorError
 ### ProcessingFailure_InvalidRangeError
 ### ProcessingFailure_ModelSaveErrorError
 ### ProcessingFailure_MultipleProcessingErrorsError
