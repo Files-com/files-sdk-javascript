@@ -41,7 +41,7 @@ class SftpActionLog {
   getUsername = () => this.attributes.username
 
   // string # Unique ID of the Session
-  getSessionUid = () => this.attributes.session_uid
+  getSessionUuid = () => this.attributes.session_uuid
 
   // int64 # SFTP Sequence ID
   getSeqId = () => this.attributes.seq_id

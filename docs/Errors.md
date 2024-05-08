@@ -152,6 +152,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_UserNotFoundError
 ### ProcessingFailure_AlreadyCompletedError
 ### ProcessingFailure_AutomationCannotBeRunManuallyError
+### ProcessingFailure_BehaviorNotAllowedOnRemoteServerError
 ### ProcessingFailure_BundleOnlyAllowsPreviewsError
 ### ProcessingFailure_BundleOperationRequiresSubfolderError
 ### ProcessingFailure_CouldNotCreateParentError
