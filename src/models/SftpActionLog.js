@@ -55,7 +55,7 @@ class SftpActionLog {
   // string # Action Type
   getActionType = () => this.attributes.action_type
 
-  // string # Path as sent by the Client (may not match Files.com path due to user root folders for SFTP) This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path as sent by the Client (may not match Files.com path due to user root folders for SFTP). This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # Path on Files.com
@@ -64,35 +64,17 @@ class SftpActionLog {
   // string # Name of File
   getName = () => this.attributes.name
 
-  // string # Log Message
-  getMessage = () => this.attributes.message
+  // string # SFTP Response Code Returned to the Client.
+  getSftpResponseCode = () => this.attributes.sftp_response_code
 
-  // string # Failure Reason Type
-  getFailureReasonType = () => this.attributes.failure_reason_type
-
-  // string # Failure Reason Message
-  getFailureReasonMessage = () => this.attributes.failure_reason_message
+  // string # SFTP Response Message Returned to the Client.
+  getSftpResponseMessage = () => this.attributes.sftp_response_message
 
   // string # MD5 Hash of the file. Not always available.
   getMd5 = () => this.attributes.md5
 
-  // string # SFTP Command Flags. Present for actions which involve flags.
-  getFlags = () => this.attributes.flags
-
-  // string # SFTP Command Handle. Present for actions which involve handles.
-  getHandle = () => this.attributes.handle
-
-  // string # SFTP Command Attrs. Present for action which involve attrs.
-  getAttrs = () => this.attributes.attrs
-
-  // string # Size. Present for action which involve size.
+  // string # Size of File That was Uploaded or Downloaded.
   getSize = () => this.attributes.size
-
-  // string # Offset. Present for actions which involve offset.
-  getOffset = () => this.attributes.offset
-
-  // string # Length. Present for actions which involve length.
-  getLength = () => this.attributes.length
 
   // string # Data Length in Bytes. Present for actions that transfer data.
   getDataLength = () => this.attributes.data_length
