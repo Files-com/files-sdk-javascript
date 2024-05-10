@@ -34,7 +34,7 @@ class FtpActionLog {
   // string # IP Address of FTP Client
   getRemoteIp = () => this.attributes.remote_ip
 
-  // string # IP Address of SFTP Server
+  // string # IP Address of FTP Server
   getServerIp = () => this.attributes.server_ip
 
   // string # Username

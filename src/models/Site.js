@@ -73,6 +73,9 @@ class Site {
   // string # List of allowed IP addresses
   getAllowedIps = () => this.attributes.allowed_ips
 
+  // boolean # Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
+  getAlwaysMkdirParents = () => this.attributes.always_mkdir_parents
+
   // boolean # If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   getAskAboutOverwrites = () => this.attributes.ask_about_overwrites
 
@@ -528,6 +531,7 @@ class Site {
   //   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
   //   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   //   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
+  //   always_mkdir_parents - boolean - Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
   //   welcome_email_cc - string - Include this email in welcome emails if enabled
   //   welcome_email_subject - string - Include this email subject in welcome emails if enabled
   //   welcome_custom_text - string - Custom text send in user welcome email
