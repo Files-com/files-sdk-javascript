@@ -195,6 +195,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_UpdatesNotAllowedForRemotesError
 ### RateLimited_DuplicateShareRecipientError
 ### RateLimited_ReauthenticationRateLimitedError
+### RateLimited_TooManyConcurrentLoginsError
 ### RateLimited_TooManyConcurrentRequestsError
 ### RateLimited_TooManyLoginAttemptsError
 ### RateLimited_TooManyRequestsError
