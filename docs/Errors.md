@@ -73,7 +73,6 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidUploadPartSizeError
 ### BadRequest_MethodNotAllowedError
 ### BadRequest_NoValidInputParamsError
-### BadRequest_OperationOnNonScimResourceError
 ### BadRequest_PartNumberTooLargeError
 ### BadRequest_PathCannotHaveTrailingWhitespaceError
 ### BadRequest_ReauthenticationNeededFieldsError
