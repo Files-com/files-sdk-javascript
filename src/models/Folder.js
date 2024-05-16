@@ -35,6 +35,69 @@ class Folder {
     this.attributes.path = value
   }
 
+  // int64 # User ID of the User who created the file/folder
+  getCreatedById = () => this.attributes.created_by_id
+
+  setCreatedById = value => {
+    this.attributes.created_by_id = value
+  }
+
+  // int64 # ID of the API key that created the file/folder
+  getCreatedByApiKeyId = () => this.attributes.created_by_api_key_id
+
+  setCreatedByApiKeyId = value => {
+    this.attributes.created_by_api_key_id = value
+  }
+
+  // int64 # ID of the AS2 Incoming Message that created the file/folder
+  getCreatedByAs2IncomingMessageId = () => this.attributes.created_by_as2_incoming_message_id
+
+  setCreatedByAs2IncomingMessageId = value => {
+    this.attributes.created_by_as2_incoming_message_id = value
+  }
+
+  // int64 # ID of the Automation that created the file/folder
+  getCreatedByAutomationId = () => this.attributes.created_by_automation_id
+
+  setCreatedByAutomationId = value => {
+    this.attributes.created_by_automation_id = value
+  }
+
+  // int64 # ID of the Bundle Registration that created the file/folder
+  getCreatedByBundleRegistrationId = () => this.attributes.created_by_bundle_registration_id
+
+  setCreatedByBundleRegistrationId = value => {
+    this.attributes.created_by_bundle_registration_id = value
+  }
+
+  // int64 # ID of the Inbox that created the file/folder
+  getCreatedByInboxId = () => this.attributes.created_by_inbox_id
+
+  setCreatedByInboxId = value => {
+    this.attributes.created_by_inbox_id = value
+  }
+
+  // int64 # ID of the Remote Server that created the file/folder
+  getCreatedByRemoteServerId = () => this.attributes.created_by_remote_server_id
+
+  setCreatedByRemoteServerId = value => {
+    this.attributes.created_by_remote_server_id = value
+  }
+
+  // int64 # ID of the Remote Server Sync that created the file/folder
+  getCreatedByRemoteServerSyncId = () => this.attributes.created_by_remote_server_sync_id
+
+  setCreatedByRemoteServerSyncId = value => {
+    this.attributes.created_by_remote_server_sync_id = value
+  }
+
+  // object # Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value.
+  getCustomMetadata = () => this.attributes.custom_metadata
+
+  setCustomMetadata = value => {
+    this.attributes.custom_metadata = value
+  }
+
   // string # File/Folder display name
   getDisplayName = () => this.attributes.display_name
 
@@ -58,6 +121,48 @@ class Folder {
 
   // date-time # File created date/time
   getCreatedAt = () => this.attributes.created_at
+
+  // int64 # User ID of the User who last modified the file/folder
+  getLastModifiedById = () => this.attributes.last_modified_by_id
+
+  setLastModifiedById = value => {
+    this.attributes.last_modified_by_id = value
+  }
+
+  // int64 # ID of the API key that last modified the file/folder
+  getLastModifiedByApiKeyId = () => this.attributes.last_modified_by_api_key_id
+
+  setLastModifiedByApiKeyId = value => {
+    this.attributes.last_modified_by_api_key_id = value
+  }
+
+  // int64 # ID of the Automation that last modified the file/folder
+  getLastModifiedByAutomationId = () => this.attributes.last_modified_by_automation_id
+
+  setLastModifiedByAutomationId = value => {
+    this.attributes.last_modified_by_automation_id = value
+  }
+
+  // int64 # ID of the Bundle Registration that last modified the file/folder
+  getLastModifiedByBundleRegistrationId = () => this.attributes.last_modified_by_bundle_registration_id
+
+  setLastModifiedByBundleRegistrationId = value => {
+    this.attributes.last_modified_by_bundle_registration_id = value
+  }
+
+  // int64 # ID of the Remote Server that last modified the file/folder
+  getLastModifiedByRemoteServerId = () => this.attributes.last_modified_by_remote_server_id
+
+  setLastModifiedByRemoteServerId = value => {
+    this.attributes.last_modified_by_remote_server_id = value
+  }
+
+  // int64 # ID of the Remote Server Sync that last modified the file/folder
+  getLastModifiedByRemoteServerSyncId = () => this.attributes.last_modified_by_remote_server_sync_id
+
+  setLastModifiedByRemoteServerSyncId = value => {
+    this.attributes.last_modified_by_remote_server_sync_id = value
+  }
 
   // date-time # File last modified date/time, according to the server.  This is the timestamp of the last Files.com operation of the file, regardless of what modified timestamp was sent.
   getMtime = () => this.attributes.mtime
