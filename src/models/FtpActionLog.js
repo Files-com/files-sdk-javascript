@@ -46,6 +46,9 @@ class FtpActionLog {
   // int64 # FTP Sequence ID
   getSeqId = () => this.attributes.seq_id
 
+  // string # Authentication Ciphers
+  getAuthCiphers = () => this.attributes.auth_ciphers
+
   // string # Action Type
   getActionType = () => this.attributes.action_type
 
