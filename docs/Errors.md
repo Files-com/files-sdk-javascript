@@ -201,6 +201,8 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManySharesError
 ### ServiceUnavailable_AgentUnavailableError
 ### ServiceUnavailable_AutomationsUnavailableError
+### ServiceUnavailable_MigrationInProgressError
+### ServiceUnavailable_SiteDisabledError
 ### ServiceUnavailable_UploadsUnavailableError
 ### SiteConfiguration_AccountAlreadyExistsError
 ### SiteConfiguration_AccountOverdueError

@@ -70,6 +70,9 @@ class ApiRequestLog {
   // string # Error type, if applicable
   getErrorType = () => this.attributes.error_type
 
+  // string # Error message, if applicable
+  getErrorMessage = () => this.attributes.error_message
+
   // int64 # HTTP Response Code
   getResponseCode = () => this.attributes.response_code
 
