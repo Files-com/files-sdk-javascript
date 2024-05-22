@@ -77,7 +77,7 @@ class Behavior {
     this.attributes.value = value
   }
 
-  // boolean # If true, the parent folder's behavior will be disabled for this folder.
+  // boolean # If true, the parent folder's behavior will be disabled for this folder and its children.
   getDisableParentFolderBehavior = () => this.attributes.disable_parent_folder_behavior
 
   setDisableParentFolderBehavior = value => {
@@ -108,7 +108,7 @@ class Behavior {
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-  //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+  //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder and its children.
   //   recursive - boolean - Is behavior recursive?
   //   name - string - Name for this behavior.
   //   description - string - Description for this behavior.
@@ -298,7 +298,7 @@ class Behavior {
   // Parameters:
   //   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-  //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+  //   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder and its children.
   //   recursive - boolean - Is behavior recursive?
   //   name - string - Name for this behavior.
   //   description - string - Description for this behavior.
