@@ -99,7 +99,7 @@ await Group.create({
 ## Update Group
 
 ```
-const [group] = await Group.list()
+const group = await Group.find(id)
 
 await group.update({
   'notes': "example",
@@ -150,7 +150,7 @@ await group.update({
 ## Delete Group
 
 ```
-const [group] = await Group.list()
+const group = await Group.find(id)
 
 await group.delete()
 ```

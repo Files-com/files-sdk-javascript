@@ -67,7 +67,7 @@ await SftpHostKey.create({
 ## Update Sftp Host Key
 
 ```
-const [sftp_host_key] = await SftpHostKey.list()
+const sftp_host_key = await SftpHostKey.find(id)
 
 await sftp_host_key.update({
   'name': "example",
@@ -96,7 +96,7 @@ await sftp_host_key.update({
 ## Delete Sftp Host Key
 
 ```
-const [sftp_host_key] = await SftpHostKey.list()
+const sftp_host_key = await SftpHostKey.find(id)
 
 await sftp_host_key.delete()
 ```

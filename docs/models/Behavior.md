@@ -143,7 +143,7 @@ await Behavior.webhookTest({
 ## Update Behavior
 
 ```
-const [behavior] = await Behavior.list()
+const behavior = await Behavior.find(id)
 
 await behavior.update({
   'value': "{\"method\": \"GET\"}",
@@ -193,7 +193,7 @@ await behavior.update({
 ## Delete Behavior
 
 ```
-const [behavior] = await Behavior.list()
+const behavior = await Behavior.find(id)
 
 await behavior.delete()
 ```

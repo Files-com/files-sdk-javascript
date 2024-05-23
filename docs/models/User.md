@@ -283,7 +283,7 @@ await User.create({
 ## Unlock user who has been locked out due to failed logins
 
 ```
-const [user] = await User.list()
+const user = await User.find(id)
 
 await user.unlock()
 ```
@@ -298,7 +298,7 @@ await user.unlock()
 ## Resend user welcome email
 
 ```
-const [user] = await User.list()
+const user = await User.find(id)
 
 await user.resend_welcome_email()
 ```
@@ -313,7 +313,7 @@ await user.resend_welcome_email()
 ## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
-const [user] = await User.list()
+const user = await User.find(id)
 
 await user.user_2fa_reset()
 ```
@@ -328,7 +328,7 @@ await user.user_2fa_reset()
 ## Update User
 
 ```
-const [user] = await User.list()
+const user = await User.find(id)
 
 await user.update({
   'avatar_delete': true,
@@ -497,7 +497,7 @@ await user.update({
 ## Delete User
 
 ```
-const [user] = await User.list()
+const user = await User.find(id)
 
 await user.delete()
 ```

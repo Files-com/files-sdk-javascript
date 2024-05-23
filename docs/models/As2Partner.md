@@ -98,7 +98,7 @@ await As2Partner.create({
 ## Update As2 Partner
 
 ```
-const [as2_partner] = await As2Partner.list()
+const as2_partner = await As2Partner.find(id)
 
 await as2_partner.update({
   'name': "AS2 Partner Name",
@@ -145,7 +145,7 @@ await as2_partner.update({
 ## Delete As2 Partner
 
 ```
-const [as2_partner] = await As2Partner.list()
+const as2_partner = await As2Partner.find(id)
 
 await as2_partner.delete()
 ```

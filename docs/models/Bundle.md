@@ -240,7 +240,7 @@ await Bundle.create({
 ## Send email(s) with a link to bundle
 
 ```
-const [bundle] = await Bundle.list()
+const bundle = await Bundle.find(id)
 
 await bundle.share({
   'to': ["johndoe@gmail.com"],
@@ -262,7 +262,7 @@ await bundle.share({
 ## Update Bundle
 
 ```
-const [bundle] = await Bundle.list()
+const bundle = await Bundle.find(id)
 
 await bundle.update({
   'paths': ["file.txt"],
@@ -414,7 +414,7 @@ await bundle.update({
 ## Delete Bundle
 
 ```
-const [bundle] = await Bundle.list()
+const bundle = await Bundle.find(id)
 
 await bundle.delete()
 ```

@@ -73,7 +73,7 @@ await Snapshot.create({
 ## Finalize Snapshot
 
 ```
-const [snapshot] = await Snapshot.list()
+const snapshot = await Snapshot.find(id)
 
 await snapshot.finalize()
 ```
@@ -88,7 +88,7 @@ await snapshot.finalize()
 ## Update Snapshot
 
 ```
-const [snapshot] = await Snapshot.list()
+const snapshot = await Snapshot.find(id)
 
 await snapshot.update({
   'expires_at': "2000-01-01T01:00:00Z",
@@ -121,7 +121,7 @@ await snapshot.update({
 ## Delete Snapshot
 
 ```
-const [snapshot] = await Snapshot.list()
+const snapshot = await Snapshot.find(id)
 
 await snapshot.delete()
 ```

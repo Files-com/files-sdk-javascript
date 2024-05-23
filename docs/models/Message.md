@@ -88,7 +88,7 @@ await Message.create({
 ## Update Message
 
 ```
-const [message] = await Message.list()
+const message = await Message.find(id)
 
 await message.update({
   'project_id': 1,
@@ -131,7 +131,7 @@ await message.update({
 ## Delete Message
 
 ```
-const [message] = await Message.list()
+const message = await Message.find(id)
 
 await message.delete()
 ```

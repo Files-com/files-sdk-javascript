@@ -75,7 +75,7 @@ await BundleNotification.create({
 ## Update Bundle Notification
 
 ```
-const [bundle_notification] = await BundleNotification.list()
+const bundle_notification = await BundleNotification.find(id)
 
 await bundle_notification.update({
   'notify_on_registration': true,
@@ -106,7 +106,7 @@ await bundle_notification.update({
 ## Delete Bundle Notification
 
 ```
-const [bundle_notification] = await BundleNotification.list()
+const bundle_notification = await BundleNotification.find(id)
 
 await bundle_notification.delete()
 ```

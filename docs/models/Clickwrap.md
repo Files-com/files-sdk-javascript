@@ -77,7 +77,7 @@ await Clickwrap.create({
 ## Update Clickwrap
 
 ```
-const [clickwrap] = await Clickwrap.list()
+const clickwrap = await Clickwrap.find(id)
 
 await clickwrap.update({
   'name': "Example Site NDA for Files.com Use",
@@ -115,7 +115,7 @@ await clickwrap.update({
 ## Delete Clickwrap
 
 ```
-const [clickwrap] = await Clickwrap.list()
+const clickwrap = await Clickwrap.find(id)
 
 await clickwrap.delete()
 ```

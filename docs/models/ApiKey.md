@@ -134,7 +134,7 @@ await ApiKey.deleteCurrent
 ## Update Api Key
 
 ```
-const [api_key] = await ApiKey.list()
+const api_key = await ApiKey.find(id)
 
 await api_key.update({
   'description': "example",
@@ -176,7 +176,7 @@ await api_key.update({
 ## Delete Api Key
 
 ```
-const [api_key] = await ApiKey.list()
+const api_key = await ApiKey.find(id)
 
 await api_key.delete()
 ```

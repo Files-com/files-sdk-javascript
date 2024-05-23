@@ -61,7 +61,7 @@ await Project.create({
 ## Update Project
 
 ```
-const [project] = await Project.list()
+const project = await Project.find(id)
 
 await project.update({
   'global_access': "global_access",
@@ -87,7 +87,7 @@ await project.update({
 ## Delete Project
 
 ```
-const [project] = await Project.list()
+const project = await Project.find(id)
 
 await project.delete()
 ```

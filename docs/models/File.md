@@ -150,8 +150,7 @@ await File.find(path, {
 ## Download file
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.download({
   'with_previews': true,
@@ -220,8 +219,7 @@ await file.download({
 ## Update file/folder metadata
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.update({
   'custom_metadata': {"key":"value"},
@@ -290,8 +288,7 @@ await file.update({
 ## Delete file/folder
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.delete({
   'recursive': true,
@@ -309,8 +306,7 @@ await file.delete({
 ## Copy file/folder
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.copy({
   'destination': "destination",
@@ -340,8 +336,7 @@ await file.copy({
 ## Move file/folder
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.move({
   'destination': "destination",
@@ -369,8 +364,7 @@ await file.move({
 ## Begin file upload
 
 ```
-const file = new File()
-file.path = myFilePath
+const file = await File.find(path)
 
 await file.begin_upload({
   'mkdir_parents': true,

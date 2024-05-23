@@ -35,8 +35,7 @@ await Style.find(path)
 ## Update Style
 
 ```
-const style = new Style()
-style.path = myFilePath
+const style = await Style.find(path)
 
 await style.update({
   'file': "file",
@@ -64,8 +63,7 @@ await style.update({
 ## Delete Style
 
 ```
-const style = new Style()
-style.path = myFilePath
+const style = await Style.find(path)
 
 await style.delete()
 ```

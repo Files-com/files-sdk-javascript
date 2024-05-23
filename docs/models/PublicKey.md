@@ -78,7 +78,7 @@ await PublicKey.create({
 ## Update Public Key
 
 ```
-const [public_key] = await PublicKey.list()
+const public_key = await PublicKey.find(id)
 
 await public_key.update({
   'title': "My Main Key",
@@ -109,7 +109,7 @@ await public_key.update({
 ## Delete Public Key
 
 ```
-const [public_key] = await PublicKey.list()
+const public_key = await PublicKey.find(id)
 
 await public_key.delete()
 ```

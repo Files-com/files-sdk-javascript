@@ -68,7 +68,7 @@ await MessageReaction.create({
 ## Delete Message Reaction
 
 ```
-const [message_reaction] = await MessageReaction.list()
+const message_reaction = await MessageReaction.find(id)
 
 await message_reaction.delete()
 ```

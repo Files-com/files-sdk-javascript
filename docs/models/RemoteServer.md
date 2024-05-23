@@ -307,7 +307,7 @@ await RemoteServer.create({
 ## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
 
 ```
-const [remote_server] = await RemoteServer.list()
+const remote_server = await RemoteServer.find(id)
 
 await remote_server.configuration_file({
   'api_token': "example",
@@ -375,7 +375,7 @@ await remote_server.configuration_file({
 ## Update Remote Server
 
 ```
-const [remote_server] = await RemoteServer.list()
+const remote_server = await RemoteServer.find(id)
 
 await remote_server.update({
   'aws_access_key': "example",
@@ -563,7 +563,7 @@ await remote_server.update({
 ## Delete Remote Server
 
 ```
-const [remote_server] = await RemoteServer.list()
+const remote_server = await RemoteServer.find(id)
 
 await remote_server.delete()
 ```

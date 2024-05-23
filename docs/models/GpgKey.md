@@ -82,7 +82,7 @@ await GpgKey.create({
 ## Update Gpg Key
 
 ```
-const [gpg_key] = await GpgKey.list()
+const gpg_key = await GpgKey.find(id)
 
 await gpg_key.update({
   'public_key': "7f8bc1210b09b9ddf469e6b6b8920e76",
@@ -119,7 +119,7 @@ await gpg_key.update({
 ## Delete Gpg Key
 
 ```
-const [gpg_key] = await GpgKey.list()
+const gpg_key = await GpgKey.find(id)
 
 await gpg_key.delete()
 ```

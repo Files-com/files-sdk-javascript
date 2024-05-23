@@ -73,7 +73,7 @@ await UserRequest.create({
 ## Delete User Request
 
 ```
-const [user_request] = await UserRequest.list()
+const user_request = await UserRequest.find(id)
 
 await user_request.delete()
 ```

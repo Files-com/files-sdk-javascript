@@ -149,7 +149,7 @@ await Notification.create({
 ## Update Notification
 
 ```
-const [notification] = await Notification.list()
+const notification = await Notification.find(id)
 
 await notification.update({
   'notify_on_copy': true,
@@ -226,7 +226,7 @@ await notification.update({
 ## Delete Notification
 
 ```
-const [notification] = await Notification.list()
+const notification = await Notification.find(id)
 
 await notification.delete()
 ```

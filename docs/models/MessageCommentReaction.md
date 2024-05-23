@@ -68,7 +68,7 @@ await MessageCommentReaction.create({
 ## Delete Message Comment Reaction
 
 ```
-const [message_comment_reaction] = await MessageCommentReaction.list()
+const message_comment_reaction = await MessageCommentReaction.find(id)
 
 await message_comment_reaction.delete()
 ```

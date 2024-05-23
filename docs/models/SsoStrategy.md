@@ -134,7 +134,7 @@ await SsoStrategy.find(id)
 ## Synchronize provisioning data with the SSO remote server
 
 ```
-const [sso_strategy] = await SsoStrategy.list()
+const sso_strategy = await SsoStrategy.find(id)
 
 await sso_strategy.sync()
 ```

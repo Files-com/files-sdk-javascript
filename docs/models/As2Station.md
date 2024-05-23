@@ -91,7 +91,7 @@ await As2Station.create({
 ## Update As2 Station
 
 ```
-const [as2_station] = await As2Station.list()
+const as2_station = await As2Station.find(id)
 
 await as2_station.update({
   'name': "AS2 Station Name",
@@ -131,7 +131,7 @@ await as2_station.update({
 ## Delete As2 Station
 
 ```
-const [as2_station] = await As2Station.list()
+const as2_station = await As2Station.find(id)
 
 await as2_station.delete()
 ```

@@ -81,7 +81,7 @@ await ShareGroup.create({
 ## Update Share Group
 
 ```
-const [share_group] = await ShareGroup.list()
+const share_group = await ShareGroup.find(id)
 
 await share_group.update({
   'notes': "This group is defined for testing purposes",
@@ -120,7 +120,7 @@ await share_group.update({
 ## Delete Share Group
 
 ```
-const [share_group] = await ShareGroup.list()
+const share_group = await ShareGroup.find(id)
 
 await share_group.delete()
 ```

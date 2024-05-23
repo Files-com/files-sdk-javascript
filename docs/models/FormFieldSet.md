@@ -104,7 +104,7 @@ await FormFieldSet.create({
 ## Update Form Field Set
 
 ```
-const [form_field_set] = await FormFieldSet.list()
+const form_field_set = await FormFieldSet.find(id)
 
 await form_field_set.update({
   'title': "Sample Form Title",
@@ -163,7 +163,7 @@ await form_field_set.update({
 ## Delete Form Field Set
 
 ```
-const [form_field_set] = await FormFieldSet.list()
+const form_field_set = await FormFieldSet.find(id)
 
 await form_field_set.delete()
 ```

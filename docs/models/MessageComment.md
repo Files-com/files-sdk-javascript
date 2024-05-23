@@ -75,7 +75,7 @@ await MessageComment.create({
 ## Update Message Comment
 
 ```
-const [message_comment] = await MessageComment.list()
+const message_comment = await MessageComment.find(id)
 
 await message_comment.update({
   'body': "body",
@@ -107,7 +107,7 @@ await message_comment.update({
 ## Delete Message Comment
 
 ```
-const [message_comment] = await MessageComment.list()
+const message_comment = await MessageComment.find(id)
 
 await message_comment.delete()
 ```

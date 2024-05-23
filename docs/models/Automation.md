@@ -201,7 +201,7 @@ await Automation.create({
 ## Manually run automation
 
 ```
-const [automation] = await Automation.list()
+const automation = await Automation.find(id)
 
 await automation.manual_run()
 ```
@@ -216,7 +216,7 @@ await automation.manual_run()
 ## Update Automation
 
 ```
-const [automation] = await Automation.list()
+const automation = await Automation.find(id)
 
 await automation.update({
   'source': "source",
@@ -343,7 +343,7 @@ await automation.update({
 ## Delete Automation
 
 ```
-const [automation] = await Automation.list()
+const automation = await Automation.find(id)
 
 await automation.delete()
 ```
