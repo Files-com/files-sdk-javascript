@@ -73,7 +73,7 @@ class App {
   // string # Associated Remote Server type, if any
   getRemoteServerType = () => this.attributes.remote_server_type
 
-  // array # Screenshots of the App
+  // array(string) # Screenshots of the App
   getScreenshotListUrls = () => this.attributes.screenshot_list_urls
 
   // string # Link to SDK installation instructions

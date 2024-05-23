@@ -37,7 +37,7 @@ class IpAddress {
   // int64 # Group ID
   getGroupId = () => this.attributes.group_id
 
-  // array # A list of IP addresses.
+  // array(string) # A list of IP addresses.
   getIpAddresses = () => this.attributes.ip_addresses
 
   // Parameters:

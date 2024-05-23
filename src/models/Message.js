@@ -49,7 +49,7 @@ class Message {
     this.attributes.body = value
   }
 
-  // array # Comments.
+  // array(object) # Comments.
   getComments = () => this.attributes.comments
 
   setComments = value => {

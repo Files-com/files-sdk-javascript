@@ -28,10 +28,10 @@ class Errors {
 
   isLoaded = () => !!this.attributes.id
 
-  // array # A list of fields where errors occur
+  // array(string) # A list of fields where errors occur
   getFields = () => this.attributes.fields
 
-  // array # A list of error messages
+  // array(string) # A list of error messages
   getMessages = () => this.attributes.messages
 }
 

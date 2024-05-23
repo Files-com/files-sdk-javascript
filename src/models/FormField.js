@@ -43,7 +43,7 @@ class FormField {
   // string # Type of Field
   getFieldType = () => this.attributes.field_type
 
-  // array # Options to display for radio and dropdown
+  // array(string) # Options to display for radio and dropdown
   getOptionsForSelect = () => this.attributes.options_for_select
 
   // string # Default option for radio and dropdown

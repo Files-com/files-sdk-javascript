@@ -283,14 +283,14 @@ class Bundle {
     this.attributes.has_inbox = value
   }
 
-  // array # A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
+  // array(string) # A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
   getPaths = () => this.attributes.paths
 
   setPaths = value => {
     this.attributes.paths = value
   }
 
-  // array # A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
+  // array(object) # A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
   getBundlepaths = () => this.attributes.bundlepaths
 
   setBundlepaths = value => {

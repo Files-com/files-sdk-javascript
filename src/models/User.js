@@ -42,7 +42,7 @@ class User {
     this.attributes.username = value
   }
 
-  // array # List of group IDs of which this user is an administrator
+  // array(int64) # List of group IDs of which this user is an administrator
   getAdminGroupIds = () => this.attributes.admin_group_ids
 
   setAdminGroupIds = value => {

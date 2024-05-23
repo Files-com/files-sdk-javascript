@@ -40,7 +40,7 @@ class Status {
   // Auto # Additional data
   getData = () => this.attributes.data
 
-  // array # A list of api errors
+  // array(object) # A list of api errors
   getErrors = () => this.attributes.errors
 
   // int64 # Required Clickwrap id
