@@ -67,7 +67,7 @@ class FtpActionLog {
   // string # FTP Command Param
   getParam = () => this.attributes.param
 
-  // string # FTP Response Code
+  // int64 # FTP Response Code
   getResponseCode = () => this.attributes.responseCode
 
   // string # FTP Response Message
