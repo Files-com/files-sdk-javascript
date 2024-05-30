@@ -73,10 +73,10 @@ class SftpActionLog {
   // string # MD5 Hash of the file. Not always available.
   getMd5 = () => this.attributes.md5
 
-  // string # Size of File That was Uploaded or Downloaded.
+  // int64 # Size of File That was Uploaded or Downloaded.
   getSize = () => this.attributes.size
 
-  // string # Data Length in Bytes. Present for actions that transfer data.
+  // int64 # Data Length in Bytes. Present for actions that transfer data.
   getDataLength = () => this.attributes.data_length
 
   // int64 # Number of entries returned when listing files and folders
