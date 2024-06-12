@@ -195,10 +195,10 @@ class Lock {
 
   // Parameters:
   //   path (required) - string - Path
-  //   allow_access_by_any_user - boolean - Allow lock to be updated by any user?
+  //   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
   //   exclusive - boolean - Is lock exclusive?
-  //   recursive - string - Does lock apply to subfolders?
-  //   timeout - int64 - Lock timeout length
+  //   recursive - boolean - Does lock apply to subfolders?
+  //   timeout - int64 - Lock timeout in seconds
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -212,10 +212,6 @@ class Lock {
 
     if (params.path && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    if (params.recursive && !isString(params.recursive)) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type String, received ${getType(params.recursive)}`)
     }
 
     if (params.timeout && !isInt(params.timeout)) {
