@@ -112,8 +112,6 @@ class Behavior {
   //   recursive - boolean - Is behavior recursive?
   //   name - string - Name for this behavior.
   //   description - string - Description for this behavior.
-  //   behavior - string - Behavior type.
-  //   path - string - Folder behaviors path.
   //   attachment_delete - boolean - If true, will delete the file stored in attachment
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -139,14 +137,6 @@ class Behavior {
 
     if (params.description && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
-    }
-
-    if (params.behavior && !isString(params.behavior)) {
-      throw new errors.InvalidParameterError(`Bad parameter: behavior must be of type String, received ${getType(params.behavior)}`)
-    }
-
-    if (params.path && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
     if (!params.id) {
