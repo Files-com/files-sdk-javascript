@@ -25,6 +25,7 @@
 ```
 await IpAddress.list({
   'per_page': 1,
+  'page': 1,
 })
 ```
 
@@ -33,6 +34,8 @@ await IpAddress.list({
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (int64): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (int64): 
 
 ---
 
@@ -41,6 +44,7 @@ await IpAddress.list({
 ```
 await IpAddress.getSmartfileReserved({
   'per_page': 1,
+  'page': 1,
 })
 ```
 
@@ -49,6 +53,8 @@ await IpAddress.getSmartfileReserved({
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (int64): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (int64): 
 
 ---
 
@@ -57,6 +63,7 @@ await IpAddress.getSmartfileReserved({
 ```
 await IpAddress.getExavaultReserved({
   'per_page': 1,
+  'page': 1,
 })
 ```
 
@@ -65,6 +72,8 @@ await IpAddress.getExavaultReserved({
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (int64): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (int64): 
 
 ---
 
@@ -73,6 +82,7 @@ await IpAddress.getExavaultReserved({
 ```
 await IpAddress.getReserved({
   'per_page': 1,
+  'page': 1,
 })
 ```
 
@@ -81,3 +91,5 @@ await IpAddress.getReserved({
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (int64): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (int64): 
