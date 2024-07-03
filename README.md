@@ -22,7 +22,9 @@ or
 ```js
 import Files from "files.com/lib/Files.js";
 
-// set your subdomain or custom domain
+// Set the client to your site subdomain if your site is configured to disable global acceleration.
+// Otherwise, don't change this setting for production.
+// For dev/CI, you can point this to the mock server.
 Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
 
