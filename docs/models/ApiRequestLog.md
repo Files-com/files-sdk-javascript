@@ -46,7 +46,7 @@
 
 ---
 
-## List Api Request Logs
+## List API Request Logs
 
 ```
 await ApiRequestLog.list({

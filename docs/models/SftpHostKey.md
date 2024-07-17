@@ -19,7 +19,7 @@
 
 ---
 
-## List Sftp Host Keys
+## List SFTP Host Keys
 
 ```
 await SftpHostKey.list({
@@ -38,7 +38,7 @@ await SftpHostKey.list({
 
 ---
 
-## Show Sftp Host Key
+## Show SFTP Host Key
 
 ```
 await SftpHostKey.find(id)
@@ -51,7 +51,7 @@ await SftpHostKey.find(id)
 
 ---
 
-## Create Sftp Host Key
+## Create SFTP Host Key
 
 ```
 await SftpHostKey.create({
@@ -67,7 +67,7 @@ await SftpHostKey.create({
 
 ---
 
-## Update Sftp Host Key
+## Update SFTP Host Key
 
 ```
 const sftp_host_key = await SftpHostKey.find(id)
@@ -96,7 +96,7 @@ await sftp_host_key.update({
 
 ---
 
-## Delete Sftp Host Key
+## Delete SFTP Host Key
 
 ```
 const sftp_host_key = await SftpHostKey.find(id)

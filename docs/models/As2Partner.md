@@ -42,7 +42,7 @@
 
 ---
 
-## List As2 Partners
+## List AS2 Partners
 
 ```
 await As2Partner.list({
@@ -61,7 +61,7 @@ await As2Partner.list({
 
 ---
 
-## Show As2 Partner
+## Show AS2 Partner
 
 ```
 await As2Partner.find(id)
@@ -74,7 +74,7 @@ await As2Partner.find(id)
 
 ---
 
-## Create As2 Partner
+## Create AS2 Partner
 
 ```
 await As2Partner.create({
@@ -104,7 +104,7 @@ await As2Partner.create({
 
 ---
 
-## Update As2 Partner
+## Update AS2 Partner
 
 ```
 const as2_partner = await As2Partner.find(id)
@@ -155,7 +155,7 @@ await as2_partner.update({
 
 ---
 
-## Delete As2 Partner
+## Delete AS2 Partner
 
 ```
 const as2_partner = await As2Partner.find(id)

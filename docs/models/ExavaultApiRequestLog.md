@@ -32,7 +32,7 @@
 
 ---
 
-## List Exavault Api Request Logs
+## List Exavault API Request Logs
 
 ```
 await ExavaultApiRequestLog.list({

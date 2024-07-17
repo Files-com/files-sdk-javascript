@@ -46,7 +46,7 @@
 
 ---
 
-## List Ftp Action Logs
+## List FTP Action Logs
 
 ```
 await FtpActionLog.list({

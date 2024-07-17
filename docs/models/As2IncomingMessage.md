@@ -84,7 +84,7 @@
 
 ---
 
-## List As2 Incoming Messages
+## List AS2 Incoming Messages
 
 ```
 await As2IncomingMessage.list({

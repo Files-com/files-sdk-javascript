@@ -76,7 +76,7 @@
 
 ---
 
-## List As2 Outgoing Messages
+## List AS2 Outgoing Messages
 
 ```
 await As2OutgoingMessage.list({

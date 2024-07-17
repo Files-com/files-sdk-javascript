@@ -63,7 +63,7 @@ class User {
     this.attributes.attachments_permission = value
   }
 
-  // int64 # Number of api keys associated with this user
+  // int64 # Number of API keys associated with this user
   getApiKeysCount = () => this.attributes.api_keys_count
 
   setApiKeysCount = value => {

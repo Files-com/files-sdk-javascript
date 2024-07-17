@@ -39,7 +39,7 @@
 
 ---
 
-## List As2 Stations
+## List AS2 Stations
 
 ```
 await As2Station.list({
@@ -58,7 +58,7 @@ await As2Station.list({
 
 ---
 
-## Show As2 Station
+## Show AS2 Station
 
 ```
 await As2Station.find(id)
@@ -71,7 +71,7 @@ await As2Station.find(id)
 
 ---
 
-## Create As2 Station
+## Create AS2 Station
 
 ```
 await As2Station.create({
@@ -91,7 +91,7 @@ await As2Station.create({
 
 ---
 
-## Update As2 Station
+## Update AS2 Station
 
 ```
 const as2_station = await As2Station.find(id)
@@ -131,7 +131,7 @@ await as2_station.update({
 
 ---
 
-## Delete As2 Station
+## Delete AS2 Station
 
 ```
 const as2_station = await As2Station.find(id)

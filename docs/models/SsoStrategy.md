@@ -102,7 +102,7 @@
 
 ---
 
-## List Sso Strategies
+## List SSO Strategies
 
 ```
 await SsoStrategy.list({
@@ -121,7 +121,7 @@ await SsoStrategy.list({
 
 ---
 
-## Show Sso Strategy
+## Show SSO Strategy
 
 ```
 await SsoStrategy.find(id)

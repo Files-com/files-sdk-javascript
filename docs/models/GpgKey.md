@@ -24,7 +24,7 @@
 
 ---
 
-## List Gpg Keys
+## List GPG Keys
 
 ```
 await GpgKey.list({
@@ -46,7 +46,7 @@ await GpgKey.list({
 
 ---
 
-## Show Gpg Key
+## Show GPG Key
 
 ```
 await GpgKey.find(id)
@@ -59,7 +59,7 @@ await GpgKey.find(id)
 
 ---
 
-## Create Gpg Key
+## Create GPG Key
 
 ```
 await GpgKey.create({
@@ -82,7 +82,7 @@ await GpgKey.create({
 
 ---
 
-## Update Gpg Key
+## Update GPG Key
 
 ```
 const gpg_key = await GpgKey.find(id)
@@ -119,7 +119,7 @@ await gpg_key.update({
 
 ---
 
-## Delete Gpg Key
+## Delete GPG Key
 
 ```
 const gpg_key = await GpgKey.find(id)

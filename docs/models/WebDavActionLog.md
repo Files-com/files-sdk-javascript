@@ -42,7 +42,7 @@
 
 ---
 
-## List Web Dav Action Logs
+## List WebDAV Action Logs
 
 ```
 await WebDavActionLog.list({

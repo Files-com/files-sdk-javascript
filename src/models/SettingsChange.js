@@ -37,7 +37,7 @@ class SettingsChange {
   // int64 # The user id responsible for this change
   getUserId = () => this.attributes.user_id
 
-  // int64 # The api key id responsible for this change
+  // int64 # The API key id responsible for this change
   getApiKeyId = () => this.attributes.api_key_id
 
   // boolean # true if this change was performed by Files.com support.

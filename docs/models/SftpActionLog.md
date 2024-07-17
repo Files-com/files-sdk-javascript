@@ -50,7 +50,7 @@
 
 ---
 
-## List Sftp Action Logs
+## List SFTP Action Logs
 
 ```
 await SftpActionLog.list({
