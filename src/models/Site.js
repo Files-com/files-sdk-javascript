@@ -106,6 +106,9 @@ class Site {
   // boolean # Do Bundles require recipients for sharing?
   getBundleRequireShareRecipient = () => this.attributes.bundle_require_share_recipient
 
+  // boolean # Do Bundles require internal notes?
+  getBundleRequireNote = () => this.attributes.bundle_require_note
+
   // string # Do Bundle uploaders receive upload confirmation notifications?
   getBundleUploadReceiptNotifications = () => this.attributes.bundle_upload_receipt_notifications
 
@@ -557,6 +560,7 @@ class Site {
   //   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
   //   left_navigation_visibility - object - Visibility settings for account navigation
   //   additional_text_file_types - array(string) - Additional extensions that are considered text files
+  //   bundle_require_note - boolean - Do Bundles require internal notes?
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
