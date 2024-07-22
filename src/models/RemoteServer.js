@@ -413,6 +413,13 @@ class RemoteServer {
     this.attributes.linode_region = value
   }
 
+  // boolean # If true, this remote server supports file versioning. This value is determined automatically by Files.com.
+  getSupportsVersioning = () => this.attributes.supports_versioning
+
+  setSupportsVersioning = value => {
+    this.attributes.supports_versioning = value
+  }
+
   // string # AWS secret key.
   getAwsSecretKey = () => this.attributes.aws_secret_key
 
