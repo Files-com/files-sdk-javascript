@@ -52,7 +52,7 @@ class FtpActionLog {
   // string # Action Type
   getActionType = () => this.attributes.action_type
 
-  // string # Path as sent by the Client (may not match Files.com path due to user root folders for FTP) This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path as sent by the Client (may not match Files.com path due to user root folders for FTP). This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # Path on Files.com

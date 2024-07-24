@@ -31,7 +31,7 @@ class History {
   // int64 # Action ID
   getId = () => this.attributes.id
 
-  // string # Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // date-time # Action occurrence date/time

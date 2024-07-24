@@ -34,7 +34,7 @@ class BundleDownload {
   // string # Download method (file or full_zip)
   getDownloadMethod = () => this.attributes.download_method
 
-  // string # Download path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Download path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // date-time # Download date/time

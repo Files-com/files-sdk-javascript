@@ -31,7 +31,7 @@ class OutboundConnectionLog {
   // date-time # Start Time of Action
   getTimestamp = () => this.attributes.timestamp
 
-  // string # Remote Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Remote Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # End User IP

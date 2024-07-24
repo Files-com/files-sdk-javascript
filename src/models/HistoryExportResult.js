@@ -46,7 +46,7 @@ class HistoryExportResult {
   // int64 # ID of the parent folder
   getParentId = () => this.attributes.parent_id
 
-  // string # Path of the related action This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path of the related action. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # Folder in which the action occurred

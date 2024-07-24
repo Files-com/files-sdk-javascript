@@ -40,7 +40,7 @@ class BundleAction {
   // string # The destination path for this bundle action, if applicable
   getDestination = () => this.attributes.destination
 
-  // string # Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   // string # The source path for this bundle action, if applicable

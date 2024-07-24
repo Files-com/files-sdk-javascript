@@ -28,7 +28,7 @@ class Folder {
 
   isLoaded = () => !!this.attributes.path
 
-  // string # File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # File/Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   setPath = value => {
