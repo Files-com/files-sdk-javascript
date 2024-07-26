@@ -25,10 +25,7 @@
 ## List Clickwraps
 
 ```
-await Clickwrap.list({
-  'per_page': 1,
-  'page': 1,
-})
+await Clickwrap.list
 ```
 
 

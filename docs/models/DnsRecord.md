@@ -21,10 +21,7 @@
 ## Show site DNS configuration
 
 ```
-await DnsRecord.list({
-  'per_page': 1,
-  'page': 1,
-})
+await DnsRecord.list
 ```
 
 

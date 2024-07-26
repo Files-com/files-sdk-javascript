@@ -40,8 +40,6 @@
 
 ```
 await InboxRegistration.list({
-  'per_page': 1,
-  'page': 1,
   'folder_behavior_id': 1,
 })
 ```

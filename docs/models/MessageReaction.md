@@ -20,8 +20,6 @@
 ```
 await MessageReaction.list({
   'user_id': 1,
-  'per_page': 1,
-  'page': 1,
   'message_id': 1,
 })
 ```

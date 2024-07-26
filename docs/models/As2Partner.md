@@ -45,10 +45,7 @@
 ## List AS2 Partners
 
 ```
-await As2Partner.list({
-  'per_page': 1,
-  'page': 1,
-})
+await As2Partner.list
 ```
 
 

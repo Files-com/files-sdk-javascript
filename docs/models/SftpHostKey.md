@@ -22,10 +22,7 @@
 ## List SFTP Host Keys
 
 ```
-await SftpHostKey.list({
-  'per_page': 1,
-  'page': 1,
-})
+await SftpHostKey.list
 ```
 
 

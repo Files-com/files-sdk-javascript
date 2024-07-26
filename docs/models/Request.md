@@ -28,8 +28,6 @@
 
 ```
 await Request.list({
-  'per_page': 1,
-  'page': 1,
   'mine': true,
   'path': "example",
 })
@@ -52,8 +50,6 @@ await Request.list({
 
 ```
 await Request.getFolder(path, {
-  'per_page': 1,
-  'page': 1,
   'mine': true,
 })
 ```

@@ -57,10 +57,7 @@
 ## List Payments
 
 ```
-await Payment.list({
-  'per_page': 1,
-  'page': 1,
-})
+await Payment.list
 ```
 
 

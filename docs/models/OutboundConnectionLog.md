@@ -42,8 +42,8 @@
 
 ```
 await OutboundConnectionLog.list({
-  'per_page': 1,
-  'page': 1,
+  'filter': "",
+  'filter_prefix': "",
 })
 ```
 

@@ -88,8 +88,6 @@
 
 ```
 await As2IncomingMessage.list({
-  'per_page': 1,
-  'page': 1,
   'as2_partner_id': 1,
 })
 ```

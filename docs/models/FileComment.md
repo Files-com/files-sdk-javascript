@@ -25,10 +25,7 @@
 ## List File Comments by path
 
 ```
-await FileComment.listFor(path, {
-  'per_page': 1,
-  'page': 1,
-})
+await FileComment.listFor(path)
 ```
 
 

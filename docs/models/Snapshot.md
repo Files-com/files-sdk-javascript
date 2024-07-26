@@ -26,10 +26,7 @@
 ## List Snapshots
 
 ```
-await Snapshot.list({
-  'per_page': 1,
-  'page': 1,
-})
+await Snapshot.list
 ```
 
 

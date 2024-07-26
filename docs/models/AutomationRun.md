@@ -32,8 +32,6 @@
 
 ```
 await AutomationRun.list({
-  'per_page': 1,
-  'page': 1,
   'automation_id': 1,
 })
 ```

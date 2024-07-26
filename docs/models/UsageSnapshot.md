@@ -45,10 +45,7 @@
 ## List Usage Snapshots
 
 ```
-await UsageSnapshot.list({
-  'per_page': 1,
-  'page': 1,
-})
+await UsageSnapshot.list
 ```
 
 

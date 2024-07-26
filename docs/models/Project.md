@@ -17,10 +17,7 @@
 ## List Projects
 
 ```
-await Project.list({
-  'per_page': 1,
-  'page': 1,
-})
+await Project.list
 ```
 
 

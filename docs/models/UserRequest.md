@@ -23,10 +23,7 @@
 ## List User Requests
 
 ```
-await UserRequest.list({
-  'per_page': 1,
-  'page': 1,
-})
+await UserRequest.list
 ```
 
 

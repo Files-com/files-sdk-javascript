@@ -58,8 +58,9 @@
 
 ```
 await App.list({
-  'per_page': 1,
-  'page': 1,
+  'sort_by': "",
+  'filter': "",
+  'filter_prefix': "",
 })
 ```
 

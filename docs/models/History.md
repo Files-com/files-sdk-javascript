@@ -43,9 +43,6 @@
 ```
 await History.listForFile(path, {
   'display': "Actual text of the action here.",
-  'per_page': 1,
-  'action': "create",
-  'page': 1,
 })
 ```
 
@@ -69,9 +66,6 @@ await History.listForFile(path, {
 ```
 await History.listForFolder(path, {
   'display': "Actual text of the action here.",
-  'per_page': 1,
-  'action': "create",
-  'page': 1,
 })
 ```
 
@@ -95,9 +89,6 @@ await History.listForFolder(path, {
 ```
 await History.listForUser(user_id, {
   'display': "Actual text of the action here.",
-  'per_page': 1,
-  'action': "create",
-  'page': 1,
 })
 ```
 
@@ -121,9 +112,6 @@ await History.listForUser(user_id, {
 ```
 await History.listLogins({
   'display': "Actual text of the action here.",
-  'per_page': 1,
-  'action': "create",
-  'page': 1,
 })
 ```
 
@@ -146,9 +134,6 @@ await History.listLogins({
 ```
 await History.list({
   'display': "Actual text of the action here.",
-  'per_page': 1,
-  'action': "create",
-  'page': 1,
 })
 ```
 

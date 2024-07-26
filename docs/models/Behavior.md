@@ -36,8 +36,9 @@
 
 ```
 await Behavior.list({
-  'per_page': 1,
-  'page': 1,
+  'sort_by': "",
+  'filter': "",
+  'filter_prefix': "",
 })
 ```
 
@@ -71,8 +72,6 @@ await Behavior.find(id)
 
 ```
 await Behavior.listFor(path, {
-  'per_page': 1,
-  'page': 1,
   'ancestor_behaviors': true,
   'behavior': "webhook",
 })
@@ -131,7 +130,6 @@ await Behavior.webhookTest({
   'encoding': "RAW",
   'headers': {"x-test-header":"testvalue"},
   'body': {"test-param":"testvalue"},
-  'action': "test",
 })
 ```
 

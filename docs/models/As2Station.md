@@ -42,10 +42,7 @@
 ## List AS2 Stations
 
 ```
-await As2Station.list({
-  'per_page': 1,
-  'page': 1,
-})
+await As2Station.list
 ```
 
 

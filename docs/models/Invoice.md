@@ -57,10 +57,7 @@
 ## List Invoices
 
 ```
-await Invoice.list({
-  'per_page': 1,
-  'page': 1,
-})
+await Invoice.list
 ```
 
 

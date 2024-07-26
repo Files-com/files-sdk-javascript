@@ -105,10 +105,7 @@
 ## List SSO Strategies
 
 ```
-await SsoStrategy.list({
-  'per_page': 1,
-  'page': 1,
-})
+await SsoStrategy.list
 ```
 
 

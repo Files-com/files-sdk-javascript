@@ -30,8 +30,6 @@
 
 ```
 await Permission.list({
-  'per_page': 1,
-  'page': 1,
   'path': "example",
   'include_groups': true,
   'group_id': 1,

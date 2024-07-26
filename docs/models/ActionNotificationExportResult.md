@@ -35,8 +35,6 @@
 ```
 await ActionNotificationExportResult.list({
   'user_id': 1,
-  'per_page': 1,
-  'page': 1,
   'action_notification_export_id': 1,
 })
 ```

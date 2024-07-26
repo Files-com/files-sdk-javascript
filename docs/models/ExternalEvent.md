@@ -40,8 +40,13 @@
 
 ```
 await ExternalEvent.list({
-  'per_page': 1,
-  'page': 1,
+  'sort_by': "",
+  'filter': "",
+  'filter_gt': "",
+  'filter_gteq': "",
+  'filter_prefix': "",
+  'filter_lt': "",
+  'filter_lteq': "",
 })
 ```
 

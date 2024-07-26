@@ -144,10 +144,7 @@
 ## List Remote Servers
 
 ```
-await RemoteServer.list({
-  'per_page': 1,
-  'page': 1,
-})
+await RemoteServer.list
 ```
 
 

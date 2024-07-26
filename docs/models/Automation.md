@@ -103,8 +103,6 @@
 
 ```
 await Automation.list({
-  'per_page': 1,
-  'page': 1,
   'with_deleted': true,
 })
 ```

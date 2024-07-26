@@ -17,10 +17,7 @@
 ## List Priorities
 
 ```
-await Priority.list(path, {
-  'per_page': 1,
-  'page': 1,
-})
+await Priority.list(path)
 ```
 
 

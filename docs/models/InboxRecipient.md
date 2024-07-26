@@ -26,8 +26,6 @@
 
 ```
 await InboxRecipient.list({
-  'per_page': 1,
-  'page': 1,
   'inbox_id': 1,
 })
 ```
