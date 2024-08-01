@@ -53,10 +53,7 @@
 ## List SFTP Action Logs
 
 ```
-await SftpActionLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await SftpActionLog.list
 ```
 
 

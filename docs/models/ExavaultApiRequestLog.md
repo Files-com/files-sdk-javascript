@@ -35,10 +35,7 @@
 ## List Exavault API Request Logs
 
 ```
-await ExavaultApiRequestLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await ExavaultApiRequestLog.list
 ```
 
 

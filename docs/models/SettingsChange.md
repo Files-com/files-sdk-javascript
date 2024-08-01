@@ -27,10 +27,7 @@
 ## List Settings Changes
 
 ```
-await SettingsChange.list({
-  'sort_by': "",
-  'filter': "",
-})
+await SettingsChange.list
 ```
 
 

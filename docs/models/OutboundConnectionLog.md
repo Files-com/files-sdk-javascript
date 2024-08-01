@@ -41,10 +41,7 @@
 ## List Outbound Connection Logs
 
 ```
-await OutboundConnectionLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await OutboundConnectionLog.list
 ```
 
 

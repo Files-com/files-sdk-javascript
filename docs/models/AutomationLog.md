@@ -31,10 +31,7 @@
 ## List Automation Logs
 
 ```
-await AutomationLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await AutomationLog.list
 ```
 
 

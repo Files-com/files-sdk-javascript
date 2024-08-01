@@ -29,10 +29,7 @@
 ## List Public Hosting Request Logs
 
 ```
-await PublicHostingRequestLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await PublicHostingRequestLog.list
 ```
 
 

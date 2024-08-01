@@ -49,10 +49,7 @@
 ## List API Request Logs
 
 ```
-await ApiRequestLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await ApiRequestLog.list
 ```
 
 

@@ -23,10 +23,7 @@
 ## List Bundle Notifications
 
 ```
-await BundleNotification.list({
-  'sort_by': "",
-  'filter': "",
-})
+await BundleNotification.list
 ```
 
 

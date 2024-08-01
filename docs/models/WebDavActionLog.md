@@ -45,10 +45,7 @@
 ## List WebDAV Action Logs
 
 ```
-await WebDavActionLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await WebDavActionLog.list
 ```
 
 

@@ -57,11 +57,7 @@
 ## List Apps
 
 ```
-await App.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_prefix': "",
-})
+await App.list
 ```
 
 

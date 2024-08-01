@@ -49,10 +49,7 @@
 ## List FTP Action Logs
 
 ```
-await FtpActionLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await FtpActionLog.list
 ```
 
 

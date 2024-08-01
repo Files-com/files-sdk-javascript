@@ -33,10 +33,7 @@
 ## List Sync Logs
 
 ```
-await SyncLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await SyncLog.list
 ```
 
 

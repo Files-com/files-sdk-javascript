@@ -37,14 +37,7 @@
 ## List Usage Daily Snapshots
 
 ```
-await UsageDailySnapshot.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_gt': "",
-  'filter_gteq': "",
-  'filter_lt': "",
-  'filter_lteq': "",
-})
+await UsageDailySnapshot.list
 ```
 
 

@@ -31,10 +31,7 @@
 ## List Email Logs
 
 ```
-await EmailLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await EmailLog.list
 ```
 
 

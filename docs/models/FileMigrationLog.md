@@ -29,10 +29,7 @@
 ## List File Migration Logs
 
 ```
-await FileMigrationLog.list({
-  'filter': "",
-  'filter_prefix': "",
-})
+await FileMigrationLog.list
 ```
 
 

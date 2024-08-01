@@ -23,14 +23,7 @@
 ## List Remote Bandwidth Snapshots
 
 ```
-await RemoteBandwidthSnapshot.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_gt': "",
-  'filter_gteq': "",
-  'filter_lt': "",
-  'filter_lteq': "",
-})
+await RemoteBandwidthSnapshot.list
 ```
 
 

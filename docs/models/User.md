@@ -149,17 +149,7 @@
 ## List Users
 
 ```
-await User.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_gt': "",
-  'filter_gteq': "",
-  'filter_prefix': "",
-  'filter_lt': "",
-  'filter_lteq': "",
-  'ids': "",
-  'search': "",
-})
+await User.list
 ```
 
 

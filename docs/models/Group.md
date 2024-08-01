@@ -35,12 +35,7 @@
 ## List Groups
 
 ```
-await Group.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_prefix': "",
-  'ids': "",
-})
+await Group.list
 ```
 
 

@@ -35,11 +35,7 @@
 ## List Behaviors
 
 ```
-await Behavior.list({
-  'sort_by': "",
-  'filter': "",
-  'filter_prefix': "",
-})
+await Behavior.list
 ```
 
 
