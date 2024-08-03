@@ -64,9 +64,6 @@ class HistoryExportResult {
   // string # Username of the user that performed the action
   getUsername = () => this.attributes.username
 
-  // boolean # true if this change was performed by a user on a parent site.
-  getUserIsFromParentSite = () => this.attributes.user_is_from_parent_site
-
   // string # What action was taken. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`
   getAction = () => this.attributes.action
 

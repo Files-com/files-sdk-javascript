@@ -58,9 +58,6 @@ class History {
   // string # Username
   getUsername = () => this.attributes.username
 
-  // boolean # true if this change was performed by a user on a parent site.
-  getUserIsFromParentSite = () => this.attributes.user_is_from_parent_site
-
   // string # Type of action
   getAction = () => this.attributes.action
 
