@@ -73,9 +73,7 @@ class History {
   //   display - string - Display format. Leave blank or set to `full` or `parent`.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string
-  //   page - int64
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `user_id` and `created_at`.
   //   path (required) - string - Path to operate on.
   static listForFile = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -108,14 +106,6 @@ class History {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.action && !isString(params.action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
-    }
-
-    if (params.page && !isInt(params.page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: page must be of type Int, received ${getType(params.page)}`)
-    }
-
     if (params.path && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
@@ -132,9 +122,7 @@ class History {
   //   display - string - Display format. Leave blank or set to `full` or `parent`.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string
-  //   page - int64
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `user_id` and `created_at`.
   //   path (required) - string - Path to operate on.
   static listForFolder = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -167,14 +155,6 @@ class History {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.action && !isString(params.action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
-    }
-
-    if (params.page && !isInt(params.page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: page must be of type Int, received ${getType(params.page)}`)
-    }
-
     if (params.path && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
@@ -191,9 +171,7 @@ class History {
   //   display - string - Display format. Leave blank or set to `full` or `parent`.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string
-  //   page - int64
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `user_id` and `created_at`.
   //   user_id (required) - int64 - User ID.
   static listForUser = async (userId, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -226,14 +204,6 @@ class History {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.action && !isString(params.action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
-    }
-
-    if (params.page && !isInt(params.page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: page must be of type Int, received ${getType(params.page)}`)
-    }
-
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
@@ -250,9 +220,7 @@ class History {
   //   display - string - Display format. Leave blank or set to `full` or `parent`.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string
-  //   page - int64
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `user_id` and `created_at`.
   static listLogins = async (params = {}, options = {}) => {
     if (params.start_at && !isString(params.start_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
@@ -274,14 +242,6 @@ class History {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.action && !isString(params.action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
-    }
-
-    if (params.page && !isInt(params.page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: page must be of type Int, received ${getType(params.page)}`)
-    }
-
     const response = await Api.sendRequest('/history/login', 'GET', params, options)
 
     const Action = require('./Action.js').default
@@ -294,9 +254,7 @@ class History {
   //   display - string - Display format. Leave blank or set to `full` or `parent`.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   action - string
-  //   page - int64
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[path]=desc`). Valid fields are `path`, `folder`, `user_id` or `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `folder`, `user_id` or `created_at`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
   static list = async (params = {}, options = {}) => {
@@ -318,14 +276,6 @@ class History {
 
     if (params.per_page && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
-    }
-
-    if (params.action && !isString(params.action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
-    }
-
-    if (params.page && !isInt(params.page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: page must be of type Int, received ${getType(params.page)}`)
     }
 
     const response = await Api.sendRequest('/history', 'GET', params, options)
