@@ -43,6 +43,9 @@ class SettingsChange {
   // boolean # true if this change was performed by Files.com support.
   getUserIsFilesSupport = () => this.attributes.user_is_files_support
 
+  // boolean # true if this change was performed by a user on a parent site.
+  getUserIsFromParentSite = () => this.attributes.user_is_from_parent_site
+
   // string # The username of the user responsible for this change
   getUsername = () => this.attributes.username
 

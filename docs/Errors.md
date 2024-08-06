@@ -94,6 +94,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthenticated_InvalidCredentialsError
 ### NotAuthenticated_InvalidOauthError
 ### NotAuthenticated_InvalidOrExpiredCodeError
+### NotAuthenticated_InvalidSessionError
 ### NotAuthenticated_InvalidUsernameOrPasswordError
 ### NotAuthenticated_LockedOutError
 ### NotAuthenticated_LockoutRegionMismatchError
@@ -116,6 +117,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_FullPermissionRequiredError
 ### NotAuthorized_HistoryPermissionRequiredError
 ### NotAuthorized_InsufficientPermissionForParamsError
+### NotAuthorized_InsufficientPermissionForSiteError
 ### NotAuthorized_MustAuthenticateWithApiKeyError
 ### NotAuthorized_NeedAdminPermissionForInboxError
 ### NotAuthorized_NonAdminsMustQueryByFolderOrPathError
