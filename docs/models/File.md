@@ -362,7 +362,7 @@ await file.move({
 
 ---
 
-## Begin file upload
+## Begin File Upload
 
 ```
 const file = await File.find(path)

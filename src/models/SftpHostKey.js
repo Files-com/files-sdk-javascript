@@ -28,7 +28,7 @@ class SftpHostKey {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Sftp Host Key ID
+  // int64 # SFTP Host Key ID
   getId = () => this.attributes.id
 
   setId = value => {
