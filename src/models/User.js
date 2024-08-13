@@ -353,6 +353,13 @@ class User {
     this.attributes.password_expired = value
   }
 
+  // boolean # Is the user an allowed to view all (non-billing) site configuration for this site?
+  getReadonlySiteAdmin = () => this.attributes.readonly_site_admin
+
+  setReadonlySiteAdmin = value => {
+    this.attributes.readonly_site_admin = value
+  }
+
   // boolean # Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
   getRestapiPermission = () => this.attributes.restapi_permission
 
@@ -637,6 +644,7 @@ class User {
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
   //   password_validity_days - int64 - Number of days to allow user to use the same password
+  //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
@@ -916,6 +924,7 @@ class User {
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
   //   password_validity_days - int64 - Number of days to allow user to use the same password
+  //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?

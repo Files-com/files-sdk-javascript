@@ -366,6 +366,7 @@ Error
 |     `NotAuthorized_ApiKeyOnlyForDesktopAppError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForMobileAppError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForOfficeIntegrationError`|  `NotAuthorizedError` |
+|     `NotAuthorized_BillingOrSiteAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BillingPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundleMaximumUsesReachedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_CannotLoginWhileUsingKeyError`|  `NotAuthorizedError` |
