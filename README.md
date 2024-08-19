@@ -48,9 +48,7 @@ const User = require("files.com/lib/models/User.js").default;
 const { LogLevel } = require("files.com/lib/Logger.js").default;
 ```
 
-<Note title="Repository">
 Explore the [files-sdk-javascript](https://github.com/Files-com/files-sdk-javascript) code on GitHub.
-</Note>
 
 ### Getting Support
 
@@ -84,9 +82,7 @@ const user = new User(params, { apiKey: 'YOUR_API_KEY' })
 await User.find(id, params, { apiKey: 'YOUR_API_KEY' })
 ```
 
-<Note>
 Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
-</Note>
 
 ### Authenticate with a Session
 
