@@ -67,7 +67,7 @@ class Site {
   // boolean # Are manual Bundle names allowed?
   getAllowBundleNames = () => this.attributes.allow_bundle_names
 
-  // string # Comma seperated list of allowed Country codes
+  // string # Comma separated list of allowed Country codes
   getAllowedCountries = () => this.attributes.allowed_countries
 
   // string # List of allowed IP addresses
@@ -178,7 +178,7 @@ class Site {
   // int64 # Mobile app session lifetime (in hours)
   getMobileAppSessionLifetime = () => this.attributes.mobile_app_session_lifetime
 
-  // string # Comma seperated list of disallowed Country codes
+  // string # Comma separated list of disallowed Country codes
   getDisallowedCountries = () => this.attributes.disallowed_countries
 
   // boolean # If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
@@ -394,7 +394,7 @@ class Site {
   // int64 # Id of the currently selected custom SFTP Host Key
   getActiveSftpHostKeyId = () => this.attributes.active_sftp_host_key_id
 
-  // boolean # If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
+  // boolean # If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
   getSftpInsecureCiphers = () => this.attributes.sftp_insecure_ciphers
 
   // boolean # If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
@@ -564,7 +564,7 @@ class Site {
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
-  //   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
+  //   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
   //   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
   //   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
   //   user_lockout - boolean - Will users be locked out after incorrect login attempts?
@@ -572,9 +572,9 @@ class Site {
   //   user_lockout_within - int64 - Number of hours for user lockout window
   //   user_lockout_lock_period - int64 - How many hours to lock user out for failed password?
   //   include_password_in_welcome_email - boolean - Include password in emails to new users?
-  //   allowed_countries - string - Comma seperated list of allowed Country codes
+  //   allowed_countries - string - Comma separated list of allowed Country codes
   //   allowed_ips - string - List of allowed IP addresses
-  //   disallowed_countries - string - Comma seperated list of disallowed Country codes
+  //   disallowed_countries - string - Comma separated list of disallowed Country codes
   //   days_to_retain_backups - int64 - Number of days to keep deleted files
   //   max_prior_passwords - int64 - Number of prior passwords to disallow
   //   password_validity_days - int64 - Number of days password is valid
