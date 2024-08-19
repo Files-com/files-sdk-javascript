@@ -82,7 +82,7 @@ const testSuite = async () => {
     invariant(file.display_name === displayName, 'Uploaded file response object should have the same display_name as the file we uploaded')
 
     const foundFile = await File.find(destinationPath)
-    
+
     invariant(foundFile.path === destinationPath, 'Found file should have the same path as the file we uploaded')
     invariant(foundFile.display_name === displayName, 'Found file should have the same display_name as the file we uploaded')
     invariant(typeof foundFile.getDownloadUri() === 'undefined', 'Found file should not have a download uri yet')
@@ -211,7 +211,7 @@ const testSuite = async () => {
     const auto = await ApiKey.list({ user_id: 0 })
 
     invariant(JSON.stringify(manual.attributes) === JSON.stringify(auto.attributes), 'Manual and auto session API key lists should match')
-    
+
     await Session.destroy()
 
     Files.setSessionId(null)
@@ -244,19 +244,19 @@ const testSuite = async () => {
   const testUserListAndUpdate = async () => {
     const allUsers = await User.all()
     const firstUser = allUsers[0]
-  
+
     const oldName = firstUser.name
     const newName = `edited name - ${Math.random()}`
-  
+
     firstUser.setName(newName)
     await firstUser.save()
-  
+
     const updatedUser = await User.find(firstUser.id)
-  
+
     invariant(updatedUser.isLoaded(), 'updated user should be loaded')
     invariant(oldName !== newName, 'old name should not equal new name')
     invariant(updatedUser.name === newName, 'updated user name should match new name')
-  
+
     Logger.info('***** testUserListAndUpdate() succeeded! *****');
   }
 

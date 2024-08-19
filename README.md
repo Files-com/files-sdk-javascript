@@ -256,9 +256,9 @@ try {
 }
 catch(err) {
     if (err instanceof FilesErrors.NotAuthenticatedError) {
-        console.log("Authorization Error Occured (" + err.constructor.name + "): " + err.error);
+        console.log("Authorization Error Occurred (" + err.constructor.name + "): " + err.error);
     } else if (err instanceof FilesErrors.FilesError) {
-        console.log("Unknown Error Occured (" + err.constructor.name + "): " + err.error);
+        console.log("Unknown Error Occurred (" + err.constructor.name + "): " + err.error);
     } else {
         throw err;
     }
