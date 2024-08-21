@@ -85,6 +85,9 @@ class App {
   // string # Associated SSO Strategy type, if any
   getSsoStrategyType = () => this.attributes.sso_strategy_type
 
+  // string # Associated SIEM type, if any
+  getSiemType = () => this.attributes.siem_type
+
   // string # Tutorial video page
   getTutorialYoutubeUrl = () => this.attributes.tutorial_youtube_url
 
