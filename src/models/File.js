@@ -606,6 +606,7 @@ class File {
   //   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
   //   with_previews - boolean - Include file preview information?
   //   with_priority_color - boolean - Include file priority color information?
+  //   point_in_time - string - Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
   download = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
@@ -626,6 +627,10 @@ class File {
 
     if (params.preview_size && !isString(params.preview_size)) {
       throw new errors.InvalidParameterError(`Bad parameter: preview_size must be of type String, received ${getType(params.preview_size)}`)
+    }
+
+    if (params.point_in_time && !isString(params.point_in_time)) {
+      throw new errors.InvalidParameterError(`Bad parameter: point_in_time must be of type String, received ${getType(params.point_in_time)}`)
     }
 
     if (!params.path) {
