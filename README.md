@@ -5,11 +5,19 @@ The content included here should be enough to get started, but please visit our
 
 ## Introduction
 
-The Files.com JavaScript SDK provides convenient access to the Files.com API from applications written in JavaScript.
+The Files.com JavaScript SDK provides convenient access to all aspects of Files.com from applications written in JavaScript.
+
+This includes directly working with files and folders as well as performing management tasks such as adding/removing users, onboarding counterparties, retrieving information about automations and more.
+
+### JavaScript is a Core Focus at Files.com
+
+This SDK is used internally by serveral Files.com integrations that we maintain, and we work hard to ensure that it is always up to date and performant.
+
+It is also a very popular choice for Files.com customers looking to integrate with Files.com.
 
 ### Installation
 
-To install the package:
+To install the package, use `yarn` or `npm`:
 
 ```shell
 yarn add files.com
@@ -27,11 +35,6 @@ npm install files.com
 
 ```js
 import Files from "files.com/lib/Files.js";
-
-// Set the client to your site subdomain if your site is configured to disable global acceleration.
-// Otherwise, don't change this setting for production.
-// For dev/CI, you can point this to the mock server.
-Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
 
 ##### `require()` vs. `import`
@@ -52,10 +55,9 @@ Explore the [files-sdk-javascript](https://github.com/Files-com/files-sdk-javasc
 
 ### Getting Support
 
-The Files.com team is happy to help with any SDK Integration challenges you
-may face.
+The Files.com Support team provides official support for all of our official Files.com integration tools.
 
-Just email support@files.com and we'll get the process started.
+To initiate a support conversation, you can send an [Authenticated Support Request](https://www.files.com/docs/overview/requesting-support) or simply send an E-Mail to support@files.com.
 
 ## Authentication
 
