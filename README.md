@@ -9,6 +9,8 @@ The Files.com JavaScript SDK provides convenient access to all aspects of Files.
 
 This includes directly working with files and folders as well as performing management tasks such as adding/removing users, onboarding counterparties, retrieving information about automations and more.
 
+The JavaScript SDK uses the Files.com RESTful APIs via the HTTPS protocol (port 443) to securely communicate and transfer files so no firewall changes should be required in order to allow connectivity to Files.com.
+
 ### JavaScript is a Core Focus at Files.com
 
 This SDK is used internally by serveral Files.com integrations that we maintain, and we work hard to ensure that it is always up to date and performant.
