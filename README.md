@@ -13,7 +13,7 @@ The JavaScript SDK uses the Files.com RESTful APIs via the HTTPS protocol (port 
 
 ### JavaScript is a Core Focus at Files.com
 
-This SDK is used internally by serveral Files.com integrations that we maintain, and we work hard to ensure that it is always up to date and performant.
+This SDK is used internally by several Files.com integrations that we maintain, and we work hard to ensure that it is always up to date and performant.
 
 It is also a very popular choice for Files.com customers looking to integrate with Files.com.
 
@@ -33,7 +33,7 @@ npm install files.com
 
 ### Usage
 
-#### Import and initialize
+#### Import and Initialize
 
 ```js
 import Files from "files.com/lib/Files.js";
@@ -100,7 +100,7 @@ session times out, simply create a new session and resume where you left off. Th
 automatically handled by SDKs because we do not want to store password information in memory without
 your explicit consent.
 
-#### Logging in
+#### Logging In
 
 To create a session, the `create` method is called on the `Session` object with the user's username and
 password.
@@ -111,7 +111,7 @@ This returns a session object that can be used to authenticate SDK method calls.
 const session = await Session.create({ username: 'motor', password: 'vroom' })
 ```
 
-#### Using a session
+#### Using a Session
 
 Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
@@ -126,7 +126,7 @@ const user = new User(params, { session_id: session.id })
 await User.find(id, params, { session_id: session.id })
 ```
 
-#### Logging out
+#### Logging Out
 
 User sessions can be ended calling the `destroy` method on the `session` object.
 
@@ -136,7 +136,7 @@ await Session.destroy()
 
 ## Configuration
 
-### Configuration options
+### Configuration Options
 
 #### Base URL
 
@@ -147,7 +147,7 @@ This can also be set to use a mock server in development or CI.
 Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
 
-#### Log level
+#### Log Level
 
 Supported values:
 
@@ -173,7 +173,7 @@ Files.configureDebugging({
 })
 ```
 
-#### Network settings
+#### Network Settings
 
 ```javascript title="Example setting"
 Files.configureNetwork({
@@ -443,14 +443,14 @@ Error
 
 ### File Operations
 
-#### List root folder
+#### List Root Folder
 
 ```javascript
 import Folder from 'files.com/lib/models/Folder.js'
 const dirFiles = await Folder.listFor('/')
 ```
 
-#### Uploading a file
+#### Uploading a File
 
 ```javascript
 import File from 'files.com/lib/models/File.js'
@@ -465,9 +465,9 @@ if (!isBrowser()) {
 }
 ```
 
-#### Downloading a file
+#### Downloading a File
 
-##### Get a downloadable file object by path
+##### Get a Downloadable File Object by Path
 
 ```javascript
 import File from 'files.com/lib/models/File.js'
@@ -476,7 +476,7 @@ const foundFile = await File.find(remoteFilePath)
 const downloadableFile = await foundFile.download()
 ```
 
-##### Download a file (not available in browser)
+##### Download a File (not available in browser)
 
 ```javascript
 import { isBrowser } from 'files.com/lib/utils.js'
@@ -493,7 +493,7 @@ if (!isBrowser()) {
 }
 ```
 
-#### Comparing Case insensitive files and paths
+#### Comparing Case-Insensitive Files and Paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 
