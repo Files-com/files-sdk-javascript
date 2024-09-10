@@ -28,6 +28,9 @@ class Site {
 
   isLoaded = () => !!this.attributes.id
 
+  // int64 # Site Id
+  getId = () => this.attributes.id
+
   // string # Site name
   getName = () => this.attributes.name
 
