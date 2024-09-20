@@ -35,7 +35,7 @@ class Permission {
     this.attributes.id = value
   }
 
-  // string # Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+  // string # Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
   setPath = value => {
@@ -49,7 +49,7 @@ class Permission {
     this.attributes.user_id = value
   }
 
-  // string # User's username
+  // string # Username (if applicable)
   getUsername = () => this.attributes.username
 
   setUsername = value => {
@@ -63,21 +63,21 @@ class Permission {
     this.attributes.group_id = value
   }
 
-  // string # Group name if applicable
+  // string # Group name (if applicable)
   getGroupName = () => this.attributes.group_name
 
   setGroupName = value => {
     this.attributes.group_name = value
   }
 
-  // string # Permission type
+  // string # Permission type.  See the table referenced in the documentation for an explanation of each permission.
   getPermission = () => this.attributes.permission
 
   setPermission = value => {
     this.attributes.permission = value
   }
 
-  // boolean # Does this permission apply to subfolders?
+  // boolean # Recursive: does this permission apply to subfolders?
   getRecursive = () => this.attributes.recursive
 
   setRecursive = value => {
