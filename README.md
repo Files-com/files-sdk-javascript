@@ -524,6 +524,7 @@ Error
 |     `ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationCountryBlacklistedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationGeneralErrorError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_TwoFactorAuthenticationMethodUnsupportedErrorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationUnsubscribedRecipientError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_UpdatesNotAllowedForRemotesError`|  `ProcessingFailureError` |
 |     `RateLimited_DuplicateShareRecipientError`|  `RateLimitedError` |
