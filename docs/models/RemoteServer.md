@@ -359,7 +359,7 @@ await remote_server.configuration_file({
   "log_level": "example",
   "log_rotate_num": 1,
   "log_rotate_size": 1,
-  "max_concurrent_jobs": 1,
+  "override_max_concurrent_jobs": 1,
   "graceful_shutdown_timeout": 1,
   "transfer_rate_limit": "example",
   "api_token": "example",

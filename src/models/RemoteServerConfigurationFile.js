@@ -46,10 +46,10 @@ class RemoteServerConfigurationFile {
   // boolean # Follow symlinks when traversing directories
   getFollowLinks = () => this.attributes.follow_links
 
-  // string # Preferred network protocol ['udp', 'tcp']
+  // string # Preferred network protocol ['udp', 'tcp'] (default udp)
   getPreferProtocol = () => this.attributes.prefer_protocol
 
-  // string # DNS lookup method ['auto','doh','system']
+  // string # DNS lookup method ['auto','doh','system'] (default auto)
   getDns = () => this.attributes.dns
 
   // boolean # Proxy all outbound traffic through files.com proxy server
@@ -61,19 +61,19 @@ class RemoteServerConfigurationFile {
   // string # Log file name and location
   getLogFile = () => this.attributes.log_file
 
-  // string # Log level for the agent logs ['debug', 'info', 'warn', 'error', 'fatal']
+  // string # Log level for the agent logs ['debug', 'info', 'warn', 'error', 'fatal'] (default info)
   getLogLevel = () => this.attributes.log_level
 
   // int64 # Log route for agent logs. (default 5)
   getLogRotateNum = () => this.attributes.log_rotate_num
 
-  // int64 # Log route size in MB for agent logs. (default 20MB)
+  // int64 # Log route size in MB for agent logs. (default 20)
   getLogRotateSize = () => this.attributes.log_rotate_size
 
-  // int64 # Maximum number of concurrent jobs (default CPU Count * 4)
-  getMaxConcurrentJobs = () => this.attributes.max_concurrent_jobs
+  // int64 # Maximum number of concurrent jobs (default 1024)
+  getOverrideMaxConcurrentJobs = () => this.attributes.override_max_concurrent_jobs
 
-  // int64 # Graceful shutdown timeout in seconds
+  // int64 # Graceful shutdown timeout in seconds (default 15)
   getGracefulShutdownTimeout = () => this.attributes.graceful_shutdown_timeout
 
   // string # File transfer (upload/download) rate limit
