@@ -70,7 +70,7 @@ class RemoteServerConfigurationFile {
   // int64 # Log route size in MB for agent logs. (default 20)
   getLogRotateSize = () => this.attributes.log_rotate_size
 
-  // int64 # Maximum number of concurrent jobs (default 1024)
+  // int64 # Maximum number of concurrent jobs (default 500)
   getOverrideMaxConcurrentJobs = () => this.attributes.override_max_concurrent_jobs
 
   // int64 # Graceful shutdown timeout in seconds (default 15)
