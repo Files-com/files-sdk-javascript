@@ -91,6 +91,13 @@ class Automation {
     this.attributes.disabled = value
   }
 
+  // string # If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+  getExcludePattern = () => this.attributes.exclude_pattern
+
+  setExcludePattern = value => {
+    this.attributes.exclude_pattern = value
+  }
+
   // boolean # Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
   getFlattenDestinationStructure = () => this.attributes.flatten_destination_structure
 
@@ -203,7 +210,7 @@ class Automation {
     this.attributes.schedule_time_zone = value
   }
 
-  // string # Source Path
+  // string # Source path. Supports globs, except on remote mounts.
   getSource = () => this.attributes.source
 
   setSource = value => {
