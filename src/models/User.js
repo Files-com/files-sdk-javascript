@@ -444,11 +444,18 @@ class User {
     this.attributes.type_of_2fa_for_display = value
   }
 
-  // string # Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+  // string # Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
   getUserRoot = () => this.attributes.user_root
 
   setUserRoot = value => {
     this.attributes.user_root = value
+  }
+
+  // string # Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+  getUserHome = () => this.attributes.user_home
+
+  setUserHome = value => {
+    this.attributes.user_home = value
   }
 
   // int64 # Number of days remaining until password expires
@@ -658,7 +665,8 @@ class User {
   //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
   //   require_2fa - string - 2FA required setting
   //   time_zone - string - User time zone
-  //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+  //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+  //   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
   //   username - string - User's username
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -772,6 +780,10 @@ class User {
 
     if (params.user_root && !isString(params.user_root)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(params.user_root)}`)
+    }
+
+    if (params.user_home && !isString(params.user_home)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_home must be of type String, received ${getType(params.user_home)}`)
     }
 
     if (params.username && !isString(params.username)) {
@@ -938,7 +950,8 @@ class User {
   //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
   //   require_2fa - string - 2FA required setting
   //   time_zone - string - User time zone
-  //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+  //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+  //   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
   //   username (required) - string - User's username
   static create = async (params = {}, options = {}) => {
     if (!params.username) {
@@ -1043,6 +1056,10 @@ class User {
 
     if (params.user_root && !isString(params.user_root)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(params.user_root)}`)
+    }
+
+    if (params.user_home && !isString(params.user_home)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_home must be of type String, received ${getType(params.user_home)}`)
     }
 
     if (params.username && !isString(params.username)) {
