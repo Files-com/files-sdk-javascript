@@ -112,7 +112,7 @@
 
 ---
 
-## List Siem Http Destinations
+## List SIEM HTTP Destinations
 
 ```
 await SiemHttpDestination.list
@@ -126,7 +126,7 @@ await SiemHttpDestination.list
 
 ---
 
-## Show Siem Http Destination
+## Show SIEM HTTP Destination
 
 ```
 await SiemHttpDestination.find(id)
@@ -139,7 +139,7 @@ await SiemHttpDestination.find(id)
 
 ---
 
-## Create Siem Http Destination
+## Create SIEM HTTP Destination
 
 ```
 await SiemHttpDestination.create({
@@ -200,7 +200,7 @@ await SiemHttpDestination.create({
 
 ---
 
-## send_test_entry Siem Http Destination
+## send_test_entry SIEM HTTP Destination
 
 ```
 await SiemHttpDestination.sendTestEntry({
@@ -263,7 +263,7 @@ await SiemHttpDestination.sendTestEntry({
 
 ---
 
-## Update Siem Http Destination
+## Update SIEM HTTP Destination
 
 ```
 const siem_http_destination = await SiemHttpDestination.find(id)
@@ -382,7 +382,7 @@ await siem_http_destination.update({
 
 ---
 
-## Delete Siem Http Destination
+## Delete SIEM HTTP Destination
 
 ```
 const siem_http_destination = await SiemHttpDestination.find(id)
