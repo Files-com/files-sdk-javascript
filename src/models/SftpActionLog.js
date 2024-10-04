@@ -40,6 +40,9 @@ class SftpActionLog {
   // string # Username
   getUsername = () => this.attributes.username
 
+  // string # Name of the SFTP Client provided at initial connection
+  getSshClientIdentification = () => this.attributes.ssh_client_identification
+
   // string # Unique ID of the Session
   getSessionUuid = () => this.attributes.session_uuid
 
