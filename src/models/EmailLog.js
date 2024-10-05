@@ -46,7 +46,7 @@ class EmailLog {
   // string # CC field of E-Mail
   getCc = () => this.attributes.cc
 
-  // string # How was email deliered?  `customer_smtp` or `files.com`
+  // string # How was the email delivered?  `customer_smtp` or `files.com`
   getDeliveryMethod = () => this.attributes.delivery_method
 
   // string # Customer SMTP Hostname used.

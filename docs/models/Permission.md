@@ -7,7 +7,7 @@
   "id": 1,
   "path": "example",
   "user_id": 1,
-  "username": "Sser",
+  "username": "user",
   "group_id": 1,
   "group_name": "example",
   "permission": "full",
@@ -61,7 +61,7 @@ await Permission.create({
   'permission': "full",
   'recursive': true,
   'user_id': 1,
-  'username': "Sser",
+  'username': "user",
 })
 ```
 

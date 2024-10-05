@@ -8,9 +8,7 @@
   "group_id": 1,
   "user_id": 1,
   "admin": true,
-  "usernames": [
-    "user"
-  ]
+  "usernames": "user"
 }
 ```
 
@@ -18,7 +16,7 @@
 * `group_id` (int64): Group ID
 * `user_id` (int64): User ID
 * `admin` (boolean): Is this user an administrator of this group?
-* `usernames` (array(string)): A list of usernames for users in this group
+* `usernames` (string): Comma-delimited list of usernames who belong to this group (separated by commas).
 * `id` (int64): Group User ID.
 
 ---
@@ -88,9 +86,7 @@ await group_user.update({
   "group_id": 1,
   "user_id": 1,
   "admin": true,
-  "usernames": [
-    "user"
-  ]
+  "usernames": "user"
 }
 ```
 

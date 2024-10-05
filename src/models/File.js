@@ -681,7 +681,7 @@ class File {
   }
 
   // Parameters:
-  //   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+  //   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
   delete = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')

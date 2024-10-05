@@ -42,14 +42,14 @@ class SftpHostKey {
     this.attributes.name = value
   }
 
-  // string # MD5 Fingerpint of the public key
+  // string # MD5 Fingerprint of the public key
   getFingerprintMd5 = () => this.attributes.fingerprint_md5
 
   setFingerprintMd5 = value => {
     this.attributes.fingerprint_md5 = value
   }
 
-  // string # SHA256 Fingerpint of the public key
+  // string # SHA256 Fingerprint of the public key
   getFingerprintSha256 = () => this.attributes.fingerprint_sha256
 
   setFingerprintSha256 = value => {
