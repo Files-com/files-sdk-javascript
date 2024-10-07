@@ -77,13 +77,13 @@ access to the entire API. If the user is not an administrator, you will only be 
 that user can access, and no access will be granted to site administration functions in the API.
 
 ```javascript title="Example Request"
-Files.setApiKey('YOUR_API_KEY')
+Files.setApiKey('YOUR_API_KEY');
 
 // Alternatively, you can specify the API key on a per-object basis in the second parameter to a model constructor.
-const user = new User(params, { apiKey: 'YOUR_API_KEY' })
+const user = new User(params, { apiKey: 'YOUR_API_KEY' });
 
 // You may also specify the API key on a per-request basis in the final parameter to static methods.
-await User.find(id, params, { apiKey: 'YOUR_API_KEY' })
+await User.find(id, params, { apiKey: 'YOUR_API_KEY' });
 ```
 
 Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
@@ -108,7 +108,7 @@ password.
 This returns a session object that can be used to authenticate SDK method calls.
 
 ```javascript title="Example Request"
-const session = await Session.create({ username: 'motor', password: 'vroom' })
+const session = await Session.create({ username: 'motor', password: 'vroom' });
 ```
 
 #### Using a Session
@@ -117,13 +117,13 @@ Once a session has been created, you can store the session globally, use the ses
 
 ```javascript title="Example Request"
 // You may set the returned session ID to be used by default for subsequent requests.
-Files.setSessionId(session.id)
+Files.setSessionId(session.id);
 
 // Alternatively, you can specify the session ID on a per-object basis in the second parameter to a model constructor.
-const user = new User(params, { session_id: session.id })
+const user = new User(params, { session_id: session.id });
 
 // You may also specify the session ID on a per-request basis in the final parameter to static methods.
-await User.find(id, params, { session_id: session.id })
+await User.find(id, params, { session_id: session.id });
 ```
 
 #### Logging Out
@@ -131,7 +131,7 @@ await User.find(id, params, { session_id: session.id })
 User sessions can be ended calling the `destroy` method on the `session` object.
 
 ```javascript title="Example Request"
-await Session.destroy()
+await Session.destroy();
 ```
 
 ## Configuration
@@ -158,8 +158,9 @@ Supported values:
 * LogLevel.DEBUG
 
 ```javascript title="Example setting"
-import { LogLevel } from 'files.com/lib/Logger.js'
-Files.setLogLevel(LogLevel.INFO)
+import { LogLevel } from 'files.com/lib/Logger.js';
+
+Files.setLogLevel(LogLevel.INFO);
 ```
 
 #### Debugging
@@ -170,7 +171,7 @@ Enable debug logging of API requests and/or response headers. Both settings defa
 Files.configureDebugging({
   debugRequest: true,
   debugResponseHeaders: true,
-})
+});
 ```
 
 #### Network Settings
@@ -191,114 +192,112 @@ Files.configureNetwork({
 
   // auto-fetch all pages when results span multiple pages (default: `true`)
   autoPaginate: true,
-})
+});
 ```
 
 ## Sort and Filter
 
-Several of the Files.com API resources have list operations that return multiple instances of the resource.  The List operations
-can be sorted and filtered.
+Several of the Files.com API resources have list operations that return multiple instances of the
+resource. The List operations can be sorted and filtered.
 
 ### Sorting
 
-The returned data can be sorted by passing in the ```sort_by``` method argument.
+To sort the returned data, pass in the ```sort_by``` method argument.
 
-Each resource has a set of valid fields for sorting and can be sorted by one field at a time.
+Each resource supports a unique set of valid sort fields and can only be sorted by one field at a
+time.
 
-The argument value is a Javascript object that has a property of the resource field name sort on and a value of either ```"asc"``` or ```"desc"``` to specify the sort order.
-
-### Filters
-
-Filters apply selection criteria to the underlying query that returns the results. Filters can be applied individually to select resource fields
-and/or in a combination with each other.  The results of applying filters and filter combinations can be sorted by a single field.
-
-The passed in argument value is a Javascript object that has a property of the resource field name to filter on and a passed in value to use in the filter comparison.
-
-Each resource has their own set of valid filters and fields, valid combinations of filters, and sortable fields.
-
-#### Types of Filters
-
-##### Exact Filter
-
-`filter` - find resources that have an exact field value match to a passed in value. (i.e., FIELD_VALUE = PASS_IN_VALUE).
-
-#### Range Filters
-
-`filter_gt` - find resources that have a field value that is greater than the passed in value.  (i.e., FIELD_VALUE > PASS_IN_VALUE).
-
-`filter_gte` - find resources that have a field value that is greater than or equal to the passed in value.  (i.e., FIELD_VALUE >=  PASS_IN_VALUE).
-
-`filter_lt` - find resources that have a field value that is less than the passed in value.  (i.e., FIELD_VALUE < PASS_IN_VALUE).
-
-`filter_lte` - find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE).
-
-##### Pattern Filter
-
-`filter_prefix` - find resources where the specified field is prefixed by the supplied value. This is applicable to values that are strings.
+The argument value is a Javascript object that has a property of the resource field name sort on and
+a value of either ```"asc"``` or ```"desc"``` to specify the sort order.
 
 ```javascript title="Sort Example"
-// users sorted by username
 Files.setApiKey('my-key');
-var users = await User.list({
-    sort_by: { username: "asc"}
-  })
 
-for (var i = 0; i < users.length; i++) {
-    console.log(users[i].username);
-}
+// Users, sorted by username in ascending order.
+const users = await User.list({
+  sort_by: { username: "asc"}
+});
+
+users.forEach(user => {
+  console.log(user.username);
+});
 ```
 
-```javascript title="Exact Filter Example"
-// non admin users
-Files.setApiKey('my-key');
-var users = await User.list({
-    filter: { not_site_admin: true },
-    sort_by: { username: "asc"}
-  })
+### Filtering
 
-for (var i = 0; i < users.length; i++) {
-    console.log(users[i].username);
-}
+Filters apply selection criteria to the underlying query that returns the results. They can be
+applied individually or combined with other filters, and the resulting data can be sorted by a
+single field.
+
+Each resource supports a unique set of valid filter fields, filter combinations, and combinations of
+filters and sort fields.
+
+The passed in argument value is a Javascript object that has a property of the resource field name
+to filter on and a passed in value to use in the filter comparison.
+
+#### Filter Types
+
+| Filter | Type | Description |
+| --------- | --------- | --------- |
+| `filter` | Exact | Find resources that have an exact field value match to a passed in value. (i.e., FIELD_VALUE = PASS_IN_VALUE). |
+| `filter_prefix` | Pattern | Find resources where the specified field is prefixed by the supplied value. This is applicable to values that are strings. |
+| `filter_gt` | Range | Find resources that have a field value that is greater than the passed in value.  (i.e., FIELD_VALUE > PASS_IN_VALUE). |
+| `filter_gteq` | Range | Find resources that have a field value that is greater than or equal to the passed in value.  (i.e., FIELD_VALUE >=  PASS_IN_VALUE). |
+| `filter_lt` | Range | Find resources that have a field value that is less than the passed in value.  (i.e., FIELD_VALUE < PASS_IN_VALUE). |
+| `filter_lteq` | Range | Find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE). |
+
+```javascript title="Exact Filter Example"
+Files.setApiKey('my-key');
+
+// Users who are not site admins.
+const users = await User.list({
+  filter: { not_site_admin: true }
+});
+
+users.forEach(user => {
+  console.log(user.username);
+});
 ```
 
 ```javascript title="Range Filter Example"
-// users who haven't logged in since 2024-01-01
 Files.setApiKey('my-key');
-var users = await User.list({
-    filter_gte: { last_login_at: "2024-01-01" },
-    sort_by: { last_login_at: "asc"}
-  })
 
-for (var i = 0; i < users.length; i++) {
-    console.log(users[i].username);
-}
+// Users who haven't logged in since 2024-01-01.
+const users = await User.list({
+  filter_gteq: { last_login_at: "2024-01-01" }
+});
+
+users.forEach(user => {
+  console.log(user.username);
+});
 ```
 
 ```javascript title="Pattern Filter Example"
-// users who usernames start with 'test'
 Files.setApiKey('my-key');
-var users = await User.list({
-    filter_prefix: { username: "test" },
-    sort_by: { last_login_at: "asc"}
-  })
 
-for (var i = 0; i < users.length; i++) {
-    console.log(users[i].username);
-}
+// Users whose usernames start with 'test'.
+const users = await User.list({
+  filter_prefix: { username: "test" }
+});
+
+users.forEach(user => {
+  console.log(user.username);
+});
 ```
 
-```javascript title="Combined Filter Example"
-// users who usernames start with 'test' and are not admins
+```javascript title="Combination Filter with Sort Example"
 Files.setApiKey('my-key');
-var users = await User.list({
-    filter_prefix: { username: "test" },
-    filter: { not_site_admin: true },
-    sort_by: { last_login_at: "asc"}
-  })
 
-for (var i = 0; i < users.length; i++) {
-    console.log(users[i].username);
-}
+// Users whose usernames start with 'test' and are not site admins, sorted by last login date.
+const users = await User.list({
+  filter_prefix: { username: "test" },
+  filter: { not_site_admin: true },
+  sort_by: { last_login_at: "asc" }
+});
+
+users.forEach(user => {
+  console.log(user.username);
+});
 ```
 
 ## Errors
@@ -319,20 +318,19 @@ Use standard Javascript exception handling to detect and deal with errors.  It i
 catch the general `FilesError` exception as a catch-all.
 
 ```javascript title="Example Error Handling"
-import Session from 'files.com/lib/models/Session.js'
-import * as FilesErrors from 'files.com/lib/Errors.js'
+import Session from 'files.com/lib/models/Session.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
-    const session = await Session.create({ username: 'USERNAME', password: 'BADPASSWORD' })
-}
-catch(err) {
-    if (err instanceof FilesErrors.NotAuthenticatedError) {
-        console.log("Authorization Error Occurred (" + err.constructor.name + "): " + err.error);
-    } else if (err instanceof FilesErrors.FilesError) {
-        console.log("Unknown Error Occurred (" + err.constructor.name + "): " + err.error);
-    } else {
-        throw err;
-    }
+  const session = await Session.create({ username: 'USERNAME', password: 'BADPASSWORD' });
+} catch(err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authorization Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
 }
 ```
 
@@ -554,22 +552,23 @@ Error
 #### List Root Folder
 
 ```javascript
-import Folder from 'files.com/lib/models/Folder.js'
-const dirFiles = await Folder.listFor('/')
+import Folder from 'files.com/lib/models/Folder.js';
+
+const dirFiles = await Folder.listFor('/');
 ```
 
 #### Uploading a File
 
 ```javascript
-import File from 'files.com/lib/models/File.js'
-import { isBrowser } from 'files.com/lib/utils.js'
+import File from 'files.com/lib/models/File.js';
+import { isBrowser } from 'files.com/lib/utils.js';
 
 // uploading raw file data
-await File.uploadData(destinationFileName, data)
+await File.uploadData(destinationFileName, data);
 
 // uploading a file on disk (not available in browser)
 if (!isBrowser()) {
-  await File.uploadFile(destinationFileName, sourceFilePath)
+  await File.uploadFile(destinationFileName, sourceFilePath);
 }
 ```
 
@@ -578,26 +577,26 @@ if (!isBrowser()) {
 ##### Get a Downloadable File Object by Path
 
 ```javascript
-import File from 'files.com/lib/models/File.js'
+import File from 'files.com/lib/models/File.js';
 
-const foundFile = await File.find(remoteFilePath)
-const downloadableFile = await foundFile.download()
+const foundFile = await File.find(remoteFilePath);
+const downloadableFile = await foundFile.download();
 ```
 
 ##### Download a File (not available in browser)
 
 ```javascript
-import { isBrowser } from 'files.com/lib/utils.js'
+import { isBrowser } from 'files.com/lib/utils.js';
 
 if (!isBrowser()) {
   // download to a file on disk
-  await downloadableFile.downloadToFile(localFilePath)
+  await downloadableFile.downloadToFile(localFilePath);
 
   // download to a writable stream
-  await downloadableFile.downloadToStream(stream)
+  await downloadableFile.downloadToStream(stream);
 
   // download in memory and return as a UTF-8 string
-  const textContent = await downloadableFile.downloadToString()
+  const textContent = await downloadableFile.downloadToString();
 }
 ```
 
@@ -606,7 +605,7 @@ if (!isBrowser()) {
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 
 ```javascript
-import { pathNormalizer } from 'files.com/lib/utils.js'
+import { pathNormalizer } from 'files.com/lib/utils.js';
 
 if (pathNormalizer.same('Fïłèńämê.Txt', 'filename.txt')) {
   // the paths are the same
