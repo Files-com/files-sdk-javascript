@@ -162,19 +162,23 @@ class Permission {
     Permission.list(params, options)
 
   // Parameters:
+  //   path (required) - string - Folder path
   //   group_id - int64 - Group ID
-  //   path - string - Folder path
-  //   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
+  //   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
   //   recursive - boolean - Apply to subfolders recursively?
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
   static create = async (params = {}, options = {}) => {
-    if (params.group_id && !isInt(params.group_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
     }
 
     if (params.path && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
     if (params.permission && !isString(params.permission)) {
