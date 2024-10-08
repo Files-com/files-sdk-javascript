@@ -103,9 +103,7 @@
 ## List Automations
 
 ```
-await Automation.list({
-  'with_deleted': true,
-})
+await Automation.list
 ```
 
 
@@ -119,7 +117,6 @@ await Automation.list({
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `last_modified_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `last_modified_at`.
 * `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
-* `with_deleted` (boolean): Set to true to include deleted automations in the results.
 
 ---
 

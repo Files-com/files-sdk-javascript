@@ -157,6 +157,9 @@ class Site {
   // int64 # Number of days to keep deleted files
   getDaysToRetainBackups = () => this.attributes.days_to_retain_backups
 
+  // string # If true, allow public viewers of Bundles with full permissions to use document editing integrations.
+  getDocumentEditsInBundleAllowed = () => this.attributes.document_edits_in_bundle_allowed
+
   // string # Site default time zone
   getDefaultTimeZone = () => this.attributes.default_time_zone
 
@@ -316,10 +319,10 @@ class Site {
   // string # Next billing date
   getNextBillingDate = () => this.attributes.next_billing_date
 
-  // boolean # Allow users to use Office for the web?
+  // boolean # If true, allows users to use a document editing integration.
   getOfficeIntegrationAvailable = () => this.attributes.office_integration_available
 
-  // string # Office integration application used to edit and view the MS Office documents
+  // string # Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
   getOfficeIntegrationType = () => this.attributes.office_integration_type
 
   // string # Link to scheduling a meeting with our Sales team
@@ -552,8 +555,8 @@ class Site {
   //   mobile_app_session_lifetime - int64 - Mobile app session lifetime (in hours)
   //   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
   //   welcome_screen - string - Does the welcome screen appear?
-  //   office_integration_available - boolean - Allow users to use Office for the web?
-  //   office_integration_type - string - Office integration application used to edit and view the MS Office documents
+  //   office_integration_available - boolean - If true, allows users to use a document editing integration.
+  //   office_integration_type - string - Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
   //   pin_all_remote_servers_to_site_region - boolean - If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
   //   motd_text - string - A message to show users when they connect via FTP or SFTP.
   //   motd_use_for_ftp - boolean - Show message to users connecting via FTP
@@ -597,6 +600,7 @@ class Site {
   //   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
   //   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
   //   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
+  //   document_edits_in_bundle_allowed - string - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
   //   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
   //   prevent_root_permissions_for_non_site_admins - boolean - If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
   //   opt_out_global - boolean - Use servers in the USA only?
@@ -807,6 +811,10 @@ class Site {
 
     if (params.bundle_upload_receipt_notifications && !isString(params.bundle_upload_receipt_notifications)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_upload_receipt_notifications must be of type String, received ${getType(params.bundle_upload_receipt_notifications)}`)
+    }
+
+    if (params.document_edits_in_bundle_allowed && !isString(params.document_edits_in_bundle_allowed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: document_edits_in_bundle_allowed must be of type String, received ${getType(params.document_edits_in_bundle_allowed)}`)
     }
 
     if (params.disable_users_from_inactivity_period_days && !isInt(params.disable_users_from_inactivity_period_days)) {
