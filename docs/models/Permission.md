@@ -62,6 +62,7 @@ await Permission.create({
   'recursive': true,
   'user_id': 1,
   'username': "user",
+  'group_name': "example",
 })
 ```
 
@@ -69,11 +70,12 @@ await Permission.create({
 ### Parameters
 
 * `path` (string): Required - Folder path
-* `group_id` (int64): Group ID
+* `group_id` (int64): Group ID. Provide `group_name` or `group_id`
 * `permission` (string): Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
 * `recursive` (boolean): Apply to subfolders recursively?
 * `user_id` (int64): User ID.  Provide `username` or `user_id`
 * `username` (string): User username.  Provide `username` or `user_id`
+* `group_name` (string): Group name.  Provide `group_name` or `group_id`
 
 ---
 

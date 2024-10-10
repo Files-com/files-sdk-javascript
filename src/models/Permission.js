@@ -163,11 +163,12 @@ class Permission {
 
   // Parameters:
   //   path (required) - string - Folder path
-  //   group_id - int64 - Group ID
+  //   group_id - int64 - Group ID. Provide `group_name` or `group_id`
   //   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
   //   recursive - boolean - Apply to subfolders recursively?
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
+  //   group_name - string - Group name.  Provide `group_name` or `group_id`
   static create = async (params = {}, options = {}) => {
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
@@ -191,6 +192,10 @@ class Permission {
 
     if (params.username && !isString(params.username)) {
       throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
+    }
+
+    if (params.group_name && !isString(params.group_name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_name must be of type String, received ${getType(params.group_name)}`)
     }
 
     const response = await Api.sendRequest('/permissions', 'POST', params, options)
