@@ -15,6 +15,7 @@
   "authenticate_until": "2000-01-01T01:00:00Z",
   "authentication_method": "password",
   "avatar_url": "example",
+  "billable": true,
   "billing_permission": true,
   "bypass_site_allowed_ips": true,
   "bypass_inactive_disable": true,
@@ -82,6 +83,7 @@
 * `authenticate_until` (date-time): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `avatar_url` (string): URL holding the user's avatar
+* `billable` (boolean): Is this a billable user record?
 * `billing_permission` (boolean): Allow this user to perform operations on the account, payments, and invoices?
 * `bypass_site_allowed_ips` (boolean): Allow this user to skip site-wide IP blacklists?
 * `bypass_inactive_disable` (boolean): Exempt this user from being disabled based on inactivity?
@@ -446,6 +448,7 @@ await user.update({
   "authenticate_until": "2000-01-01T01:00:00Z",
   "authentication_method": "password",
   "avatar_url": "example",
+  "billable": true,
   "billing_permission": true,
   "bypass_site_allowed_ips": true,
   "bypass_inactive_disable": true,

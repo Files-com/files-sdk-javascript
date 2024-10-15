@@ -91,6 +91,13 @@ class User {
     this.attributes.avatar_url = value
   }
 
+  // boolean # Is this a billable user record?
+  getBillable = () => this.attributes.billable
+
+  setBillable = value => {
+    this.attributes.billable = value
+  }
+
   // boolean # Allow this user to perform operations on the account, payments, and invoices?
   getBillingPermission = () => this.attributes.billing_permission
 
