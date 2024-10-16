@@ -388,7 +388,6 @@ Error
 |     `BadRequest_InvalidCursorTypeForSortError`|  `BadRequestError` |
 |     `BadRequest_InvalidEtagsError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterAliasCombinationError`|  `BadRequestError` |
-|     `BadRequest_InvalidFilterCombinationError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterFieldError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterParamError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterParamValueError`|  `BadRequestError` |
@@ -397,6 +396,7 @@ Error
 |     `BadRequest_InvalidOauthProviderError`|  `BadRequestError` |
 |     `BadRequest_InvalidPathError`|  `BadRequestError` |
 |     `BadRequest_InvalidReturnToUrlError`|  `BadRequestError` |
+|     `BadRequest_InvalidSortFilterCombinationError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadOffsetError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartGapError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartSizeError`|  `BadRequestError` |

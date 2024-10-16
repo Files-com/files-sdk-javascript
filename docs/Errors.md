@@ -59,7 +59,6 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidCursorTypeForSortError
 ### BadRequest_InvalidEtagsError
 ### BadRequest_InvalidFilterAliasCombinationError
-### BadRequest_InvalidFilterCombinationError
 ### BadRequest_InvalidFilterFieldError
 ### BadRequest_InvalidFilterParamError
 ### BadRequest_InvalidFilterParamValueError
@@ -68,6 +67,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidOauthProviderError
 ### BadRequest_InvalidPathError
 ### BadRequest_InvalidReturnToUrlError
+### BadRequest_InvalidSortFilterCombinationError
 ### BadRequest_InvalidUploadOffsetError
 ### BadRequest_InvalidUploadPartGapError
 ### BadRequest_InvalidUploadPartSizeError
