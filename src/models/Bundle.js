@@ -283,6 +283,13 @@ class Bundle {
     this.attributes.has_inbox = value
   }
 
+  // boolean # Should folder uploads be prevented?
+  getDontAllowFoldersInUploads = () => this.attributes.dont_allow_folders_in_uploads
+
+  setDontAllowFoldersInUploads = value => {
+    this.attributes.dont_allow_folders_in_uploads = value
+  }
+
   // array(string) # A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
   getPaths = () => this.attributes.paths
 
