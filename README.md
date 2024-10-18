@@ -383,6 +383,7 @@ Error
 |     `BadRequest_DatetimeParseError`|  `BadRequestError` |
 |     `BadRequest_DestinationSameError`|  `BadRequestError` |
 |     `BadRequest_FolderMustNotBeAFileError`|  `BadRequestError` |
+|     `BadRequest_FoldersNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_InvalidBodyError`|  `BadRequestError` |
 |     `BadRequest_InvalidCursorError`|  `BadRequestError` |
 |     `BadRequest_InvalidCursorTypeForSortError`|  `BadRequestError` |

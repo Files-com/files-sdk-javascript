@@ -54,6 +54,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_DatetimeParseError
 ### BadRequest_DestinationSameError
 ### BadRequest_FolderMustNotBeAFileError
+### BadRequest_FoldersNotAllowedError
 ### BadRequest_InvalidBodyError
 ### BadRequest_InvalidCursorError
 ### BadRequest_InvalidCursorTypeForSortError
