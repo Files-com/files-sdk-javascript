@@ -192,6 +192,20 @@ class Folder {
     this.attributes.md5 = value
   }
 
+  // string # File SHA1 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+  getSha1 = () => this.attributes.sha1
+
+  setSha1 = value => {
+    this.attributes.sha1 = value
+  }
+
+  // string # File SHA256 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+  getSha256 = () => this.attributes.sha256
+
+  setSha256 = value => {
+    this.attributes.sha256 = value
+  }
+
   // string # MIME Type.  This is determined by the filename extension and is not stored separately internally.
   getMimeType = () => this.attributes.mime_type
 
