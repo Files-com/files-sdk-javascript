@@ -35,6 +35,9 @@ class BundleAction {
   getBundleRegistration = () => this.attributes.bundle_registration
 
   // date-time # Action occurrence date/time
+  getCreatedAt = () => this.attributes.created_at
+
+  // date-time # Action occurrence date/time
   getWhen = () => this.attributes.when
 
   // string # The destination path for this bundle action, if applicable

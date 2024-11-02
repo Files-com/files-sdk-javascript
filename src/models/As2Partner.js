@@ -70,6 +70,20 @@ class As2Partner {
     this.attributes.http_auth_username = value
   }
 
+  // object # Additional HTTP Headers for outgoing message sent to this partner.
+  getAdditionalHttpHeaders = () => this.attributes.additional_http_headers
+
+  setAdditionalHttpHeaders = value => {
+    this.attributes.additional_http_headers = value
+  }
+
+  // string # Default mime type of the file attached to the encrypted message
+  getDefaultMimeType = () => this.attributes.default_mime_type
+
+  setDefaultMimeType = value => {
+    this.attributes.default_mime_type = value
+  }
+
   // string # How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
   getMdnValidationLevel = () => this.attributes.mdn_validation_level
 
@@ -77,7 +91,7 @@ class As2Partner {
     this.attributes.mdn_validation_level = value
   }
 
-  // boolean # If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+  // boolean # If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   getEnableDedicatedIps = () => this.attributes.enable_dedicated_ips
 
   setEnableDedicatedIps = value => {
@@ -148,11 +162,13 @@ class As2Partner {
   }
 
   // Parameters:
-  //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+  //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   //   http_auth_username - string - Username to send to server for HTTP Authentication.
   //   http_auth_password - string - Password to send to server for HTTP Authentication.
   //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
   //   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+  //   default_mime_type - string - Default mime type of the file attached to the encrypted message
+  //   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
   //   name - string - The partner's formal AS2 name.
   //   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
   //   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
@@ -184,6 +200,10 @@ class As2Partner {
 
     if (params.server_certificate && !isString(params.server_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params.server_certificate)}`)
+    }
+
+    if (params.default_mime_type && !isString(params.default_mime_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_mime_type must be of type String, received ${getType(params.default_mime_type)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -297,11 +317,13 @@ class As2Partner {
     As2Partner.find(id, params, options)
 
   // Parameters:
-  //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+  //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   //   http_auth_username - string - Username to send to server for HTTP Authentication.
   //   http_auth_password - string - Password to send to server for HTTP Authentication.
   //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
   //   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+  //   default_mime_type - string - Default mime type of the file attached to the encrypted message
+  //   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
   //   as2_station_id (required) - int64 - ID of the AS2 Station associated with this partner.
   //   name (required) - string - The partner's formal AS2 name.
   //   uri (required) - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
@@ -337,6 +359,10 @@ class As2Partner {
 
     if (params.server_certificate && !isString(params.server_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_certificate must be of type String, received ${getType(params.server_certificate)}`)
+    }
+
+    if (params.default_mime_type && !isString(params.default_mime_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_mime_type must be of type String, received ${getType(params.default_mime_type)}`)
     }
 
     if (params.as2_station_id && !isInt(params.as2_station_id)) {
