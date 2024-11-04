@@ -37,9 +37,6 @@ class BundleAction {
   // date-time # Action occurrence date/time
   getCreatedAt = () => this.attributes.created_at
 
-  // date-time # Action occurrence date/time
-  getWhen = () => this.attributes.when
-
   // string # The destination path for this bundle action, if applicable
   getDestination = () => this.attributes.destination
 
