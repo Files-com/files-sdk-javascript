@@ -37,6 +37,9 @@ class UserCipherUse {
   // date-time # The earliest recorded use of this combination of interface and protocol and cipher (for this user)
   getCreatedAt = () => this.attributes.created_at
 
+  // boolean # Is this cipher considered insecure?
+  getInsecure = () => this.attributes.insecure
+
   // string # The interface accessed
   getInterface = () => this.attributes.interface
 
