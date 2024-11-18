@@ -49,7 +49,7 @@ class History {
   // string # The source path for this action, if applicable
   getSource = () => this.attributes.source
 
-  // array(object) # Targets
+  // object # Targets
   getTargets = () => this.attributes.targets
 
   // int64 # User ID
