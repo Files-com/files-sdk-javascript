@@ -468,7 +468,6 @@ Error
 |     `NotAuthorized_UserIdWithoutSiteAdminError`|  `NotAuthorizedError` |
 |     `NotAuthorized_WriteAndBundlePermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_WritePermissionRequiredError`|  `NotAuthorizedError` |
-|     `NotAuthorized_ZipDownloadIpMismatchError`|  `NotAuthorizedError` |
 |     `NotFound_ApiKeyNotFoundError`|  `NotFoundError` |
 |     `NotFound_BundlePathNotFoundError`|  `NotFoundError` |
 |     `NotFound_BundleRegistrationNotFoundError`|  `NotFoundError` |

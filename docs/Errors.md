@@ -139,7 +139,6 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_UserIdWithoutSiteAdminError
 ### NotAuthorized_WriteAndBundlePermissionRequiredError
 ### NotAuthorized_WritePermissionRequiredError
-### NotAuthorized_ZipDownloadIpMismatchError
 ### NotFound_ApiKeyNotFoundError
 ### NotFound_BundlePathNotFoundError
 ### NotFound_BundleRegistrationNotFoundError
