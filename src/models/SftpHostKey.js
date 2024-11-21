@@ -202,6 +202,13 @@ class SftpHostKey {
 
     return new SftpHostKey(response?.data, options)
   }
+
+  static createExport = async (options = {}) => {
+    const response = await Api.sendRequest('/sftp_host_keys/create_export', 'POST', {}, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default SftpHostKey

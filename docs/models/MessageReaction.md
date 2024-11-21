@@ -64,6 +64,23 @@ await MessageReaction.create({
 
 ---
 
+## Create Export Message Reaction
+
+```
+await MessageReaction.createExport({
+  'user_id': 1,
+  'message_id': 1,
+})
+```
+
+
+### Parameters
+
+* `user_id` (int64): User ID.  Provide a value of `0` to operate the current session's user.
+* `message_id` (int64): Required - Message to return reactions for.
+
+---
+
 ## Delete Message Reaction
 
 ```

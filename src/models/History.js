@@ -289,6 +289,173 @@ class History {
 
   static all = (params = {}, options = {}) =>
     History.list(params, options)
+
+  // Parameters:
+  //   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+  //   end_at - string - Leave blank or set to a date/time to filter later entries.
+  //   display - string - Display format. Leave blank or set to `full` or `parent`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path` and `created_at`.
+  //   path (required) - int64
+  static listForFileCreateExport = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = path
+
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
+    }
+
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
+    }
+
+    if (params.display && !isString(params.display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params.display)}`)
+    }
+
+    if (params.path && !isInt(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type Int, received ${getType(params.path)}`)
+    }
+
+    const response = await Api.sendRequest(`/history/files/${encodeURIComponent(params.path)}/create_export`, 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
+
+  // Parameters:
+  //   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+  //   end_at - string - Leave blank or set to a date/time to filter later entries.
+  //   display - string - Display format. Leave blank or set to `full` or `parent`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+  //   path (required) - int64
+  static listForFolderCreateExport = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = path
+
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
+    }
+
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
+    }
+
+    if (params.display && !isString(params.display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params.display)}`)
+    }
+
+    if (params.path && !isInt(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type Int, received ${getType(params.path)}`)
+    }
+
+    const response = await Api.sendRequest(`/history/folders/${encodeURIComponent(params.path)}/create_export`, 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
+
+  // Parameters:
+  //   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+  //   end_at - string - Leave blank or set to a date/time to filter later entries.
+  //   display - string - Display format. Leave blank or set to `full` or `parent`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `user_id` and `created_at`.
+  //   user_id (required) - int64 - User ID.
+  static listForUserCreateExport = async (userId, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.user_id = userId
+
+    if (!params.user_id) {
+      throw new errors.MissingParameterError('Parameter missing: user_id')
+    }
+
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
+    }
+
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
+    }
+
+    if (params.display && !isString(params.display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params.display)}`)
+    }
+
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    const response = await Api.sendRequest(`/history/users/${encodeURIComponent(params.user_id)}/create_export`, 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
+
+  // Parameters:
+  //   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+  //   end_at - string - Leave blank or set to a date/time to filter later entries.
+  //   display - string - Display format. Leave blank or set to `full` or `parent`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+  static listLoginsCreateExport = async (params = {}, options = {}) => {
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
+    }
+
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
+    }
+
+    if (params.display && !isString(params.display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params.display)}`)
+    }
+
+    const response = await Api.sendRequest('/history/login/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
+
+  // Parameters:
+  //   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+  //   end_at - string - Leave blank or set to a date/time to filter later entries.
+  //   display - string - Display format. Leave blank or set to `full` or `parent`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `created_at` or `user_id`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[ user_id, folder ]`, `[ user_id, path ]`, `[ folder, path ]` or `[ user_id, folder, path ]`.
+  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
+  static listCreateExport = async (params = {}, options = {}) => {
+    if (params.start_at && !isString(params.start_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
+    }
+
+    if (params.end_at && !isString(params.end_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
+    }
+
+    if (params.display && !isString(params.display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: display must be of type String, received ${getType(params.display)}`)
+    }
+
+    const response = await Api.sendRequest('/history/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default History

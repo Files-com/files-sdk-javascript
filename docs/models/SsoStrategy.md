@@ -129,6 +129,15 @@ await SsoStrategy.find(id)
 
 ---
 
+## Create Export SSO Strategy
+
+```
+await SsoStrategy.createExport
+```
+
+
+---
+
 ## Synchronize provisioning data with the SSO remote server
 
 ```

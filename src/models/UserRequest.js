@@ -184,6 +184,13 @@ class UserRequest {
 
     return new UserRequest(response?.data, options)
   }
+
+  static createExport = async (options = {}) => {
+    const response = await Api.sendRequest('/user_requests/create_export', 'POST', {}, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default UserRequest

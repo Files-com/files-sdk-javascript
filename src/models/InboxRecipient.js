@@ -158,6 +158,25 @@ class InboxRecipient {
 
     return new InboxRecipient(response?.data, options)
   }
+
+  // Parameters:
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
+  //   inbox_id (required) - int64 - List recipients for the inbox with this ID.
+  static createExport = async (params = {}, options = {}) => {
+    if (!params.inbox_id) {
+      throw new errors.MissingParameterError('Parameter missing: inbox_id')
+    }
+
+    if (params.inbox_id && !isInt(params.inbox_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: inbox_id must be of type Int, received ${getType(params.inbox_id)}`)
+    }
+
+    const response = await Api.sendRequest('/inbox_recipients/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default InboxRecipient

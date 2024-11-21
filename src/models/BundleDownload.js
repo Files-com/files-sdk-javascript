@@ -75,6 +75,30 @@ class BundleDownload {
 
   static all = (params = {}, options = {}) =>
     BundleDownload.list(params, options)
+
+  // Parameters:
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
+  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
+  //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
+  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
+  //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
+  //   bundle_id - int64 - Bundle ID
+  //   bundle_registration_id - int64 - BundleRegistration ID
+  static createExport = async (params = {}, options = {}) => {
+    if (params.bundle_id && !isInt(params.bundle_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
+    }
+
+    if (params.bundle_registration_id && !isInt(params.bundle_registration_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_id must be of type Int, received ${getType(params.bundle_registration_id)}`)
+    }
+
+    const response = await Api.sendRequest('/bundle_downloads/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default BundleDownload

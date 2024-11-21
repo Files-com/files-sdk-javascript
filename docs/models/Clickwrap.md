@@ -72,6 +72,15 @@ await Clickwrap.create({
 
 ---
 
+## Create Export Clickwrap
+
+```
+await Clickwrap.createExport
+```
+
+
+---
+
 ## Update Clickwrap
 
 ```

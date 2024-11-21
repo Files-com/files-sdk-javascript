@@ -68,6 +68,29 @@ class Priority {
 
   static all = (path, params = {}, options = {}) =>
     Priority.list(path, params, options)
+
+  // Parameters:
+  //   path (required) - string - The path to query for priorities
+  static createExport = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = path
+
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    const response = await Api.sendRequest('/priorities/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default Priority

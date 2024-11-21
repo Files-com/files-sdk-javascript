@@ -78,3 +78,12 @@ await Invoice.find(id)
 ### Parameters
 
 * `id` (int64): Required - Invoice ID.
+
+---
+
+## Create Export Invoice
+
+```
+await Invoice.createExport
+```
+

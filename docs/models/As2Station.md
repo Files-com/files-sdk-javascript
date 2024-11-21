@@ -86,6 +86,15 @@ await As2Station.create({
 
 ---
 
+## Create Export AS2 Station
+
+```
+await As2Station.createExport
+```
+
+
+---
+
 ## Update AS2 Station
 
 ```

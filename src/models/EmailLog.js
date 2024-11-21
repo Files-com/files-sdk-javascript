@@ -76,6 +76,16 @@ class EmailLog {
 
   static all = (params = {}, options = {}) =>
     EmailLog.list(params, options)
+
+  // Parameters:
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `start_date`, `end_date` or `status`. Valid field combinations are `[ start_date ]`, `[ end_date ]`, `[ status ]`, `[ start_date, end_date ]`, `[ start_date, status ]` or `[ end_date, status ]`.
+  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `status`. Valid field combinations are `[ start_date ]`, `[ end_date ]`, `[ status ]`, `[ start_date, end_date ]`, `[ start_date, status ]` or `[ end_date, status ]`.
+  static createExport = async (params = {}, options = {}) => {
+    const response = await Api.sendRequest('/email_logs/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default EmailLog

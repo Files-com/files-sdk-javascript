@@ -68,6 +68,15 @@ await UserRequest.create({
 
 ---
 
+## Create Export User Request
+
+```
+await UserRequest.createExport
+```
+
+
+---
+
 ## Delete User Request
 
 ```

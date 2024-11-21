@@ -78,3 +78,12 @@ await Payment.find(id)
 ### Parameters
 
 * `id` (int64): Required - Payment ID.
+
+---
+
+## Create Export Payment
+
+```
+await Payment.createExport
+```
+

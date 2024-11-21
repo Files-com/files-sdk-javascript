@@ -109,6 +109,15 @@ await As2Partner.create({
 
 ---
 
+## Create Export AS2 Partner
+
+```
+await As2Partner.createExport
+```
+
+
+---
+
 ## Update AS2 Partner
 
 ```

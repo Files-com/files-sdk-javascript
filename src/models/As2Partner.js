@@ -385,6 +385,13 @@ class As2Partner {
 
     return new As2Partner(response?.data, options)
   }
+
+  static createExport = async (options = {}) => {
+    const response = await Api.sendRequest('/as2_partners/create_export', 'POST', {}, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default As2Partner

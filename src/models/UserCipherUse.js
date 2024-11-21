@@ -73,6 +73,19 @@ class UserCipherUse {
 
   static all = (params = {}, options = {}) =>
     UserCipherUse.list(params, options)
+
+  // Parameters:
+  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+  static createExport = async (params = {}, options = {}) => {
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    const response = await Api.sendRequest('/user_cipher_uses/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default UserCipherUse

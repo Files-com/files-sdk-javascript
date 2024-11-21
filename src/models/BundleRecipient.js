@@ -158,6 +158,25 @@ class BundleRecipient {
 
     return new BundleRecipient(response?.data, options)
   }
+
+  // Parameters:
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
+  //   bundle_id (required) - int64 - List recipients for the bundle with this ID.
+  static createExport = async (params = {}, options = {}) => {
+    if (!params.bundle_id) {
+      throw new errors.MissingParameterError('Parameter missing: bundle_id')
+    }
+
+    if (params.bundle_id && !isInt(params.bundle_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
+    }
+
+    const response = await Api.sendRequest('/bundle_recipients/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default BundleRecipient

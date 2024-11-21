@@ -200,6 +200,15 @@ await SiemHttpDestination.create({
 
 ---
 
+## Create Export SIEM HTTP Destination
+
+```
+await SiemHttpDestination.createExport
+```
+
+
+---
+
 ## send_test_entry SIEM HTTP Destination
 
 ```

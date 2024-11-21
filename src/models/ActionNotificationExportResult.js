@@ -91,6 +91,28 @@ class ActionNotificationExportResult {
 
   static all = (params = {}, options = {}) =>
     ActionNotificationExportResult.list(params, options)
+
+  // Parameters:
+  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+  //   action_notification_export_id (required) - int64 - ID of the associated action notification export.
+  static createExport = async (params = {}, options = {}) => {
+    if (!params.action_notification_export_id) {
+      throw new errors.MissingParameterError('Parameter missing: action_notification_export_id')
+    }
+
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (params.action_notification_export_id && !isInt(params.action_notification_export_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action_notification_export_id must be of type Int, received ${getType(params.action_notification_export_id)}`)
+    }
+
+    const response = await Api.sendRequest('/action_notification_export_results/create_export', 'POST', params, options)
+
+    const Export = require('./Export.js').default
+    return response?.data?.map(obj => new Export(obj, options)) || []
+  }
 }
 
 export default ActionNotificationExportResult

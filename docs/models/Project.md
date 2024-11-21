@@ -56,6 +56,15 @@ await Project.create({
 
 ---
 
+## Create Export Project
+
+```
+await Project.createExport
+```
+
+
+---
+
 ## Update Project
 
 ```

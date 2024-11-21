@@ -59,6 +59,23 @@ await GroupUser.create({
 
 ---
 
+## Create Export Group User
+
+```
+await GroupUser.createExport({
+  'user_id': 1,
+  'group_id': 1,
+})
+```
+
+
+### Parameters
+
+* `user_id` (int64): User ID.  If provided, will return group_users of this user.
+* `group_id` (int64): Group ID.  If provided, will return group_users of this group.
+
+---
+
 ## Update Group User
 
 ```

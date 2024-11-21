@@ -68,6 +68,15 @@ await Snapshot.create({
 
 ---
 
+## Create Export Snapshot
+
+```
+await Snapshot.createExport
+```
+
+
+---
+
 ## Finalize Snapshot
 
 ```
