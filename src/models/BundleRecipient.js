@@ -175,7 +175,7 @@ class BundleRecipient {
     const response = await Api.sendRequest('/bundle_recipients/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

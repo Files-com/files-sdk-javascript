@@ -326,7 +326,7 @@ class History {
     const response = await Api.sendRequest(`/history/files/${encodeURIComponent(params.path)}/create_export`, 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   // Parameters:
@@ -365,7 +365,7 @@ class History {
     const response = await Api.sendRequest(`/history/folders/${encodeURIComponent(params.path)}/create_export`, 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   // Parameters:
@@ -404,7 +404,7 @@ class History {
     const response = await Api.sendRequest(`/history/users/${encodeURIComponent(params.user_id)}/create_export`, 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   // Parameters:
@@ -428,7 +428,7 @@ class History {
     const response = await Api.sendRequest('/history/login/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   // Parameters:
@@ -454,7 +454,7 @@ class History {
     const response = await Api.sendRequest('/history/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

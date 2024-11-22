@@ -29,7 +29,7 @@ await Priority.list(path)
 
 ---
 
-## Create Export Priority
+## Create an export CSV of Priority resources
 
 ```
 await Priority.createExport(path)

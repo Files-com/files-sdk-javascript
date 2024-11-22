@@ -41,7 +41,7 @@ await UserCipherUse.list({
 
 ---
 
-## Create Export User Cipher Use
+## Create an export CSV of User Cipher Use resources
 
 ```
 await UserCipherUse.createExport({

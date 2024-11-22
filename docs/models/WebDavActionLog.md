@@ -58,7 +58,7 @@ await WebDavActionLog.list
 
 ---
 
-## Create Export WebDAV Action Log
+## Create an export CSV of WebDAV Action Log resources
 
 ```
 await WebDavActionLog.createExport

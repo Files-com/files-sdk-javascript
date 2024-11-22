@@ -109,7 +109,7 @@ await As2Partner.create({
 
 ---
 
-## Create Export AS2 Partner
+## Create an export CSV of AS2 Partner resources
 
 ```
 await As2Partner.createExport

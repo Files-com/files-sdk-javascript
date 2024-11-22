@@ -81,7 +81,7 @@ await HistoryExportResult.list({
 
 ---
 
-## Create Export History Export Result
+## Create an export CSV of History Export Result resources
 
 ```
 await HistoryExportResult.createExport({

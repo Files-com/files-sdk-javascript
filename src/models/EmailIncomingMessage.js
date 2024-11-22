@@ -94,7 +94,7 @@ class EmailIncomingMessage {
     const response = await Api.sendRequest('/email_incoming_messages/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

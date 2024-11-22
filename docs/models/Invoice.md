@@ -81,7 +81,7 @@ await Invoice.find(id)
 
 ---
 
-## Create Export Invoice
+## Create an export CSV of Invoice resources
 
 ```
 await Invoice.createExport

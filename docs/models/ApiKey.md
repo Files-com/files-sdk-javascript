@@ -105,7 +105,7 @@ await ApiKey.create({
 
 ---
 
-## Create Export API Key
+## Create an export CSV of API Key resources
 
 ```
 await ApiKey.createExport({

@@ -200,7 +200,7 @@ await Automation.create({
 
 ---
 
-## Create Export Automation
+## Create an export CSV of Automation resources
 
 ```
 await Automation.createExport

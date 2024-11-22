@@ -100,7 +100,7 @@ await FormFieldSet.create({
 
 ---
 
-## Create Export Form Field Set
+## Create an export CSV of Form Field Set resources
 
 ```
 await FormFieldSet.createExport({

@@ -53,7 +53,7 @@ await InboxRegistration.list({
 
 ---
 
-## Create Export Inbox Registration
+## Create an export CSV of Inbox Registration resources
 
 ```
 await InboxRegistration.createExport({

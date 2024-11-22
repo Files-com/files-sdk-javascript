@@ -89,7 +89,7 @@ await ExternalEvent.create({
 
 ---
 
-## Create Export External Event
+## Create an export CSV of External Event resources
 
 ```
 await ExternalEvent.createExport

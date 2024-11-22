@@ -42,7 +42,7 @@ await SettingsChange.list
 
 ---
 
-## Create Export Settings Change
+## Create an export CSV of Settings Change resources
 
 ```
 await SettingsChange.createExport

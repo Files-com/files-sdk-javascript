@@ -68,7 +68,7 @@ await SftpActionLog.list
 
 ---
 
-## Create Export SFTP Action Log
+## Create an export CSV of SFTP Action Log resources
 
 ```
 await SftpActionLog.createExport

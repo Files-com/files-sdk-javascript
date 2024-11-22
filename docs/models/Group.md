@@ -99,7 +99,7 @@ await Group.create({
 
 ---
 
-## Create Export Group
+## Create an export CSV of Group resources
 
 ```
 await Group.createExport({

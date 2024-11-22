@@ -135,7 +135,7 @@ await Behavior.webhookTest({
 
 ---
 
-## Create Export Behavior
+## Create an export CSV of Behavior resources
 
 ```
 await Behavior.createExport

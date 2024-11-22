@@ -54,7 +54,7 @@ await OutboundConnectionLog.list
 
 ---
 
-## Create Export Outbound Connection Log
+## Create an export CSV of Outbound Connection Log resources
 
 ```
 await OutboundConnectionLog.createExport

@@ -48,7 +48,7 @@ await BandwidthSnapshot.list
 
 ---
 
-## Create Export Bandwidth Snapshot
+## Create an export CSV of Bandwidth Snapshot resources
 
 ```
 await BandwidthSnapshot.createExport

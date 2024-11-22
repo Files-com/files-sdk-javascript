@@ -71,7 +71,7 @@ await MessageComment.create({
 
 ---
 
-## Create Export Message Comment
+## Create an export CSV of Message Comment resources
 
 ```
 await MessageComment.createExport({

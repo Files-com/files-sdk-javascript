@@ -74,7 +74,7 @@ await PublicKey.create({
 
 ---
 
-## Create Export Public Key
+## Create an export CSV of Public Key resources
 
 ```
 await PublicKey.createExport({

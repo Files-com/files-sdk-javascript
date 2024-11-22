@@ -84,7 +84,7 @@ await Message.create({
 
 ---
 
-## Create Export Message
+## Create an export CSV of Message resources
 
 ```
 await Message.createExport({

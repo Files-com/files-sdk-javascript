@@ -78,7 +78,7 @@ class UserSftpClientUse {
     const response = await Api.sendRequest('/user_sftp_client_uses/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

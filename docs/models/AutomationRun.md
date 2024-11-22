@@ -60,7 +60,7 @@ await AutomationRun.find(id)
 
 ---
 
-## Create Export Automation Run
+## Create an export CSV of Automation Run resources
 
 ```
 await AutomationRun.createExport({

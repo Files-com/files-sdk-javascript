@@ -72,7 +72,7 @@ await Clickwrap.create({
 
 ---
 
-## Create Export Clickwrap
+## Create an export CSV of Clickwrap resources
 
 ```
 await Clickwrap.createExport

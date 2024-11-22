@@ -77,7 +77,7 @@ await ShareGroup.create({
 
 ---
 
-## Create Export Share Group
+## Create an export CSV of Share Group resources
 
 ```
 await ShareGroup.createExport({

@@ -55,7 +55,7 @@ await BundleRegistration.list({
 
 ---
 
-## Create Export Bundle Registration
+## Create an export CSV of Bundle Registration resources
 
 ```
 await BundleRegistration.createExport({

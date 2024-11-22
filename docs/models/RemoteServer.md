@@ -309,7 +309,7 @@ await RemoteServer.create({
 
 ---
 
-## Create Export Remote Server
+## Create an export CSV of Remote Server resources
 
 ```
 await RemoteServer.createExport

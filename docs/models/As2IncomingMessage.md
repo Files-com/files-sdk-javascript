@@ -107,7 +107,7 @@ await As2IncomingMessage.list({
 
 ---
 
-## Create Export AS2 Incoming Message
+## Create an export CSV of AS2 Incoming Message resources
 
 ```
 await As2IncomingMessage.createExport({

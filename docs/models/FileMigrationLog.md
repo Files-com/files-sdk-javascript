@@ -42,7 +42,7 @@ await FileMigrationLog.list
 
 ---
 
-## Create Export File Migration Log
+## Create an export CSV of File Migration Log resources
 
 ```
 await FileMigrationLog.createExport

@@ -159,7 +159,7 @@ class HistoryExportResult {
     const response = await Api.sendRequest('/history_export_results/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

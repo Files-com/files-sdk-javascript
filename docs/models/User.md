@@ -293,7 +293,7 @@ await User.create({
 
 ---
 
-## Create Export User
+## Create an export CSV of User resources
 
 ```
 await User.createExport({

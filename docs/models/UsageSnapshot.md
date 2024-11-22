@@ -56,7 +56,7 @@ await UsageSnapshot.list
 
 ---
 
-## Create Export Usage Snapshot
+## Create an export CSV of Usage Snapshot resources
 
 ```
 await UsageSnapshot.createExport

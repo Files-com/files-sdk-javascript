@@ -70,7 +70,7 @@ await BundleNotification.create({
 
 ---
 
-## Create Export Bundle Notification
+## Create an export CSV of Bundle Notification resources
 
 ```
 await BundleNotification.createExport

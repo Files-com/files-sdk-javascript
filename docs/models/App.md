@@ -73,7 +73,7 @@ await App.list
 
 ---
 
-## Create Export App
+## Create an export CSV of App resources
 
 ```
 await App.createExport

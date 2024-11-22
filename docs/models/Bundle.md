@@ -237,7 +237,7 @@ await Bundle.create({
 
 ---
 
-## Create Export Bundle
+## Create an export CSV of Bundle resources
 
 ```
 await Bundle.createExport({

@@ -86,7 +86,7 @@ await As2Station.create({
 
 ---
 
-## Create Export AS2 Station
+## Create an export CSV of AS2 Station resources
 
 ```
 await As2Station.createExport

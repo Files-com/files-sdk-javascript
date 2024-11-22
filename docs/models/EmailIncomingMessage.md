@@ -49,7 +49,7 @@ await EmailIncomingMessage.list
 
 ---
 
-## Create Export Email Incoming Message
+## Create an export CSV of Email Incoming Message resources
 
 ```
 await EmailIncomingMessage.createExport

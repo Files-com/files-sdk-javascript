@@ -59,7 +59,7 @@ await GroupUser.create({
 
 ---
 
-## Create Export Group User
+## Create an export CSV of Group User resources
 
 ```
 await GroupUser.createExport({

@@ -42,7 +42,7 @@ await PublicHostingRequestLog.list
 
 ---
 
-## Create Export Public Hosting Request Log
+## Create an export CSV of Public Hosting Request Log resources
 
 ```
 await PublicHostingRequestLog.createExport

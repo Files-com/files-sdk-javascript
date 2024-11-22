@@ -173,7 +173,7 @@ class Export {
 
     const response = await Api.sendRequest('/exports/create_export', 'POST', params, options)
 
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

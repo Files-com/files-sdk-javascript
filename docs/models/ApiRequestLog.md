@@ -64,7 +64,7 @@ await ApiRequestLog.list
 
 ---
 
-## Create Export API Request Log
+## Create an export CSV of API Request Log resources
 
 ```
 await ApiRequestLog.createExport

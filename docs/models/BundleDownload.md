@@ -59,7 +59,7 @@ await BundleDownload.list({
 
 ---
 
-## Create Export Bundle Download
+## Create an export CSV of Bundle Download resources
 
 ```
 await BundleDownload.createExport({

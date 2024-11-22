@@ -118,28 +118,28 @@ class IpAddress {
     const response = await Api.sendRequest('/ip_addresses/smartfile-reserved/create_export', 'POST', {}, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   static exavaultReservedCreateExport = async (options = {}) => {
     const response = await Api.sendRequest('/ip_addresses/exavault-reserved/create_export', 'POST', {}, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   static reservedCreateExport = async (options = {}) => {
     const response = await Api.sendRequest('/ip_addresses/reserved/create_export', 'POST', {}, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 
   static createExport = async (options = {}) => {
     const response = await Api.sendRequest('/ip_addresses/create_export', 'POST', {}, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

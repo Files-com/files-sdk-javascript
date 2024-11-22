@@ -98,7 +98,7 @@ class UsageDailySnapshot {
     const response = await Api.sendRequest('/usage_daily_snapshots/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

@@ -244,7 +244,7 @@ class Clickwrap {
     const response = await Api.sendRequest('/clickwraps/create_export', 'POST', {}, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

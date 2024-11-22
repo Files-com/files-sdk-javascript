@@ -143,7 +143,7 @@ await Notification.create({
 
 ---
 
-## Create Export Notification
+## Create an export CSV of Notification resources
 
 ```
 await Notification.createExport({

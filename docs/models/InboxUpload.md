@@ -36,7 +36,7 @@ await InboxUpload.list
 
 ---
 
-## Create Export Inbox Upload
+## Create an export CSV of Inbox Upload resources
 
 ```
 await InboxUpload.createExport

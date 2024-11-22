@@ -81,7 +81,7 @@ await Payment.find(id)
 
 ---
 
-## Create Export Payment
+## Create an export CSV of Payment resources
 
 ```
 await Payment.createExport

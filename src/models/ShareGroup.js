@@ -241,7 +241,7 @@ class ShareGroup {
     const response = await Api.sendRequest('/share_groups/create_export', 'POST', params, options)
 
     const Export = require('./Export.js').default
-    return response?.data?.map(obj => new Export(obj, options)) || []
+    return new Export(response?.data, options)
   }
 }
 

@@ -44,7 +44,7 @@ await EmailLog.list
 
 ---
 
-## Create Export Email Log
+## Create an export CSV of Email Log resources
 
 ```
 await EmailLog.createExport

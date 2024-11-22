@@ -37,7 +37,7 @@ await UserSftpClientUse.list({
 
 ---
 
-## Create Export User SFTP Client Use
+## Create an export CSV of User SFTP Client Use resources
 
 ```
 await UserSftpClientUse.createExport({

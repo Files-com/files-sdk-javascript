@@ -66,7 +66,7 @@ await InboxRecipient.create({
 
 ---
 
-## Create Export Inbox Recipient
+## Create an export CSV of Inbox Recipient resources
 
 ```
 await InboxRecipient.createExport({

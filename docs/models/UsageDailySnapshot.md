@@ -54,7 +54,7 @@ await UsageDailySnapshot.list
 
 ---
 
-## Create Export Usage Daily Snapshot
+## Create an export CSV of Usage Daily Snapshot resources
 
 ```
 await UsageDailySnapshot.createExport

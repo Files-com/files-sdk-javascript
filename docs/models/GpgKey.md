@@ -78,7 +78,7 @@ await GpgKey.create({
 
 ---
 
-## Create Export GPG Key
+## Create an export CSV of GPG Key resources
 
 ```
 await GpgKey.createExport({

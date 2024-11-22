@@ -40,7 +40,7 @@ await RemoteBandwidthSnapshot.list
 
 ---
 
-## Create Export Remote Bandwidth Snapshot
+## Create an export CSV of Remote Bandwidth Snapshot resources
 
 ```
 await RemoteBandwidthSnapshot.createExport

@@ -46,7 +46,7 @@ await SyncLog.list
 
 ---
 
-## Create Export Sync Log
+## Create an export CSV of Sync Log resources
 
 ```
 await SyncLog.createExport
