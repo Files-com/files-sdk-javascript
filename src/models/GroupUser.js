@@ -247,24 +247,6 @@ class GroupUser {
 
     return new GroupUser(response?.data, options)
   }
-
-  // Parameters:
-  //   user_id - int64 - User ID.  If provided, will return group_users of this user.
-  //   group_id - int64 - Group ID.  If provided, will return group_users of this group.
-  static createExport = async (params = {}, options = {}) => {
-    if (params.user_id && !isInt(params.user_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
-    }
-
-    if (params.group_id && !isInt(params.group_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
-    }
-
-    const response = await Api.sendRequest('/group_users/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default GroupUser

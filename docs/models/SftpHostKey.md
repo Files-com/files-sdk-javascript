@@ -62,15 +62,6 @@ await SftpHostKey.create({
 
 ---
 
-## Create an export CSV of SFTP Host Key resources
-
-```
-await SftpHostKey.createExport
-```
-
-
----
-
 ## Update SFTP Host Key
 
 ```

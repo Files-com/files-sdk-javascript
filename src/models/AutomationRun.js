@@ -110,25 +110,6 @@ class AutomationRun {
 
   static get = (id, params = {}, options = {}) =>
     AutomationRun.find(id, params, options)
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `automation_id`, `created_at` or `status`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `automation_id`. Valid field combinations are `[ status, automation_id ]`.
-  //   automation_id (required) - int64 - ID of the associated Automation.
-  static createExport = async (params = {}, options = {}) => {
-    if (!params.automation_id) {
-      throw new errors.MissingParameterError('Parameter missing: automation_id')
-    }
-
-    if (params.automation_id && !isInt(params.automation_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: automation_id must be of type Int, received ${getType(params.automation_id)}`)
-    }
-
-    const response = await Api.sendRequest('/automation_runs/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default AutomationRun

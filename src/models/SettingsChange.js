@@ -70,16 +70,6 @@ class SettingsChange {
 
   static all = (params = {}, options = {}) =>
     SettingsChange.list(params, options)
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `api_key_id` or `user_id`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `api_key_id` and `user_id`.
-  static createExport = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest('/settings_changes/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default SettingsChange

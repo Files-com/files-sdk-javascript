@@ -88,19 +88,6 @@ class InboxRegistration {
 
   static all = (params = {}, options = {}) =>
     InboxRegistration.list(params, options)
-
-  // Parameters:
-  //   folder_behavior_id - int64 - ID of the associated Inbox.
-  static createExport = async (params = {}, options = {}) => {
-    if (params.folder_behavior_id && !isInt(params.folder_behavior_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(params.folder_behavior_id)}`)
-    }
-
-    const response = await Api.sendRequest('/inbox_registrations/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default InboxRegistration

@@ -217,21 +217,6 @@ class Request {
 
     return new Request(response?.data, options)
   }
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
-  //   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-  //   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
-  static createExport = async (params = {}, options = {}) => {
-    if (params.path && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    const response = await Api.sendRequest('/requests/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default Request

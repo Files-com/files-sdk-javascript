@@ -1394,17 +1394,6 @@ class RemoteServer {
 
     return new RemoteServer(response?.data, options)
   }
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ name, server_type ]`, `[ name, backblaze_b2_bucket ]`, `[ name, google_cloud_storage_bucket ]`, `[ name, wasabi_bucket ]`, `[ name, s3_bucket ]`, `[ name, rackspace_container ]`, `[ name, azure_blob_storage_container ]`, `[ name, azure_files_storage_share_name ]`, `[ name, s3_compatible_bucket ]`, `[ name, filebase_bucket ]`, `[ name, cloudflare_bucket ]` or `[ name, linode_bucket ]`.
-  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ name, backblaze_b2_bucket ]`, `[ name, google_cloud_storage_bucket ]`, `[ name, wasabi_bucket ]`, `[ name, s3_bucket ]`, `[ name, rackspace_container ]`, `[ name, azure_blob_storage_container ]`, `[ name, azure_files_storage_share_name ]`, `[ name, s3_compatible_bucket ]`, `[ name, filebase_bucket ]`, `[ name, cloudflare_bucket ]` or `[ name, linode_bucket ]`.
-  static createExport = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest('/remote_servers/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default RemoteServer

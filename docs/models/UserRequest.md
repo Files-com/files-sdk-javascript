@@ -68,15 +68,6 @@ await UserRequest.create({
 
 ---
 
-## Create an export CSV of User Request resources
-
-```
-await UserRequest.createExport
-```
-
-
----
-
 ## Delete User Request
 
 ```

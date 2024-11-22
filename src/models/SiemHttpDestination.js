@@ -701,13 +701,6 @@ class SiemHttpDestination {
     return new SiemHttpDestination(response?.data, options)
   }
 
-  static createExport = async (options = {}) => {
-    const response = await Api.sendRequest('/siem_http_destinations/create_export', 'POST', {}, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
-
   // Parameters:
   //   siem_http_destination_id - int64 - SIEM HTTP Destination ID
   //   destination_type - string - Destination Type

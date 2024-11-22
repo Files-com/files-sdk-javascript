@@ -401,28 +401,6 @@ class Notification {
 
     return new Notification(response?.data, options)
   }
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `user_id` or `group_id`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id` or `group_id`.
-  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
-  //   path - string - Show notifications for this Path.
-  //   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
-  //   group_id - string
-  static createExport = async (params = {}, options = {}) => {
-    if (params.path && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    if (params.group_id && !isString(params.group_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type String, received ${getType(params.group_id)}`)
-    }
-
-    const response = await Api.sendRequest('/notifications/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default Notification

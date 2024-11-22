@@ -70,20 +70,6 @@ await BundleNotification.create({
 
 ---
 
-## Create an export CSV of Bundle Notification resources
-
-```
-await BundleNotification.createExport
-```
-
-
-### Parameters
-
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `bundle_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
-
----
-
 ## Update Bundle Notification
 
 ```

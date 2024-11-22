@@ -62,20 +62,6 @@ class InboxUpload {
 
   static all = (params = {}, options = {}) =>
     InboxUpload.list(params, options)
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `folder_behavior_id` or `inbox_registration_id`. Valid field combinations are `[ created_at, folder_behavior_id ]`, `[ created_at, inbox_registration_id ]`, `[ folder_behavior_id, inbox_registration_id ]` or `[ created_at, folder_behavior_id, inbox_registration_id ]`.
-  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
-  //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
-  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
-  //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
-  static createExport = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest('/inbox_uploads/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default InboxUpload

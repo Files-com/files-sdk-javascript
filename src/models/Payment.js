@@ -113,13 +113,6 @@ class Payment {
 
   static get = (id, params = {}, options = {}) =>
     Payment.find(id, params, options)
-
-  static createExport = async (options = {}) => {
-    const response = await Api.sendRequest('/payments/create_export', 'POST', {}, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default Payment

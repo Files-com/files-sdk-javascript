@@ -91,19 +91,6 @@ class BundleRegistration {
 
   static all = (params = {}, options = {}) =>
     BundleRegistration.list(params, options)
-
-  // Parameters:
-  //   bundle_id - int64 - ID of the associated Bundle
-  static createExport = async (params = {}, options = {}) => {
-    if (params.bundle_id && !isInt(params.bundle_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
-    }
-
-    const response = await Api.sendRequest('/bundle_registrations/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default BundleRegistration

@@ -56,15 +56,6 @@ await Project.create({
 
 ---
 
-## Create an export CSV of Project resources
-
-```
-await Project.createExport
-```
-
-
----
-
 ## Update Project
 
 ```

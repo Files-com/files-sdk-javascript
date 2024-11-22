@@ -68,15 +68,6 @@ await Snapshot.create({
 
 ---
 
-## Create an export CSV of Snapshot resources
-
-```
-await Snapshot.createExport
-```
-
-
----
-
 ## Finalize Snapshot
 
 ```

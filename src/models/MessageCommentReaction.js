@@ -166,28 +166,6 @@ class MessageCommentReaction {
 
     return new MessageCommentReaction(response?.data, options)
   }
-
-  // Parameters:
-  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   message_comment_id (required) - int64 - Message comment to return reactions for.
-  static createExport = async (params = {}, options = {}) => {
-    if (!params.message_comment_id) {
-      throw new errors.MissingParameterError('Parameter missing: message_comment_id')
-    }
-
-    if (params.user_id && !isInt(params.user_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
-    }
-
-    if (params.message_comment_id && !isInt(params.message_comment_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: message_comment_id must be of type Int, received ${getType(params.message_comment_id)}`)
-    }
-
-    const response = await Api.sendRequest('/message_comment_reactions/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default MessageCommentReaction

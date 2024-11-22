@@ -252,13 +252,6 @@ class Snapshot {
 
     return new Snapshot(response?.data, options)
   }
-
-  static createExport = async (options = {}) => {
-    const response = await Api.sendRequest('/snapshots/create_export', 'POST', {}, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default Snapshot

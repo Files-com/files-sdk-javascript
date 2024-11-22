@@ -202,16 +202,6 @@ class BundleNotification {
 
     return new BundleNotification(response?.data, options)
   }
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `bundle_id`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
-  static createExport = async (params = {}, options = {}) => {
-    const response = await Api.sendRequest('/bundle_notifications/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default BundleNotification

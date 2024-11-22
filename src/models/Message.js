@@ -274,28 +274,6 @@ class Message {
 
     return new Message(response?.data, options)
   }
-
-  // Parameters:
-  //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   project_id (required) - int64 - Project for which to return messages.
-  static createExport = async (params = {}, options = {}) => {
-    if (!params.project_id) {
-      throw new errors.MissingParameterError('Parameter missing: project_id')
-    }
-
-    if (params.user_id && !isInt(params.user_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
-    }
-
-    if (params.project_id && !isInt(params.project_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: project_id must be of type Int, received ${getType(params.project_id)}`)
-    }
-
-    const response = await Api.sendRequest('/messages/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default Message

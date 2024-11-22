@@ -163,25 +163,6 @@ class As2IncomingMessage {
 
   static all = (params = {}, options = {}) =>
     As2IncomingMessage.list(params, options)
-
-  // Parameters:
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at` and `as2_partner_id`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
-  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
-  //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
-  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
-  //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
-  //   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
-  static createExport = async (params = {}, options = {}) => {
-    if (params.as2_partner_id && !isInt(params.as2_partner_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: as2_partner_id must be of type Int, received ${getType(params.as2_partner_id)}`)
-    }
-
-    const response = await Api.sendRequest('/as2_incoming_messages/create_export', 'POST', params, options)
-
-    const Export = require('./Export.js').default
-    return new Export(response?.data, options)
-  }
 }
 
 export default As2IncomingMessage
