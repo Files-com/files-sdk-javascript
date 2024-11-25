@@ -115,7 +115,7 @@ await Folder.listFor(path, {
 
 ---
 
-## Create folder
+## Create Folder
 
 ```
 await Folder.create(path, {

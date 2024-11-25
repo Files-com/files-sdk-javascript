@@ -266,7 +266,7 @@ class Automation {
     this.attributes.webhook_url = value
   }
 
-  // Manually run automation
+  // Manually Run Automation
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')

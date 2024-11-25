@@ -200,7 +200,7 @@ await Automation.create({
 
 ---
 
-## Manually run automation
+## Manually Run Automation
 
 ```
 const automation = await Automation.find(id)

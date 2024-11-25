@@ -111,7 +111,7 @@ await Behavior.create({
 
 ---
 
-## Test webhook
+## Test Webhook
 
 ```
 await Behavior.webhookTest({

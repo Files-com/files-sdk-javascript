@@ -97,7 +97,7 @@
 
 ---
 
-## Upload file
+## Upload File
 
 ```
 await File.create(path, {
@@ -132,7 +132,7 @@ await File.create(path, {
 
 ---
 
-## Find file/folder by path
+## Find File/Folder by Path
 
 ```
 await File.find(path, {
@@ -151,7 +151,7 @@ await File.find(path, {
 
 ---
 
-## Download file
+## Download File
 
 ```
 const file = await File.find(path)
@@ -222,7 +222,7 @@ await file.download({
 
 ---
 
-## Update file/folder metadata
+## Update File/Folder Metadata
 
 ```
 const file = await File.find(path)
@@ -293,7 +293,7 @@ await file.update({
 
 ---
 
-## Delete file/folder
+## Delete File/Folder
 
 ```
 const file = await File.find(path)
@@ -311,7 +311,7 @@ await file.delete({
 
 ---
 
-## Copy file/folder
+## Copy File/Folder
 
 ```
 const file = await File.find(path)
@@ -341,7 +341,7 @@ await file.copy({
 
 ---
 
-## Move file/folder
+## Move File/Folder
 
 ```
 const file = await File.find(path)

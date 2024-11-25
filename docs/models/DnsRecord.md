@@ -18,7 +18,7 @@
 
 ---
 
-## Show site DNS configuration
+## Show Site DNS Configuration
 
 ```
 await DnsRecord.list

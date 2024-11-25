@@ -471,7 +471,7 @@
 
 ---
 
-## Show site settings
+## Show Site Settings
 
 ```
 await Site.get
@@ -489,7 +489,7 @@ await Site.getUsage
 
 ---
 
-## Update site settings
+## Update Site Settings
 
 ```
 await Site.update({
