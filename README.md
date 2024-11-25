@@ -565,17 +565,7 @@ A README is available on the GitHub link.
 
 ## File/Folder Operations
 
-### File Operations
-
-#### List Root Folder
-
-```javascript
-import Folder from 'files.com/lib/models/Folder.js';
-
-const dirFiles = await Folder.listFor('/');
-```
-
-#### Uploading a File
+### Upload
 
 ```javascript
 import File from 'files.com/lib/models/File.js';
@@ -584,15 +574,18 @@ import { isBrowser } from 'files.com/lib/utils.js';
 // uploading raw file data
 await File.uploadData(destinationFileName, data);
 
+// upload readable stream
+await File.uploadStream(destinationFileName, readableStream)
+
 // uploading a file on disk (not available in browser)
 if (!isBrowser()) {
   await File.uploadFile(destinationFileName, sourceFilePath);
 }
 ```
 
-#### Downloading a File
+### Download
 
-##### Get a Downloadable File Object by Path
+#### Get a Downloadable File Object by Path
 
 ```javascript
 import File from 'files.com/lib/models/File.js';
@@ -601,7 +594,7 @@ const foundFile = await File.find(remoteFilePath);
 const downloadableFile = await foundFile.download();
 ```
 
-##### Download a File (not available in browser)
+#### Download a File (not available in browser)
 
 ```javascript
 import { isBrowser } from 'files.com/lib/utils.js';
@@ -618,7 +611,15 @@ if (!isBrowser()) {
 }
 ```
 
-#### Comparing Case-Insensitive Files and Paths
+### List
+
+```javascript
+import Folder from 'files.com/lib/models/Folder.js';
+
+const dirFiles = await Folder.listFor('/');
+```
+
+### Comparing Case-Insensitive Files and Paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 
