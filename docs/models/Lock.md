@@ -34,7 +34,7 @@
 
 ---
 
-## List Locks by path
+## List Locks by Path
 
 ```
 await Lock.listFor(path, {

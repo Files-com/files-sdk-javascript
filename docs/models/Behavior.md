@@ -62,7 +62,7 @@ await Behavior.find(id)
 
 ---
 
-## List Behaviors by path
+## List Behaviors by Path
 
 ```
 await Behavior.listFor(path, {

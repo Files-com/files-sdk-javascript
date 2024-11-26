@@ -89,7 +89,7 @@
 
 ---
 
-## List Folders by path
+## List Folders by Path
 
 ```
 await Folder.listFor(path, {

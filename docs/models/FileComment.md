@@ -22,7 +22,7 @@
 
 ---
 
-## List File Comments by path
+## List File Comments by Path
 
 ```
 await FileComment.listFor(path)
