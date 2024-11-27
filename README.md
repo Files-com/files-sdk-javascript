@@ -545,27 +545,11 @@ Error
 |     `SiteConfiguration_TrialLockedError`|  `SiteConfigurationError` |
 |     `SiteConfiguration_UserRequestsEnabledRequiredError`|  `SiteConfigurationError` |
 
-## Mock Server
-
-Files.com publishes a Files.com API server, which is useful for testing your use of the Files.com
-SDKs and other direct integrations against the Files.com API in an integration test environment.
-
-It is a Ruby app that operates as a minimal server for the purpose of testing basic network
-operations and JSON encoding for your SDK or API client. It does not maintain state and it does not
-deeply inspect your submissions for correctness.
-
-Eventually we will add more features intended for integration testing, such as the ability to
-intentionally provoke errors.
-
-Download the server as a Docker image via [Docker Hub](https://hub.docker.com/r/filescom/files-mock-server).
-
-The Source Code is also available on [GitHub](https://github.com/Files-com/files-mock-server).
-
-A README is available on the GitHub link.
-
-## File/Folder Operations
+## Examples
 
 ### Upload
+
+#### Upload a File
 
 ```javascript
 import File from 'files.com/lib/models/File.js';
@@ -581,6 +565,16 @@ await File.uploadStream(destinationFileName, readableStream)
 if (!isBrowser()) {
   await File.uploadFile(destinationFileName, sourceFilePath);
 }
+```
+
+#### Create a Folder
+
+```javascript
+import Folder from 'files.com/lib/models/Folder.js';
+
+await Folder.create('path/to/folder/to/be/created', {
+  mkdir_parents: true,
+});
 ```
 
 ### Download
@@ -613,10 +607,57 @@ if (!isBrowser()) {
 
 ### List
 
+#### List Folder Contents
+
 ```javascript
 import Folder from 'files.com/lib/models/Folder.js';
 
-const dirFiles = await Folder.listFor('/');
+const items = await Folder.listFor('remote/path/to/folder/');
+for (const item of items) {
+  console.log(item.path);
+}
+```
+
+### Copy
+
+The copy method works for both files and folders.
+
+```javascript
+import File from 'files.com/lib/models/File.js';
+
+const file = new File({ path: 'source/path' });
+await file.copy({ destination: 'destination/path' });
+```
+
+### Move
+
+The move method works for both files and folders.
+
+```javascript
+import File from 'files.com/lib/models/File.js';
+
+const file = new File({ path: 'source/path' });
+await file.move({ destination: 'destination/path' });
+```
+
+### Delete
+
+The delete method works for both files and folders.
+
+```javascript
+import File from 'files.com/lib/models/File.js';
+
+const file = new File({ path: 'path/to/file/or/folder' });
+await file.delete();
+```
+
+In case the folder is not empty, you can use the `recursive` argument:
+
+```javascript
+import File from 'files.com/lib/models/File.js';
+
+const folder = new File({ path: 'path/to/folder' });
+await folder.delete({ recursive: true });
 ```
 
 ### Comparing Case-Insensitive Files and Paths
@@ -630,3 +671,21 @@ if (pathNormalizer.same('Fïłèńämê.Txt', 'filename.txt')) {
   // the paths are the same
 }
 ```
+
+## Mock Server
+
+Files.com publishes a Files.com API server, which is useful for testing your use of the Files.com
+SDKs and other direct integrations against the Files.com API in an integration test environment.
+
+It is a Ruby app that operates as a minimal server for the purpose of testing basic network
+operations and JSON encoding for your SDK or API client. It does not maintain state and it does not
+deeply inspect your submissions for correctness.
+
+Eventually we will add more features intended for integration testing, such as the ability to
+intentionally provoke errors.
+
+Download the server as a Docker image via [Docker Hub](https://hub.docker.com/r/filescom/files-mock-server).
+
+The Source Code is also available on [GitHub](https://github.com/Files-com/files-mock-server).
+
+A README is available on the GitHub link.
