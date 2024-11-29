@@ -391,6 +391,7 @@ Error
 |     `BadRequest_InvalidFilterAliasCombinationError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterFieldError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterParamError`|  `BadRequestError` |
+|     `BadRequest_InvalidFilterParamFormatError`|  `BadRequestError` |
 |     `BadRequest_InvalidFilterParamValueError`|  `BadRequestError` |
 |     `BadRequest_InvalidInputEncodingError`|  `BadRequestError` |
 |     `BadRequest_InvalidInterfaceError`|  `BadRequestError` |
