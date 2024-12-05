@@ -98,6 +98,13 @@ class Automation {
     this.attributes.exclude_pattern = value
   }
 
+  // array(object) # List of URLs to be imported and names to be used.
+  getImportUrls = () => this.attributes.import_urls
+
+  setImportUrls = value => {
+    this.attributes.import_urls = value
+  }
+
   // boolean # Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
   getFlattenDestinationStructure = () => this.attributes.flatten_destination_structure
 
@@ -309,6 +316,7 @@ class Automation {
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+  //   import_urls - array(object) - List of URLs to be imported and names to be used.
   //   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
   //   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
   //   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -388,6 +396,10 @@ class Automation {
 
     if (params.exclude_pattern && !isString(params.exclude_pattern)) {
       throw new errors.InvalidParameterError(`Bad parameter: exclude_pattern must be of type String, received ${getType(params.exclude_pattern)}`)
+    }
+
+    if (params.import_urls && !isArray(params.import_urls)) {
+      throw new errors.InvalidParameterError(`Bad parameter: import_urls must be of type Array, received ${getType(params.import_urls)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -535,6 +547,7 @@ class Automation {
   //   description - string - Description for the this Automation.
   //   disabled - boolean - If true, this automation will not run.
   //   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+  //   import_urls - array(object) - List of URLs to be imported and names to be used.
   //   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
   //   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
   //   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -605,6 +618,10 @@ class Automation {
 
     if (params.exclude_pattern && !isString(params.exclude_pattern)) {
       throw new errors.InvalidParameterError(`Bad parameter: exclude_pattern must be of type String, received ${getType(params.exclude_pattern)}`)
+    }
+
+    if (params.import_urls && !isArray(params.import_urls)) {
+      throw new errors.InvalidParameterError(`Bad parameter: import_urls must be of type Array, received ${getType(params.import_urls)}`)
     }
 
     if (params.name && !isString(params.name)) {
