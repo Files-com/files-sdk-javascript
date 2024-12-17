@@ -169,6 +169,9 @@ class Site {
   // boolean # Use user FTP roots also for WebDAV?
   getDavUserRootEnabled = () => this.attributes.dav_user_root_enabled
 
+  // int64 # Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
+  getDaysBeforeDeletingDisabledUsers = () => this.attributes.days_before_deleting_disabled_users
+
   // int64 # Number of days to keep deleted files
   getDaysToRetainBackups = () => this.attributes.days_to_retain_backups
 
@@ -602,6 +605,7 @@ class Site {
   //   allowed_countries - string - Comma separated list of allowed Country codes
   //   allowed_ips - string - List of allowed IP addresses
   //   disallowed_countries - string - Comma separated list of disallowed Country codes
+  //   days_before_deleting_disabled_users - int64 - Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
   //   days_to_retain_backups - int64 - Number of days to keep deleted files
   //   max_prior_passwords - int64 - Number of prior passwords to disallow
   //   password_validity_days - int64 - Number of days password is valid
@@ -803,6 +807,10 @@ class Site {
 
     if (params.disallowed_countries && !isString(params.disallowed_countries)) {
       throw new errors.InvalidParameterError(`Bad parameter: disallowed_countries must be of type String, received ${getType(params.disallowed_countries)}`)
+    }
+
+    if (params.days_before_deleting_disabled_users && !isInt(params.days_before_deleting_disabled_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: days_before_deleting_disabled_users must be of type Int, received ${getType(params.days_before_deleting_disabled_users)}`)
     }
 
     if (params.days_to_retain_backups && !isInt(params.days_to_retain_backups)) {
