@@ -46,7 +46,7 @@ await GroupUser.list({
 await GroupUser.create({
   'group_id': 1,
   'user_id': 1,
-  'admin': true,
+  'admin': false,
 })
 ```
 
@@ -67,7 +67,7 @@ const [group_user] = await GroupUser.list()
 await group_user.update({
   'group_id': 1,
   'user_id': 1,
-  'admin': true,
+  'admin': false,
 })
 ```
 

@@ -50,7 +50,7 @@ await InboxRecipient.create({
   'name': "John Smith",
   'company': "Acme Ltd",
   'note': "Just a note.",
-  'share_after_create': true,
+  'share_after_create': false,
 })
 ```
 

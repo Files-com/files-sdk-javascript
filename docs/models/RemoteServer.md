@@ -190,7 +190,7 @@ await RemoteServer.findConfigurationFile(id)
 await RemoteServer.create({
   'aws_access_key': "example",
   'wasabi_access_key': "example",
-  'reset_authentication': true,
+  'reset_authentication': false,
   'hostname': "remote-server.com",
   'name': "My Remote server",
   'max_connections': 1,
@@ -385,7 +385,7 @@ const remote_server = await RemoteServer.find(id)
 await remote_server.update({
   'aws_access_key': "example",
   'wasabi_access_key': "example",
-  'reset_authentication': true,
+  'reset_authentication': false,
   'hostname': "remote-server.com",
   'name': "My Remote server",
   'max_connections': 1,

@@ -66,7 +66,7 @@ await Behavior.find(id)
 
 ```
 await Behavior.listFor(path, {
-  'ancestor_behaviors': true,
+  'ancestor_behaviors': false,
 })
 ```
 
@@ -88,8 +88,8 @@ await Behavior.listFor(path, {
 ```
 await Behavior.create({
   'value': "{\"method\": \"GET\"}",
-  'disable_parent_folder_behavior': true,
-  'recursive': true,
+  'disable_parent_folder_behavior': false,
+  'recursive': false,
   'name': "example",
   'description': "example",
   'path': "path",
@@ -142,11 +142,11 @@ const behavior = await Behavior.find(id)
 
 await behavior.update({
   'value': "{\"method\": \"GET\"}",
-  'disable_parent_folder_behavior': true,
-  'recursive': true,
+  'disable_parent_folder_behavior': false,
+  'recursive': false,
   'name': "example",
   'description': "example",
-  'attachment_delete': true,
+  'attachment_delete': false,
 })
 ```
 

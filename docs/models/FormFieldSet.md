@@ -81,9 +81,9 @@ await FormFieldSet.find(id)
 await FormFieldSet.create({
   'user_id': 1,
   'title': "Sample Form Title",
-  'skip_email': true,
-  'skip_name': true,
-  'skip_company': true,
+  'skip_email': false,
+  'skip_name': false,
+  'skip_company': false,
   'form_fields': [{"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
 })
 ```
@@ -107,9 +107,9 @@ const form_field_set = await FormFieldSet.find(id)
 
 await form_field_set.update({
   'title': "Sample Form Title",
-  'skip_email': true,
-  'skip_name': true,
-  'skip_company': true,
+  'skip_email': false,
+  'skip_name': false,
+  'skip_company': false,
   'form_fields': [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
 })
 ```

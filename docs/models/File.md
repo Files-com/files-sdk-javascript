@@ -102,13 +102,13 @@
 ```
 await File.create(path, {
   'length': 1,
-  'mkdir_parents': true,
+  'mkdir_parents': false,
   'part': 1,
   'parts': 1,
   'provided_mtime': "2000-01-01T01:00:00Z",
   'restart': 1,
   'size': 1,
-  'with_rename': true,
+  'with_rename': false,
 })
 ```
 
@@ -136,8 +136,8 @@ await File.create(path, {
 
 ```
 await File.find(path, {
-  'with_previews': true,
-  'with_priority_color': true,
+  'with_previews': false,
+  'with_priority_color': false,
 })
 ```
 
@@ -157,8 +157,8 @@ await File.find(path, {
 const file = await File.find(path)
 
 await file.download({
-  'with_previews': true,
-  'with_priority_color': true,
+  'with_previews': false,
+  'with_priority_color': false,
 })
 ```
 
@@ -299,7 +299,7 @@ await file.update({
 const file = await File.find(path)
 
 await file.delete({
-  'recursive': true,
+  'recursive': false,
 })
 ```
 
@@ -318,8 +318,8 @@ const file = await File.find(path)
 
 await file.copy({
   'destination': "destination",
-  'structure': true,
-  'overwrite': true,
+  'structure': false,
+  'overwrite': false,
 })
 ```
 
@@ -348,7 +348,7 @@ const file = await File.find(path)
 
 await file.move({
   'destination': "destination",
-  'overwrite': true,
+  'overwrite': false,
 })
 ```
 
@@ -375,13 +375,13 @@ await file.move({
 const file = await File.find(path)
 
 await file.begin_upload({
-  'mkdir_parents': true,
+  'mkdir_parents': false,
   'part': 1,
   'parts': 1,
   'ref': "upload-1",
   'restart': 1,
   'size': 1,
-  'with_rename': true,
+  'with_rename': false,
 })
 ```
 

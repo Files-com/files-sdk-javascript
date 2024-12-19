@@ -28,7 +28,7 @@
 
 ```
 await Request.list({
-  'mine': true,
+  'mine': false,
   'path': "example",
 })
 ```
@@ -48,7 +48,7 @@ await Request.list({
 
 ```
 await Request.getFolder(path, {
-  'mine': true,
+  'mine': false,
 })
 ```
 

@@ -31,7 +31,7 @@
 ```
 await Permission.list({
   'path': "example",
-  'include_groups': true,
+  'include_groups': false,
   'group_id': 1,
   'user_id': 1,
 })
@@ -59,7 +59,7 @@ await Permission.create({
   'path': "path",
   'group_id': 1,
   'permission': "full",
-  'recursive': true,
+  'recursive': false,
   'user_id': 1,
   'username': "user",
   'group_name': "example",

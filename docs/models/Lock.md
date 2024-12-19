@@ -38,7 +38,7 @@
 
 ```
 await Lock.listFor(path, {
-  'include_children': true,
+  'include_children': false,
 })
 ```
 
@@ -56,8 +56,8 @@ await Lock.listFor(path, {
 
 ```
 await Lock.create(path, {
-  'allow_access_by_any_user': true,
-  'exclusive': true,
+  'allow_access_by_any_user': false,
+  'exclusive': false,
   'recursive': true,
   'timeout': 1,
 })
