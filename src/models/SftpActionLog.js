@@ -82,6 +82,9 @@ class SftpActionLog {
   // int64 # Data Length in Bytes. Present for actions that transfer data.
   getDataLength = () => this.attributes.data_length
 
+  // int64 # The number of bytes transferred for uploads and downloads.
+  getBytesTransferred = () => this.attributes.bytes_transferred
+
   // int64 # Number of entries returned when listing files and folders
   getEntriesReturned = () => this.attributes.entries_returned
 
