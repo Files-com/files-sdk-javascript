@@ -5,7 +5,7 @@ const endpointPrefix = '/api/rest/v1'
 let apiKey
 let baseUrl = 'https://app.files.com'
 let sessionId = null
-const version = '1.2.194'
+const version = '1.2.195'
 let userAgent = `Files.com JavaScript SDK v${version}`
 
 let logLevel = LogLevel.INFO
