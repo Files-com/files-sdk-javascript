@@ -79,6 +79,9 @@ access to the entire API. If the user is not an administrator, you will only be 
 that user can access, and no access will be granted to site administration functions in the API.
 
 ```javascript title="Example Request"
+import Files from 'files.com/lib/Files';
+import User from 'files.com/lib/models/User';
+
 Files.setApiKey('YOUR_API_KEY');
 
 // Alternatively, you can specify the API key on a per-object basis in the second parameter to a model constructor.
@@ -110,6 +113,8 @@ password.
 This returns a session object that can be used to authenticate SDK method calls.
 
 ```javascript title="Example Request"
+import Session from 'files.com/lib/models/Session';
+
 const session = await Session.create({ username: 'motor', password: 'vroom' });
 ```
 
@@ -118,6 +123,9 @@ const session = await Session.create({ username: 'motor', password: 'vroom' });
 Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
 ```javascript title="Example Request"
+import Files from 'files.com/lib/Files';
+import User from 'files.com/lib/models/User';
+
 // You may set the returned session ID to be used by default for subsequent requests.
 Files.setSessionId(session.id);
 
@@ -133,6 +141,8 @@ await User.find(id, params, { session_id: session.id });
 User sessions can be ended calling the `destroy` method on the `session` object.
 
 ```javascript title="Example Request"
+import Session from 'files.com/lib/models/Session';
+
 await Session.destroy();
 ```
 
@@ -148,6 +158,8 @@ Setting the base URL for the API is required if your site is configured to disab
 This can also be set to use a mock server in development or CI.
 
 ```javascript title="Example setting"
+import Files from 'files.com/lib/Files';
+
 Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
 
@@ -162,7 +174,8 @@ Supported values:
 * LogLevel.DEBUG
 
 ```javascript title="Example setting"
-import { LogLevel } from 'files.com/lib/Logger.js';
+import Files from 'files.com/lib/Files';
+import { LogLevel } from 'files.com/lib/Logger';
 
 Files.setLogLevel(LogLevel.INFO);
 ```
@@ -172,6 +185,8 @@ Files.setLogLevel(LogLevel.INFO);
 Enable debug logging of API requests and/or response headers. Both settings default to `false`.
 
 ```javascript title="Example setting"
+import Files from 'files.com/lib/Files';
+
 Files.configureDebugging({
   debugRequest: true,
   debugResponseHeaders: true,
@@ -181,6 +196,8 @@ Files.configureDebugging({
 #### Network Settings
 
 ```javascript title="Example setting"
+import Files from 'files.com/lib/Files';
+
 Files.configureNetwork({
   // max retries (default: 3)
   maxNetworkRetries: 3,
@@ -215,7 +232,7 @@ The argument value is a Javascript object that has a property of the resource fi
 a value of either ```"asc"``` or ```"desc"``` to specify the sort order.
 
 ```javascript title="Sort Example"
-Files.setApiKey('my-key');
+import User from 'files.com/lib/models/User';
 
 // Users, sorted by username in ascending order.
 const users = await User.list({
@@ -251,7 +268,7 @@ to filter on and a passed in value to use in the filter comparison.
 | `filter_lteq` | Range | Find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE). |
 
 ```javascript title="Exact Filter Example"
-Files.setApiKey('my-key');
+import User from 'files.com/lib/models/User';
 
 // Users who are not site admins.
 const users = await User.list({
@@ -264,7 +281,7 @@ users.forEach(user => {
 ```
 
 ```javascript title="Range Filter Example"
-Files.setApiKey('my-key');
+import User from 'files.com/lib/models/User';
 
 // Users who haven't logged in since 2024-01-01.
 const users = await User.list({
@@ -277,7 +294,7 @@ users.forEach(user => {
 ```
 
 ```javascript title="Pattern Filter Example"
-Files.setApiKey('my-key');
+import User from 'files.com/lib/models/User';
 
 // Users whose usernames start with 'test'.
 const users = await User.list({
@@ -290,7 +307,7 @@ users.forEach(user => {
 ```
 
 ```javascript title="Combination Filter with Sort Example"
-Files.setApiKey('my-key');
+import User from 'files.com/lib/models/User';
 
 // Users whose usernames start with 'test' and are not site admins, sorted by last login date.
 const users = await User.list({
@@ -322,8 +339,8 @@ Use standard Javascript exception handling to detect and deal with errors.  It i
 catch the general `FilesError` exception as a catch-all.
 
 ```javascript title="Example Error Handling"
-import Session from 'files.com/lib/models/Session.js';
-import * as FilesErrors from 'files.com/lib/Errors.js';
+import Session from 'files.com/lib/models/Session';
+import * as FilesErrors from 'files.com/lib/Errors';
 
 try {
   const session = await Session.create({ username: 'USERNAME', password: 'BADPASSWORD' });
@@ -346,7 +363,7 @@ SDK errors are general errors that occur within the SDK code.  These errors gene
 exception classes inherit from a standard `FilesError` base class.
 
 ```javascript title="Example SDK Exception Class Inheritance Structure"
-import * as FilesErrors from 'files.com/lib/Errors.js'
+import * as FilesErrors from 'files.com/lib/Errors'
 
 FilesErrors.ConfigurationError ->
 FilesErrors.FilesError ->
@@ -367,8 +384,8 @@ Error
 API errors are errors returned by the Files.com API.  Each exception class inherits from an error group base class.
 The error group base class indicates a particular type of error.
 
-```shell title="Example API Exception Class Inheritance Structure"
-import * as FilesErrors from 'files.com/lib/Errors.js'
+```javascript title="Example API Exception Class Inheritance Structure"
+import * as FilesErrors from 'files.com/lib/Errors'
 
 FilesErrors.NotAuthorized_FolderAdminPermissionRequiredError ->
 FilesErrors.NotAuthorizedError ->
@@ -562,7 +579,7 @@ when handling errors related to duplicate file names and when developing tools f
 synchronization.
 
 ```javascript title="Compare Case-Insensitive Files and Paths"
-import { pathNormalizer } from 'files.com/lib/utils.js';
+import { pathNormalizer } from 'files.com/lib/utils';
 
 if (pathNormalizer.same('Fïłèńämê.Txt', 'filename.txt')) {
   // the paths are the same
