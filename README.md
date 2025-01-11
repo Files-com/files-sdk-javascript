@@ -81,14 +81,25 @@ that user can access, and no access will be granted to site administration funct
 ```javascript title="Example Request"
 import Files from 'files.com/lib/Files';
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
 Files.setApiKey('YOUR_API_KEY');
 
-// Alternatively, you can specify the API key on a per-object basis in the second parameter to a model constructor.
-const user = new User(params, { apiKey: 'YOUR_API_KEY' });
+try {
+  // Alternatively, you can specify the API key on a per-object basis in the second parameter to a model constructor.
+  const user = new User(params, { apiKey: 'YOUR_API_KEY' });
 
-// You may also specify the API key on a per-request basis in the final parameter to static methods.
-await User.find(id, params, { apiKey: 'YOUR_API_KEY' });
+  // You may also specify the API key on a per-request basis in the final parameter to static methods.
+  await User.find(id, params, { apiKey: 'YOUR_API_KEY' });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
@@ -114,8 +125,19 @@ This returns a session object that can be used to authenticate SDK method calls.
 
 ```javascript title="Example Request"
 import Session from 'files.com/lib/models/Session';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-const session = await Session.create({ username: 'motor', password: 'vroom' });
+try {
+  const session = await Session.create({ username: 'motor', password: 'vroom' });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 #### Using a Session
@@ -125,15 +147,26 @@ Once a session has been created, you can store the session globally, use the ses
 ```javascript title="Example Request"
 import Files from 'files.com/lib/Files';
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
 // You may set the returned session ID to be used by default for subsequent requests.
 Files.setSessionId(session.id);
 
-// Alternatively, you can specify the session ID on a per-object basis in the second parameter to a model constructor.
-const user = new User(params, { session_id: session.id });
+try {
+  // Alternatively, you can specify the session ID on a per-object basis in the second parameter to a model constructor.
+  const user = new User(params, { session_id: session.id });
 
-// You may also specify the session ID on a per-request basis in the final parameter to static methods.
-await User.find(id, params, { session_id: session.id });
+  // You may also specify the session ID on a per-request basis in the final parameter to static methods.
+  await User.find(id, params, { session_id: session.id });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 #### Logging Out
@@ -142,8 +175,19 @@ User sessions can be ended calling the `destroy` method on the `session` object.
 
 ```javascript title="Example Request"
 import Session from 'files.com/lib/models/Session';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-await Session.destroy();
+try {
+  await Session.destroy();
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 ## Configuration
@@ -233,15 +277,26 @@ a value of either ```"asc"``` or ```"desc"``` to specify the sort order.
 
 ```javascript title="Sort Example"
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-// Users, sorted by username in ascending order.
-const users = await User.list({
-  sort_by: { username: "asc"}
-});
+try {
+  // Users, sorted by username in ascending order.
+  const users = await User.list({
+    sort_by: { username: "asc" }
+  });
 
-users.forEach(user => {
-  console.log(user.username);
-});
+  users.forEach(user => {
+    console.log(user.username);
+  });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 ### Filtering
@@ -269,56 +324,101 @@ to filter on and a passed in value to use in the filter comparison.
 
 ```javascript title="Exact Filter Example"
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-// Users who are not site admins.
-const users = await User.list({
-  filter: { not_site_admin: true }
-});
+try {
+  // Users who are not site admins.
+  const users = await User.list({
+    filter: { not_site_admin: true }
+  });
 
-users.forEach(user => {
-  console.log(user.username);
-});
+  users.forEach(user => {
+    console.log(user.username);
+  });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 ```javascript title="Range Filter Example"
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-// Users who haven't logged in since 2024-01-01.
-const users = await User.list({
-  filter_gteq: { last_login_at: "2024-01-01" }
-});
+try {
+  // Users who haven't logged in since 2024-01-01.
+  const users = await User.list({
+    filter_gteq: { last_login_at: "2024-01-01" }
+  });
 
-users.forEach(user => {
-  console.log(user.username);
-});
+  users.forEach(user => {
+    console.log(user.username);
+  });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
+```
 ```
 
 ```javascript title="Pattern Filter Example"
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-// Users whose usernames start with 'test'.
-const users = await User.list({
-  filter_prefix: { username: "test" }
-});
+try {
+  // Users whose usernames start with 'test'.
+  const users = await User.list({
+    filter_prefix: { username: "test" }
+  });
 
-users.forEach(user => {
-  console.log(user.username);
-});
+  users.forEach(user => {
+    console.log(user.username);
+  });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 ```javascript title="Combination Filter with Sort Example"
 import User from 'files.com/lib/models/User';
+import * as FilesErrors from 'files.com/lib/Errors';
 
-// Users whose usernames start with 'test' and are not site admins, sorted by last login date.
-const users = await User.list({
-  filter_prefix: { username: "test" },
-  filter: { not_site_admin: true },
-  sort_by: { last_login_at: "asc" }
-});
+try {
+  // Users whose usernames start with 'test' and are not site admins, sorted by last login date.
+  const users = await User.list({
+    filter_prefix: { username: "test" },
+    filter: { not_site_admin: true },
+    sort_by: { last_login_at: "asc" }
+  });
 
-users.forEach(user => {
-  console.log(user.username);
-});
+  users.forEach(user => {
+    console.log(user.username);
+  });
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
 ```
 
 ## Errors
@@ -344,9 +444,9 @@ import * as FilesErrors from 'files.com/lib/Errors';
 
 try {
   const session = await Session.create({ username: 'USERNAME', password: 'BADPASSWORD' });
-} catch(err) {
+} catch (err) {
   if (err instanceof FilesErrors.NotAuthenticatedError) {
-    console.error(`Authorization Error Occurred (${err.constructor.name}): ${err.error}`);
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
   } else if (err instanceof FilesErrors.FilesError) {
     console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
   } else {
