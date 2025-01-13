@@ -287,6 +287,13 @@ class RemoteServer {
     this.attributes.azure_files_storage_share_name = value
   }
 
+  // string # Custom DNS suffix
+  getAzureFilesStorageDnsSuffix = () => this.attributes.azure_files_storage_dns_suffix
+
+  setAzureFilesStorageDnsSuffix = value => {
+    this.attributes.azure_files_storage_dns_suffix = value
+  }
+
   // string # S3-compatible Bucket name
   getS3CompatibleBucket = () => this.attributes.s3_compatible_bucket
 
@@ -683,6 +690,7 @@ class RemoteServer {
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   azure_files_storage_account - string - Azure File Storage Account name
   //   azure_files_storage_share_name - string - Azure File Storage Share name
+  //   azure_files_storage_dns_suffix - string - Custom DNS suffix
   //   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
@@ -877,6 +885,10 @@ class RemoteServer {
 
     if (params.azure_files_storage_share_name && !isString(params.azure_files_storage_share_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(params.azure_files_storage_share_name)}`)
+    }
+
+    if (params.azure_files_storage_dns_suffix && !isString(params.azure_files_storage_dns_suffix)) {
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_dns_suffix must be of type String, received ${getType(params.azure_files_storage_dns_suffix)}`)
     }
 
     if (params.azure_files_storage_sas_token && !isString(params.azure_files_storage_sas_token)) {
@@ -1127,6 +1139,7 @@ class RemoteServer {
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
   //   azure_files_storage_account - string - Azure File Storage Account name
   //   azure_files_storage_share_name - string - Azure File Storage Share name
+  //   azure_files_storage_dns_suffix - string - Custom DNS suffix
   //   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
   //   s3_compatible_bucket - string - S3-compatible Bucket name
   //   s3_compatible_endpoint - string - S3-compatible endpoint
@@ -1308,6 +1321,10 @@ class RemoteServer {
 
     if (params.azure_files_storage_share_name && !isString(params.azure_files_storage_share_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_share_name must be of type String, received ${getType(params.azure_files_storage_share_name)}`)
+    }
+
+    if (params.azure_files_storage_dns_suffix && !isString(params.azure_files_storage_dns_suffix)) {
+      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_dns_suffix must be of type String, received ${getType(params.azure_files_storage_dns_suffix)}`)
     }
 
     if (params.azure_files_storage_sas_token && !isString(params.azure_files_storage_sas_token)) {
