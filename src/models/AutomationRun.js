@@ -40,6 +40,15 @@ class AutomationRun {
   // date-time # Automation run start date/time.
   getCreatedAt = () => this.attributes.created_at
 
+  // date-time # If set, this Automation run was retried due to `failure` or `partial_failure`.
+  getRetriedAt = () => this.attributes.retried_at
+
+  // int64 # ID of the original run that this run is retrying.
+  getRetryOfRunId = () => this.attributes.retry_of_run_id
+
+  // int64 # ID of the run that is or will be retrying this run.
+  getRetriedInRunId = () => this.attributes.retried_in_run_id
+
   // double # Automation run runtime.
   getRuntime = () => this.attributes.runtime
 
