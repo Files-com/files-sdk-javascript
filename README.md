@@ -668,6 +668,40 @@ Error
 |     `SiteConfiguration_TrialLockedError`|  `SiteConfigurationError` |
 |     `SiteConfiguration_UserRequestsEnabledRequiredError`|  `SiteConfigurationError` |
 
+## {frontmatter.title}
+
+Certain API operations return lists of objects. When the number of objects in the list is large,
+the API will paginate the results.
+
+The Files.com JavaScript SDK automatically paginates through lists of objects by default.
+
+```javascript title="Example Request" hasDataFormatSelector
+import File from 'files.com/lib/models/File';
+import * as FilesErrors from 'files.com/lib/Errors';
+
+Files.configureNetwork({
+  // true by default
+  autoPaginate: true,
+});
+
+try {
+  const files = await Folder.listFor(path, {
+    search: "some-partial-filename",
+  });
+  for (const file of files) {
+    // Operate on file
+  }
+} catch (err) {
+  if (err instanceof FilesErrors.NotAuthenticatedError) {
+    console.error(`Authentication Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else if (err instanceof FilesErrors.FilesError) {
+    console.error(`Unknown Error Occurred (${err.constructor.name}): ${err.error}`);
+  } else {
+    throw err;
+  }
+}
+```
+
 ## Case Sensitivity
 
 The Files.com API compares files and paths in a case-insensitive manner.
