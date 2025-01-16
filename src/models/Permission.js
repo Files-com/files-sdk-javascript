@@ -84,6 +84,13 @@ class Permission {
     this.attributes.recursive = value
   }
 
+  // int64 # Site ID
+  getSiteId = () => this.attributes.site_id
+
+  setSiteId = value => {
+    this.attributes.site_id = value
+  }
+
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -125,7 +132,7 @@ class Permission {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `group_id`, `path` or `user_id`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `group_id`, `path` or `user_id`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id` or `user_id`. Valid field combinations are `[ group_id, path ]`, `[ user_id, path ]` or `[ user_id, group_id ]`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
   //   path - string - Permission path.  If provided, will scope all permissions(including upward) to this path.
@@ -169,6 +176,7 @@ class Permission {
   //   user_id - int64 - User ID.  Provide `username` or `user_id`
   //   username - string - User username.  Provide `username` or `user_id`
   //   group_name - string - Group name.  Provide `group_name` or `group_id`
+  //   site_id - int64 - Site ID. If not provided, will default to current site. Used when creating a permission for a child site.
   static create = async (params = {}, options = {}) => {
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
@@ -196,6 +204,10 @@ class Permission {
 
     if (params.group_name && !isString(params.group_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_name must be of type String, received ${getType(params.group_name)}`)
+    }
+
+    if (params.site_id && !isInt(params.site_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: site_id must be of type Int, received ${getType(params.site_id)}`)
     }
 
     const response = await Api.sendRequest('/permissions', 'POST', params, options)
