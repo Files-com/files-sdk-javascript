@@ -503,6 +503,7 @@ Error
 |     `BadRequest_CantMoveWithMultipleLocationsError`|  `BadRequestError` |
 |     `BadRequest_DatetimeParseError`|  `BadRequestError` |
 |     `BadRequest_DestinationSameError`|  `BadRequestError` |
+|     `BadRequest_DoesNotSupportSortingError`|  `BadRequestError` |
 |     `BadRequest_FolderMustNotBeAFileError`|  `BadRequestError` |
 |     `BadRequest_FoldersNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_InvalidBodyError`|  `BadRequestError` |
@@ -519,11 +520,13 @@ Error
 |     `BadRequest_InvalidOauthProviderError`|  `BadRequestError` |
 |     `BadRequest_InvalidPathError`|  `BadRequestError` |
 |     `BadRequest_InvalidReturnToUrlError`|  `BadRequestError` |
+|     `BadRequest_InvalidSortFieldError`|  `BadRequestError` |
 |     `BadRequest_InvalidSortFilterCombinationError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadOffsetError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartGapError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartSizeError`|  `BadRequestError` |
 |     `BadRequest_MethodNotAllowedError`|  `BadRequestError` |
+|     `BadRequest_MultipleSortParamsNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_NoValidInputParamsError`|  `BadRequestError` |
 |     `BadRequest_PartNumberTooLargeError`|  `BadRequestError` |
 |     `BadRequest_PathCannotHaveTrailingWhitespaceError`|  `BadRequestError` |
@@ -532,6 +535,7 @@ Error
 |     `BadRequest_RequestParamsInvalidError`|  `BadRequestError` |
 |     `BadRequest_RequestParamsRequiredError`|  `BadRequestError` |
 |     `BadRequest_SearchAllOnChildPathError`|  `BadRequestError` |
+|     `BadRequest_UnrecognizedSortIndexError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedCurrencyError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedHttpResponseFormatError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedMediaTypeError`|  `BadRequestError` |

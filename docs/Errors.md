@@ -53,6 +53,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_CantMoveWithMultipleLocationsError
 ### BadRequest_DatetimeParseError
 ### BadRequest_DestinationSameError
+### BadRequest_DoesNotSupportSortingError
 ### BadRequest_FolderMustNotBeAFileError
 ### BadRequest_FoldersNotAllowedError
 ### BadRequest_InvalidBodyError
@@ -69,11 +70,13 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidOauthProviderError
 ### BadRequest_InvalidPathError
 ### BadRequest_InvalidReturnToUrlError
+### BadRequest_InvalidSortFieldError
 ### BadRequest_InvalidSortFilterCombinationError
 ### BadRequest_InvalidUploadOffsetError
 ### BadRequest_InvalidUploadPartGapError
 ### BadRequest_InvalidUploadPartSizeError
 ### BadRequest_MethodNotAllowedError
+### BadRequest_MultipleSortParamsNotAllowedError
 ### BadRequest_NoValidInputParamsError
 ### BadRequest_PartNumberTooLargeError
 ### BadRequest_PathCannotHaveTrailingWhitespaceError
@@ -82,6 +85,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_RequestParamsInvalidError
 ### BadRequest_RequestParamsRequiredError
 ### BadRequest_SearchAllOnChildPathError
+### BadRequest_UnrecognizedSortIndexError
 ### BadRequest_UnsupportedCurrencyError
 ### BadRequest_UnsupportedHttpResponseFormatError
 ### BadRequest_UnsupportedMediaTypeError
