@@ -369,7 +369,6 @@ try {
   }
 }
 ```
-```
 
 ```javascript title="Pattern Filter Example"
 import User from 'files.com/lib/models/User';
