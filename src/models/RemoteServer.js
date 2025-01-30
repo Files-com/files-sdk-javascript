@@ -224,13 +224,6 @@ class RemoteServer {
     this.attributes.rackspace_container = value
   }
 
-  // string # Returns link to login with an Oauth provider
-  getAuthSetupLink = () => this.attributes.auth_setup_link
-
-  setAuthSetupLink = value => {
-    this.attributes.auth_setup_link = value
-  }
-
   // string # Either `in_setup` or `complete`
   getAuthStatus = () => this.attributes.auth_status
 
