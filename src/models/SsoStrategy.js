@@ -136,6 +136,9 @@ class SsoStrategy {
   // string # 2FA required setting for auto provisioned users.
   getProvisionRequire2fa = () => this.attributes.provision_require_2fa
 
+  // string # URL-friendly, unique identifier for Azure SAML configuration
+  getIdentifier = () => this.attributes.identifier
+
   // string # Base DN for looking up users in LDAP server
   getLdapBaseDn = () => this.attributes.ldap_base_dn
 
