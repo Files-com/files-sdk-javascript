@@ -162,10 +162,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getSftpActionRecordsSentEntriesSent = () => this.attributes.sftp_action_records_sent_entries_sent
+  getSftpActionEntriesSent = () => this.attributes.sftp_action_entries_sent
 
-  setSftpActionRecordsSentEntriesSent = value => {
-    this.attributes.sftp_action_records_sent_entries_sent = value
+  setSftpActionEntriesSent = value => {
+    this.attributes.sftp_action_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for ftp_action logs.
@@ -176,10 +176,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getFtpActionRecordsSentEntriesSent = () => this.attributes.ftp_action_records_sent_entries_sent
+  getFtpActionEntriesSent = () => this.attributes.ftp_action_entries_sent
 
-  setFtpActionRecordsSentEntriesSent = value => {
-    this.attributes.ftp_action_records_sent_entries_sent = value
+  setFtpActionEntriesSent = value => {
+    this.attributes.ftp_action_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for web_dav_action logs.
@@ -190,10 +190,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getWebDavActionRecordsSentEntriesSent = () => this.attributes.web_dav_action_records_sent_entries_sent
+  getWebDavActionEntriesSent = () => this.attributes.web_dav_action_entries_sent
 
-  setWebDavActionRecordsSentEntriesSent = value => {
-    this.attributes.web_dav_action_records_sent_entries_sent = value
+  setWebDavActionEntriesSent = value => {
+    this.attributes.web_dav_action_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for sync logs.
@@ -204,10 +204,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getSyncRecordsSentEntriesSent = () => this.attributes.sync_records_sent_entries_sent
+  getSyncEntriesSent = () => this.attributes.sync_entries_sent
 
-  setSyncRecordsSentEntriesSent = value => {
-    this.attributes.sync_records_sent_entries_sent = value
+  setSyncEntriesSent = value => {
+    this.attributes.sync_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for outbound_connection logs.
@@ -218,10 +218,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getOutboundConnectionRecordsSentEntriesSent = () => this.attributes.outbound_connection_records_sent_entries_sent
+  getOutboundConnectionEntriesSent = () => this.attributes.outbound_connection_entries_sent
 
-  setOutboundConnectionRecordsSentEntriesSent = value => {
-    this.attributes.outbound_connection_records_sent_entries_sent = value
+  setOutboundConnectionEntriesSent = value => {
+    this.attributes.outbound_connection_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for automation logs.
@@ -232,10 +232,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getAutomationRecordsSentEntriesSent = () => this.attributes.automation_records_sent_entries_sent
+  getAutomationEntriesSent = () => this.attributes.automation_entries_sent
 
-  setAutomationRecordsSentEntriesSent = value => {
-    this.attributes.automation_records_sent_entries_sent = value
+  setAutomationEntriesSent = value => {
+    this.attributes.automation_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for api_request logs.
@@ -246,10 +246,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getApiRequestRecordsSentEntriesSent = () => this.attributes.api_request_records_sent_entries_sent
+  getApiRequestEntriesSent = () => this.attributes.api_request_entries_sent
 
-  setApiRequestRecordsSentEntriesSent = value => {
-    this.attributes.api_request_records_sent_entries_sent = value
+  setApiRequestEntriesSent = value => {
+    this.attributes.api_request_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for public_hosting_request logs.
@@ -260,10 +260,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getPublicHostingRequestRecordsSentEntriesSent = () => this.attributes.public_hosting_request_records_sent_entries_sent
+  getPublicHostingRequestEntriesSent = () => this.attributes.public_hosting_request_entries_sent
 
-  setPublicHostingRequestRecordsSentEntriesSent = value => {
-    this.attributes.public_hosting_request_records_sent_entries_sent = value
+  setPublicHostingRequestEntriesSent = value => {
+    this.attributes.public_hosting_request_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for email logs.
@@ -274,10 +274,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getEmailRecordsSentEntriesSent = () => this.attributes.email_records_sent_entries_sent
+  getEmailEntriesSent = () => this.attributes.email_entries_sent
 
-  setEmailRecordsSentEntriesSent = value => {
-    this.attributes.email_records_sent_entries_sent = value
+  setEmailEntriesSent = value => {
+    this.attributes.email_entries_sent = value
   }
 
   // boolean # Whether or not sending is enabled for exavault_api_request logs.
@@ -288,10 +288,10 @@ class SiemHttpDestination {
   }
 
   // int64 # Number of log entries sent for the lifetime of this destination.
-  getExavaultApiRequestRecordsSentEntriesSent = () => this.attributes.exavault_api_request_records_sent_entries_sent
+  getExavaultApiRequestEntriesSent = () => this.attributes.exavault_api_request_entries_sent
 
-  setExavaultApiRequestRecordsSentEntriesSent = value => {
-    this.attributes.exavault_api_request_records_sent_entries_sent = value
+  setExavaultApiRequestEntriesSent = value => {
+    this.attributes.exavault_api_request_entries_sent = value
   }
 
   // string # Type of URL that was last called. Can be `destination_url` or `azure_oauth_client_credentials_url`
