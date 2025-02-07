@@ -93,6 +93,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_UserIdOnUserEndpointError
 ### BadRequest_UserRequiredError
 ### NotAuthenticated_AdditionalAuthenticationRequiredError
+### NotAuthenticated_ApiKeySessionsNotSupportedError
 ### NotAuthenticated_AuthenticationRequiredError
 ### NotAuthenticated_BundleRegistrationCodeFailedError
 ### NotAuthenticated_FilesAgentTokenFailedError

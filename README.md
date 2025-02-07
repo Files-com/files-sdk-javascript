@@ -542,6 +542,7 @@ Error
 |     `BadRequest_UserIdOnUserEndpointError`|  `BadRequestError` |
 |     `BadRequest_UserRequiredError`|  `BadRequestError` |
 |     `NotAuthenticated_AdditionalAuthenticationRequiredError`|  `NotAuthenticatedError` |
+|     `NotAuthenticated_ApiKeySessionsNotSupportedError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_AuthenticationRequiredError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_BundleRegistrationCodeFailedError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_FilesAgentTokenFailedError`|  `NotAuthenticatedError` |
