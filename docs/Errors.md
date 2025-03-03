@@ -190,11 +190,13 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_InvalidFilenameError
 ### ProcessingFailure_InvalidPriorityColorError
 ### ProcessingFailure_InvalidRangeError
+### ProcessingFailure_InvalidSiteError
 ### ProcessingFailure_ModelSaveErrorError
 ### ProcessingFailure_MultipleProcessingErrorsError
 ### ProcessingFailure_PathTooLongError
 ### ProcessingFailure_RecipientAlreadySharedError
 ### ProcessingFailure_RemoteServerErrorError
+### ProcessingFailure_ResourceBelongsToParentSiteError
 ### ProcessingFailure_ResourceLockedError
 ### ProcessingFailure_SubfolderLockedError
 ### ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError

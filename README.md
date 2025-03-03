@@ -639,11 +639,13 @@ Error
 |     `ProcessingFailure_InvalidFilenameError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_InvalidPriorityColorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_InvalidRangeError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_InvalidSiteError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ModelSaveErrorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_MultipleProcessingErrorsError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_PathTooLongError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_RecipientAlreadySharedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_RemoteServerErrorError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_ResourceBelongsToParentSiteError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceLockedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_SubfolderLockedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError`|  `ProcessingFailureError` |
