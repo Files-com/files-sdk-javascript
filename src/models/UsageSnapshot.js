@@ -37,7 +37,7 @@ class UsageSnapshot {
   // date-time # Usage snapshot end date/time
   getEndAt = () => this.attributes.end_at
 
-  // double # Highest user count number in time period
+  // int64 # Highest user count number in time period
   getHighWaterUserCount = () => this.attributes.high_water_user_count
 
   // double # Current total Storage Usage GB as of end date (not necessarily high water mark, which is used for billing)
@@ -45,9 +45,6 @@ class UsageSnapshot {
 
   // double # Highest Storage Usage GB recorded in time period (used for billing)
   getHighWaterStorage = () => this.attributes.high_water_storage
-
-  // object # Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
-  getUsageByTopLevelDir = () => this.attributes.usage_by_top_level_dir
 
   // double # Storage Usage for root folder as of end date (not necessarily high water mark, which is used for billing)
   getRootStorage = () => this.attributes.root_storage
@@ -72,6 +69,9 @@ class UsageSnapshot {
 
   // double # Transfer Usage for period - Outbound GB from Remote Servers (Sync/Mount)
   getSyncBytesSent = () => this.attributes.sync_bytes_sent
+
+  // array(object) # Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
+  getUsageByTopLevelDir = () => this.attributes.usage_by_top_level_dir
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.

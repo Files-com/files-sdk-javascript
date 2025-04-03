@@ -56,7 +56,7 @@ class Request {
     this.attributes.destination = value
   }
 
-  // string # ID of automation that created request
+  // int64 # ID of automation that created request
   getAutomationId = () => this.attributes.automation_id
 
   setAutomationId = value => {

@@ -40,7 +40,7 @@ class AutomationRun {
   // date-time # Automation run start date/time.
   getCreatedAt = () => this.attributes.created_at
 
-  // string # If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
+  // date-time # If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
   getRetryAt = () => this.attributes.retry_at
 
   // date-time # If set, this Automation run was retried due to `failure` or `partial_failure`.

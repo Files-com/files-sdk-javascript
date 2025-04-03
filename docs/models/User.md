@@ -23,7 +23,7 @@
   "dav_permission": true,
   "disabled": true,
   "disabled_expired_or_inactive": true,
-  "email": "example",
+  "email": "john.doe@files.com",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",
@@ -198,7 +198,7 @@ await User.find(id)
 ```
 await User.create({
   'avatar_delete': false,
-  'email': "example",
+  'email': "john.doe@files.com",
   'group_id': 1,
   'group_ids': "example",
   'announcements_read': false,
@@ -345,7 +345,7 @@ const user = await User.find(id)
 
 await user.update({
   'avatar_delete': false,
-  'email': "example",
+  'email': "john.doe@files.com",
   'group_id': 1,
   'group_ids': "example",
   'announcements_read': false,
@@ -461,7 +461,7 @@ await user.update({
   "dav_permission": true,
   "disabled": true,
   "disabled_expired_or_inactive": true,
-  "email": "example",
+  "email": "john.doe@files.com",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",
