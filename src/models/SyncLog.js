@@ -49,7 +49,7 @@ class SyncLog {
   // string # File path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
-  // string # File size
+  // int64 # File size
   getSize = () => this.attributes.size
 
   // string # File type
