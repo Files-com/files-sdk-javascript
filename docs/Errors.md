@@ -116,6 +116,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_BillingOrSiteAdminPermissionRequiredError
 ### NotAuthorized_BillingPermissionRequiredError
 ### NotAuthorized_BundleMaximumUsesReachedError
+### NotAuthorized_BundlePermissionRequiredError
 ### NotAuthorized_CannotLoginWhileUsingKeyError
 ### NotAuthorized_CantActForOtherUserError
 ### NotAuthorized_ContactAdminForPasswordChangeHelpError

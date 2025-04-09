@@ -565,6 +565,7 @@ Error
 |     `NotAuthorized_BillingOrSiteAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BillingPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundleMaximumUsesReachedError`|  `NotAuthorizedError` |
+|     `NotAuthorized_BundlePermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_CannotLoginWhileUsingKeyError`|  `NotAuthorizedError` |
 |     `NotAuthorized_CantActForOtherUserError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ContactAdminForPasswordChangeHelpError`|  `NotAuthorizedError` |
