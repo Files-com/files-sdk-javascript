@@ -43,9 +43,6 @@ class As2OutgoingMessage {
   // object # HTTP Headers sent with this message.
   getHttpHeaders = () => this.attributes.http_headers
 
-  // string # JSON Structure of the activity log.
-  getActivityLog = () => this.attributes.activity_log
-
   // string # Result of processing.
   getProcessingResult = () => this.attributes.processing_result
 
