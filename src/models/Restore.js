@@ -28,7 +28,7 @@ class Restore {
 
   isLoaded = () => !!this.attributes.id
 
-  // date-time # Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+  // date-time # Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
   getEarliestDate = () => this.attributes.earliest_date
 
   setEarliestDate = value => {
@@ -84,7 +84,7 @@ class Restore {
     this.attributes.files_total = value
   }
 
-  // string # Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+  // string # Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
   getPrefix = () => this.attributes.prefix
 
   setPrefix = value => {
@@ -112,7 +112,7 @@ class Restore {
     this.attributes.status = value
   }
 
-  // boolean # If trie, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+  // boolean # If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
   getUpdateTimestamps = () => this.attributes.update_timestamps
 
   setUpdateTimestamps = value => {
@@ -157,10 +157,11 @@ class Restore {
     Restore.list(params, options)
 
   // Parameters:
-  //   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+  //   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
+  //   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
   //   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
   //   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
-  //   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+  //   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
   static create = async (params = {}, options = {}) => {
     if (!params.earliest_date) {
       throw new errors.MissingParameterError('Parameter missing: earliest_date')
