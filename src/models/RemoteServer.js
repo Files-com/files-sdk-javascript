@@ -266,6 +266,13 @@ class RemoteServer {
     this.attributes.azure_blob_storage_hierarchical_namespace = value
   }
 
+  // string # Custom DNS suffix
+  getAzureBlobStorageDnsSuffix = () => this.attributes.azure_blob_storage_dns_suffix
+
+  setAzureBlobStorageDnsSuffix = value => {
+    this.attributes.azure_blob_storage_dns_suffix = value
+  }
+
   // string # Azure File Storage Account name
   getAzureFilesStorageAccount = () => this.attributes.azure_files_storage_account
 
@@ -681,6 +688,7 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_blob_storage_dns_suffix - string - Custom DNS suffix
   //   azure_files_storage_account - string - Azure File Storage Account name
   //   azure_files_storage_share_name - string - Azure File Storage Share name
   //   azure_files_storage_dns_suffix - string - Custom DNS suffix
@@ -870,6 +878,10 @@ class RemoteServer {
 
     if (params.azure_blob_storage_sas_token && !isString(params.azure_blob_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(params.azure_blob_storage_sas_token)}`)
+    }
+
+    if (params.azure_blob_storage_dns_suffix && !isString(params.azure_blob_storage_dns_suffix)) {
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_dns_suffix must be of type String, received ${getType(params.azure_blob_storage_dns_suffix)}`)
     }
 
     if (params.azure_files_storage_account && !isString(params.azure_files_storage_account)) {
@@ -1130,6 +1142,7 @@ class RemoteServer {
   //   azure_blob_storage_container - string - Azure Blob Storage Container name
   //   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
   //   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+  //   azure_blob_storage_dns_suffix - string - Custom DNS suffix
   //   azure_files_storage_account - string - Azure File Storage Account name
   //   azure_files_storage_share_name - string - Azure File Storage Share name
   //   azure_files_storage_dns_suffix - string - Custom DNS suffix
@@ -1306,6 +1319,10 @@ class RemoteServer {
 
     if (params.azure_blob_storage_sas_token && !isString(params.azure_blob_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(params.azure_blob_storage_sas_token)}`)
+    }
+
+    if (params.azure_blob_storage_dns_suffix && !isString(params.azure_blob_storage_dns_suffix)) {
+      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_dns_suffix must be of type String, received ${getType(params.azure_blob_storage_dns_suffix)}`)
     }
 
     if (params.azure_files_storage_account && !isString(params.azure_files_storage_account)) {
