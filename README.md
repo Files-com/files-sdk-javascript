@@ -420,6 +420,22 @@ try {
 }
 ```
 
+## Foreign Language Support
+
+The Files.com Javascript SDK supports localized responses by using the `Files.setLanguage()` configuration method.
+When configured, this guides the API in selecting a preferred language for applicable response content.
+
+Language support currently applies to select human-facing fields only, such as notification messages
+and error descriptions.
+
+If the specified language is not supported or the value is omitted, the API defaults to English.
+
+```javascript title="Example Request"
+import Files from 'files.com/lib/Files';
+
+Files.setLanguage('es');
+```
+
 ## Errors
 
 The Files.com JavaScript SDK will return errors by raising exceptions. There are many exception classes defined in the Files SDK that correspond

@@ -1,3 +1,39 @@
+///////////////////////////////////////////////////////////////////////////////
+// To run this test suite, first set environment variables:
+//
+// required:
+//   FILES_API_KEY - set to your API key
+//   FILES_API_DOMAIN - set to your Files.com subdomain (e.g. mysite.files.com)
+//
+// required only if testSession() is run, otherwise can be omitted:
+//   FILES_SESSION_USERNAME - username to login with
+//   FILES_SESSION_PASSWORD - password to login with
+//
+// optional:
+//   USER_COUNT_TO_TRIGGER_PAGINATION - defaults to 1, set to a number that will
+//     require multiple page requests to fetch all users, but don't set it too low;
+//     if you have many users, then "1" will trigger a fetch for every single user
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+// Next, in the ../../../ directory, build the SDK:
+//
+// npm install
+// npm run build
+//
+// Then, in the ../ directory, build the test suite:
+//
+// npm install
+// npm run build
+//
+// Finally, execute the current file:
+//
+// npm run test
+//
+///////////////////////////////////////////////////////////////////////////////
+// Note: you can comment out at the bottom of this file any tests you don't want to run.
+///////////////////////////////////////////////////////////////////////////////
+
 import Files from 'files.com/lib/Files'
 import Logger, { LogLevel } from 'files.com/lib/Logger'
 import ApiKey from 'files.com/lib/models/ApiKey'
@@ -27,12 +63,14 @@ if (!apiDomain) {
 Files.setApiKey(apiKey)
 Files.setBaseUrl(`https://${apiDomain}`)
 
-// temp for testing against staging
 if (apiDomain.substr(-10) === 'staging.av') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
 }
 
 const DEBUG_MODE = false
+
+// any user count that will require multiple page requests to fetch all users
+const USER_COUNT_TO_TRIGGER_PAGINATION = process.env.USER_COUNT_TO_TRIGGER_PAGINATION || 1
 
 Files.setLogLevel(DEBUG_MODE ? LogLevel.DEBUG : LogLevel.INFO)
 
@@ -53,7 +91,7 @@ const testSuite = async () => {
       autoPaginate: false,
     })
 
-    const firstPageItems = await Folder.listFor('/', { per_page: 1 })
+    const firstPageItems = await Folder.listFor('/', { per_page: USER_COUNT_TO_TRIGGER_PAGINATION })
 
     invariant(firstPageItems.length === 1, 'First page should have 1 item')
 
@@ -260,6 +298,41 @@ const testSuite = async () => {
     Logger.info('***** testUserListAndUpdate() succeeded! *****');
   }
 
+  const testLanguage = async () => {
+    Files.setLanguage('es');
+    invariant(Files.getLanguage() === 'es');
+
+    const savedLogLevel = Files.getLogLevel()
+    const savedDebugRequest = Files.shouldDebugRequest()
+    const savedDebugResponseHeaders = Files.shouldDebugResponseHeaders()
+    Files.setLogLevel(LogLevel.DEBUG)
+    Files.configureDebugging({
+      debugRequest: true,
+      debugResponseHeaders: true,
+    })
+
+    const logs = []
+    const savedConsoleLog = console.log
+    console.log = (...args) => {
+      logs.push(args.map(JSON.stringify).join(' '))
+    }
+
+    await ApiKey.list({ user_id: 0 })
+
+    console.log = savedConsoleLog
+
+    Files.setLogLevel(savedLogLevel)
+    Files.configureDebugging({
+      debugRequest: savedDebugRequest,
+      debugResponseHeaders: savedDebugResponseHeaders,
+    })
+
+    const allLogs = logs.join('\n')
+    invariant(allLogs.includes('"Accept-Language":"es"'), '"Accept-Language: es" header not found in debug output');
+
+    Logger.info('***** testLanguage() succeeded! *****');
+  }
+
   //
   // execute all tests
   //
@@ -273,6 +346,7 @@ const testSuite = async () => {
     await testSession()
     await testFailure()
     await testUserListAndUpdate()
+    await testLanguage()
   } catch (error) {
     console.log('*** TEST SUITE FAILED ***')
     console.error(error)

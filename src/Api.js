@@ -172,8 +172,11 @@ class Api {
   }
 
   static sendRequest = async (path, verb, params = null, options = {}, metadata = null) => {
+    const languageHeader = Files.getLanguage() ? { 'Accept-Language': Files.getLanguage() } : {}
+
     const headers = {
       Accept: 'application/json',
+      ...languageHeader,
       ...options.headers,
       'User-Agent': Files.getUserAgent(),
     }
