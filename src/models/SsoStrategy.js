@@ -109,6 +109,9 @@ class SsoStrategy {
   // string # Comma-separated list of group names whose members will be created with email_signup authentication.
   getProvisionEmailSignupGroups = () => this.attributes.provision_email_signup_groups
 
+  // string # Comma-separated list of group names whose members will be created as Read-Only Site Admins.
+  getProvisionReadonlySiteAdminGroups = () => this.attributes.provision_readonly_site_admin_groups
+
   // string # Comma-separated list of group names whose members will be created as Site Admins.
   getProvisionSiteAdminGroups = () => this.attributes.provision_site_admin_groups
 
