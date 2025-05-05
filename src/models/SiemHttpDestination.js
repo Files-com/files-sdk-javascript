@@ -294,6 +294,20 @@ class SiemHttpDestination {
     this.attributes.exavault_api_request_entries_sent = value
   }
 
+  // boolean # Whether or not sending is enabled for settings_change logs.
+  getSettingsChangeSendEnabled = () => this.attributes.settings_change_send_enabled
+
+  setSettingsChangeSendEnabled = value => {
+    this.attributes.settings_change_send_enabled = value
+  }
+
+  // int64 # Number of log entries sent for the lifetime of this destination.
+  getSettingsChangeEntriesSent = () => this.attributes.settings_change_entries_sent
+
+  setSettingsChangeEntriesSent = value => {
+    this.attributes.settings_change_entries_sent = value
+  }
+
   // string # Type of URL that was last called. Can be `destination_url` or `azure_oauth_client_credentials_url`
   getLastHttpCallTargetType = () => this.attributes.last_http_call_target_type
 
@@ -425,6 +439,7 @@ class SiemHttpDestination {
   //   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
   //   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
   //   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+  //   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
   //   destination_type - string - Destination Type
   //   destination_url - string - Destination Url
   update = async (params = {}) => {
@@ -625,6 +640,7 @@ class SiemHttpDestination {
   //   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
   //   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
   //   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+  //   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
   //   destination_type (required) - string - Destination Type
   //   destination_url (required) - string - Destination Url
   static create = async (params = {}, options = {}) => {
@@ -730,6 +746,7 @@ class SiemHttpDestination {
   //   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
   //   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
   //   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+  //   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
   static sendTestEntry = async (params = {}, options = {}) => {
     if (params.siem_http_destination_id && !isInt(params.siem_http_destination_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: siem_http_destination_id must be of type Int, received ${getType(params.siem_http_destination_id)}`)

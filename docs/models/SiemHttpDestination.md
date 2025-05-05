@@ -44,6 +44,8 @@
   "email_entries_sent": 1,
   "exavault_api_request_send_enabled": true,
   "exavault_api_request_entries_sent": 1,
+  "settings_change_send_enabled": true,
+  "settings_change_entries_sent": 1,
   "last_http_call_target_type": "destination_url",
   "last_http_call_success": true,
   "last_http_call_response_code": 1,
@@ -94,6 +96,8 @@
 * `email_entries_sent` (int64): Number of log entries sent for the lifetime of this destination.
 * `exavault_api_request_send_enabled` (boolean): Whether or not sending is enabled for exavault_api_request logs.
 * `exavault_api_request_entries_sent` (int64): Number of log entries sent for the lifetime of this destination.
+* `settings_change_send_enabled` (boolean): Whether or not sending is enabled for settings_change logs.
+* `settings_change_entries_sent` (int64): Number of log entries sent for the lifetime of this destination.
 * `last_http_call_target_type` (string): Type of URL that was last called. Can be `destination_url` or `azure_oauth_client_credentials_url`
 * `last_http_call_success` (boolean): Was the last HTTP call made successful?
 * `last_http_call_response_code` (int64): Last HTTP Call Response Code
@@ -162,6 +166,7 @@ await SiemHttpDestination.create({
   'public_hosting_request_send_enabled': true,
   'email_send_enabled': true,
   'exavault_api_request_send_enabled': true,
+  'settings_change_send_enabled': true,
   'destination_type': "example",
   'destination_url': "example",
 })
@@ -195,6 +200,7 @@ await SiemHttpDestination.create({
 * `public_hosting_request_send_enabled` (boolean): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (boolean): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (boolean): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (boolean): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Required - Destination Type
 * `destination_url` (string): Required - Destination Url
 
@@ -226,6 +232,7 @@ await SiemHttpDestination.sendTestEntry({
   'public_hosting_request_send_enabled': true,
   'email_send_enabled': true,
   'exavault_api_request_send_enabled': true,
+  'settings_change_send_enabled': true,
 })
 ```
 
@@ -260,6 +267,7 @@ await SiemHttpDestination.sendTestEntry({
 * `public_hosting_request_send_enabled` (boolean): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (boolean): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (boolean): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (boolean): Whether or not sending is enabled for settings_change logs.
 
 ---
 
@@ -288,6 +296,7 @@ await siem_http_destination.update({
   'public_hosting_request_send_enabled': true,
   'email_send_enabled': true,
   'exavault_api_request_send_enabled': true,
+  'settings_change_send_enabled': true,
   'destination_type': "example",
   'destination_url': "example",
 })
@@ -321,6 +330,7 @@ await siem_http_destination.update({
 * `public_hosting_request_send_enabled` (boolean): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (boolean): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (boolean): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (boolean): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Destination Type
 * `destination_url` (string): Destination Url
 
@@ -368,6 +378,8 @@ await siem_http_destination.update({
   "email_entries_sent": 1,
   "exavault_api_request_send_enabled": true,
   "exavault_api_request_entries_sent": 1,
+  "settings_change_send_enabled": true,
+  "settings_change_entries_sent": 1,
   "last_http_call_target_type": "destination_url",
   "last_http_call_success": true,
   "last_http_call_response_code": 1,

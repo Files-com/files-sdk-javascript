@@ -28,17 +28,17 @@ class SettingsChange {
 
   isLoaded = () => !!this.attributes.id
 
+  // int64 # The API key id responsible for this change.
+  getApiKeyId = () => this.attributes.api_key_id
+
   // array(string) # Markdown-formatted change messages.
   getChanges = () => this.attributes.changes
 
-  // date-time # The time this change was made
+  // date-time # The time this change was made.
   getCreatedAt = () => this.attributes.created_at
 
-  // int64 # The user id responsible for this change
+  // int64 # The user id responsible for this change.
   getUserId = () => this.attributes.user_id
-
-  // int64 # The API key id responsible for this change
-  getApiKeyId = () => this.attributes.api_key_id
 
   // boolean # true if this change was performed by Files.com support.
   getUserIsFilesSupport = () => this.attributes.user_is_files_support
@@ -46,7 +46,7 @@ class SettingsChange {
   // boolean # true if this change was performed by a user on a parent site.
   getUserIsFromParentSite = () => this.attributes.user_is_from_parent_site
 
-  // string # The username of the user responsible for this change
+  // string # The username of the user responsible for this change.
   getUsername = () => this.attributes.username
 
   // Parameters:
