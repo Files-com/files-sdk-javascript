@@ -24,7 +24,6 @@
   "username": "user",
   "google_cloud_storage_bucket": "my-bucket",
   "google_cloud_storage_project_id": "my-project",
-  "google_cloud_storage_region": "us-east-1",
   "google_cloud_storage_s3_compatible_access_key": "example",
   "backblaze_b2_s3_endpoint": "s3.us-west-001.backblazeb2.com",
   "backblaze_b2_bucket": "my-bucket",
@@ -86,7 +85,6 @@
 * `username` (string): Remote server username.  Not needed for S3 buckets.
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `backblaze_b2_s3_endpoint` (string): Backblaze B2 Cloud Storage: S3 Endpoint
 * `backblaze_b2_bucket` (string): Backblaze B2 Cloud Storage: Bucket name
@@ -218,7 +216,6 @@ await RemoteServer.create({
   'files_agent_version': "example",
   'google_cloud_storage_bucket': "my-bucket",
   'google_cloud_storage_project_id': "my-project",
-  'google_cloud_storage_region': "us-east-1",
   'google_cloud_storage_s3_compatible_access_key': "example",
   'hostname': "remote-server.com",
   'linode_access_key': "example",
@@ -294,7 +291,6 @@ await RemoteServer.create({
 * `files_agent_version` (string): Files Agent version
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `hostname` (string): Hostname or IP address
 * `linode_access_key` (string): Linode: Access Key
@@ -422,7 +418,6 @@ await remote_server.update({
   'files_agent_version': "example",
   'google_cloud_storage_bucket': "my-bucket",
   'google_cloud_storage_project_id': "my-project",
-  'google_cloud_storage_region': "us-east-1",
   'google_cloud_storage_s3_compatible_access_key': "example",
   'hostname': "remote-server.com",
   'linode_access_key': "example",
@@ -498,7 +493,6 @@ await remote_server.update({
 * `files_agent_version` (string): Files Agent version
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `hostname` (string): Hostname or IP address
 * `linode_access_key` (string): Linode: Access Key
@@ -551,7 +545,6 @@ await remote_server.update({
   "username": "user",
   "google_cloud_storage_bucket": "my-bucket",
   "google_cloud_storage_project_id": "my-project",
-  "google_cloud_storage_region": "us-east-1",
   "google_cloud_storage_s3_compatible_access_key": "example",
   "backblaze_b2_s3_endpoint": "s3.us-west-001.backblazeb2.com",
   "backblaze_b2_bucket": "my-bucket",

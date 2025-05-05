@@ -168,13 +168,6 @@ class RemoteServer {
     this.attributes.google_cloud_storage_project_id = value
   }
 
-  // string # Google Cloud Storage: Region
-  getGoogleCloudStorageRegion = () => this.attributes.google_cloud_storage_region
-
-  setGoogleCloudStorageRegion = value => {
-    this.attributes.google_cloud_storage_region = value
-  }
-
   // string # Google Cloud Storage: S3-compatible Access Key.
   getGoogleCloudStorageS3CompatibleAccessKey = () => this.attributes.google_cloud_storage_s3_compatible_access_key
 
@@ -710,7 +703,6 @@ class RemoteServer {
   //   files_agent_version - string - Files Agent version
   //   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
   //   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
-  //   google_cloud_storage_region - string - Google Cloud Storage: Region
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   hostname - string - Hostname or IP address
   //   linode_access_key - string - Linode: Access Key
@@ -902,10 +894,6 @@ class RemoteServer {
 
     if (params.google_cloud_storage_project_id && !isString(params.google_cloud_storage_project_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(params.google_cloud_storage_project_id)}`)
-    }
-
-    if (params.google_cloud_storage_region && !isString(params.google_cloud_storage_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_region must be of type String, received ${getType(params.google_cloud_storage_region)}`)
     }
 
     if (params.google_cloud_storage_s3_compatible_access_key && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
@@ -1179,7 +1167,6 @@ class RemoteServer {
   //   files_agent_version - string - Files Agent version
   //   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
   //   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
-  //   google_cloud_storage_region - string - Google Cloud Storage: Region
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   hostname - string - Hostname or IP address
   //   linode_access_key - string - Linode: Access Key
@@ -1358,10 +1345,6 @@ class RemoteServer {
 
     if (params.google_cloud_storage_project_id && !isString(params.google_cloud_storage_project_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_project_id must be of type String, received ${getType(params.google_cloud_storage_project_id)}`)
-    }
-
-    if (params.google_cloud_storage_region && !isString(params.google_cloud_storage_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_region must be of type String, received ${getType(params.google_cloud_storage_region)}`)
     }
 
     if (params.google_cloud_storage_s3_compatible_access_key && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
