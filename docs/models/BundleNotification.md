@@ -8,7 +8,7 @@
   "id": 1,
   "notify_on_registration": true,
   "notify_on_upload": true,
-  "user_id": 1
+  "notify_user_id": 1
 }
 ```
 
@@ -16,7 +16,7 @@
 * `id` (int64): Bundle Notification ID
 * `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
 * `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
-* `user_id` (int64): The id of the user to notify.
+* `notify_user_id` (int64): The id of the user to notify.
 
 ---
 
@@ -54,7 +54,7 @@ await BundleNotification.find(id)
 ```
 await BundleNotification.create({
   'bundle_id': 1,
-  'user_id': 1,
+  'notify_user_id': 1,
   'notify_on_registration': true,
   'notify_on_upload': true,
 })
@@ -64,7 +64,7 @@ await BundleNotification.create({
 ### Parameters
 
 * `bundle_id` (int64): Required - Bundle ID to notify on
-* `user_id` (int64): The id of the user to notify.
+* `notify_user_id` (int64): The id of the user to notify.
 * `notify_on_registration` (boolean): Triggers bundle notification when a registration action occurs for it.
 * `notify_on_upload` (boolean): Triggers bundle notification when a upload action occurs for it.
 
@@ -95,7 +95,7 @@ await bundle_notification.update({
   "id": 1,
   "notify_on_registration": true,
   "notify_on_upload": true,
-  "user_id": 1
+  "notify_user_id": 1
 }
 ```
 

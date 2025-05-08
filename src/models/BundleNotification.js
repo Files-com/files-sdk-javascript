@@ -57,10 +57,10 @@ class BundleNotification {
   }
 
   // int64 # The id of the user to notify.
-  getUserId = () => this.attributes.user_id
+  getNotifyUserId = () => this.attributes.notify_user_id
 
-  setUserId = value => {
-    this.attributes.user_id = value
+  setNotifyUserId = value => {
+    this.attributes.notify_user_id = value
   }
 
   // Parameters:
@@ -182,7 +182,7 @@ class BundleNotification {
 
   // Parameters:
   //   bundle_id (required) - int64 - Bundle ID to notify on
-  //   user_id - int64 - The id of the user to notify.
+  //   notify_user_id - int64 - The id of the user to notify.
   //   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
   //   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
   static create = async (params = {}, options = {}) => {
@@ -194,8 +194,8 @@ class BundleNotification {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    if (params.notify_user_id && !isInt(params.notify_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_user_id must be of type Int, received ${getType(params.notify_user_id)}`)
     }
 
     const response = await Api.sendRequest('/bundle_notifications', 'POST', params, options)
