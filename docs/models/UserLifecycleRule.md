@@ -73,6 +73,44 @@ await UserLifecycleRule.create({
 
 ---
 
+## Update User Lifecycle Rule
+
+```
+const user_lifecycle_rule = await UserLifecycleRule.find(id)
+
+await user_lifecycle_rule.update({
+  'authentication_method': "password",
+  'inactivity_days': 12,
+  'include_site_admins': true,
+  'include_folder_admins': true,
+})
+```
+
+### Parameters
+
+* `id` (int64): Required - User Lifecycle Rule ID.
+* `action` (string): Required - Action to take on inactive users (disable or delete)
+* `authentication_method` (string): Required - User authentication method for the rule
+* `inactivity_days` (int64): Required - Number of days of inactivity before the rule applies
+* `include_site_admins` (boolean): Include site admins in the rule
+* `include_folder_admins` (boolean): Include folder admins in the rule
+
+### Example Response
+
+```json
+{
+  "id": 1,
+  "authentication_method": "password",
+  "inactivity_days": 12,
+  "include_folder_admins": true,
+  "include_site_admins": true,
+  "action": "disable",
+  "site_id": 1
+}
+```
+
+---
+
 ## Delete User Lifecycle Rule
 
 ```

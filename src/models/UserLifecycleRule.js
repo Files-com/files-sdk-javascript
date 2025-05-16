@@ -77,6 +77,75 @@ class UserLifecycleRule {
     this.attributes.site_id = value
   }
 
+  // Parameters:
+  //   action (required) - string - Action to take on inactive users (disable or delete)
+  //   authentication_method (required) - string - User authentication method for the rule
+  //   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+  //   include_site_admins - boolean - Include site admins in the rule
+  //   include_folder_admins - boolean - Include folder admins in the rule
+  update = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.action && !isString(params.action)) {
+      throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
+    }
+
+    if (params.authentication_method && !isString(params.authentication_method)) {
+      throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.inactivity_days && !isInt(params.inactivity_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: inactivity_days must be of type Int, received ${getType(params.inactivity_days)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    if (!params.action) {
+      if (this.attributes.action) {
+        params.action = this.action
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: action')
+      }
+    }
+
+    if (!params.authentication_method) {
+      if (this.attributes.authentication_method) {
+        params.authentication_method = this.authentication_method
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: authentication_method')
+      }
+    }
+
+    if (!params.inactivity_days) {
+      if (this.attributes.inactivity_days) {
+        params.inactivity_days = this.inactivity_days
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: inactivity_days')
+      }
+    }
+
+    const response = await Api.sendRequest(`/user_lifecycle_rules/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
+
+    return new UserLifecycleRule(response?.data, this.options)
+  }
+
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -107,12 +176,14 @@ class UserLifecycleRule {
 
   save = async () => {
     if (this.attributes.id) {
-      throw new errors.NotImplementedError('The UserLifecycleRule object doesn\'t support updates.')
-    } else {
-      const newObject = await UserLifecycleRule.create(this.attributes, this.options)
+      const newObject = await this.update(this.attributes)
       this.attributes = { ...newObject.attributes }
       return true
     }
+
+    const newObject = await UserLifecycleRule.create(this.attributes, this.options)
+    this.attributes = { ...newObject.attributes }
+    return true
   }
 
   // Parameters:
