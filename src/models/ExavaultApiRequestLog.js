@@ -34,7 +34,7 @@ class ExavaultApiRequestLog {
   // string # Name of API Endpoint
   getEndpoint = () => this.attributes.endpoint
 
-  // string # Exavault API Version
+  // int64 # Exavault API Version
   getVersion = () => this.attributes.version
 
   // string # IP of requesting client
