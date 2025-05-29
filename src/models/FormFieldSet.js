@@ -77,6 +77,13 @@ class FormFieldSet {
     this.attributes.skip_company = value
   }
 
+  // boolean # Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration
+  getInUse = () => this.attributes.in_use
+
+  setInUse = value => {
+    this.attributes.in_use = value
+  }
+
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
   getUserId = () => this.attributes.user_id
 

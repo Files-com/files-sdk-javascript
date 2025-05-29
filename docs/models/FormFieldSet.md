@@ -30,7 +30,8 @@
   ],
   "skip_name": true,
   "skip_email": true,
-  "skip_company": true
+  "skip_company": true,
+  "in_use": true
 }
 ```
 
@@ -41,6 +42,7 @@
 * `skip_name` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
 * `skip_email` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
 * `skip_company` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
+* `in_use` (boolean): Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration
 * `user_id` (int64): User ID.  Provide a value of `0` to operate the current session's user.
 
 ---
@@ -153,7 +155,8 @@ await form_field_set.update({
   ],
   "skip_name": true,
   "skip_email": true,
-  "skip_company": true
+  "skip_company": true,
+  "in_use": true
 }
 ```
 
