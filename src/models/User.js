@@ -817,6 +817,8 @@ class User {
     return new User(response?.data, this.options)
   }
 
+  // Parameters:
+  //   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -829,6 +831,10 @@ class User {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.new_owner_id && !isInt(params.new_owner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: new_owner_id must be of type Int, received ${getType(params.new_owner_id)}`)
     }
 
     if (!params.id) {
