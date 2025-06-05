@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "always_serialize_jobs": true,
   "always_overwrite_size_matching_files": true,
   "automation": "create_folder",
   "deleted": true,
@@ -90,6 +91,7 @@
 ```
 
 * `id` (int64): Automation ID
+* `always_serialize_jobs` (boolean): Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
 * `always_overwrite_size_matching_files` (boolean): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
 * `automation` (string): Automation type
 * `deleted` (boolean): Indicates if the automation has been deleted.
@@ -179,6 +181,7 @@ await Automation.create({
   'schedule_times_of_day': ["7:30","11:30"],
   'schedule_time_zone': "Eastern Time (US & Canada)",
   'always_overwrite_size_matching_files': true,
+  'always_serialize_jobs': true,
   'description': "example",
   'disabled': true,
   'exclude_pattern': "path/to/exclude/*",
@@ -215,6 +218,7 @@ await Automation.create({
 * `schedule_times_of_day` (array(string)): If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`. Time zone for the schedule.
 * `always_overwrite_size_matching_files` (boolean): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
+* `always_serialize_jobs` (boolean): Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
 * `description` (string): Description for the this Automation.
 * `disabled` (boolean): If true, this automation will not run.
 * `exclude_pattern` (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
@@ -269,6 +273,7 @@ await automation.update({
   'schedule_times_of_day': ["7:30","11:30"],
   'schedule_time_zone': "Eastern Time (US & Canada)",
   'always_overwrite_size_matching_files': true,
+  'always_serialize_jobs': true,
   'description': "example",
   'disabled': true,
   'exclude_pattern': "path/to/exclude/*",
@@ -305,6 +310,7 @@ await automation.update({
 * `schedule_times_of_day` (array(string)): If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`. Time zone for the schedule.
 * `always_overwrite_size_matching_files` (boolean): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
+* `always_serialize_jobs` (boolean): Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
 * `description` (string): Description for the this Automation.
 * `disabled` (boolean): If true, this automation will not run.
 * `exclude_pattern` (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
@@ -328,6 +334,7 @@ await automation.update({
 ```json
 {
   "id": 1,
+  "always_serialize_jobs": true,
   "always_overwrite_size_matching_files": true,
   "automation": "create_folder",
   "deleted": true,
