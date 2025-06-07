@@ -59,6 +59,13 @@ class PublicKey {
     this.attributes.fingerprint_sha256 = value
   }
 
+  // date-time # Key's most recent login time via SFTP
+  getLastLoginAt = () => this.attributes.last_login_at
+
+  setLastLoginAt = value => {
+    this.attributes.last_login_at = value
+  }
+
   // string # Username of the user this public key is associated with
   getUsername = () => this.attributes.username
 
