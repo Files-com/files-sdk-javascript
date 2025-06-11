@@ -140,14 +140,14 @@ class Sync {
     this.attributes.trigger_file = value
   }
 
-  // array(array) # Array of glob patterns to include
+  // array(string) # Array of glob patterns to include
   getIncludePatterns = () => this.attributes.include_patterns
 
   setIncludePatterns = value => {
     this.attributes.include_patterns = value
   }
 
-  // array(array) # Array of glob patterns to exclude
+  // array(string) # Array of glob patterns to exclude
   getExcludePatterns = () => this.attributes.exclude_patterns
 
   setExcludePatterns = value => {

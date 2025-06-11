@@ -46,7 +46,7 @@ class SyncRun {
   // string # Log or summary body for this run
   getBody = () => this.attributes.body
 
-  // array(array) # Array of errors encountered during the run
+  // array(string) # Array of errors encountered during the run
   getEventErrors = () => this.attributes.event_errors
 
   // int64 # Total bytes synced in this run

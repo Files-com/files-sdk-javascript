@@ -105,6 +105,13 @@ class As2Partner {
     this.attributes.hex_public_certificate_serial = value
   }
 
+  // string # Public certificate used for message security.
+  getPublicCertificate = () => this.attributes.public_certificate
+
+  setPublicCertificate = value => {
+    this.attributes.public_certificate = value
+  }
+
   // string # MD5 hash of public certificate used for message security.
   getPublicCertificateMd5 = () => this.attributes.public_certificate_md5
 
@@ -152,13 +159,6 @@ class As2Partner {
 
   setHttpAuthPassword = value => {
     this.attributes.http_auth_password = value
-  }
-
-  // string # Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
-  getPublicCertificate = () => this.attributes.public_certificate
-
-  setPublicCertificate = value => {
-    this.attributes.public_certificate = value
   }
 
   // Parameters:

@@ -70,6 +70,13 @@ class As2Station {
     this.attributes.public_certificate_md5 = value
   }
 
+  // string # Public certificate used for message security.
+  getPublicCertificate = () => this.attributes.public_certificate
+
+  setPublicCertificate = value => {
+    this.attributes.public_certificate = value
+  }
+
   // string # MD5 hash of private key used for message security.
   getPrivateKeyMd5 = () => this.attributes.private_key_md5
 
@@ -117,13 +124,6 @@ class As2Station {
 
   setPrivateKeyPasswordMd5 = value => {
     this.attributes.private_key_password_md5 = value
-  }
-
-  // string
-  getPublicCertificate = () => this.attributes.public_certificate
-
-  setPublicCertificate = value => {
-    this.attributes.public_certificate = value
   }
 
   // string
