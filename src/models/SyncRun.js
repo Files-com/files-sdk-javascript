@@ -64,7 +64,7 @@ class SyncRun {
   // int64 # Number of files successfully synced
   getSuccessfulFiles = () => this.attributes.successful_files
 
-  // float # Total runtime in seconds
+  // double # Total runtime in seconds
   getRuntime = () => this.attributes.runtime
 
   // string # S3 path to the main log file
