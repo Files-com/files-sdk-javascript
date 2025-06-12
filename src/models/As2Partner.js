@@ -84,11 +84,18 @@ class As2Partner {
     this.attributes.default_mime_type = value
   }
 
-  // string # How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+  // string # How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates. `auto`: Automatically set the correct value for this setting based on next mdn received.
   getMdnValidationLevel = () => this.attributes.mdn_validation_level
 
   setMdnValidationLevel = value => {
     this.attributes.mdn_validation_level = value
+  }
+
+  // string # Should Files.com require signatures on incoming AS2 messages?  `normal`: require that incoming messages are signed with a valid matching signature. `none`: Unsigned incoming messages are allowed. `auto`: Automatically set the correct value for this setting based on next message received.
+  getSignatureValidationLevel = () => this.attributes.signature_validation_level
+
+  setSignatureValidationLevel = value => {
+    this.attributes.signature_validation_level = value
   }
 
   // boolean # If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
@@ -165,7 +172,8 @@ class As2Partner {
   //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   //   http_auth_username - string - Username to send to server for HTTP Authentication.
   //   http_auth_password - string - Password to send to server for HTTP Authentication.
-  //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+  //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates. `auto`: Automatically set the correct value for this setting based on next mdn received.
+  //   signature_validation_level - string - Should Files.com require signatures on incoming AS2 messages?  `normal`: require that incoming messages are signed with a valid matching signature. `none`: Unsigned incoming messages are allowed. `auto`: Automatically set the correct value for this setting based on next message received.
   //   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS? (This only applies to Outgoing AS2 message from Files.com to a Partner.)
   //   default_mime_type - string - Default mime type of the file attached to the encrypted message
   //   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
@@ -196,6 +204,10 @@ class As2Partner {
 
     if (params.mdn_validation_level && !isString(params.mdn_validation_level)) {
       throw new errors.InvalidParameterError(`Bad parameter: mdn_validation_level must be of type String, received ${getType(params.mdn_validation_level)}`)
+    }
+
+    if (params.signature_validation_level && !isString(params.signature_validation_level)) {
+      throw new errors.InvalidParameterError(`Bad parameter: signature_validation_level must be of type String, received ${getType(params.signature_validation_level)}`)
     }
 
     if (params.server_certificate && !isString(params.server_certificate)) {
@@ -320,7 +332,8 @@ class As2Partner {
   //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   //   http_auth_username - string - Username to send to server for HTTP Authentication.
   //   http_auth_password - string - Password to send to server for HTTP Authentication.
-  //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+  //   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates. `auto`: Automatically set the correct value for this setting based on next mdn received.
+  //   signature_validation_level - string - Should Files.com require signatures on incoming AS2 messages?  `normal`: require that incoming messages are signed with a valid matching signature. `none`: Unsigned incoming messages are allowed. `auto`: Automatically set the correct value for this setting based on next message received.
   //   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS? (This only applies to Outgoing AS2 message from Files.com to a Partner.)
   //   default_mime_type - string - Default mime type of the file attached to the encrypted message
   //   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
@@ -355,6 +368,10 @@ class As2Partner {
 
     if (params.mdn_validation_level && !isString(params.mdn_validation_level)) {
       throw new errors.InvalidParameterError(`Bad parameter: mdn_validation_level must be of type String, received ${getType(params.mdn_validation_level)}`)
+    }
+
+    if (params.signature_validation_level && !isString(params.signature_validation_level)) {
+      throw new errors.InvalidParameterError(`Bad parameter: signature_validation_level must be of type String, received ${getType(params.signature_validation_level)}`)
     }
 
     if (params.server_certificate && !isString(params.server_certificate)) {
