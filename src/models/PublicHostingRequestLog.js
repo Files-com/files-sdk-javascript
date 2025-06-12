@@ -31,29 +31,35 @@ class PublicHostingRequestLog {
   // date-time # Start Time of Action. Deprecrated: Use created_at.
   getTimestamp = () => this.attributes.timestamp
 
-  // string # IP Address of Public Hosting Client
+  // string # IP Address of Public Hosting Client.
   getRemoteIp = () => this.attributes.remote_ip
 
-  // string # IP Address of Public Hosting Server
+  // string # IP Address of Public Hosting Server.
   getServerIp = () => this.attributes.server_ip
 
-  // string # HTTP Request Hostname
+  // string # HTTP Request Hostname.
   getHostname = () => this.attributes.hostname
 
   // string # HTTP Request Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
-  // int64 # HTTP Response Code
+  // int64 # HTTP Response Code.
   getResponseCode = () => this.attributes.responseCode
 
   // boolean # Whether SFTP Action was successful.
   getSuccess = () => this.attributes.success
 
-  // int64 # Duration (in milliseconds)
+  // int64 # Duration (in milliseconds).
   getDurationMs = () => this.attributes.duration_ms
 
-  // date-time # Start Time of Action
+  // date-time # Start Time of Action.
   getCreatedAt = () => this.attributes.created_at
+
+  // int64 # The number of bytes transferred for file downloads.
+  getBytesTransferred = () => this.attributes.bytes_transferred
+
+  // string # Method of the HTTP call.
+  getHttpMethod = () => this.attributes.http_method
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
