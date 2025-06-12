@@ -119,13 +119,6 @@ class Sync {
     this.attributes.disabled = value
   }
 
-  // string # If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
-  getInterval = () => this.attributes.interval
-
-  setInterval = value => {
-    this.attributes.interval = value
-  }
-
   // string # Trigger type: daily, custom_schedule, or manual
   getTrigger = () => this.attributes.trigger
 
@@ -167,6 +160,13 @@ class Sync {
     this.attributes.sync_interval_minutes = value
   }
 
+  // string # If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+  getInterval = () => this.attributes.interval
+
+  setInterval = value => {
+    this.attributes.interval = value
+  }
+
   // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   getRecurringDay = () => this.attributes.recurring_day
 
@@ -206,7 +206,7 @@ class Sync {
   //   keep_after_copy - boolean - Keep files after copying?
   //   delete_empty_folders - boolean - Delete empty folders after sync?
   //   disabled - boolean - Is this sync disabled?
-  //   interval - int64 - Interval in minutes for sync (if scheduled)
+  //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -251,8 +251,8 @@ class Sync {
       throw new errors.InvalidParameterError(`Bad parameter: dest_remote_server_id must be of type Int, received ${getType(params.dest_remote_server_id)}`)
     }
 
-    if (params.interval && !isInt(params.interval)) {
-      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type Int, received ${getType(params.interval)}`)
+    if (params.interval && !isString(params.interval)) {
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
@@ -388,7 +388,7 @@ class Sync {
   //   keep_after_copy - boolean - Keep files after copying?
   //   delete_empty_folders - boolean - Delete empty folders after sync?
   //   disabled - boolean - Is this sync disabled?
-  //   interval - int64 - Interval in minutes for sync (if scheduled)
+  //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -420,8 +420,8 @@ class Sync {
       throw new errors.InvalidParameterError(`Bad parameter: dest_remote_server_id must be of type Int, received ${getType(params.dest_remote_server_id)}`)
     }
 
-    if (params.interval && !isInt(params.interval)) {
-      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type Int, received ${getType(params.interval)}`)
+    if (params.interval && !isString(params.interval)) {
+      throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
