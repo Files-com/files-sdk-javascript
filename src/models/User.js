@@ -486,6 +486,13 @@ class User {
     this.attributes.password_expire_at = value
   }
 
+  // boolean # Does this user have any associations that can be reassigned on delete?
+  getHasReassignableAssociations = () => this.attributes.has_reassignable_associations
+
+  setHasReassignableAssociations = value => {
+    this.attributes.has_reassignable_associations = value
+  }
+
   // file # An image file for your user avatar.
   getAvatarFile = () => this.attributes.avatar_file
 
