@@ -154,6 +154,21 @@ await Sync.createMigrateTo
 
 ---
 
+## Manually Run Sync
+
+```
+const sync = await Sync.find(id)
+
+await sync.manual_run()
+```
+
+### Parameters
+
+* `id` (int64): Required - Sync ID.
+
+
+---
+
 ## Update Sync
 
 ```

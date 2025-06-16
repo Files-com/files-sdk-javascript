@@ -195,6 +195,32 @@ class Sync {
     this.attributes.schedule_time_zone = value
   }
 
+  // Manually Run Sync
+  manualRun = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    await Api.sendRequest(`/syncs/${encodeURIComponent(params.id)}/manual_run`, 'POST', params, this.options)
+  }
+
   // Parameters:
   //   name - string - Name for this sync job
   //   description - string - Description for this sync job
