@@ -67,11 +67,8 @@ class SyncRun {
   // double # Total runtime in seconds
   getRuntime = () => this.attributes.runtime
 
-  // string # S3 path to the main log file
-  getS3BodyPath = () => this.attributes.s3_body_path
-
-  // string # S3 path to the internal log file
-  getS3InternalBodyPath = () => this.attributes.s3_internal_body_path
+  // string # Link to external log file.
+  getLogUrl = () => this.attributes.log_url
 
   // date-time # When this run was completed
   getCompletedAt = () => this.attributes.completed_at
