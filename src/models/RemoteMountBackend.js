@@ -63,6 +63,13 @@ class RemoteMountBackend {
     this.attributes.health_check_type = value
   }
 
+  // int64 # Unique identifier for this backend.
+  getId = () => this.attributes.id
+
+  setId = value => {
+    this.attributes.id = value
+  }
+
   // int64 # Interval in seconds between health checks.
   getInterval = () => this.attributes.interval
 
@@ -131,13 +138,6 @@ class RemoteMountBackend {
 
   setUndergoingMaintenance = value => {
     this.attributes.undergoing_maintenance = value
-  }
-
-  // int64 # Remote Mount Backend ID.
-  getId = () => this.attributes.id
-
-  setId = value => {
-    this.attributes.id = value
   }
 
   // Reset backend status to healthy
@@ -310,6 +310,7 @@ class RemoteMountBackend {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `remote_server_mount_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
