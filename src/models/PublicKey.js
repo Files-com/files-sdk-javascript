@@ -59,11 +59,32 @@ class PublicKey {
     this.attributes.fingerprint_sha256 = value
   }
 
+  // string # Can be invalid, not_generated, generating, complete
+  getStatus = () => this.attributes.status
+
+  setStatus = value => {
+    this.attributes.status = value
+  }
+
   // date-time # Key's most recent login time via SFTP
   getLastLoginAt = () => this.attributes.last_login_at
 
   setLastLoginAt = value => {
     this.attributes.last_login_at = value
+  }
+
+  // string # Private key generated for the user.
+  getPrivateKey = () => this.attributes.private_key
+
+  setPrivateKey = value => {
+    this.attributes.private_key = value
+  }
+
+  // string # Public key generated for the user.
+  getPublicKey = () => this.attributes.public_key
+
+  setPublicKey = value => {
+    this.attributes.public_key = value
   }
 
   // string # Username of the user this public key is associated with
@@ -80,11 +101,32 @@ class PublicKey {
     this.attributes.user_id = value
   }
 
-  // string # Actual contents of SSH key.
-  getPublicKey = () => this.attributes.public_key
+  // boolean # If true, generate a new SSH key pair. Can not be used with `public_key`
+  getGenerateKeypair = () => this.attributes.generate_keypair
 
-  setPublicKey = value => {
-    this.attributes.public_key = value
+  setGenerateKeypair = value => {
+    this.attributes.generate_keypair = value
+  }
+
+  // string # Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGeneratePrivateKeyPassword = () => this.attributes.generate_private_key_password
+
+  setGeneratePrivateKeyPassword = value => {
+    this.attributes.generate_private_key_password = value
+  }
+
+  // string # Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGenerateAlgorithm = () => this.attributes.generate_algorithm
+
+  setGenerateAlgorithm = value => {
+    this.attributes.generate_algorithm = value
+  }
+
+  // int64 # Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGenerateLength = () => this.attributes.generate_length
+
+  setGenerateLength = value => {
+    this.attributes.generate_length = value
   }
 
   // Parameters:
@@ -226,14 +268,14 @@ class PublicKey {
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   title (required) - string - Internal reference for key.
-  //   public_key (required) - string - Actual contents of SSH key.
+  //   public_key - string - Actual contents of SSH key.
+  //   generate_keypair - boolean - If true, generate a new SSH key pair. Can not be used with `public_key`
+  //   generate_private_key_password - string - Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  //   generate_algorithm - string - Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  //   generate_length - int64 - Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
   static create = async (params = {}, options = {}) => {
     if (!params.title) {
       throw new errors.MissingParameterError('Parameter missing: title')
-    }
-
-    if (!params.public_key) {
-      throw new errors.MissingParameterError('Parameter missing: public_key')
     }
 
     if (params.user_id && !isInt(params.user_id)) {
@@ -246,6 +288,18 @@ class PublicKey {
 
     if (params.public_key && !isString(params.public_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params.public_key)}`)
+    }
+
+    if (params.generate_private_key_password && !isString(params.generate_private_key_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_private_key_password must be of type String, received ${getType(params.generate_private_key_password)}`)
+    }
+
+    if (params.generate_algorithm && !isString(params.generate_algorithm)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_algorithm must be of type String, received ${getType(params.generate_algorithm)}`)
+    }
+
+    if (params.generate_length && !isInt(params.generate_length)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_length must be of type Int, received ${getType(params.generate_length)}`)
     }
 
     const response = await Api.sendRequest('/public_keys', 'POST', params, options)

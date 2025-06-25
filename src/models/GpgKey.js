@@ -77,6 +77,34 @@ class GpgKey {
     this.attributes.private_key_password = value
   }
 
+  // string # Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGenerateExpiresAt = () => this.attributes.generate_expires_at
+
+  setGenerateExpiresAt = value => {
+    this.attributes.generate_expires_at = value
+  }
+
+  // boolean # If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+  getGenerateKeypair = () => this.attributes.generate_keypair
+
+  setGenerateKeypair = value => {
+    this.attributes.generate_keypair = value
+  }
+
+  // string # Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGenerateFullName = () => this.attributes.generate_full_name
+
+  setGenerateFullName = value => {
+    this.attributes.generate_full_name = value
+  }
+
+  // string # Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  getGenerateEmail = () => this.attributes.generate_email
+
+  setGenerateEmail = value => {
+    this.attributes.generate_email = value
+  }
+
   // Parameters:
   //   public_key - string - Your GPG public key
   //   private_key - string - Your GPG private key.
@@ -222,6 +250,10 @@ class GpgKey {
   //   private_key - string - Your GPG private key.
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
   //   name (required) - string - Your GPG key name.
+  //   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  //   generate_keypair - boolean - If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+  //   generate_full_name - string - Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+  //   generate_email - string - Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
@@ -245,6 +277,18 @@ class GpgKey {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.generate_expires_at && !isString(params.generate_expires_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_expires_at must be of type String, received ${getType(params.generate_expires_at)}`)
+    }
+
+    if (params.generate_full_name && !isString(params.generate_full_name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_full_name must be of type String, received ${getType(params.generate_full_name)}`)
+    }
+
+    if (params.generate_email && !isString(params.generate_email)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_email must be of type String, received ${getType(params.generate_email)}`)
     }
 
     const response = await Api.sendRequest('/gpg_keys', 'POST', params, options)
