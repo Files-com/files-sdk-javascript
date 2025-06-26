@@ -195,6 +195,13 @@ class Sync {
     this.attributes.schedule_time_zone = value
   }
 
+  // string # If trigger is `custom_schedule`, the Automation will check if there is a formal, observed holiday for the region, and if so, it will not run.
+  getHolidayRegion = () => this.attributes.holiday_region
+
+  setHolidayRegion = value => {
+    this.attributes.holiday_region = value
+  }
+
   // Manually Run Sync
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {

@@ -294,6 +294,13 @@ class Automation {
     this.attributes.webhook_url = value
   }
 
+  // string # If trigger is `custom_schedule`, the Automation will check if there is a formal, observed holiday for the region, and if so, it will not run.
+  getHolidayRegion = () => this.attributes.holiday_region
+
+  setHolidayRegion = value => {
+    this.attributes.holiday_region = value
+  }
+
   // Manually Run Automation
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {
