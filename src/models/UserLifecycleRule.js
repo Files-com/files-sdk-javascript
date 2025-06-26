@@ -70,6 +70,13 @@ class UserLifecycleRule {
     this.attributes.action = value
   }
 
+  // string # State of the users to apply the rule to (inactive or disabled)
+  getUserState = () => this.attributes.user_state
+
+  setUserState = value => {
+    this.attributes.user_state = value
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -83,6 +90,7 @@ class UserLifecycleRule {
   //   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
+  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -107,6 +115,10 @@ class UserLifecycleRule {
 
     if (params.inactivity_days && !isInt(params.inactivity_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: inactivity_days must be of type Int, received ${getType(params.inactivity_days)}`)
+    }
+
+    if (params.user_state && !isString(params.user_state)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
     }
 
     if (!params.id) {
@@ -237,6 +249,7 @@ class UserLifecycleRule {
   //   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
+  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   static create = async (params = {}, options = {}) => {
     if (!params.action) {
       throw new errors.MissingParameterError('Parameter missing: action')
@@ -260,6 +273,10 @@ class UserLifecycleRule {
 
     if (params.inactivity_days && !isInt(params.inactivity_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: inactivity_days must be of type Int, received ${getType(params.inactivity_days)}`)
+    }
+
+    if (params.user_state && !isString(params.user_state)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
     }
 
     const response = await Api.sendRequest('/user_lifecycle_rules', 'POST', params, options)
