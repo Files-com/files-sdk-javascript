@@ -167,9 +167,6 @@ class RemoteMountBackend {
   }
 
   // Parameters:
-  //   canary_file_path (required) - string - Path to the canary file used for health checks.
-  //   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
-  //   remote_server_id (required) - int64 - The remote server that this backend is associated with.
   //   enabled - boolean - True if this backend is enabled.
   //   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
   //   health_check_enabled - boolean - True if health checks are enabled for this backend.
@@ -180,6 +177,8 @@ class RemoteMountBackend {
   //   priority - int64 - Priority of this backend.
   //   remote_path - string - Path on the remote server to treat as the root of this mount.
   //   rise - int64 - Number of consecutive successes before considering the backend healthy.
+  //   canary_file_path - string - Path to the canary file used for health checks.
+  //   remote_server_id - int64 - The remote server that this backend is associated with.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -192,18 +191,6 @@ class RemoteMountBackend {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.canary_file_path && !isString(params.canary_file_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: canary_file_path must be of type String, received ${getType(params.canary_file_path)}`)
-    }
-
-    if (params.remote_server_mount_id && !isInt(params.remote_server_mount_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: remote_server_mount_id must be of type Int, received ${getType(params.remote_server_mount_id)}`)
-    }
-
-    if (params.remote_server_id && !isInt(params.remote_server_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: remote_server_id must be of type Int, received ${getType(params.remote_server_id)}`)
     }
 
     if (params.fall && !isInt(params.fall)) {
@@ -230,35 +217,19 @@ class RemoteMountBackend {
       throw new errors.InvalidParameterError(`Bad parameter: rise must be of type Int, received ${getType(params.rise)}`)
     }
 
+    if (params.canary_file_path && !isString(params.canary_file_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: canary_file_path must be of type String, received ${getType(params.canary_file_path)}`)
+    }
+
+    if (params.remote_server_id && !isInt(params.remote_server_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: remote_server_id must be of type Int, received ${getType(params.remote_server_id)}`)
+    }
+
     if (!params.id) {
       if (this.attributes.id) {
         params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    if (!params.canary_file_path) {
-      if (this.attributes.canary_file_path) {
-        params.canary_file_path = this.canary_file_path
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: canary_file_path')
-      }
-    }
-
-    if (!params.remote_server_mount_id) {
-      if (this.attributes.remote_server_mount_id) {
-        params.remote_server_mount_id = this.remote_server_mount_id
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: remote_server_mount_id')
-      }
-    }
-
-    if (!params.remote_server_id) {
-      if (this.attributes.remote_server_id) {
-        params.remote_server_id = this.remote_server_id
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: remote_server_id')
       }
     }
 
@@ -354,9 +325,6 @@ class RemoteMountBackend {
     RemoteMountBackend.find(id, params, options)
 
   // Parameters:
-  //   canary_file_path (required) - string - Path to the canary file used for health checks.
-  //   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
-  //   remote_server_id (required) - int64 - The remote server that this backend is associated with.
   //   enabled - boolean - True if this backend is enabled.
   //   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
   //   health_check_enabled - boolean - True if health checks are enabled for this backend.
@@ -367,6 +335,9 @@ class RemoteMountBackend {
   //   priority - int64 - Priority of this backend.
   //   remote_path - string - Path on the remote server to treat as the root of this mount.
   //   rise - int64 - Number of consecutive successes before considering the backend healthy.
+  //   canary_file_path (required) - string - Path to the canary file used for health checks.
+  //   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
+  //   remote_server_id (required) - int64 - The remote server that this backend is associated with.
   static create = async (params = {}, options = {}) => {
     if (!params.canary_file_path) {
       throw new errors.MissingParameterError('Parameter missing: canary_file_path')
@@ -378,18 +349,6 @@ class RemoteMountBackend {
 
     if (!params.remote_server_id) {
       throw new errors.MissingParameterError('Parameter missing: remote_server_id')
-    }
-
-    if (params.canary_file_path && !isString(params.canary_file_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: canary_file_path must be of type String, received ${getType(params.canary_file_path)}`)
-    }
-
-    if (params.remote_server_mount_id && !isInt(params.remote_server_mount_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: remote_server_mount_id must be of type Int, received ${getType(params.remote_server_mount_id)}`)
-    }
-
-    if (params.remote_server_id && !isInt(params.remote_server_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: remote_server_id must be of type Int, received ${getType(params.remote_server_id)}`)
     }
 
     if (params.fall && !isInt(params.fall)) {
@@ -414,6 +373,18 @@ class RemoteMountBackend {
 
     if (params.rise && !isInt(params.rise)) {
       throw new errors.InvalidParameterError(`Bad parameter: rise must be of type Int, received ${getType(params.rise)}`)
+    }
+
+    if (params.canary_file_path && !isString(params.canary_file_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: canary_file_path must be of type String, received ${getType(params.canary_file_path)}`)
+    }
+
+    if (params.remote_server_mount_id && !isInt(params.remote_server_mount_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: remote_server_mount_id must be of type Int, received ${getType(params.remote_server_mount_id)}`)
+    }
+
+    if (params.remote_server_id && !isInt(params.remote_server_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: remote_server_id must be of type Int, received ${getType(params.remote_server_id)}`)
     }
 
     const response = await Api.sendRequest('/remote_mount_backends', 'POST', params, options)

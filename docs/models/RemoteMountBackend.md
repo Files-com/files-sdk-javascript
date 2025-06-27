@@ -74,9 +74,6 @@ await RemoteMountBackend.find(id)
 
 ```
 await RemoteMountBackend.create({
-  'canary_file_path': "backend1.txt",
-  'remote_server_mount_id': 1,
-  'remote_server_id': 1,
   'enabled': true,
   'fall': 1,
   'health_check_enabled': true,
@@ -87,15 +84,15 @@ await RemoteMountBackend.create({
   'priority': 1,
   'remote_path': "/path/on/remote",
   'rise': 1,
+  'canary_file_path': "backend1.txt",
+  'remote_server_mount_id': 1,
+  'remote_server_id': 1,
 })
 ```
 
 
 ### Parameters
 
-* `canary_file_path` (string): Required - Path to the canary file used for health checks.
-* `remote_server_mount_id` (int64): Required - The mount ID of the Remote Server Mount that this backend is associated with.
-* `remote_server_id` (int64): Required - The remote server that this backend is associated with.
 * `enabled` (boolean): True if this backend is enabled.
 * `fall` (int64): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` (boolean): True if health checks are enabled for this backend.
@@ -106,6 +103,9 @@ await RemoteMountBackend.create({
 * `priority` (int64): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (int64): Number of consecutive successes before considering the backend healthy.
+* `canary_file_path` (string): Required - Path to the canary file used for health checks.
+* `remote_server_mount_id` (int64): Required - The mount ID of the Remote Server Mount that this backend is associated with.
+* `remote_server_id` (int64): Required - The remote server that this backend is associated with.
 
 ---
 
@@ -130,9 +130,6 @@ await remote_mount_backend.reset_status()
 const remote_mount_backend = await RemoteMountBackend.find(id)
 
 await remote_mount_backend.update({
-  'canary_file_path': "backend1.txt",
-  'remote_server_mount_id': 1,
-  'remote_server_id': 1,
   'enabled': true,
   'fall': 1,
   'health_check_enabled': true,
@@ -143,15 +140,14 @@ await remote_mount_backend.update({
   'priority': 1,
   'remote_path': "/path/on/remote",
   'rise': 1,
+  'canary_file_path': "backend1.txt",
+  'remote_server_id': 1,
 })
 ```
 
 ### Parameters
 
 * `id` (int64): Required - Remote Mount Backend ID.
-* `canary_file_path` (string): Required - Path to the canary file used for health checks.
-* `remote_server_mount_id` (int64): Required - The mount ID of the Remote Server Mount that this backend is associated with.
-* `remote_server_id` (int64): Required - The remote server that this backend is associated with.
 * `enabled` (boolean): True if this backend is enabled.
 * `fall` (int64): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` (boolean): True if health checks are enabled for this backend.
@@ -162,6 +158,8 @@ await remote_mount_backend.update({
 * `priority` (int64): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (int64): Number of consecutive successes before considering the backend healthy.
+* `canary_file_path` (string): Path to the canary file used for health checks.
+* `remote_server_id` (int64): The remote server that this backend is associated with.
 
 ### Example Response
 
