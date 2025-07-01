@@ -59,7 +59,7 @@ class PublicKey {
     this.attributes.fingerprint_sha256 = value
   }
 
-  // string # Can be invalid, not_generated, generating, complete
+  // string # Only returned when generating keys. Can be invalid, not_generated, generating, complete
   getStatus = () => this.attributes.status
 
   setStatus = value => {
@@ -73,14 +73,14 @@ class PublicKey {
     this.attributes.last_login_at = value
   }
 
-  // string # Private key generated for the user.
+  // string # Only returned when generating keys. Private key generated for the user.
   getPrivateKey = () => this.attributes.private_key
 
   setPrivateKey = value => {
     this.attributes.private_key = value
   }
 
-  // string # Public key generated for the user.
+  // string # Only returned when generating keys. Public key generated for the user.
   getPublicKey = () => this.attributes.public_key
 
   setPublicKey = value => {
