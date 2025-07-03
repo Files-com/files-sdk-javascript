@@ -85,9 +85,9 @@ class UserLifecycleRule {
   }
 
   // Parameters:
-  //   action (required) - string - Action to take on inactive users (disable or delete)
-  //   authentication_method (required) - string - User authentication method for the rule
-  //   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+  //   action - string - Action to take on inactive users (disable or delete)
+  //   authentication_method - string - User authentication method for the rule
+  //   inactivity_days - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
@@ -126,30 +126,6 @@ class UserLifecycleRule {
         params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    if (!params.action) {
-      if (this.attributes.action) {
-        params.action = this.action
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: action')
-      }
-    }
-
-    if (!params.authentication_method) {
-      if (this.attributes.authentication_method) {
-        params.authentication_method = this.authentication_method
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: authentication_method')
-      }
-    }
-
-    if (!params.inactivity_days) {
-      if (this.attributes.inactivity_days) {
-        params.inactivity_days = this.inactivity_days
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: inactivity_days')
       }
     }
 
@@ -244,25 +220,13 @@ class UserLifecycleRule {
     UserLifecycleRule.find(id, params, options)
 
   // Parameters:
-  //   action (required) - string - Action to take on inactive users (disable or delete)
-  //   authentication_method (required) - string - User authentication method for the rule
-  //   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+  //   action - string - Action to take on inactive users (disable or delete)
+  //   authentication_method - string - User authentication method for the rule
+  //   inactivity_days - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   static create = async (params = {}, options = {}) => {
-    if (!params.action) {
-      throw new errors.MissingParameterError('Parameter missing: action')
-    }
-
-    if (!params.authentication_method) {
-      throw new errors.MissingParameterError('Parameter missing: authentication_method')
-    }
-
-    if (!params.inactivity_days) {
-      throw new errors.MissingParameterError('Parameter missing: inactivity_days')
-    }
-
     if (params.action && !isString(params.action)) {
       throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
     }
