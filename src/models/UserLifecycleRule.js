@@ -77,6 +77,13 @@ class UserLifecycleRule {
     this.attributes.user_state = value
   }
 
+  // string # User Lifecycle Rule name
+  getName = () => this.attributes.name
+
+  setName = value => {
+    this.attributes.name = value
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -91,6 +98,7 @@ class UserLifecycleRule {
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   name - string - User Lifecycle Rule name
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -119,6 +127,10 @@ class UserLifecycleRule {
 
     if (params.user_state && !isString(params.user_state)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
     if (!params.id) {
@@ -226,6 +238,7 @@ class UserLifecycleRule {
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   name - string - User Lifecycle Rule name
   static create = async (params = {}, options = {}) => {
     if (params.action && !isString(params.action)) {
       throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
@@ -241,6 +254,10 @@ class UserLifecycleRule {
 
     if (params.user_state && !isString(params.user_state)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
     const response = await Api.sendRequest('/user_lifecycle_rules', 'POST', params, options)

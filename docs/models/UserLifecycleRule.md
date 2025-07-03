@@ -11,6 +11,7 @@
   "include_site_admins": true,
   "action": "disable",
   "user_state": "inactive",
+  "name": "password specific rules",
   "site_id": 1
 }
 ```
@@ -22,6 +23,7 @@
 * `include_site_admins` (boolean): Include site admins in the rule
 * `action` (string): Action to take on inactive users (disable or delete)
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 * `site_id` (int64): Site ID
 
 ---
@@ -62,6 +64,7 @@ await UserLifecycleRule.create({
   'include_site_admins': true,
   'include_folder_admins': true,
   'user_state': "inactive",
+  'name': "password specific rules",
 })
 ```
 
@@ -74,6 +77,7 @@ await UserLifecycleRule.create({
 * `include_site_admins` (boolean): Include site admins in the rule
 * `include_folder_admins` (boolean): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 
 ---
 
@@ -88,6 +92,7 @@ await user_lifecycle_rule.update({
   'include_site_admins': true,
   'include_folder_admins': true,
   'user_state': "inactive",
+  'name': "password specific rules",
 })
 ```
 
@@ -100,6 +105,7 @@ await user_lifecycle_rule.update({
 * `include_site_admins` (boolean): Include site admins in the rule
 * `include_folder_admins` (boolean): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 
 ### Example Response
 
@@ -112,6 +118,7 @@ await user_lifecycle_rule.update({
   "include_site_admins": true,
   "action": "disable",
   "user_state": "inactive",
+  "name": "password specific rules",
   "site_id": 1
 }
 ```
