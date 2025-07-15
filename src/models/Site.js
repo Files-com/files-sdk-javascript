@@ -436,11 +436,17 @@ class Site {
   // boolean # Show request access link for users without access?  Currently unused.
   getShowRequestAccessLink = () => this.attributes.show_request_access_link
 
-  // string # Custom site footer text
+  // string # Custom site footer text for authenticated pages
   getSiteFooter = () => this.attributes.site_footer
 
-  // string # Custom site header text
+  // string # Custom site header text for authenticated pages
   getSiteHeader = () => this.attributes.site_header
+
+  // string # Custom site footer text for public pages
+  getSitePublicFooter = () => this.attributes.site_public_footer
+
+  // string # Custom site header text for public pages
+  getSitePublicHeader = () => this.attributes.site_public_header
 
   // string # SMTP server hostname or IP
   getSmtpAddress = () => this.attributes.smtp_address
@@ -671,8 +677,10 @@ class Site {
   //   color2_link - string - Top bar link color
   //   color2_text - string - Page link and button color
   //   color2_top_text - string - Top bar text color
-  //   site_header - string - Custom site header text
-  //   site_footer - string - Custom site footer text
+  //   site_header - string - Custom site header text for authenticated pages
+  //   site_footer - string - Custom site footer text for authenticated pages
+  //   site_public_header - string - Custom site header text for public pages
+  //   site_public_footer - string - Custom site footer text for public pages
   //   login_help_text - string - Login help text
   //   use_dedicated_ips_for_smtp - boolean - If using custom SMTP, should we use dedicated IPs to deliver emails?
   //   smtp_address - string - SMTP server hostname or IP
@@ -887,6 +895,14 @@ class Site {
 
     if (params.site_footer && !isString(params.site_footer)) {
       throw new errors.InvalidParameterError(`Bad parameter: site_footer must be of type String, received ${getType(params.site_footer)}`)
+    }
+
+    if (params.site_public_header && !isString(params.site_public_header)) {
+      throw new errors.InvalidParameterError(`Bad parameter: site_public_header must be of type String, received ${getType(params.site_public_header)}`)
+    }
+
+    if (params.site_public_footer && !isString(params.site_public_footer)) {
+      throw new errors.InvalidParameterError(`Bad parameter: site_public_footer must be of type String, received ${getType(params.site_public_footer)}`)
     }
 
     if (params.login_help_text && !isString(params.login_help_text)) {
