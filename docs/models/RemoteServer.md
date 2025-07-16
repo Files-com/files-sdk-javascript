@@ -377,6 +377,7 @@ await remote_server.configuration_file({
   "override_max_concurrent_jobs": 1,
   "graceful_shutdown_timeout": 1,
   "transfer_rate_limit": "example",
+  "auto_update_policy": "example",
   "api_token": "example",
   "port": 1,
   "hostname": "example",

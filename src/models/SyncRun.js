@@ -40,8 +40,11 @@ class SyncRun {
   // string # Status of the sync run (success, failure, partial_failure, in_progress, skipped)
   getStatus = () => this.attributes.status
 
-  // string # Type of remote server used, if any
-  getRemoteServerType = () => this.attributes.remote_server_type
+  // string # Source remote server type, if any
+  getSrcRemoteServerType = () => this.attributes.src_remote_server_type
+
+  // string # Destination remote server type, if any
+  getDestRemoteServerType = () => this.attributes.dest_remote_server_type
 
   // string # Log or summary body for this run
   getBody = () => this.attributes.body
