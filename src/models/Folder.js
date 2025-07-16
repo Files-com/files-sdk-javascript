@@ -293,6 +293,8 @@ class Folder {
   //   search_all - boolean - Search entire site?  If set, we will ignore the folder path provided and search the entire site.  This is the same API used by the search bar in the web UI when running 'Search All Files'.  Search results are a best effort, not real time, and not guaranteed to match every file.  This field should only be used for ad-hoc (human) searching, and not as part of an automated process.
   //   with_previews - boolean - Include file previews?
   //   with_priority_color - boolean - Include file priority color information?
+  //   type - string - Type of objects to return.  Can be `folder` or `file`.
+  //   modified_at_datetime - string - If provided, will only return files/folders modified after this time. Can be used only in combination with `type` filter.
   static listFor = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -326,6 +328,14 @@ class Folder {
 
     if (params.search_custom_metadata_key && !isString(params.search_custom_metadata_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: search_custom_metadata_key must be of type String, received ${getType(params.search_custom_metadata_key)}`)
+    }
+
+    if (params.type && !isString(params.type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: type must be of type String, received ${getType(params.type)}`)
+    }
+
+    if (params.modified_at_datetime && !isString(params.modified_at_datetime)) {
+      throw new errors.InvalidParameterError(`Bad parameter: modified_at_datetime must be of type String, received ${getType(params.modified_at_datetime)}`)
     }
 
     const response = await Api.sendRequest(`/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
