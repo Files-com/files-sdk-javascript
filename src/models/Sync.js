@@ -505,10 +505,6 @@ class Sync {
 
     return new Sync(response?.data, options)
   }
-
-  static createMigrateTo = async (options = {}) => {
-    await Api.sendRequest('/syncs/migrate_to_syncs', 'POST', {}, options)
-  }
 }
 
 export default Sync

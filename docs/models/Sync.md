@@ -151,15 +151,6 @@ await Sync.create({
 
 ---
 
-## Migrate Legacy Syncs to Syncs
-
-```
-await Sync.createMigrateTo
-```
-
-
----
-
 ## Manually Run Sync
 
 ```
