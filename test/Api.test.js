@@ -3,7 +3,7 @@ import nock from 'nock'
 import {
   FilesError,
   NotAuthenticated_LockoutRegionMismatchError,
-  NotFound_FolderNotFoundError,
+  NotFoundError,
 } from '../lib/Errors'
 import Files from '../lib/Files'
 import ApiKey from '../lib/models/ApiKey'
@@ -99,10 +99,10 @@ describe('API client', () => {
       .get('/api/rest/v1/folders/missing')
       .query(true)
       .reply(404, {
-        error: 'Folder missing not found.',
+        error: 'Not Found.  This may be related to your permissions.',
         'http-code': 404,
-        title: 'Folder Not Found',
-        type: 'not-found/folder-not-found',
+        title: 'Not Found',
+        type: 'not-found',
       })
 
     return Folder.listFor('missing')
@@ -110,11 +110,11 @@ describe('API client', () => {
         throw new Error('Missing folder did not throw an error')
       })
       .catch(error => {
-        expect(error).toBeInstanceOf(NotFound_FolderNotFoundError)
-        expect(error.error).toBe('Folder missing not found.')
+        expect(error).toBeInstanceOf(NotFoundError)
+        expect(error.error).toBe('Not Found.  This may be related to your permissions.')
         expect(error.httpCode).toBe(404)
-        expect(error.title).toBe('Folder Not Found')
-        expect(error.type).toBe('not-found/folder-not-found')
+        expect(error.title).toBe('Not Found')
+        expect(error.type).toBe('not-found')
       })
   })
 

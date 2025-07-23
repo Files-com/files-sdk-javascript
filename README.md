@@ -624,7 +624,6 @@ Error
 |     `NotFound_CodeNotFoundError`|  `NotFoundError` |
 |     `NotFound_FileNotFoundError`|  `NotFoundError` |
 |     `NotFound_FileUploadNotFoundError`|  `NotFoundError` |
-|     `NotFound_FolderNotFoundError`|  `NotFoundError` |
 |     `NotFound_GroupNotFoundError`|  `NotFoundError` |
 |     `NotFound_InboxNotFoundError`|  `NotFoundError` |
 |     `NotFound_NestedNotFoundError`|  `NotFoundError` |

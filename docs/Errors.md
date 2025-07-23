@@ -152,7 +152,6 @@ These errors are derived from the error groups listed above.
 ### NotFound_CodeNotFoundError
 ### NotFound_FileNotFoundError
 ### NotFound_FileUploadNotFoundError
-### NotFound_FolderNotFoundError
 ### NotFound_GroupNotFoundError
 ### NotFound_InboxNotFoundError
 ### NotFound_NestedNotFoundError
