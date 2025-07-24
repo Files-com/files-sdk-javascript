@@ -56,6 +56,20 @@ class GpgKey {
     this.attributes.user_id = value
   }
 
+  // string # MD5 hash of your GPG public key
+  getPublicKeyMd5 = () => this.attributes.public_key_md5
+
+  setPublicKeyMd5 = value => {
+    this.attributes.public_key_md5 = value
+  }
+
+  // string # MD5 hash of your GPG private key.
+  getPrivateKeyMd5 = () => this.attributes.private_key_md5
+
+  setPrivateKeyMd5 = value => {
+    this.attributes.private_key_md5 = value
+  }
+
   // string # Your GPG public key
   getPublicKey = () => this.attributes.public_key
 
@@ -106,8 +120,8 @@ class GpgKey {
   }
 
   // Parameters:
-  //   public_key - string - Your GPG public key
-  //   private_key - string - Your GPG private key.
+  //   public_key - string - MD5 hash of your GPG public key
+  //   private_key - string - MD5 hash of your GPG private key.
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
   //   name - string - Your GPG key name.
   update = async (params = {}) => {
@@ -246,8 +260,8 @@ class GpgKey {
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-  //   public_key - string - Your GPG public key
-  //   private_key - string - Your GPG private key.
+  //   public_key - string - MD5 hash of your GPG public key
+  //   private_key - string - MD5 hash of your GPG private key.
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
   //   name (required) - string - Your GPG key name.
   //   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
