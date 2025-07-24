@@ -31,6 +31,12 @@ class UserCipherUse {
   // int64 # UserCipherUse ID
   getId = () => this.attributes.id
 
+  // int64 # ID of the user who performed this access
+  getUserId = () => this.attributes.user_id
+
+  // string # Username of the user who performed this access
+  getUsername = () => this.attributes.username
+
   // string # The protocol and cipher employed
   getProtocolCipher = () => this.attributes.protocol_cipher
 
@@ -45,9 +51,6 @@ class UserCipherUse {
 
   // date-time # The most recent use of this combination of interface and protocol and cipher (for this user)
   getUpdatedAt = () => this.attributes.updated_at
-
-  // int64 # ID of the user who performed this access
-  getUserId = () => this.attributes.user_id
 
   // Parameters:
   //   user_id - int64 - User ID. If provided, will return uses for this user.
