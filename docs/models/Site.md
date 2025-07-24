@@ -171,7 +171,6 @@
     "site_id": 1,
     "ssl_required": true,
     "timeout_at": "2000-01-01T01:00:00Z",
-    "tls_disabled": false,
     "two_factor_setup_needed": false,
     "allowed_2fa_method_sms": true,
     "allowed_2fa_method_totp": true,
@@ -211,7 +210,6 @@
   "ssl_required": true,
   "subdomain": "mysite",
   "switch_to_plan_date": "2000-01-01T01:00:00Z",
-  "tls_disabled": true,
   "trial_days_left": 1,
   "trial_until": "2000-01-01T01:00:00Z",
   "use_dedicated_ips_for_smtp": true,
@@ -457,7 +455,6 @@
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
 * `subdomain` (string): Site subdomain
 * `switch_to_plan_date` (date-time): If switching plans, when does the new plan take effect?
-* `tls_disabled` (boolean): This setting enables Legacy Support for Insecure Ciphers across SFTP and FTP.  See our documentation for more information.  Contrary to its name, this setting does not disable TLS (it used to do that a long time ago), but rather enables certain ciphers which are known to be insecure but required for broad MFT compatibility.
 * `trial_days_left` (int64): Number of days left in trial
 * `trial_until` (date-time): When does this Site trial expire?
 * `use_dedicated_ips_for_smtp` (boolean): If using custom SMTP, should we use dedicated IPs to deliver emails?
@@ -547,7 +544,6 @@ await Site.update({
   'migrate_remote_server_sync_to_sync': false,
   'session_expiry': 1.0,
   'ssl_required': false,
-  'tls_disabled': false,
   'sftp_insecure_ciphers': false,
   'sftp_insecure_diffie_hellman': false,
   'disable_files_certificate_generation': false,
@@ -709,7 +705,6 @@ await Site.update({
 * `migrate_remote_server_sync_to_sync` (boolean): If true, we will migrate all remote server syncs to the new Sync model.
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
-* `tls_disabled` (boolean): This setting enables Legacy Support for Insecure Ciphers across SFTP and FTP.  See our documentation for more information.  Contrary to its name, this setting does not disable TLS (it used to do that a long time ago), but rather enables certain ciphers which are known to be insecure but required for broad MFT compatibility.
 * `sftp_insecure_ciphers` (boolean): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` (boolean): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `disable_files_certificate_generation` (boolean): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
