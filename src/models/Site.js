@@ -541,6 +541,9 @@ class Site {
   // boolean # Allow group admins set password authentication method
   getGroupAdminsCanSetUserPassword = () => this.attributes.group_admins_can_set_user_password
 
+  // array(string) # List of site settings managed by the parent site
+  getManagedSiteSettings = () => this.attributes.managed_site_settings
+
   static get = async (options = {}) => {
     const response = await Api.sendRequest('/site', 'GET', {}, options)
 

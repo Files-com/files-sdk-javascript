@@ -89,7 +89,7 @@ class RemoteServerConfigurationFile {
   // * 2000 requests/day: '2000-D'
   getTransferRateLimit = () => this.attributes.transfer_rate_limit
 
-  // string # Auto update policy ['manual_trigger', 'critical_only', 'always'] (default critical_only)
+  // string # Auto update policy ['manual_trigger', 'critical_only', 'always', 'never'] (default critical_only)
   getAutoUpdatePolicy = () => this.attributes.auto_update_policy
 
   // string # Files Agent API Token
