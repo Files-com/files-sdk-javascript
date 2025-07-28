@@ -210,27 +210,6 @@ class RemoteServer {
     this.attributes.wasabi_access_key = value
   }
 
-  // string # Rackspace: username used to login to the Rackspace Cloud Control Panel.
-  getRackspaceUsername = () => this.attributes.rackspace_username
-
-  setRackspaceUsername = value => {
-    this.attributes.rackspace_username = value
-  }
-
-  // string # Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-  getRackspaceRegion = () => this.attributes.rackspace_region
-
-  setRackspaceRegion = value => {
-    this.attributes.rackspace_region = value
-  }
-
-  // string # Rackspace: The name of the container (top level directory) where files will sync.
-  getRackspaceContainer = () => this.attributes.rackspace_container
-
-  setRackspaceContainer = value => {
-    this.attributes.rackspace_container = value
-  }
-
   // string # Either `in_setup` or `complete`
   getAuthStatus = () => this.attributes.auth_status
 
@@ -553,13 +532,6 @@ class RemoteServer {
     this.attributes.linode_secret_key = value
   }
 
-  // string # Rackspace: API key from the Rackspace Cloud Control Panel
-  getRackspaceApiKey = () => this.attributes.rackspace_api_key
-
-  setRackspaceApiKey = value => {
-    this.attributes.rackspace_api_key = value
-  }
-
   // string # S3-compatible: Secret Key
   getS3CompatibleSecretKey = () => this.attributes.s3_compatible_secret_key
 
@@ -678,7 +650,6 @@ class RemoteServer {
   //   google_cloud_storage_credentials_json - string - Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
   //   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
   //   linode_secret_key - string - Linode: Secret Key
-  //   rackspace_api_key - string - Rackspace: API key from the Rackspace Cloud Control Panel
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
   //   wasabi_secret_key - string - Wasabi: Secret Key
   //   aws_access_key - string - AWS Access Key.
@@ -713,9 +684,6 @@ class RemoteServer {
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
   //   port - int64 - Port for remote server.  Not needed for S3.
-  //   rackspace_container - string - Rackspace: The name of the container (top level directory) where files will sync.
-  //   rackspace_region - string - Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-  //   rackspace_username - string - Rackspace: username used to login to the Rackspace Cloud Control Panel.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -806,10 +774,6 @@ class RemoteServer {
 
     if (params.linode_secret_key && !isString(params.linode_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(params.linode_secret_key)}`)
-    }
-
-    if (params.rackspace_api_key && !isString(params.rackspace_api_key)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_api_key must be of type String, received ${getType(params.rackspace_api_key)}`)
     }
 
     if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
@@ -930,18 +894,6 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
-    }
-
-    if (params.rackspace_container && !isString(params.rackspace_container)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_container must be of type String, received ${getType(params.rackspace_container)}`)
-    }
-
-    if (params.rackspace_region && !isString(params.rackspace_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_region must be of type String, received ${getType(params.rackspace_region)}`)
-    }
-
-    if (params.rackspace_username && !isString(params.rackspace_username)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_username must be of type String, received ${getType(params.rackspace_username)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
@@ -1056,9 +1008,9 @@ class RemoteServer {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ rackspace_container, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
-  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ rackspace_container, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
+  //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -1142,7 +1094,6 @@ class RemoteServer {
   //   google_cloud_storage_credentials_json - string - Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
   //   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
   //   linode_secret_key - string - Linode: Secret Key
-  //   rackspace_api_key - string - Rackspace: API key from the Rackspace Cloud Control Panel
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
   //   wasabi_secret_key - string - Wasabi: Secret Key
   //   aws_access_key - string - AWS Access Key.
@@ -1177,9 +1128,6 @@ class RemoteServer {
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
   //   port - int64 - Port for remote server.  Not needed for S3.
-  //   rackspace_container - string - Rackspace: The name of the container (top level directory) where files will sync.
-  //   rackspace_region - string - Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-  //   rackspace_username - string - Rackspace: username used to login to the Rackspace Cloud Control Panel.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1257,10 +1205,6 @@ class RemoteServer {
 
     if (params.linode_secret_key && !isString(params.linode_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(params.linode_secret_key)}`)
-    }
-
-    if (params.rackspace_api_key && !isString(params.rackspace_api_key)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_api_key must be of type String, received ${getType(params.rackspace_api_key)}`)
     }
 
     if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
@@ -1381,18 +1325,6 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
-    }
-
-    if (params.rackspace_container && !isString(params.rackspace_container)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_container must be of type String, received ${getType(params.rackspace_container)}`)
-    }
-
-    if (params.rackspace_region && !isString(params.rackspace_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_region must be of type String, received ${getType(params.rackspace_region)}`)
-    }
-
-    if (params.rackspace_username && !isString(params.rackspace_username)) {
-      throw new errors.InvalidParameterError(`Bad parameter: rackspace_username must be of type String, received ${getType(params.rackspace_username)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
