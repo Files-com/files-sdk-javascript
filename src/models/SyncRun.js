@@ -52,9 +52,6 @@ class SyncRun {
   // array(string) # Array of errors encountered during the run
   getEventErrors = () => this.attributes.event_errors
 
-  // int64 # Total bytes synced in this run
-  getBytesSynced = () => this.attributes.bytes_synced
-
   // int64 # Number of files compared
   getComparedFiles = () => this.attributes.compared_files
 
@@ -79,6 +76,15 @@ class SyncRun {
   // boolean # Whether notifications were sent for this run
   getNotified = () => this.attributes.notified
 
+  // boolean # Whether this run was a dry run (no actual changes made)
+  getDryRun = () => this.attributes.dry_run
+
+  // int64 # Total bytes synced in this run
+  getBytesSynced = () => this.attributes.bytes_synced
+
+  // int64 # Estimated bytes count for this run
+  getEstimatedBytesCount = () => this.attributes.estimated_bytes_count
+
   // date-time # When this run was created
   getCreatedAt = () => this.attributes.created_at
 
@@ -89,14 +95,9 @@ class SyncRun {
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `sync_id`, `created_at` or `status`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `sync_id`. Valid field combinations are `[ sync_id, status ]`.
-  //   sync_id (required) - int64 - ID of the Sync this run belongs to
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `sync_id` or `created_at`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status`, `dry_run` or `sync_id`. Valid field combinations are `[ sync_id, status ]`.
   static list = async (params = {}, options = {}) => {
-    if (!params.sync_id) {
-      throw new errors.MissingParameterError('Parameter missing: sync_id')
-    }
-
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
@@ -107,10 +108,6 @@ class SyncRun {
 
     if (params.per_page && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
-    }
-
-    if (params.sync_id && !isInt(params.sync_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: sync_id must be of type Int, received ${getType(params.sync_id)}`)
     }
 
     const response = await Api.sendRequest('/sync_runs', 'GET', params, options)

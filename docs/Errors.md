@@ -127,12 +127,16 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_HistoryPermissionRequiredError
 ### NotAuthorized_InsufficientPermissionForParamsError
 ### NotAuthorized_InsufficientPermissionForSiteError
+### NotAuthorized_MoverAccessDeniedError
+### NotAuthorized_MoverPackageRequiredError
 ### NotAuthorized_MustAuthenticateWithApiKeyError
 ### NotAuthorized_NeedAdminPermissionForInboxError
 ### NotAuthorized_NonAdminsMustQueryByFolderOrPathError
 ### NotAuthorized_NotAllowedToCreateBundleError
+### NotAuthorized_NotEnqueuableSyncError
 ### NotAuthorized_PasswordChangeNotRequiredError
 ### NotAuthorized_PasswordChangeRequiredError
+### NotAuthorized_PaymentMethodErrorError
 ### NotAuthorized_ReadOnlySessionError
 ### NotAuthorized_ReadPermissionRequiredError
 ### NotAuthorized_ReauthenticationFailedError
@@ -199,6 +203,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_ResourceBelongsToParentSiteError
 ### ProcessingFailure_ResourceLockedError
 ### ProcessingFailure_SubfolderLockedError
+### ProcessingFailure_SyncInProgressError
 ### ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError
 ### ProcessingFailure_TwoFactorAuthenticationCountryBlacklistedError
 ### ProcessingFailure_TwoFactorAuthenticationGeneralErrorError

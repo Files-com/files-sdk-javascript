@@ -202,6 +202,39 @@ class Sync {
     this.attributes.holiday_region = value
   }
 
+  // SyncRun # The latest run of this sync
+  getLatestSyncRun = () => this.attributes.latest_sync_run
+
+  setLatestSyncRun = value => {
+    this.attributes.latest_sync_run = value
+  }
+
+  // Dry Run Sync
+  dryRun = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    await Api.sendRequest(`/syncs/${encodeURIComponent(params.id)}/dry_run`, 'POST', params, this.options)
+  }
+
   // Manually Run Sync
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {

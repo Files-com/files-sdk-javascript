@@ -667,12 +667,16 @@ Error
 |     `NotAuthorized_HistoryPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_InsufficientPermissionForParamsError`|  `NotAuthorizedError` |
 |     `NotAuthorized_InsufficientPermissionForSiteError`|  `NotAuthorizedError` |
+|     `NotAuthorized_MoverAccessDeniedError`|  `NotAuthorizedError` |
+|     `NotAuthorized_MoverPackageRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_MustAuthenticateWithApiKeyError`|  `NotAuthorizedError` |
 |     `NotAuthorized_NeedAdminPermissionForInboxError`|  `NotAuthorizedError` |
 |     `NotAuthorized_NonAdminsMustQueryByFolderOrPathError`|  `NotAuthorizedError` |
 |     `NotAuthorized_NotAllowedToCreateBundleError`|  `NotAuthorizedError` |
+|     `NotAuthorized_NotEnqueuableSyncError`|  `NotAuthorizedError` |
 |     `NotAuthorized_PasswordChangeNotRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_PasswordChangeRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_PaymentMethodErrorError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReadOnlySessionError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReadPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReauthenticationFailedError`|  `NotAuthorizedError` |
@@ -739,6 +743,7 @@ Error
 |     `ProcessingFailure_ResourceBelongsToParentSiteError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceLockedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_SubfolderLockedError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_SyncInProgressError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationCountryBlacklistedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationGeneralErrorError`|  `ProcessingFailureError` |

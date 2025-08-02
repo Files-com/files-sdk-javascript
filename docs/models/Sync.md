@@ -40,7 +40,32 @@
     "14:30"
   ],
   "schedule_time_zone": "Eastern Time (US & Canada)",
-  "holiday_region": "us_dc"
+  "holiday_region": "us_dc",
+  "latest_sync_run": {
+    "id": 1,
+    "sync_id": 1,
+    "site_id": 1,
+    "status": "example",
+    "src_remote_server_type": "example",
+    "dest_remote_server_type": "example",
+    "body": "example",
+    "event_errors": [
+      "example"
+    ],
+    "compared_files": 1,
+    "compared_folders": 1,
+    "errored_files": 1,
+    "successful_files": 1,
+    "runtime": 1.0,
+    "log_url": "https://www.example.com/log_file.txt",
+    "completed_at": "2000-01-01T01:00:00Z",
+    "notified": true,
+    "dry_run": true,
+    "bytes_synced": 1,
+    "estimated_bytes_count": 1,
+    "created_at": "2000-01-01T01:00:00Z",
+    "updated_at": "2000-01-01T01:00:00Z"
+  }
 }
 ```
 
@@ -70,6 +95,7 @@
 * `schedule_times_of_day` (array(string)): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
 * `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+* `latest_sync_run` (SyncRun): The latest run of this sync
 
 ---
 
@@ -148,6 +174,21 @@ await Sync.create({
 * `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
 * `schedule_days_of_week` (array(int64)): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` (array(string)): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+
+---
+
+## Dry Run Sync
+
+```
+const sync = await Sync.find(id)
+
+await sync.dry_run()
+```
+
+### Parameters
+
+* `id` (int64): Required - Sync ID.
+
 
 ---
 
@@ -257,7 +298,32 @@ await sync.update({
     "14:30"
   ],
   "schedule_time_zone": "Eastern Time (US & Canada)",
-  "holiday_region": "us_dc"
+  "holiday_region": "us_dc",
+  "latest_sync_run": {
+    "id": 1,
+    "sync_id": 1,
+    "site_id": 1,
+    "status": "example",
+    "src_remote_server_type": "example",
+    "dest_remote_server_type": "example",
+    "body": "example",
+    "event_errors": [
+      "example"
+    ],
+    "compared_files": 1,
+    "compared_folders": 1,
+    "errored_files": 1,
+    "successful_files": 1,
+    "runtime": 1.0,
+    "log_url": "https://www.example.com/log_file.txt",
+    "completed_at": "2000-01-01T01:00:00Z",
+    "notified": true,
+    "dry_run": true,
+    "bytes_synced": 1,
+    "estimated_bytes_count": 1,
+    "created_at": "2000-01-01T01:00:00Z",
+    "updated_at": "2000-01-01T01:00:00Z"
+  }
 }
 ```
 
