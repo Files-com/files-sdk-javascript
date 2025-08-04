@@ -162,6 +162,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_PlanNotFoundError
 ### NotFound_SiteNotFoundError
 ### NotFound_UserNotFoundError
+### ProcessingFailure_AgentUnavailableError
 ### ProcessingFailure_AlreadyCompletedError
 ### ProcessingFailure_AutomationCannotBeRunManuallyError
 ### ProcessingFailure_BehaviorNotAllowedOnRemoteServerError
@@ -217,7 +218,6 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManyLoginAttemptsError
 ### RateLimited_TooManyRequestsError
 ### RateLimited_TooManySharesError
-### ServiceUnavailable_AgentUnavailableError
 ### ServiceUnavailable_AutomationsUnavailableError
 ### ServiceUnavailable_MigrationInProgressError
 ### ServiceUnavailable_SiteDisabledError

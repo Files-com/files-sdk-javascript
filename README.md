@@ -702,6 +702,7 @@ Error
 |     `NotFound_PlanNotFoundError`|  `NotFoundError` |
 |     `NotFound_SiteNotFoundError`|  `NotFoundError` |
 |     `NotFound_UserNotFoundError`|  `NotFoundError` |
+|     `ProcessingFailure_AgentUnavailableError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AlreadyCompletedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AutomationCannotBeRunManuallyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BehaviorNotAllowedOnRemoteServerError`|  `ProcessingFailureError` |
@@ -757,7 +758,6 @@ Error
 |     `RateLimited_TooManyLoginAttemptsError`|  `RateLimitedError` |
 |     `RateLimited_TooManyRequestsError`|  `RateLimitedError` |
 |     `RateLimited_TooManySharesError`|  `RateLimitedError` |
-|     `ServiceUnavailable_AgentUnavailableError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_AutomationsUnavailableError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_MigrationInProgressError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_SiteDisabledError`|  `ServiceUnavailableError` |
