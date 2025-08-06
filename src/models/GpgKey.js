@@ -71,13 +71,34 @@ class GpgKey {
   }
 
   // string # Your GPG public key
+  getGeneratedPublicKey = () => this.attributes.generated_public_key
+
+  setGeneratedPublicKey = value => {
+    this.attributes.generated_public_key = value
+  }
+
+  // string # Your GPG private key.
+  getGeneratedPrivateKey = () => this.attributes.generated_private_key
+
+  setGeneratedPrivateKey = value => {
+    this.attributes.generated_private_key = value
+  }
+
+  // string # Your GPG private key password. Only required for password protected keys.
+  getPrivateKeyPasswordMd5 = () => this.attributes.private_key_password_md5
+
+  setPrivateKeyPasswordMd5 = value => {
+    this.attributes.private_key_password_md5 = value
+  }
+
+  // string # MD5 hash of your GPG public key
   getPublicKey = () => this.attributes.public_key
 
   setPublicKey = value => {
     this.attributes.public_key = value
   }
 
-  // string # Your GPG private key.
+  // string # MD5 hash of your GPG private key.
   getPrivateKey = () => this.attributes.private_key
 
   setPrivateKey = value => {

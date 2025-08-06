@@ -74,17 +74,17 @@ class PublicKey {
   }
 
   // string # Only returned when generating keys. Private key generated for the user.
-  getPrivateKey = () => this.attributes.private_key
+  getGeneratedPrivateKey = () => this.attributes.generated_private_key
 
-  setPrivateKey = value => {
-    this.attributes.private_key = value
+  setGeneratedPrivateKey = value => {
+    this.attributes.generated_private_key = value
   }
 
   // string # Only returned when generating keys. Public key generated for the user.
-  getPublicKey = () => this.attributes.public_key
+  getGeneratedPublicKey = () => this.attributes.generated_public_key
 
-  setPublicKey = value => {
-    this.attributes.public_key = value
+  setGeneratedPublicKey = value => {
+    this.attributes.generated_public_key = value
   }
 
   // string # Username of the user this public key is associated with
@@ -99,6 +99,13 @@ class PublicKey {
 
   setUserId = value => {
     this.attributes.user_id = value
+  }
+
+  // string # Actual contents of SSH key.
+  getPublicKey = () => this.attributes.public_key
+
+  setPublicKey = value => {
+    this.attributes.public_key = value
   }
 
   // boolean # If true, generate a new SSH key pair. Can not be used with `public_key`
