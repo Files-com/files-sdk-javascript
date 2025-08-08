@@ -54,6 +54,18 @@ class InvoiceLineItem {
 
   // string # Site name
   getSite = () => this.attributes.site
+
+  // int64 # Prepaid bytes purchased for this invoice line item
+  getPrepaidBytes = () => this.attributes.prepaid_bytes
+
+  // date-time # When the prepaid bytes expire
+  getPrepaidBytesExpireAt = () => this.attributes.prepaid_bytes_expire_at
+
+  // int64 # Total prepaid bytes used for this invoice line item
+  getPrepaidBytesUsed = () => this.attributes.prepaid_bytes_used
+
+  // int64 # Available prepaid bytes for this invoice line item
+  getPrepaidBytesAvaliable = () => this.attributes.prepaid_bytes_avaliable
 }
 
 export default InvoiceLineItem
