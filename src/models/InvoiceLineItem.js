@@ -65,7 +65,7 @@ class InvoiceLineItem {
   getPrepaidBytesUsed = () => this.attributes.prepaid_bytes_used
 
   // int64 # Available prepaid bytes for this invoice line item
-  getPrepaidBytesAvaliable = () => this.attributes.prepaid_bytes_avaliable
+  getPrepaidBytesAvailable = () => this.attributes.prepaid_bytes_available
 }
 
 export default InvoiceLineItem
