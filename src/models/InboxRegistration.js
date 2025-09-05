@@ -67,7 +67,7 @@ class InboxRegistration {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   folder_behavior_id - int64 - ID of the associated Inbox.
+  //   folder_behavior_id - int64 - ID of the associated Inbox. This is required if the user is not a site admin.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
