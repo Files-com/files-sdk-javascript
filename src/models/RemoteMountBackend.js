@@ -56,6 +56,13 @@ class RemoteMountBackend {
     this.attributes.health_check_enabled = value
   }
 
+  // array(object) # Array of recent health check results.
+  getHealthCheckResults = () => this.attributes.health_check_results
+
+  setHealthCheckResults = value => {
+    this.attributes.health_check_results = value
+  }
+
   // string # Type of health check to perform.
   getHealthCheckType = () => this.attributes.health_check_type
 
