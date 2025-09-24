@@ -325,6 +325,9 @@ class Site {
   // int64 # Number of prior passwords to disallow
   getMaxPriorPasswords = () => this.attributes.max_prior_passwords
 
+  // object # List of site settings managed by the parent site
+  getManagedSiteSettings = () => this.attributes.managed_site_settings
+
   // string # A message to show users when they connect via FTP or SFTP.
   getMotdText = () => this.attributes.motd_text
 
@@ -540,9 +543,6 @@ class Site {
 
   // boolean # Allow group admins set password authentication method
   getGroupAdminsCanSetUserPassword = () => this.attributes.group_admins_can_set_user_password
-
-  // array(string) # List of site settings managed by the parent site
-  getManagedSiteSettings = () => this.attributes.managed_site_settings
 
   static get = async (options = {}) => {
     const response = await Api.sendRequest('/site', 'GET', {}, options)

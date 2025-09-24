@@ -28,45 +28,67 @@ class ChildSiteManagementPolicy {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # ChildSiteManagementPolicy ID
+  // int64 # Policy ID.
   getId = () => this.attributes.id
 
   setId = value => {
     this.attributes.id = value
   }
 
-  // int64 # ID of the Site managing the policy
-  getSiteId = () => this.attributes.site_id
+  // string # Type of policy.  Valid values: `settings`.
+  getPolicyType = () => this.attributes.policy_type
 
-  setSiteId = value => {
-    this.attributes.site_id = value
+  setPolicyType = value => {
+    this.attributes.policy_type = value
   }
 
-  // string # The name of the setting that is managed by the policy
-  getSiteSettingName = () => this.attributes.site_setting_name
+  // string # Name for this policy.
+  getName = () => this.attributes.name
 
-  setSiteSettingName = value => {
-    this.attributes.site_setting_name = value
+  setName = value => {
+    this.attributes.name = value
   }
 
-  // string # The value for the setting that will be enforced for all child sites that are not exempt
-  getManagedValue = () => this.attributes.managed_value
+  // string # Description for this policy.
+  getDescription = () => this.attributes.description
 
-  setManagedValue = value => {
-    this.attributes.managed_value = value
+  setDescription = value => {
+    this.attributes.description = value
   }
 
-  // array(int64) # The list of child site IDs that are exempt from this policy
+  // object # Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
+  getValue = () => this.attributes.value
+
+  setValue = value => {
+    this.attributes.value = value
+  }
+
+  // array(int64) # IDs of child sites that this policy has been applied to. This field is read-only.
+  getAppliedChildSiteIds = () => this.attributes.applied_child_site_ids
+
+  setAppliedChildSiteIds = value => {
+    this.attributes.applied_child_site_ids = value
+  }
+
+  // array(int64) # IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
   getSkipChildSiteIds = () => this.attributes.skip_child_site_ids
 
   setSkipChildSiteIds = value => {
     this.attributes.skip_child_site_ids = value
   }
 
+  // date-time # When this policy was created.
+  getCreatedAt = () => this.attributes.created_at
+
+  // date-time # When this policy was last updated.
+  getUpdatedAt = () => this.attributes.updated_at
+
   // Parameters:
-  //   site_setting_name (required) - string - The name of the setting that is managed by the policy
-  //   managed_value (required) - string - The value for the setting that will be enforced for all child sites that are not exempt
-  //   skip_child_site_ids - array(int64) - The list of child site IDs that are exempt from this policy
+  //   value - string
+  //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+  //   policy_type - string - Type of policy.  Valid values: `settings`.
+  //   name - string - Name for this policy.
+  //   description - string - Description for this policy.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -81,16 +103,24 @@ class ChildSiteManagementPolicy {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.site_setting_name && !isString(params.site_setting_name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: site_setting_name must be of type String, received ${getType(params.site_setting_name)}`)
-    }
-
-    if (params.managed_value && !isString(params.managed_value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: managed_value must be of type String, received ${getType(params.managed_value)}`)
+    if (params.value && !isString(params.value)) {
+      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
+    }
+
+    if (params.policy_type && !isString(params.policy_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: policy_type must be of type String, received ${getType(params.policy_type)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
     if (!params.id) {
@@ -98,22 +128,6 @@ class ChildSiteManagementPolicy {
         params.id = this.id
       } else {
         throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    if (!params.site_setting_name) {
-      if (this.attributes.site_setting_name) {
-        params.site_setting_name = this.site_setting_name
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: site_setting_name')
-      }
-    }
-
-    if (!params.managed_value) {
-      if (this.attributes.managed_value) {
-        params.managed_value = this.managed_value
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: managed_value')
       }
     }
 
@@ -208,28 +222,34 @@ class ChildSiteManagementPolicy {
     ChildSiteManagementPolicy.find(id, params, options)
 
   // Parameters:
-  //   site_setting_name (required) - string - The name of the setting that is managed by the policy
-  //   managed_value (required) - string - The value for the setting that will be enforced for all child sites that are not exempt
-  //   skip_child_site_ids - array(int64) - The list of child site IDs that are exempt from this policy
+  //   value - string
+  //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+  //   policy_type (required) - string - Type of policy.  Valid values: `settings`.
+  //   name - string - Name for this policy.
+  //   description - string - Description for this policy.
   static create = async (params = {}, options = {}) => {
-    if (!params.site_setting_name) {
-      throw new errors.MissingParameterError('Parameter missing: site_setting_name')
+    if (!params.policy_type) {
+      throw new errors.MissingParameterError('Parameter missing: policy_type')
     }
 
-    if (!params.managed_value) {
-      throw new errors.MissingParameterError('Parameter missing: managed_value')
-    }
-
-    if (params.site_setting_name && !isString(params.site_setting_name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: site_setting_name must be of type String, received ${getType(params.site_setting_name)}`)
-    }
-
-    if (params.managed_value && !isString(params.managed_value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: managed_value must be of type String, received ${getType(params.managed_value)}`)
+    if (params.value && !isString(params.value)) {
+      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
+    }
+
+    if (params.policy_type && !isString(params.policy_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: policy_type must be of type String, received ${getType(params.policy_type)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
     const response = await Api.sendRequest('/child_site_management_policies', 'POST', params, options)
