@@ -73,9 +73,6 @@ class SyncRun {
   // date-time # When this run was completed
   getCompletedAt = () => this.attributes.completed_at
 
-  // boolean # Whether notifications were sent for this run
-  getNotified = () => this.attributes.notified
-
   // boolean # Whether this run was a dry run (no actual changes made)
   getDryRun = () => this.attributes.dry_run
 
