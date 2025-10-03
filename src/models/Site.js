@@ -76,6 +76,9 @@ class Site {
   // boolean # Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
   getAlwaysMkdirParents = () => this.attributes.always_mkdir_parents
 
+  // int64 # Number of days to retain AS2 messages (incoming and outgoing).
+  getAs2MessageRetentionDays = () => this.attributes.as2_message_retention_days
+
   // boolean # If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   getAskAboutOverwrites = () => this.attributes.ask_about_overwrites
 
@@ -601,6 +604,7 @@ class Site {
   //   calculate_file_checksums_sha256 - boolean - Calculate SHA256 checksums for files?
   //   legacy_checksums_mode - boolean - Use legacy checksums mode?
   //   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
+  //   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
   //   session_expiry - double - Session expiry in hours
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -794,6 +798,10 @@ class Site {
 
     if (params.additional_text_file_types && !isArray(params.additional_text_file_types)) {
       throw new errors.InvalidParameterError(`Bad parameter: additional_text_file_types must be of type Array, received ${getType(params.additional_text_file_types)}`)
+    }
+
+    if (params.as2_message_retention_days && !isInt(params.as2_message_retention_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: as2_message_retention_days must be of type Int, received ${getType(params.as2_message_retention_days)}`)
     }
 
     if (params.user_lockout_tries && !isInt(params.user_lockout_tries)) {
