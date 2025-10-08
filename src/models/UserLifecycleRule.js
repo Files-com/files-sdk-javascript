@@ -42,6 +42,13 @@ class UserLifecycleRule {
     this.attributes.authentication_method = value
   }
 
+  // array(int64) # Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
+  getGroupIds = () => this.attributes.group_ids
+
+  setGroupIds = value => {
+    this.attributes.group_ids = value
+  }
+
   // int64 # Number of days of inactivity before the rule applies
   getInactivityDays = () => this.attributes.inactivity_days
 
@@ -94,6 +101,7 @@ class UserLifecycleRule {
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
   //   authentication_method - string - User authentication method for the rule
+  //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
@@ -119,6 +127,10 @@ class UserLifecycleRule {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.group_ids && !isArray(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type Array, received ${getType(params.group_ids)}`)
     }
 
     if (params.inactivity_days && !isInt(params.inactivity_days)) {
@@ -234,6 +246,7 @@ class UserLifecycleRule {
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
   //   authentication_method - string - User authentication method for the rule
+  //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
   //   include_site_admins - boolean - Include site admins in the rule
   //   include_folder_admins - boolean - Include folder admins in the rule
@@ -246,6 +259,10 @@ class UserLifecycleRule {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.group_ids && !isArray(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type Array, received ${getType(params.group_ids)}`)
     }
 
     if (params.inactivity_days && !isInt(params.inactivity_days)) {
