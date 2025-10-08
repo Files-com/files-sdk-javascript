@@ -613,6 +613,13 @@ class File {
     this.attributes.with_rename = value
   }
 
+  // boolean # If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+  getBufferedUpload = () => this.attributes.buffered_upload
+
+  setBufferedUpload = value => {
+    this.attributes.buffered_upload = value
+  }
+
   // Download File
   //
   // Parameters:
@@ -894,6 +901,7 @@ class File {
   //   size - int64 - Size of file.
   //   structure - string - If copying folder, copy just the structure?
   //   with_rename - boolean - Allow file rename instead of overwrite?
+  //   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)

@@ -77,6 +77,13 @@ class RemoteServer {
     this.attributes.port = value
   }
 
+  // boolean # If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+  getBufferUploadsAlways = () => this.attributes.buffer_uploads_always
+
+  setBufferUploadsAlways = value => {
+    this.attributes.buffer_uploads_always = value
+  }
+
   // int64 # Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
   getMaxConnections = () => this.attributes.max_connections
 
@@ -662,6 +669,7 @@ class RemoteServer {
   //   azure_files_storage_share_name - string - Azure Files:  Storage Share name
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
+  //   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1106,6 +1114,7 @@ class RemoteServer {
   //   azure_files_storage_share_name - string - Azure Files:  Storage Share name
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
+  //   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
