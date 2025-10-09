@@ -24,6 +24,7 @@
   "disabled": true,
   "disabled_expired_or_inactive": true,
   "email": "john.doe@files.com",
+  "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",
@@ -93,6 +94,7 @@
 * `disabled` (boolean): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `disabled_expired_or_inactive` (boolean): Computed property that returns true if user disabled or expired or inactive.
 * `email` (email): User email address
+* `filesystem_layout` (string): File system layout
 * `first_login_at` (date-time): User's first login time
 * `ftp_permission` (boolean): Can the user access with FTP/FTPS?
 * `group_ids` (string): Comma-separated list of group IDs of which this user is a member
@@ -212,6 +214,7 @@ await User.create({
   'bypass_site_allowed_ips': false,
   'dav_permission': true,
   'disabled': true,
+  'filesystem_layout': "site_root",
   'ftp_permission': true,
   'header_text': "User-specific message.",
   'language': "en",
@@ -265,6 +268,7 @@ await User.create({
 * `bypass_site_allowed_ips` (boolean): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (boolean): Can the user connect with WebDAV?
 * `disabled` (boolean): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `filesystem_layout` (string): File system layout
 * `ftp_permission` (boolean): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -359,6 +363,7 @@ await user.update({
   'bypass_site_allowed_ips': false,
   'dav_permission': true,
   'disabled': true,
+  'filesystem_layout': "site_root",
   'ftp_permission': true,
   'header_text': "User-specific message.",
   'language': "en",
@@ -413,6 +418,7 @@ await user.update({
 * `bypass_site_allowed_ips` (boolean): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (boolean): Can the user connect with WebDAV?
 * `disabled` (boolean): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `filesystem_layout` (string): File system layout
 * `ftp_permission` (boolean): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -465,6 +471,7 @@ await user.update({
   "disabled": true,
   "disabled_expired_or_inactive": true,
   "email": "john.doe@files.com",
+  "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",

@@ -76,7 +76,7 @@ class SsoStrategy {
   // string # SCIM OAuth Access Token Expiration Time.
   getScimOauthAccessTokenExpiresAt = () => this.attributes.scim_oauth_access_token_expires_at
 
-  // string # Subdomain
+  // string # Subdomain or domain name for your auth provider.   Example: `https://[subdomain].okta.com/`
   getSubdomain = () => this.attributes.subdomain
 
   // boolean # Auto-provision users?
@@ -138,6 +138,9 @@ class SsoStrategy {
 
   // string # 2FA required setting for auto provisioned users.
   getProvisionRequire2fa = () => this.attributes.provision_require_2fa
+
+  // string # File System layout to use for auto provisioned users.
+  getProvisionFilesystemLayout = () => this.attributes.provision_filesystem_layout
 
   // string # URL-friendly, unique identifier for Azure SAML configuration
   getProviderIdentifier = () => this.attributes.provider_identifier

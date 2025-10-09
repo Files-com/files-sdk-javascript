@@ -150,6 +150,13 @@ class User {
     this.attributes.email = value
   }
 
+  // string # File system layout
+  getFilesystemLayout = () => this.attributes.filesystem_layout
+
+  setFilesystemLayout = value => {
+    this.attributes.filesystem_layout = value
+  }
+
   // date-time # User's first login time
   getFirstLoginAt = () => this.attributes.first_login_at
 
@@ -663,6 +670,7 @@ class User {
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+  //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
   //   header_text - string - Text to display to the user in the header of the UI
   //   language - string - Preferred language
@@ -750,6 +758,10 @@ class User {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.filesystem_layout && !isString(params.filesystem_layout)) {
+      throw new errors.InvalidParameterError(`Bad parameter: filesystem_layout must be of type String, received ${getType(params.filesystem_layout)}`)
     }
 
     if (params.header_text && !isString(params.header_text)) {
@@ -956,6 +968,7 @@ class User {
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+  //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
   //   header_text - string - Text to display to the user in the header of the UI
   //   language - string - Preferred language
@@ -1033,6 +1046,10 @@ class User {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.filesystem_layout && !isString(params.filesystem_layout)) {
+      throw new errors.InvalidParameterError(`Bad parameter: filesystem_layout must be of type String, received ${getType(params.filesystem_layout)}`)
     }
 
     if (params.header_text && !isString(params.header_text)) {
