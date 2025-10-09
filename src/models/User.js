@@ -304,6 +304,13 @@ class User {
     this.attributes.office_integration_enabled = value
   }
 
+  // int64 # Partner ID if this user belongs to a Partner
+  getPartnerId = () => this.attributes.partner_id
+
+  setPartnerId = value => {
+    this.attributes.partner_id = value
+  }
+
   // date-time # Last time the user's password was set
   getPasswordSetAt = () => this.attributes.password_set_at
 
@@ -679,6 +686,7 @@ class User {
   //   company - string - User's company
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
+  //   partner_id - int64 - Partner ID if this user belongs to a Partner
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -786,6 +794,10 @@ class User {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.partner_id && !isInt(params.partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
     if (params.password_validity_days && !isInt(params.password_validity_days)) {
@@ -977,6 +989,7 @@ class User {
   //   company - string - User's company
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
+  //   partner_id - int64 - Partner ID if this user belongs to a Partner
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
   //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -1074,6 +1087,10 @@ class User {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.partner_id && !isInt(params.partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
     if (params.password_validity_days && !isInt(params.password_validity_days)) {
