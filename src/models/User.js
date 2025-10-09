@@ -304,6 +304,13 @@ class User {
     this.attributes.office_integration_enabled = value
   }
 
+  // boolean # Is this user a Partner administrator?
+  getPartnerAdmin = () => this.attributes.partner_admin
+
+  setPartnerAdmin = value => {
+    this.attributes.partner_admin = value
+  }
+
   // int64 # Partner ID if this user belongs to a Partner
   getPartnerId = () => this.attributes.partner_id
 
