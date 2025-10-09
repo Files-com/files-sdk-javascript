@@ -227,6 +227,7 @@ await User.create({
   'company': "ACME Corp.",
   'notes': "Internal notes on this user.",
   'office_integration_enabled': true,
+  'partner_admin': true,
   'partner_id': 1,
   'password_validity_days': 1,
   'readonly_site_admin': true,
@@ -282,6 +283,7 @@ await User.create({
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (boolean): Enable integration with Office for the web?
+* `partner_admin` (boolean): Is this user a Partner administrator?
 * `partner_id` (int64): Partner ID if this user belongs to a Partner
 * `password_validity_days` (int64): Number of days to allow user to use the same password
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -378,6 +380,7 @@ await user.update({
   'company': "ACME Corp.",
   'notes': "Internal notes on this user.",
   'office_integration_enabled': true,
+  'partner_admin': true,
   'partner_id': 1,
   'password_validity_days': 1,
   'readonly_site_admin': true,
@@ -434,6 +437,7 @@ await user.update({
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (boolean): Enable integration with Office for the web?
+* `partner_admin` (boolean): Is this user a Partner administrator?
 * `partner_id` (int64): Partner ID if this user belongs to a Partner
 * `password_validity_days` (int64): Number of days to allow user to use the same password
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?

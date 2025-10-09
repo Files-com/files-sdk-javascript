@@ -693,6 +693,7 @@ class User {
   //   company - string - User's company
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
+  //   partner_admin - boolean - Is this user a Partner administrator?
   //   partner_id - int64 - Partner ID if this user belongs to a Partner
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -996,6 +997,7 @@ class User {
   //   company - string - User's company
   //   notes - string - Any internal notes on the user
   //   office_integration_enabled - boolean - Enable integration with Office for the web?
+  //   partner_admin - boolean - Is this user a Partner administrator?
   //   partner_id - int64 - Partner ID if this user belongs to a Partner
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
