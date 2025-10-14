@@ -31,26 +31,11 @@ class SyncRun {
   // int64 # SyncRun ID
   getId = () => this.attributes.id
 
-  // int64 # ID of the Sync this run belongs to
-  getSyncId = () => this.attributes.sync_id
-
-  // int64 # Site ID
-  getSiteId = () => this.attributes.site_id
-
-  // string # Status of the sync run (success, failure, partial_failure, in_progress, skipped)
-  getStatus = () => this.attributes.status
-
-  // string # Source remote server type, if any
-  getSrcRemoteServerType = () => this.attributes.src_remote_server_type
-
-  // string # Destination remote server type, if any
-  getDestRemoteServerType = () => this.attributes.dest_remote_server_type
-
   // string # Log or summary body for this run
   getBody = () => this.attributes.body
 
-  // array(string) # Array of errors encountered during the run
-  getEventErrors = () => this.attributes.event_errors
+  // int64 # Total bytes synced in this run
+  getBytesSynced = () => this.attributes.bytes_synced
 
   // int64 # Number of files compared
   getComparedFiles = () => this.attributes.compared_files
@@ -58,32 +43,50 @@ class SyncRun {
   // int64 # Number of folders compared
   getComparedFolders = () => this.attributes.compared_folders
 
-  // int64 # Number of files that errored
-  getErroredFiles = () => this.attributes.errored_files
-
-  // int64 # Number of files successfully synced
-  getSuccessfulFiles = () => this.attributes.successful_files
-
-  // double # Total runtime in seconds
-  getRuntime = () => this.attributes.runtime
-
-  // string # Link to external log file.
-  getLogUrl = () => this.attributes.log_url
-
   // date-time # When this run was completed
   getCompletedAt = () => this.attributes.completed_at
+
+  // date-time # When this run was created
+  getCreatedAt = () => this.attributes.created_at
+
+  // string # Destination remote server type, if any
+  getDestRemoteServerType = () => this.attributes.dest_remote_server_type
 
   // boolean # Whether this run was a dry run (no actual changes made)
   getDryRun = () => this.attributes.dry_run
 
-  // int64 # Total bytes synced in this run
-  getBytesSynced = () => this.attributes.bytes_synced
+  // int64 # Number of files that errored
+  getErroredFiles = () => this.attributes.errored_files
 
   // int64 # Estimated bytes count for this run
   getEstimatedBytesCount = () => this.attributes.estimated_bytes_count
 
-  // date-time # When this run was created
-  getCreatedAt = () => this.attributes.created_at
+  // array(string) # Array of errors encountered during the run
+  getEventErrors = () => this.attributes.event_errors
+
+  // string # Link to external log file.
+  getLogUrl = () => this.attributes.log_url
+
+  // double # Total runtime in seconds
+  getRuntime = () => this.attributes.runtime
+
+  // int64 # Site ID
+  getSiteId = () => this.attributes.site_id
+
+  // string # Source remote server type, if any
+  getSrcRemoteServerType = () => this.attributes.src_remote_server_type
+
+  // string # Status of the sync run (success, failure, partial_failure, in_progress, skipped)
+  getStatus = () => this.attributes.status
+
+  // int64 # Number of files successfully synced
+  getSuccessfulFiles = () => this.attributes.successful_files
+
+  // int64 # ID of the Sync this run belongs to
+  getSyncId = () => this.attributes.sync_id
+
+  // string # Name of the Sync this run belongs to
+  getSyncName = () => this.attributes.sync_name
 
   // date-time # When this run was last updated
   getUpdatedAt = () => this.attributes.updated_at
