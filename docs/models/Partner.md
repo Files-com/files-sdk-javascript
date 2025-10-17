@@ -10,7 +10,8 @@
   "id": 1,
   "name": "Acme Corp",
   "notes": "This is a note about the partner.",
-  "root_folder": "/AcmeCorp"
+  "root_folder": "/AcmeCorp",
+  "tags": "example"
 }
 ```
 
@@ -21,6 +22,7 @@
 * `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 ---
 
@@ -56,24 +58,26 @@ await Partner.find(id)
 
 ```
 await Partner.create({
+  'name': "Acme Corp",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
   'allow_user_creation': false,
-  'name': "Acme Corp",
   'notes': "This is a note about the partner.",
   'root_folder': "/AcmeCorp",
+  'tags': "example",
 })
 ```
 
 
 ### Parameters
 
+* `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (boolean): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
-* `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 ---
 
@@ -83,24 +87,26 @@ await Partner.create({
 const partner = await Partner.find(id)
 
 await partner.update({
+  'name': "Acme Corp",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
   'allow_user_creation': false,
-  'name': "Acme Corp",
   'notes': "This is a note about the partner.",
   'root_folder': "/AcmeCorp",
+  'tags': "example",
 })
 ```
 
 ### Parameters
 
 * `id` (int64): Required - Partner ID.
+* `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (boolean): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
-* `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 ### Example Response
 
@@ -112,7 +118,8 @@ await partner.update({
   "id": 1,
   "name": "Acme Corp",
   "notes": "This is a note about the partner.",
-  "root_folder": "/AcmeCorp"
+  "root_folder": "/AcmeCorp",
+  "tags": "example"
 }
 ```
 

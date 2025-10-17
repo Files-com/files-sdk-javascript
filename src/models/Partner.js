@@ -77,13 +77,21 @@ class Partner {
     this.attributes.root_folder = value
   }
 
+  // string # Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+  getTags = () => this.attributes.tags
+
+  setTags = value => {
+    this.attributes.tags = value
+  }
+
   // Parameters:
+  //   name - string - The name of the Partner.
   //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
-  //   name - string - The name of the Partner.
   //   notes - string - Notes about this Partner.
   //   root_folder - string - The root folder path for this Partner.
+  //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -108,6 +116,10 @@ class Partner {
 
     if (params.root_folder && !isString(params.root_folder)) {
       throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
+    }
+
+    if (params.tags && !isString(params.tags)) {
+      throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
     }
 
     if (!params.id) {
@@ -210,12 +222,13 @@ class Partner {
     Partner.find(id, params, options)
 
   // Parameters:
+  //   name - string - The name of the Partner.
   //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
-  //   name - string - The name of the Partner.
   //   notes - string - Notes about this Partner.
   //   root_folder - string - The root folder path for this Partner.
+  //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   static create = async (params = {}, options = {}) => {
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
@@ -227,6 +240,10 @@ class Partner {
 
     if (params.root_folder && !isString(params.root_folder)) {
       throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
+    }
+
+    if (params.tags && !isString(params.tags)) {
+      throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
     }
 
     const response = await Api.sendRequest('/partners', 'POST', params, options)

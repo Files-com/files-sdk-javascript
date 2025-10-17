@@ -49,7 +49,14 @@ class GpgKey {
     this.attributes.name = value
   }
 
-  // int64 # GPG owner's user id
+  // int64 # Partner ID who owns this GPG Key, if applicable.
+  getPartnerId = () => this.attributes.partner_id
+
+  setPartnerId = value => {
+    this.attributes.partner_id = value
+  }
+
+  // int64 # User ID who owns this GPG Key, if applicable.
   getUserId = () => this.attributes.user_id
 
   setUserId = value => {
@@ -141,6 +148,7 @@ class GpgKey {
   }
 
   // Parameters:
+  //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
   //   public_key - string - MD5 hash of your GPG public key
   //   private_key - string - MD5 hash of your GPG private key.
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
@@ -157,6 +165,10 @@ class GpgKey {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.partner_id && !isInt(params.partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
     if (params.public_key && !isString(params.public_key)) {
@@ -281,6 +293,7 @@ class GpgKey {
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+  //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
   //   public_key - string - MD5 hash of your GPG public key
   //   private_key - string - MD5 hash of your GPG private key.
   //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
@@ -296,6 +309,10 @@ class GpgKey {
 
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (params.partner_id && !isInt(params.partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
     if (params.public_key && !isString(params.public_key)) {

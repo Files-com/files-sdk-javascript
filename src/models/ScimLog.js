@@ -72,6 +72,31 @@ class ScimLog {
 
   static all = (params = {}, options = {}) =>
     ScimLog.list(params, options)
+
+  // Parameters:
+  //   id (required) - int64 - Scim Log ID.
+  static find = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = id
+
+    if (!params.id) {
+      throw new errors.MissingParameterError('Parameter missing: id')
+    }
+
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    const response = await Api.sendRequest(`/scim_logs/${encodeURIComponent(params.id)}`, 'GET', params, options)
+
+    return new ScimLog(response?.data, options)
+  }
+
+  static get = (id, params = {}, options = {}) =>
+    ScimLog.find(id, params, options)
 }
 
 export default ScimLog

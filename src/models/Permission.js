@@ -77,6 +77,13 @@ class Permission {
     this.attributes.partner_id = value
   }
 
+  // string # Partner name (if applicable)
+  getPartnerName = () => this.attributes.partner_name
+
+  setPartnerName = value => {
+    this.attributes.partner_name = value
+  }
+
   // string # Permission type.  See the table referenced in the documentation for an explanation of each permission.
   getPermission = () => this.attributes.permission
 

@@ -35,7 +35,7 @@ class UserLifecycleRule {
     this.attributes.id = value
   }
 
-  // string # User authentication method for the rule
+  // string # User authentication method for which the rule will apply.
   getAuthenticationMethod = () => this.attributes.authentication_method
 
   setAuthenticationMethod = value => {
@@ -49,27 +49,6 @@ class UserLifecycleRule {
     this.attributes.group_ids = value
   }
 
-  // int64 # Number of days of inactivity before the rule applies
-  getInactivityDays = () => this.attributes.inactivity_days
-
-  setInactivityDays = value => {
-    this.attributes.inactivity_days = value
-  }
-
-  // boolean # Include folder admins in the rule
-  getIncludeFolderAdmins = () => this.attributes.include_folder_admins
-
-  setIncludeFolderAdmins = value => {
-    this.attributes.include_folder_admins = value
-  }
-
-  // boolean # Include site admins in the rule
-  getIncludeSiteAdmins = () => this.attributes.include_site_admins
-
-  setIncludeSiteAdmins = value => {
-    this.attributes.include_site_admins = value
-  }
-
   // string # Action to take on inactive users (disable or delete)
   getAction = () => this.attributes.action
 
@@ -77,11 +56,25 @@ class UserLifecycleRule {
     this.attributes.action = value
   }
 
-  // string # State of the users to apply the rule to (inactive or disabled)
-  getUserState = () => this.attributes.user_state
+  // int64 # Number of days of inactivity before the rule applies
+  getInactivityDays = () => this.attributes.inactivity_days
 
-  setUserState = value => {
-    this.attributes.user_state = value
+  setInactivityDays = value => {
+    this.attributes.inactivity_days = value
+  }
+
+  // boolean # If true, the rule will apply to folder admins.
+  getIncludeFolderAdmins = () => this.attributes.include_folder_admins
+
+  setIncludeFolderAdmins = value => {
+    this.attributes.include_folder_admins = value
+  }
+
+  // boolean # If true, the rule will apply to site admins.
+  getIncludeSiteAdmins = () => this.attributes.include_site_admins
+
+  setIncludeSiteAdmins = value => {
+    this.attributes.include_site_admins = value
   }
 
   // string # User Lifecycle Rule name
@@ -91,6 +84,13 @@ class UserLifecycleRule {
     this.attributes.name = value
   }
 
+  // string # If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  getPartnerTag = () => this.attributes.partner_tag
+
+  setPartnerTag = value => {
+    this.attributes.partner_tag = value
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -98,15 +98,31 @@ class UserLifecycleRule {
     this.attributes.site_id = value
   }
 
+  // string # State of the users to apply the rule to (inactive or disabled)
+  getUserState = () => this.attributes.user_state
+
+  setUserState = value => {
+    this.attributes.user_state = value
+  }
+
+  // string # If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  getUserTag = () => this.attributes.user_tag
+
+  setUserTag = value => {
+    this.attributes.user_tag = value
+  }
+
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
-  //   authentication_method - string - User authentication method for the rule
+  //   authentication_method - string - User authentication method for which the rule will apply.
   //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
-  //   include_site_admins - boolean - Include site admins in the rule
-  //   include_folder_admins - boolean - Include folder admins in the rule
-  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   include_site_admins - boolean - If true, the rule will apply to site admins.
+  //   include_folder_admins - boolean - If true, the rule will apply to folder admins.
   //   name - string - User Lifecycle Rule name
+  //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -137,12 +153,20 @@ class UserLifecycleRule {
       throw new errors.InvalidParameterError(`Bad parameter: inactivity_days must be of type Int, received ${getType(params.inactivity_days)}`)
     }
 
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.partner_tag && !isString(params.partner_tag)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_tag must be of type String, received ${getType(params.partner_tag)}`)
+    }
+
     if (params.user_state && !isString(params.user_state)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
     }
 
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    if (params.user_tag && !isString(params.user_tag)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_tag must be of type String, received ${getType(params.user_tag)}`)
     }
 
     if (!params.id) {
@@ -201,6 +225,7 @@ class UserLifecycleRule {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -245,13 +270,15 @@ class UserLifecycleRule {
 
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
-  //   authentication_method - string - User authentication method for the rule
+  //   authentication_method - string - User authentication method for which the rule will apply.
   //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
-  //   include_site_admins - boolean - Include site admins in the rule
-  //   include_folder_admins - boolean - Include folder admins in the rule
-  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   include_site_admins - boolean - If true, the rule will apply to site admins.
+  //   include_folder_admins - boolean - If true, the rule will apply to folder admins.
   //   name - string - User Lifecycle Rule name
+  //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  //   user_state - string - State of the users to apply the rule to (inactive or disabled)
+  //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   static create = async (params = {}, options = {}) => {
     if (params.action && !isString(params.action)) {
       throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
@@ -269,12 +296,20 @@ class UserLifecycleRule {
       throw new errors.InvalidParameterError(`Bad parameter: inactivity_days must be of type Int, received ${getType(params.inactivity_days)}`)
     }
 
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.partner_tag && !isString(params.partner_tag)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_tag must be of type String, received ${getType(params.partner_tag)}`)
+    }
+
     if (params.user_state && !isString(params.user_state)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_state must be of type String, received ${getType(params.user_state)}`)
     }
 
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    if (params.user_tag && !isString(params.user_tag)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_tag must be of type String, received ${getType(params.user_tag)}`)
     }
 
     const response = await Api.sendRequest('/user_lifecycle_rules', 'POST', params, options)
