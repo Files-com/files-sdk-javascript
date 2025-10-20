@@ -137,7 +137,7 @@
 
 ---
 
-## List Bundles
+## List Share Links
 
 ```
 await Bundle.list({
@@ -161,7 +161,7 @@ await Bundle.list({
 
 ---
 
-## Show Bundle
+## Show Share Link
 
 ```
 await Bundle.find(id)
@@ -174,7 +174,7 @@ await Bundle.find(id)
 
 ---
 
-## Create Bundle
+## Create Share Link
 
 ```
 await Bundle.create({
@@ -260,7 +260,7 @@ await bundle.share({
 
 ---
 
-## Update Bundle
+## Update Share Link
 
 ```
 const bundle = await Bundle.find(id)
@@ -412,7 +412,7 @@ await bundle.update({
 
 ---
 
-## Delete Bundle
+## Delete Share Link
 
 ```
 const bundle = await Bundle.find(id)

@@ -34,7 +34,7 @@
 
 ---
 
-## List Bundle Downloads
+## List Share Link Downloads
 
 ```
 await BundleDownload.list({

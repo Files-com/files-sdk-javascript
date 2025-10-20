@@ -591,6 +591,13 @@ class User {
     this.attributes.clear_2fa = value
   }
 
+  // boolean # If true, convert this user to a partner user by assigning the partner_id provided.
+  getConvertToPartnerUser = () => this.attributes.convert_to_partner_user
+
+  setConvertToPartnerUser = value => {
+    this.attributes.convert_to_partner_user = value
+  }
+
   // Unlock user who has been locked out due to failed logins
   unlock = async (params = {}) => {
     if (!this.attributes.id) {
@@ -722,6 +729,7 @@ class User {
   //   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
   //   username - string - User's username
   //   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+  //   convert_to_partner_user - boolean - If true, convert this user to a partner user by assigning the partner_id provided.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')

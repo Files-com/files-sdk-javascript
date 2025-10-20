@@ -21,7 +21,7 @@
 
 ---
 
-## List Bundle Notifications
+## List Share Link Notifications
 
 ```
 await BundleNotification.list({
@@ -40,7 +40,7 @@ await BundleNotification.list({
 
 ---
 
-## Show Bundle Notification
+## Show Share Link Notification
 
 ```
 await BundleNotification.find(id)
@@ -53,7 +53,7 @@ await BundleNotification.find(id)
 
 ---
 
-## Create Bundle Notification
+## Create Share Link Notification
 
 ```
 await BundleNotification.create({
@@ -76,7 +76,7 @@ await BundleNotification.create({
 
 ---
 
-## Update Bundle Notification
+## Update Share Link Notification
 
 ```
 const bundle_notification = await BundleNotification.find(id)
@@ -107,7 +107,7 @@ await bundle_notification.update({
 
 ---
 
-## Delete Bundle Notification
+## Delete Share Link Notification
 
 ```
 const bundle_notification = await BundleNotification.find(id)

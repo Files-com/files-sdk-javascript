@@ -38,7 +38,7 @@
 
 ---
 
-## List Bundle Registrations
+## List Share Link Registrations
 
 ```
 await BundleRegistration.list({

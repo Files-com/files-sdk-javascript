@@ -23,7 +23,7 @@
 
 ---
 
-## List Bundle Recipients
+## List Share Link Recipients
 
 ```
 await BundleRecipient.list({
@@ -44,7 +44,7 @@ await BundleRecipient.list({
 
 ---
 
-## Create Bundle Recipient
+## Create Share Link Recipient
 
 ```
 await BundleRecipient.create({
