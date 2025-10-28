@@ -6,6 +6,7 @@
 {
   "allow_bypassing_2fa_policies": true,
   "allow_credential_changes": true,
+  "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
   "id": 1,
   "name": "Acme Corp",
@@ -17,6 +18,7 @@
 
 * `allow_bypassing_2fa_policies` (boolean): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
 * `id` (int64): The unique ID of the Partner.
 * `name` (string): The name of the Partner.
@@ -61,6 +63,7 @@ await Partner.create({
   'name': "Acme Corp",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
+  'allow_providing_gpg_keys': false,
   'allow_user_creation': false,
   'notes': "This is a note about the partner.",
   'root_folder': "/AcmeCorp",
@@ -74,6 +77,7 @@ await Partner.create({
 * `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (boolean): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -90,6 +94,7 @@ await partner.update({
   'name': "Acme Corp",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
+  'allow_providing_gpg_keys': false,
   'allow_user_creation': false,
   'notes': "This is a note about the partner.",
   'root_folder': "/AcmeCorp",
@@ -103,6 +108,7 @@ await partner.update({
 * `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (boolean): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -114,6 +120,7 @@ await partner.update({
 {
   "allow_bypassing_2fa_policies": true,
   "allow_credential_changes": true,
+  "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
   "id": 1,
   "name": "Acme Corp",
