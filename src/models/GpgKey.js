@@ -56,6 +56,13 @@ class GpgKey {
     this.attributes.partner_id = value
   }
 
+  // string # Name of the Partner who owns this GPG Key, if applicable.
+  getPartnerName = () => this.attributes.partner_name
+
+  setPartnerName = value => {
+    this.attributes.partner_name = value
+  }
+
   // int64 # User ID who owns this GPG Key, if applicable.
   getUserId = () => this.attributes.user_id
 

@@ -318,6 +318,13 @@ class User {
     this.attributes.partner_id = value
   }
 
+  // string # Name of the Partner if this user belongs to a Partner
+  getPartnerName = () => this.attributes.partner_name
+
+  setPartnerName = value => {
+    this.attributes.partner_name = value
+  }
+
   // date-time # Last time the user's password was set
   getPasswordSetAt = () => this.attributes.password_set_at
 
