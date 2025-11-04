@@ -91,6 +91,13 @@ class Partner {
     this.attributes.tags = value
   }
 
+  // array(int64) # Array of User IDs that belong to this Partner.
+  getUserIds = () => this.attributes.user_ids
+
+  setUserIds = value => {
+    this.attributes.user_ids = value
+  }
+
   // Parameters:
   //   name - string - The name of the Partner.
   //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
