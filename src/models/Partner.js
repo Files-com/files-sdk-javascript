@@ -77,6 +77,13 @@ class Partner {
     this.attributes.notes = value
   }
 
+  // array(int64) # Array of User IDs that are Partner Admins for this Partner.
+  getPartnerAdminIds = () => this.attributes.partner_admin_ids
+
+  setPartnerAdminIds = value => {
+    this.attributes.partner_admin_ids = value
+  }
+
   // string # The root folder path for this Partner.
   getRootFolder = () => this.attributes.root_folder
 
