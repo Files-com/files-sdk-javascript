@@ -106,7 +106,6 @@ class Partner {
   }
 
   // Parameters:
-  //   name - string - The name of the Partner.
   //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -114,6 +113,7 @@ class Partner {
   //   notes - string - Notes about this Partner.
   //   root_folder - string - The root folder path for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+  //   name - string - The name of the Partner.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -128,10 +128,6 @@ class Partner {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
-    }
-
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
     }
@@ -142,6 +138,10 @@ class Partner {
 
     if (params.tags && !isString(params.tags)) {
       throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
     if (!params.id) {
@@ -244,7 +244,6 @@ class Partner {
     Partner.find(id, params, options)
 
   // Parameters:
-  //   name - string - The name of the Partner.
   //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -252,9 +251,10 @@ class Partner {
   //   notes - string - Notes about this Partner.
   //   root_folder - string - The root folder path for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+  //   name (required) - string - The name of the Partner.
   static create = async (params = {}, options = {}) => {
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    if (!params.name) {
+      throw new errors.MissingParameterError('Parameter missing: name')
     }
 
     if (params.notes && !isString(params.notes)) {
@@ -267,6 +267,10 @@ class Partner {
 
     if (params.tags && !isString(params.tags)) {
       throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
     const response = await Api.sendRequest('/partners', 'POST', params, options)
