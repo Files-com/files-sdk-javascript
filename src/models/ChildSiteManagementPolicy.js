@@ -84,7 +84,7 @@ class ChildSiteManagementPolicy {
   getUpdatedAt = () => this.attributes.updated_at
 
   // Parameters:
-  //   value - string
+  //   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
   //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
   //   policy_type - string - Type of policy.  Valid values: `settings`.
   //   name - string - Name for this policy.
@@ -101,10 +101,6 @@ class ChildSiteManagementPolicy {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.value && !isString(params.value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
@@ -222,7 +218,7 @@ class ChildSiteManagementPolicy {
     ChildSiteManagementPolicy.find(id, params, options)
 
   // Parameters:
-  //   value - string
+  //   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
   //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
   //   policy_type (required) - string - Type of policy.  Valid values: `settings`.
   //   name - string - Name for this policy.
@@ -230,10 +226,6 @@ class ChildSiteManagementPolicy {
   static create = async (params = {}, options = {}) => {
     if (!params.policy_type) {
       throw new errors.MissingParameterError('Parameter missing: policy_type')
-    }
-
-    if (params.value && !isString(params.value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
