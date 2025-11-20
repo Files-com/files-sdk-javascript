@@ -28,7 +28,7 @@ class Partner {
 
   isLoaded = () => !!this.attributes.id
 
-  // boolean # Allow users created under this Partner to bypass Two-Factor Authentication policies.
+  // boolean # Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   getAllowBypassing2faPolicies = () => this.attributes.allow_bypassing_2fa_policies
 
   setAllowBypassing2faPolicies = value => {
@@ -106,7 +106,7 @@ class Partner {
   }
 
   // Parameters:
-  //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
+  //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
@@ -244,7 +244,7 @@ class Partner {
     Partner.find(id, params, options)
 
   // Parameters:
-  //   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
+  //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
