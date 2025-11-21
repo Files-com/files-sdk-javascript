@@ -8,6 +8,9 @@
   "name": "example",
   "destination_type": "example",
   "destination_url": "example",
+  "file_destination_path": "example",
+  "file_format": "example",
+  "file_interval_minutes": 1,
   "additional_headers": {
     "key": "example value"
   },
@@ -62,6 +65,9 @@
 * `name` (string): Name for this Destination
 * `destination_type` (string): Destination Type
 * `destination_url` (string): Destination Url
+* `file_destination_path` (string): Applicable only for destination type: file. Destination folder path on Files.com.
+* `file_format` (string): Applicable only for destination type: file. Generated file format.
+* `file_interval_minutes` (int64): Applicable only for destination type: file. Interval, in minutes, between file deliveries.
 * `additional_headers` (object): Additional HTTP Headers included in calls to the destination URL
 * `sending_active` (boolean): Whether this SIEM HTTP Destination is currently being sent to or not
 * `generic_payload_type` (string): Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
@@ -151,6 +157,9 @@ await SiemHttpDestination.create({
   'additional_headers': {"key":"example value"},
   'sending_active': true,
   'generic_payload_type': "example",
+  'file_destination_path': "example",
+  'file_format': "example",
+  'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
   'azure_oauth_client_credentials_tenant_id': "example",
@@ -179,6 +188,9 @@ await SiemHttpDestination.create({
 * `additional_headers` (object): Additional HTTP Headers included in calls to the destination URL
 * `sending_active` (boolean): Whether this SIEM HTTP Destination is currently being sent to or not
 * `generic_payload_type` (string): Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+* `file_destination_path` (string): Applicable only for destination type: file. Destination folder path on Files.com.
+* `file_format` (string): Applicable only for destination type: file. Generated file format.
+* `file_interval_minutes` (int64): Applicable only for destination type: file. Interval, in minutes, between file deliveries.
 * `splunk_token` (string): Applicable only for destination type: splunk. Authentication token provided by Splunk.
 * `azure_dcr_immutable_id` (string): Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
 * `azure_stream_name` (string): Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -202,7 +214,7 @@ await SiemHttpDestination.create({
 * `exavault_api_request_send_enabled` (boolean): Whether or not sending is enabled for exavault_api_request logs.
 * `settings_change_send_enabled` (boolean): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Required - Destination Type
-* `destination_url` (string): Required - Destination Url
+* `destination_url` (string): Destination Url
 
 ---
 
@@ -217,6 +229,7 @@ await SiemHttpDestination.sendTestEntry({
   'additional_headers': {"key":"example value"},
   'sending_active': true,
   'generic_payload_type': "example",
+  'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
   'azure_oauth_client_credentials_tenant_id': "example",
@@ -246,6 +259,9 @@ await SiemHttpDestination.sendTestEntry({
 * `additional_headers` (object): Additional HTTP Headers included in calls to the destination URL
 * `sending_active` (boolean): Whether this SIEM HTTP Destination is currently being sent to or not
 * `generic_payload_type` (string): Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+* `file_destination_path` (string): Applicable only for destination type: file. Destination folder path on Files.com.
+* `file_format` (string): Applicable only for destination type: file. Generated file format.
+* `file_interval_minutes` (int64): Applicable only for destination type: file. Interval, in minutes, between file deliveries.
 * `splunk_token` (string): Applicable only for destination type: splunk. Authentication token provided by Splunk.
 * `azure_dcr_immutable_id` (string): Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
 * `azure_stream_name` (string): Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -281,6 +297,9 @@ await siem_http_destination.update({
   'additional_headers': {"key":"example value"},
   'sending_active': true,
   'generic_payload_type': "example",
+  'file_destination_path': "example",
+  'file_format': "example",
+  'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
   'azure_oauth_client_credentials_tenant_id': "example",
@@ -309,6 +328,9 @@ await siem_http_destination.update({
 * `additional_headers` (object): Additional HTTP Headers included in calls to the destination URL
 * `sending_active` (boolean): Whether this SIEM HTTP Destination is currently being sent to or not
 * `generic_payload_type` (string): Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+* `file_destination_path` (string): Applicable only for destination type: file. Destination folder path on Files.com.
+* `file_format` (string): Applicable only for destination type: file. Generated file format.
+* `file_interval_minutes` (int64): Applicable only for destination type: file. Interval, in minutes, between file deliveries.
 * `splunk_token` (string): Applicable only for destination type: splunk. Authentication token provided by Splunk.
 * `azure_dcr_immutable_id` (string): Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
 * `azure_stream_name` (string): Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -342,6 +364,9 @@ await siem_http_destination.update({
   "name": "example",
   "destination_type": "example",
   "destination_url": "example",
+  "file_destination_path": "example",
+  "file_format": "example",
+  "file_interval_minutes": 1,
   "additional_headers": {
     "key": "example value"
   },

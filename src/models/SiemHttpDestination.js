@@ -56,6 +56,27 @@ class SiemHttpDestination {
     this.attributes.destination_url = value
   }
 
+  // string # Applicable only for destination type: file. Destination folder path on Files.com.
+  getFileDestinationPath = () => this.attributes.file_destination_path
+
+  setFileDestinationPath = value => {
+    this.attributes.file_destination_path = value
+  }
+
+  // string # Applicable only for destination type: file. Generated file format.
+  getFileFormat = () => this.attributes.file_format
+
+  setFileFormat = value => {
+    this.attributes.file_format = value
+  }
+
+  // int64 # Applicable only for destination type: file. Interval, in minutes, between file deliveries.
+  getFileIntervalMinutes = () => this.attributes.file_interval_minutes
+
+  setFileIntervalMinutes = value => {
+    this.attributes.file_interval_minutes = value
+  }
+
   // object # Additional HTTP Headers included in calls to the destination URL
   getAdditionalHeaders = () => this.attributes.additional_headers
 
@@ -418,6 +439,9 @@ class SiemHttpDestination {
   //   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
   //   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
   //   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+  //   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+  //   file_format - string - Applicable only for destination type: file. Generated file format.
+  //   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries.
   //   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
   //   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
   //   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -462,6 +486,18 @@ class SiemHttpDestination {
 
     if (params.generic_payload_type && !isString(params.generic_payload_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: generic_payload_type must be of type String, received ${getType(params.generic_payload_type)}`)
+    }
+
+    if (params.file_destination_path && !isString(params.file_destination_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_destination_path must be of type String, received ${getType(params.file_destination_path)}`)
+    }
+
+    if (params.file_format && !isString(params.file_format)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_format must be of type String, received ${getType(params.file_format)}`)
+    }
+
+    if (params.file_interval_minutes && !isInt(params.file_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_interval_minutes must be of type Int, received ${getType(params.file_interval_minutes)}`)
     }
 
     if (params.splunk_token && !isString(params.splunk_token)) {
@@ -619,6 +655,9 @@ class SiemHttpDestination {
   //   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
   //   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
   //   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+  //   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+  //   file_format - string - Applicable only for destination type: file. Generated file format.
+  //   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries.
   //   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
   //   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
   //   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -642,14 +681,10 @@ class SiemHttpDestination {
   //   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
   //   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
   //   destination_type (required) - string - Destination Type
-  //   destination_url (required) - string - Destination Url
+  //   destination_url - string - Destination Url
   static create = async (params = {}, options = {}) => {
     if (!params.destination_type) {
       throw new errors.MissingParameterError('Parameter missing: destination_type')
-    }
-
-    if (!params.destination_url) {
-      throw new errors.MissingParameterError('Parameter missing: destination_url')
     }
 
     if (params.name && !isString(params.name)) {
@@ -658,6 +693,18 @@ class SiemHttpDestination {
 
     if (params.generic_payload_type && !isString(params.generic_payload_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: generic_payload_type must be of type String, received ${getType(params.generic_payload_type)}`)
+    }
+
+    if (params.file_destination_path && !isString(params.file_destination_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_destination_path must be of type String, received ${getType(params.file_destination_path)}`)
+    }
+
+    if (params.file_format && !isString(params.file_format)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_format must be of type String, received ${getType(params.file_format)}`)
+    }
+
+    if (params.file_interval_minutes && !isInt(params.file_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_interval_minutes must be of type Int, received ${getType(params.file_interval_minutes)}`)
     }
 
     if (params.splunk_token && !isString(params.splunk_token)) {
@@ -725,6 +772,9 @@ class SiemHttpDestination {
   //   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
   //   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
   //   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+  //   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+  //   file_format - string - Applicable only for destination type: file. Generated file format.
+  //   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries.
   //   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
   //   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
   //   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -766,6 +816,18 @@ class SiemHttpDestination {
 
     if (params.generic_payload_type && !isString(params.generic_payload_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: generic_payload_type must be of type String, received ${getType(params.generic_payload_type)}`)
+    }
+
+    if (params.file_destination_path && !isString(params.file_destination_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_destination_path must be of type String, received ${getType(params.file_destination_path)}`)
+    }
+
+    if (params.file_format && !isString(params.file_format)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_format must be of type String, received ${getType(params.file_format)}`)
+    }
+
+    if (params.file_interval_minutes && !isInt(params.file_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_interval_minutes must be of type Int, received ${getType(params.file_interval_minutes)}`)
     }
 
     if (params.splunk_token && !isString(params.splunk_token)) {
