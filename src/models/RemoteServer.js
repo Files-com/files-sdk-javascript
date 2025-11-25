@@ -77,11 +77,11 @@ class RemoteServer {
     this.attributes.port = value
   }
 
-  // boolean # If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
-  getBufferUploadsAlways = () => this.attributes.buffer_uploads_always
+  // string # If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
+  getBufferUploads = () => this.attributes.buffer_uploads
 
-  setBufferUploadsAlways = value => {
-    this.attributes.buffer_uploads_always = value
+  setBufferUploads = value => {
+    this.attributes.buffer_uploads = value
   }
 
   // int64 # Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -669,7 +669,7 @@ class RemoteServer {
   //   azure_files_storage_share_name - string - Azure Files:  Storage Share name
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
-  //   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+  //   buffer_uploads - string - If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -826,6 +826,10 @@ class RemoteServer {
 
     if (params.backblaze_b2_s3_endpoint && !isString(params.backblaze_b2_s3_endpoint)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(params.backblaze_b2_s3_endpoint)}`)
+    }
+
+    if (params.buffer_uploads && !isString(params.buffer_uploads)) {
+      throw new errors.InvalidParameterError(`Bad parameter: buffer_uploads must be of type String, received ${getType(params.buffer_uploads)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
@@ -1114,7 +1118,7 @@ class RemoteServer {
   //   azure_files_storage_share_name - string - Azure Files:  Storage Share name
   //   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
   //   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
-  //   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+  //   buffer_uploads - string - If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1258,6 +1262,10 @@ class RemoteServer {
 
     if (params.backblaze_b2_s3_endpoint && !isString(params.backblaze_b2_s3_endpoint)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_s3_endpoint must be of type String, received ${getType(params.backblaze_b2_s3_endpoint)}`)
+    }
+
+    if (params.buffer_uploads && !isString(params.buffer_uploads)) {
+      throw new errors.InvalidParameterError(`Bad parameter: buffer_uploads must be of type String, received ${getType(params.buffer_uploads)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
