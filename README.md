@@ -712,6 +712,7 @@ Error
 |     `ProcessingFailure_AlreadyCompletedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AutomationCannotBeRunManuallyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BehaviorNotAllowedOnRemoteServerError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_BufferedUploadDisabledForThisDestinationError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BundleOnlyAllowsPreviewsError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BundleOperationRequiresSubfolderError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_CouldNotCreateParentError`|  `ProcessingFailureError` |

@@ -10,6 +10,7 @@
   "hostname": "remote-server.com",
   "remote_home_path": "/home/user1",
   "name": "My Remote server",
+  "description": "More information or notes about my server",
   "port": 1,
   "buffer_uploads": "example",
   "max_connections": 1,
@@ -69,6 +70,7 @@
 * `hostname` (string): Hostname or IP address
 * `remote_home_path` (string): Initial home folder on remote server
 * `name` (string): Internal name for your reference
+* `description` (string): Internal description for your reference
 * `port` (int64): Port for remote server.  Not needed for S3.
 * `buffer_uploads` (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `max_connections` (int64): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -203,6 +205,7 @@ await RemoteServer.create({
   'cloudflare_access_key': "example",
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
+  'description': "More information or notes about my server",
   'dropbox_teams': true,
   'enable_dedicated_ips': true,
   'filebase_access_key': "example",
@@ -275,6 +278,7 @@ await RemoteServer.create({
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `cloudflare_bucket` (string): Cloudflare: Bucket name
 * `cloudflare_endpoint` (string): Cloudflare: endpoint
+* `description` (string): Internal description for your reference
 * `dropbox_teams` (boolean): Dropbox: If true, list Team folders in root?
 * `enable_dedicated_ips` (boolean): `true` if remote server only accepts connections from dedicated IPs
 * `filebase_access_key` (string): Filebase: Access Key.
@@ -401,6 +405,7 @@ await remote_server.update({
   'cloudflare_access_key': "example",
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
+  'description': "More information or notes about my server",
   'dropbox_teams': true,
   'enable_dedicated_ips': true,
   'filebase_access_key': "example",
@@ -473,6 +478,7 @@ await remote_server.update({
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `cloudflare_bucket` (string): Cloudflare: Bucket name
 * `cloudflare_endpoint` (string): Cloudflare: endpoint
+* `description` (string): Internal description for your reference
 * `dropbox_teams` (boolean): Dropbox: If true, list Team folders in root?
 * `enable_dedicated_ips` (boolean): `true` if remote server only accepts connections from dedicated IPs
 * `filebase_access_key` (string): Filebase: Access Key.
@@ -517,6 +523,7 @@ await remote_server.update({
   "hostname": "remote-server.com",
   "remote_home_path": "/home/user1",
   "name": "My Remote server",
+  "description": "More information or notes about my server",
   "port": 1,
   "buffer_uploads": "example",
   "max_connections": 1,

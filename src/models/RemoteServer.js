@@ -70,6 +70,13 @@ class RemoteServer {
     this.attributes.name = value
   }
 
+  // string # Internal description for your reference
+  getDescription = () => this.attributes.description
+
+  setDescription = value => {
+    this.attributes.description = value
+  }
+
   // int64 # Port for remote server.  Not needed for S3.
   getPort = () => this.attributes.port
 
@@ -673,6 +680,7 @@ class RemoteServer {
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
+  //   description - string - Internal description for your reference
   //   dropbox_teams - boolean - Dropbox: If true, list Team folders in root?
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   filebase_access_key - string - Filebase: Access Key.
@@ -842,6 +850,10 @@ class RemoteServer {
 
     if (params.cloudflare_endpoint && !isString(params.cloudflare_endpoint)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(params.cloudflare_endpoint)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
     if (params.filebase_access_key && !isString(params.filebase_access_key)) {
@@ -1122,6 +1134,7 @@ class RemoteServer {
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   cloudflare_bucket - string - Cloudflare: Bucket name
   //   cloudflare_endpoint - string - Cloudflare: endpoint
+  //   description - string - Internal description for your reference
   //   dropbox_teams - boolean - Dropbox: If true, list Team folders in root?
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   filebase_access_key - string - Filebase: Access Key.
@@ -1278,6 +1291,10 @@ class RemoteServer {
 
     if (params.cloudflare_endpoint && !isString(params.cloudflare_endpoint)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_endpoint must be of type String, received ${getType(params.cloudflare_endpoint)}`)
+    }
+
+    if (params.description && !isString(params.description)) {
+      throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
     if (params.filebase_access_key && !isString(params.filebase_access_key)) {

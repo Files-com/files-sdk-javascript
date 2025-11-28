@@ -166,6 +166,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_AlreadyCompletedError
 ### ProcessingFailure_AutomationCannotBeRunManuallyError
 ### ProcessingFailure_BehaviorNotAllowedOnRemoteServerError
+### ProcessingFailure_BufferedUploadDisabledForThisDestinationError
 ### ProcessingFailure_BundleOnlyAllowsPreviewsError
 ### ProcessingFailure_BundleOperationRequiresSubfolderError
 ### ProcessingFailure_CouldNotCreateParentError
