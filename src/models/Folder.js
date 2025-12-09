@@ -84,11 +84,11 @@ class Folder {
     this.attributes.created_by_remote_server_id = value
   }
 
-  // int64 # ID of the Remote Server Sync that created the file/folder
-  getCreatedByRemoteServerSyncId = () => this.attributes.created_by_remote_server_sync_id
+  // int64 # ID of the Sync that created the file/folder
+  getCreatedBySyncId = () => this.attributes.created_by_sync_id
 
-  setCreatedByRemoteServerSyncId = value => {
-    this.attributes.created_by_remote_server_sync_id = value
+  setCreatedBySyncId = value => {
+    this.attributes.created_by_sync_id = value
   }
 
   // object # Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value.
@@ -157,11 +157,11 @@ class Folder {
     this.attributes.last_modified_by_remote_server_id = value
   }
 
-  // int64 # ID of the Remote Server Sync that last modified the file/folder
-  getLastModifiedByRemoteServerSyncId = () => this.attributes.last_modified_by_remote_server_sync_id
+  // int64 # ID of the Sync that last modified the file/folder
+  getLastModifiedBySyncId = () => this.attributes.last_modified_by_sync_id
 
-  setLastModifiedByRemoteServerSyncId = value => {
-    this.attributes.last_modified_by_remote_server_sync_id = value
+  setLastModifiedBySyncId = value => {
+    this.attributes.last_modified_by_sync_id = value
   }
 
   // date-time # File last modified date/time, according to the server.  This is the timestamp of the last Files.com operation of the file, regardless of what modified timestamp was sent.
