@@ -28,21 +28,21 @@ class GpgKey {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Your GPG key ID.
+  // int64 # GPG key ID.
   getId = () => this.attributes.id
 
   setId = value => {
     this.attributes.id = value
   }
 
-  // date-time # Your GPG key expiration date.
+  // date-time # GPG key expiration date.
   getExpiresAt = () => this.attributes.expires_at
 
   setExpiresAt = value => {
     this.attributes.expires_at = value
   }
 
-  // string # Your GPG key name.
+  // string # GPG key name.
   getName = () => this.attributes.name
 
   setName = value => {
@@ -70,56 +70,56 @@ class GpgKey {
     this.attributes.user_id = value
   }
 
-  // string # MD5 hash of your GPG public key
+  // string # MD5 hash of the GPG public key
   getPublicKeyMd5 = () => this.attributes.public_key_md5
 
   setPublicKeyMd5 = value => {
     this.attributes.public_key_md5 = value
   }
 
-  // string # MD5 hash of your GPG private key.
+  // string # MD5 hash of the GPG private key.
   getPrivateKeyMd5 = () => this.attributes.private_key_md5
 
   setPrivateKeyMd5 = value => {
     this.attributes.private_key_md5 = value
   }
 
-  // string # Your GPG public key
+  // string # GPG public key
   getGeneratedPublicKey = () => this.attributes.generated_public_key
 
   setGeneratedPublicKey = value => {
     this.attributes.generated_public_key = value
   }
 
-  // string # Your GPG private key.
+  // string # GPG private key.
   getGeneratedPrivateKey = () => this.attributes.generated_private_key
 
   setGeneratedPrivateKey = value => {
     this.attributes.generated_private_key = value
   }
 
-  // string # Your GPG private key password. Only required for password protected keys.
+  // string # GPG private key password. Only required for password protected keys.
   getPrivateKeyPasswordMd5 = () => this.attributes.private_key_password_md5
 
   setPrivateKeyPasswordMd5 = value => {
     this.attributes.private_key_password_md5 = value
   }
 
-  // string # MD5 hash of your GPG public key
+  // string # The GPG public key
   getPublicKey = () => this.attributes.public_key
 
   setPublicKey = value => {
     this.attributes.public_key = value
   }
 
-  // string # MD5 hash of your GPG private key.
+  // string # The GPG private key
   getPrivateKey = () => this.attributes.private_key
 
   setPrivateKey = value => {
     this.attributes.private_key = value
   }
 
-  // string # Your GPG private key password. Only required for password protected keys.
+  // string # The GPG private key password
   getPrivateKeyPassword = () => this.attributes.private_key_password
 
   setPrivateKeyPassword = value => {
@@ -156,10 +156,10 @@ class GpgKey {
 
   // Parameters:
   //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-  //   public_key - string - MD5 hash of your GPG public key
-  //   private_key - string - MD5 hash of your GPG private key.
-  //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
-  //   name - string - Your GPG key name.
+  //   public_key - string - The GPG public key
+  //   private_key - string - The GPG private key
+  //   private_key_password - string - The GPG private key password
+  //   name - string - GPG key name.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -301,10 +301,10 @@ class GpgKey {
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-  //   public_key - string - MD5 hash of your GPG public key
-  //   private_key - string - MD5 hash of your GPG private key.
-  //   private_key_password - string - Your GPG private key password. Only required for password protected keys.
-  //   name (required) - string - Your GPG key name.
+  //   public_key - string - The GPG public key
+  //   private_key - string - The GPG private key
+  //   private_key_password - string - The GPG private key password
+  //   name (required) - string - GPG key name.
   //   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
   //   generate_keypair - boolean - If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
   //   generate_full_name - string - Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
