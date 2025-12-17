@@ -77,7 +77,7 @@ class RemoteServer {
     this.attributes.description = value
   }
 
-  // int64 # Port for remote server.  Not needed for S3.
+  // int64 # Port for remote server.
   getPort = () => this.attributes.port
 
   setPort = value => {
@@ -110,6 +110,13 @@ class RemoteServer {
 
   setPinnedRegion = value => {
     this.attributes.pinned_region = value
+  }
+
+  // int64 # ID of Remote Server Credential, if applicable.
+  getRemoteServerCredentialId = () => this.attributes.remote_server_credential_id
+
+  setRemoteServerCredentialId = value => {
+    this.attributes.remote_server_credential_id = value
   }
 
   // string # S3 bucket name
@@ -161,7 +168,7 @@ class RemoteServer {
     this.attributes.ssl = value
   }
 
-  // string # Remote server username.  Not needed for S3 buckets.
+  // string # Remote server username.
   getUsername = () => this.attributes.username
 
   setUsername = value => {
@@ -707,7 +714,8 @@ class RemoteServer {
   //   name - string - Internal name for your reference
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-  //   port - int64 - Port for remote server.  Not needed for S3.
+  //   port - int64 - Port for remote server.
+  //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -718,7 +726,7 @@ class RemoteServer {
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
   //   server_type - string - Remote server type.
   //   ssl - string - Should we require SSL?
-  //   username - string - Remote server username.  Not needed for S3 buckets.
+  //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
   //   wasabi_bucket - string - Wasabi: Bucket name
   //   wasabi_region - string - Wasabi: Region
@@ -930,6 +938,10 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
+    }
+
+    if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: remote_server_credential_id must be of type Int, received ${getType(params.remote_server_credential_id)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
@@ -1166,7 +1178,8 @@ class RemoteServer {
   //   name - string - Internal name for your reference
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-  //   port - int64 - Port for remote server.  Not needed for S3.
+  //   port - int64 - Port for remote server.
+  //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1177,7 +1190,7 @@ class RemoteServer {
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
   //   server_type - string - Remote server type.
   //   ssl - string - Should we require SSL?
-  //   username - string - Remote server username.  Not needed for S3 buckets.
+  //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
   //   wasabi_bucket - string - Wasabi: Bucket name
   //   wasabi_region - string - Wasabi: Region
@@ -1376,6 +1389,10 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
+    }
+
+    if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: remote_server_credential_id must be of type Int, received ${getType(params.remote_server_credential_id)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
