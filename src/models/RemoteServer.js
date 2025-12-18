@@ -364,6 +364,20 @@ class RemoteServer {
     this.attributes.files_agent_version = value
   }
 
+  // boolean # If true, the Files Agent is up to date.
+  getFilesAgentUpToDate = () => this.attributes.files_agent_up_to_date
+
+  setFilesAgentUpToDate = value => {
+    this.attributes.files_agent_up_to_date = value
+  }
+
+  // string # Latest available Files Agent version
+  getFilesAgentLatestVersion = () => this.attributes.files_agent_latest_version
+
+  setFilesAgentLatestVersion = value => {
+    this.attributes.files_agent_latest_version = value
+  }
+
   // int64 # Route traffic to outbound on a files-agent
   getOutboundAgentId = () => this.attributes.outbound_agent_id
 
@@ -572,6 +586,35 @@ class RemoteServer {
 
   setWasabiSecretKey = value => {
     this.attributes.wasabi_secret_key = value
+  }
+
+  // Push update to Files Agent
+  agentPushUpdate = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/remote_servers/${encodeURIComponent(params.id)}/agent_push_update`, 'POST', params, this.options)
+
+    const AgentPushUpdate = require('./AgentPushUpdate.js').default
+    return new AgentPushUpdate(response?.data, this.options)
   }
 
   // Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
