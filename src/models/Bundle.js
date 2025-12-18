@@ -413,6 +413,7 @@ class Bundle {
   //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
+  //   user_id - int64 - The owning user id. Only site admins can set this.
   //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   update = async (params = {}) => {
@@ -483,6 +484,10 @@ class Bundle {
 
     if (params.start_access_on_date && !isString(params.start_access_on_date)) {
       throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(params.start_access_on_date)}`)
+    }
+
+    if (params.user_id && !isInt(params.user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
     if (!params.id) {
