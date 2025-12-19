@@ -91,6 +91,13 @@ class Restore {
     this.attributes.prefix = value
   }
 
+  // string # Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
+  getRestorationType = () => this.attributes.restoration_type
+
+  setRestorationType = value => {
+    this.attributes.restoration_type = value
+  }
+
   // boolean # If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
   getRestoreInPlace = () => this.attributes.restore_in_place
 
@@ -103,6 +110,48 @@ class Restore {
 
   setRestoreDeletedPermissions = value => {
     this.attributes.restore_deleted_permissions = value
+  }
+
+  // int64 # Number of users successfully restored (only present for `restoration_type=users`).
+  getUsersRestored = () => this.attributes.users_restored
+
+  setUsersRestored = value => {
+    this.attributes.users_restored = value
+  }
+
+  // int64 # Number of users that failed to restore (only present for `restoration_type=users`).
+  getUsersErrored = () => this.attributes.users_errored
+
+  setUsersErrored = value => {
+    this.attributes.users_errored = value
+  }
+
+  // int64 # Total number of users processed (only present for `restoration_type=users`).
+  getUsersTotal = () => this.attributes.users_total
+
+  setUsersTotal = value => {
+    this.attributes.users_total = value
+  }
+
+  // int64 # Number of API keys restored (only present for `restoration_type=users`).
+  getApiKeysRestored = () => this.attributes.api_keys_restored
+
+  setApiKeysRestored = value => {
+    this.attributes.api_keys_restored = value
+  }
+
+  // int64 # Number of public keys restored (only present for `restoration_type=users`).
+  getPublicKeysRestored = () => this.attributes.public_keys_restored
+
+  setPublicKeysRestored = value => {
+    this.attributes.public_keys_restored = value
+  }
+
+  // int64 # Number of two factor authentication methods restored (only present for `restoration_type=users`).
+  getTwoFactorAuthenticationMethodsRestored = () => this.attributes.two_factor_authentication_methods_restored
+
+  setTwoFactorAuthenticationMethodsRestored = value => {
+    this.attributes.two_factor_authentication_methods_restored = value
   }
 
   // string # Status of the restoration process.
@@ -159,6 +208,7 @@ class Restore {
   // Parameters:
   //   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
   //   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
+  //   restoration_type - string - Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
   //   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
   //   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
   //   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
@@ -173,6 +223,10 @@ class Restore {
 
     if (params.prefix && !isString(params.prefix)) {
       throw new errors.InvalidParameterError(`Bad parameter: prefix must be of type String, received ${getType(params.prefix)}`)
+    }
+
+    if (params.restoration_type && !isString(params.restoration_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restoration_type must be of type String, received ${getType(params.restoration_type)}`)
     }
 
     const response = await Api.sendRequest('/restores', 'POST', params, options)
