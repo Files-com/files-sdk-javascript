@@ -123,7 +123,6 @@ class Group {
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
-  //   workspace_id - int64 - Workspace ID
   //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
   //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -154,10 +153,6 @@ class Group {
 
     if (params.admin_ids && !isString(params.admin_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(params.admin_ids)}`)
-    }
-
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {
@@ -279,13 +274,13 @@ class Group {
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
-  //   workspace_id - int64 - Workspace ID
   //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
   //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
   //   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   name (required) - string - Group name.
+  //   workspace_id - int64 - Workspace ID
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
@@ -303,16 +298,16 @@ class Group {
       throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(params.admin_ids)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
-    }
-
     if (params.allowed_ips && !isString(params.allowed_ips)) {
       throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/groups', 'POST', params, options)

@@ -374,7 +374,6 @@ class Automation {
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
   //   value - object - A Hash of attributes specific to the automation type.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-  //   workspace_id - int64 - Workspace ID
   //   automation - string - Automation type
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -484,10 +483,6 @@ class Automation {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
-    }
-
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.automation && !isString(params.automation)) {
@@ -631,8 +626,8 @@ class Automation {
   //   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
   //   value - object - A Hash of attributes specific to the automation type.
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-  //   workspace_id - int64 - Workspace ID
   //   automation (required) - string - Automation type
+  //   workspace_id - int64 - Workspace ID
   static create = async (params = {}, options = {}) => {
     if (!params.automation) {
       throw new errors.MissingParameterError('Parameter missing: automation')
@@ -734,12 +729,12 @@ class Automation {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
-    }
-
     if (params.automation && !isString(params.automation)) {
       throw new errors.InvalidParameterError(`Bad parameter: automation must be of type String, received ${getType(params.automation)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/automations', 'POST', params, options)

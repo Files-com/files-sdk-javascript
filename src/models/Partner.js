@@ -63,6 +63,13 @@ class Partner {
     this.attributes.id = value
   }
 
+  // int64 # ID of the Workspace associated with this Partner.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // string # The name of the Partner.
   getName = () => this.attributes.name
 
@@ -200,7 +207,8 @@ class Partner {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -252,6 +260,7 @@ class Partner {
   //   root_folder - string - The root folder path for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name (required) - string - The name of the Partner.
+  //   workspace_id - int64 - ID of the Workspace associated with this Partner.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
@@ -271,6 +280,10 @@ class Partner {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/partners', 'POST', params, options)

@@ -209,8 +209,8 @@ await Automation.create({
   'trigger_actions': ["create"],
   'value': {"limit":"1"},
   'recurring_day': 25,
-  'workspace_id': 0,
   'automation': "create_folder",
+  'workspace_id': 0,
 })
 ```
 
@@ -249,8 +249,8 @@ await Automation.create({
 * `trigger_actions` (array(string)): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (int64): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `workspace_id` (int64): Workspace ID
 * `automation` (string): Required - Automation type
+* `workspace_id` (int64): Workspace ID
 
 ---
 
@@ -307,7 +307,6 @@ await automation.update({
   'trigger_actions': ["create"],
   'value': {"limit":"1"},
   'recurring_day': 25,
-  'workspace_id': 0,
   'automation': "create_folder",
 })
 ```
@@ -347,7 +346,6 @@ await automation.update({
 * `trigger_actions` (array(string)): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (int64): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `workspace_id` (int64): Workspace ID
 * `automation` (string): Automation type
 
 ### Example Response

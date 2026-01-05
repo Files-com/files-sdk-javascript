@@ -161,6 +161,13 @@ class RemoteServer {
     this.attributes.server_type = value
   }
 
+  // int64 # Workspace ID (0 for default workspace)
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // string # Should we require SSL?
   getSsl = () => this.attributes.ssl
 
@@ -376,6 +383,13 @@ class RemoteServer {
 
   setFilesAgentLatestVersion = value => {
     this.attributes.files_agent_latest_version = value
+  }
+
+  // boolean # Files Agent supports receiving push updates
+  getFilesAgentSupportsPushUpdates = () => this.attributes.files_agent_supports_push_updates
+
+  setFilesAgentSupportsPushUpdates = value => {
+    this.attributes.files_agent_supports_push_updates = value
   }
 
   // int64 # Route traffic to outbound on a files-agent
@@ -1099,7 +1113,7 @@ class RemoteServer {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `workspace_id`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ workspace_id, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]`, `[ linode_bucket, name ]`, `[ workspace_id, server_type ]` or `[ workspace_id, server_type, name ]`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
   static list = async (params = {}, options = {}) => {
@@ -1237,6 +1251,7 @@ class RemoteServer {
   //   wasabi_access_key - string - Wasabi: Access Key.
   //   wasabi_bucket - string - Wasabi: Bucket name
   //   wasabi_region - string - Wasabi: Region
+  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   static create = async (params = {}, options = {}) => {
     if (params.password && !isString(params.password)) {
       throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
@@ -1492,6 +1507,10 @@ class RemoteServer {
 
     if (params.wasabi_region && !isString(params.wasabi_region)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_region must be of type String, received ${getType(params.wasabi_region)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/remote_servers', 'POST', params, options)

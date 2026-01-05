@@ -91,7 +91,6 @@ await RemoteServerCredential.find(id)
 
 ```
 await RemoteServerCredential.create({
-  'workspace_id': 0,
   'name': "My Credential",
   'description': "More information or notes about this credential.",
   'server_type': "s3",
@@ -105,13 +104,13 @@ await RemoteServerCredential.create({
   's3_compatible_access_key': "example",
   'username': "user",
   'wasabi_access_key': "example",
+  'workspace_id': 0,
 })
 ```
 
 
 ### Parameters
 
-* `workspace_id` (int64): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -142,6 +141,7 @@ await RemoteServerCredential.create({
 * `linode_secret_key` (string): Linode: Secret Key
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
+* `workspace_id` (int64): Workspace ID (0 for default workspace)
 
 ---
 
@@ -151,7 +151,6 @@ await RemoteServerCredential.create({
 const remote_server_credential = await RemoteServerCredential.find(id)
 
 await remote_server_credential.update({
-  'workspace_id': 0,
   'name': "My Credential",
   'description': "More information or notes about this credential.",
   'server_type': "s3",
@@ -171,7 +170,6 @@ await remote_server_credential.update({
 ### Parameters
 
 * `id` (int64): Required - Remote Server Credential ID.
-* `workspace_id` (int64): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.

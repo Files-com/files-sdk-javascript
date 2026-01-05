@@ -287,7 +287,6 @@ class Sync {
   //   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
   //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
-  //   workspace_id - int64 - Workspace ID this sync belongs to
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -360,10 +359,6 @@ class Sync {
 
     if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
-    }
-
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (!params.id) {

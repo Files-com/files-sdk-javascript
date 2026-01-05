@@ -253,7 +253,6 @@ class RemoteServerCredential {
   }
 
   // Parameters:
-  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   name - string - Internal name for your reference
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -296,10 +295,6 @@ class RemoteServerCredential {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -524,7 +519,6 @@ class RemoteServerCredential {
     RemoteServerCredential.find(id, params, options)
 
   // Parameters:
-  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   name - string - Internal name for your reference
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -555,11 +549,8 @@ class RemoteServerCredential {
   //   linode_secret_key - string - Linode: Secret Key
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
   //   wasabi_secret_key - string - Wasabi: Secret Key
+  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   static create = async (params = {}, options = {}) => {
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
-    }
-
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
@@ -678,6 +669,10 @@ class RemoteServerCredential {
 
     if (params.wasabi_secret_key && !isString(params.wasabi_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(params.wasabi_secret_key)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/remote_server_credentials', 'POST', params, options)
