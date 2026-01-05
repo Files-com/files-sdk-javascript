@@ -106,7 +106,7 @@ class Behavior {
   }
 
   // Parameters:
-  //   value - string - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
+  //   value - object - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
   //   disable_parent_folder_behavior - boolean - If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
   //   recursive - boolean - If `true`, behavior is treated as recursive, meaning that it impacts child folders as well.
@@ -125,10 +125,6 @@ class Behavior {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.value && !isString(params.value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -275,7 +271,7 @@ class Behavior {
   }
 
   // Parameters:
-  //   value - string - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
+  //   value - object - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
   //   attachment_file - file - Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
   //   disable_parent_folder_behavior - boolean - If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
   //   recursive - boolean - If `true`, behavior is treated as recursive, meaning that it impacts child folders as well.
@@ -290,10 +286,6 @@ class Behavior {
 
     if (!params.behavior) {
       throw new errors.MissingParameterError('Parameter missing: behavior')
-    }
-
-    if (params.value && !isString(params.value)) {
-      throw new errors.InvalidParameterError(`Bad parameter: value must be of type String, received ${getType(params.value)}`)
     }
 
     if (params.name && !isString(params.name)) {

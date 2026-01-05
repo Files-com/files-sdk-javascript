@@ -35,6 +35,13 @@ class RemoteServerCredential {
     this.attributes.id = value
   }
 
+  // int64 # Workspace ID (0 for default workspace)
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // string # Internal name for your reference
   getName = () => this.attributes.name
 
@@ -246,6 +253,7 @@ class RemoteServerCredential {
   }
 
   // Parameters:
+  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   name - string - Internal name for your reference
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -288,6 +296,10 @@ class RemoteServerCredential {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -466,7 +478,8 @@ class RemoteServerCredential {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id` and `name`. Valid field combinations are `[ workspace_id, name ]`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
@@ -511,6 +524,7 @@ class RemoteServerCredential {
     RemoteServerCredential.find(id, params, options)
 
   // Parameters:
+  //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   name - string - Internal name for your reference
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -542,6 +556,10 @@ class RemoteServerCredential {
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
   //   wasabi_secret_key - string - Wasabi: Secret Key
   static create = async (params = {}, options = {}) => {
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }

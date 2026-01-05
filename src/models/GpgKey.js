@@ -35,6 +35,13 @@ class GpgKey {
     this.attributes.id = value
   }
 
+  // int64 # Workspace ID (0 for default workspace).
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // date-time # GPG key expiration date.
   getExpiresAt = () => this.attributes.expires_at
 
@@ -156,6 +163,7 @@ class GpgKey {
 
   // Parameters:
   //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
+  //   workspace_id - int64 - Workspace ID (0 for default workspace).
   //   public_key - string - The GPG public key
   //   private_key - string - The GPG private key
   //   private_key_password - string - The GPG private key password
@@ -176,6 +184,10 @@ class GpgKey {
 
     if (params.partner_id && !isInt(params.partner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.public_key && !isString(params.public_key)) {
@@ -251,7 +263,12 @@ class GpgKey {
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name` and `expires_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name` or `expires_at`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`, `partner_id` or `expires_at`. Valid field combinations are `[ workspace_id, expires_at ]`.
+  //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
+  //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `expires_at`.
+  //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
+  //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
   static list = async (params = {}, options = {}) => {
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
@@ -301,6 +318,7 @@ class GpgKey {
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
+  //   workspace_id - int64 - Workspace ID (0 for default workspace).
   //   public_key - string - The GPG public key
   //   private_key - string - The GPG private key
   //   private_key_password - string - The GPG private key password
@@ -320,6 +338,10 @@ class GpgKey {
 
     if (params.partner_id && !isInt(params.partner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.public_key && !isString(params.public_key)) {

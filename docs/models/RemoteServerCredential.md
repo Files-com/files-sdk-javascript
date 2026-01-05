@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "workspace_id": 1,
   "name": "My Credential",
   "description": "More information or notes about this credential.",
   "server_type": "s3",
@@ -22,6 +23,7 @@
 ```
 
 * `id` (int64): Remote Server Credential ID
+* `workspace_id` (int64): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -66,7 +68,8 @@ await RemoteServerCredential.list
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (int64): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `name`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id` and `name`. Valid field combinations are `[ workspace_id, name ]`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
 
 ---
@@ -88,6 +91,7 @@ await RemoteServerCredential.find(id)
 
 ```
 await RemoteServerCredential.create({
+  'workspace_id': 0,
   'name': "My Credential",
   'description': "More information or notes about this credential.",
   'server_type': "s3",
@@ -107,6 +111,7 @@ await RemoteServerCredential.create({
 
 ### Parameters
 
+* `workspace_id` (int64): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -146,6 +151,7 @@ await RemoteServerCredential.create({
 const remote_server_credential = await RemoteServerCredential.find(id)
 
 await remote_server_credential.update({
+  'workspace_id': 0,
   'name': "My Credential",
   'description': "More information or notes about this credential.",
   'server_type': "s3",
@@ -165,6 +171,7 @@ await remote_server_credential.update({
 ### Parameters
 
 * `id` (int64): Required - Remote Server Credential ID.
+* `workspace_id` (int64): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -201,6 +208,7 @@ await remote_server_credential.update({
 ```json
 {
   "id": 1,
+  "workspace_id": 1,
   "name": "My Credential",
   "description": "More information or notes about this credential.",
   "server_type": "s3",
