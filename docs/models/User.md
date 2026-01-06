@@ -63,6 +63,7 @@
   "self_managed": true,
   "sftp_permission": true,
   "site_admin": true,
+  "workspace_admin": true,
   "site_id": 1,
   "workspace_id": 1,
   "skip_welcome_screen": true,
@@ -138,6 +139,7 @@
 * `self_managed` (boolean): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (boolean): Can the user access with SFTP?
 * `site_admin` (boolean): Is the user an administrator for this site?
+* `workspace_admin` (boolean): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `site_id` (int64): Site ID
 * `workspace_id` (int64): Workspace ID
 * `skip_welcome_screen` (boolean): Skip Welcome page in the UI?
@@ -254,6 +256,7 @@ await User.create({
   'time_zone': "Pacific Time (US & Canada)",
   'user_root': "example",
   'user_home': "example",
+  'workspace_admin': true,
   'username': "user",
   'workspace_id': 1,
 })
@@ -312,6 +315,7 @@ await User.create({
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+* `workspace_admin` (boolean): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `username` (string): Required - User's username
 * `workspace_id` (int64): Workspace ID
 
@@ -411,6 +415,7 @@ await user.update({
   'time_zone': "Pacific Time (US & Canada)",
   'user_root': "example",
   'user_home': "example",
+  'workspace_admin': true,
   'username': "user",
   'clear_2fa': false,
   'convert_to_partner_user': false,
@@ -470,6 +475,7 @@ await user.update({
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+* `workspace_admin` (boolean): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `username` (string): User's username
 * `clear_2fa` (boolean): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 * `convert_to_partner_user` (boolean): If true, convert this user to a partner user by assigning the partner_id provided.
@@ -537,6 +543,7 @@ await user.update({
   "self_managed": true,
   "sftp_permission": true,
   "site_admin": true,
+  "workspace_admin": true,
   "site_id": 1,
   "workspace_id": 1,
   "skip_welcome_screen": true,
