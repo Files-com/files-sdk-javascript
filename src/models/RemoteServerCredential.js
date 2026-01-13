@@ -84,20 +84,6 @@ class RemoteServerCredential {
     this.attributes.wasabi_access_key = value
   }
 
-  // string # Azure Blob Storage: Account name
-  getAzureBlobStorageAccount = () => this.attributes.azure_blob_storage_account
-
-  setAzureBlobStorageAccount = value => {
-    this.attributes.azure_blob_storage_account = value
-  }
-
-  // string # Azure Files: Storage Account name
-  getAzureFilesStorageAccount = () => this.attributes.azure_files_storage_account
-
-  setAzureFilesStorageAccount = value => {
-    this.attributes.azure_files_storage_account = value
-  }
-
   // string # S3-compatible: Access Key
   getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
 
@@ -257,8 +243,6 @@ class RemoteServerCredential {
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
   //   aws_access_key - string - AWS Access Key.
-  //   azure_blob_storage_account - string - Azure Blob Storage: Account name
-  //   azure_files_storage_account - string - Azure Files: Storage Account name
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   filebase_access_key - string - Filebase: Access Key.
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -311,14 +295,6 @@ class RemoteServerCredential {
 
     if (params.aws_access_key && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
-    }
-
-    if (params.azure_blob_storage_account && !isString(params.azure_blob_storage_account)) {
-      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(params.azure_blob_storage_account)}`)
-    }
-
-    if (params.azure_files_storage_account && !isString(params.azure_files_storage_account)) {
-      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(params.azure_files_storage_account)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
@@ -523,8 +499,6 @@ class RemoteServerCredential {
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
   //   aws_access_key - string - AWS Access Key.
-  //   azure_blob_storage_account - string - Azure Blob Storage: Account name
-  //   azure_files_storage_account - string - Azure Files: Storage Account name
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   filebase_access_key - string - Filebase: Access Key.
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -565,14 +539,6 @@ class RemoteServerCredential {
 
     if (params.aws_access_key && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
-    }
-
-    if (params.azure_blob_storage_account && !isString(params.azure_blob_storage_account)) {
-      throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_account must be of type String, received ${getType(params.azure_blob_storage_account)}`)
-    }
-
-    if (params.azure_files_storage_account && !isString(params.azure_files_storage_account)) {
-      throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_account must be of type String, received ${getType(params.azure_files_storage_account)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
