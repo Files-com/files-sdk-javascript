@@ -28,21 +28,21 @@ class RemoteServer {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Remote server ID
+  // int64 # Remote Server ID
   getId = () => this.attributes.id
 
   setId = value => {
     this.attributes.id = value
   }
 
-  // boolean # If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+  // boolean # If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
   getDisabled = () => this.attributes.disabled
 
   setDisabled = value => {
     this.attributes.disabled = value
   }
 
-  // string # Type of authentication method
+  // string # Type of authentication method to use
   getAuthenticationMethod = () => this.attributes.authentication_method
 
   setAuthenticationMethod = value => {
@@ -61,6 +61,13 @@ class RemoteServer {
 
   setRemoteHomePath = value => {
     this.attributes.remote_home_path = value
+  }
+
+  // string # Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
+  getUploadStagingPath = () => this.attributes.upload_staging_path
+
+  setUploadStagingPath = value => {
+    this.attributes.upload_staging_path = value
   }
 
   // string # Internal name for your reference
@@ -772,6 +779,7 @@ class RemoteServer {
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
   //   port - int64 - Port for remote server.
+  //   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
   //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
@@ -995,6 +1003,10 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
+    }
+
+    if (params.upload_staging_path && !isString(params.upload_staging_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: upload_staging_path must be of type String, received ${getType(params.upload_staging_path)}`)
     }
 
     if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {
@@ -1236,6 +1248,7 @@ class RemoteServer {
   //   one_drive_account_type - string - OneDrive: Either personal or business_other account types
   //   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
   //   port - int64 - Port for remote server.
+  //   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
   //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
@@ -1447,6 +1460,10 @@ class RemoteServer {
 
     if (params.port && !isInt(params.port)) {
       throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
+    }
+
+    if (params.upload_staging_path && !isString(params.upload_staging_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: upload_staging_path must be of type String, received ${getType(params.upload_staging_path)}`)
     }
 
     if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {

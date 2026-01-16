@@ -9,6 +9,7 @@
   "authentication_method": "password",
   "hostname": "remote-server.com",
   "remote_home_path": "/home/user1",
+  "upload_staging_path": "/tmp/uploads",
   "name": "My Remote server",
   "description": "More information or notes about my server",
   "port": 1,
@@ -70,11 +71,12 @@
 }
 ```
 
-* `id` (int64): Remote server ID
-* `disabled` (boolean): If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
-* `authentication_method` (string): Type of authentication method
+* `id` (int64): Remote Server ID
+* `disabled` (boolean): If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+* `authentication_method` (string): Type of authentication method to use
 * `hostname` (string): Hostname or IP address
 * `remote_home_path` (string): Initial home folder on remote server
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `port` (int64): Port for remote server.
@@ -238,6 +240,7 @@ await RemoteServer.create({
   'one_drive_account_type': "personal",
   'pin_to_site_region': true,
   'port': 1,
+  'upload_staging_path': "/tmp/uploads",
   'remote_server_credential_id': 1,
   's3_bucket': "my-bucket",
   's3_compatible_access_key': "example",
@@ -314,6 +317,7 @@ await RemoteServer.create({
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (boolean): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (int64): Port for remote server.
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (int64): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
@@ -471,6 +475,7 @@ await remote_server.update({
   'one_drive_account_type': "personal",
   'pin_to_site_region': true,
   'port': 1,
+  'upload_staging_path': "/tmp/uploads",
   'remote_server_credential_id': 1,
   's3_bucket': "my-bucket",
   's3_compatible_access_key': "example",
@@ -546,6 +551,7 @@ await remote_server.update({
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (boolean): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (int64): Port for remote server.
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (int64): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
@@ -571,6 +577,7 @@ await remote_server.update({
   "authentication_method": "password",
   "hostname": "remote-server.com",
   "remote_home_path": "/home/user1",
+  "upload_staging_path": "/tmp/uploads",
   "name": "My Remote server",
   "description": "More information or notes about my server",
   "port": 1,
