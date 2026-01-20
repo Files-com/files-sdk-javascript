@@ -599,6 +599,7 @@ Error
 |     `BadRequest_CantMoveWithMultipleLocationsError`|  `BadRequestError` |
 |     `BadRequest_DatetimeParseError`|  `BadRequestError` |
 |     `BadRequest_DestinationSameError`|  `BadRequestError` |
+|     `BadRequest_DestinationSiteMismatchError`|  `BadRequestError` |
 |     `BadRequest_DoesNotSupportSortingError`|  `BadRequestError` |
 |     `BadRequest_FolderMustNotBeAFileError`|  `BadRequestError` |
 |     `BadRequest_FoldersNotAllowedError`|  `BadRequestError` |

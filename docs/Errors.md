@@ -53,6 +53,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_CantMoveWithMultipleLocationsError
 ### BadRequest_DatetimeParseError
 ### BadRequest_DestinationSameError
+### BadRequest_DestinationSiteMismatchError
 ### BadRequest_DoesNotSupportSortingError
 ### BadRequest_FolderMustNotBeAFileError
 ### BadRequest_FoldersNotAllowedError
