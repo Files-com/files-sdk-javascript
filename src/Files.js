@@ -6,7 +6,7 @@ let apiKey
 let baseUrl = 'https://app.files.com'
 let sessionId = null
 let language = null
-const version = '1.2.509'
+const version = '1.2.510'
 let userAgent = `Files.com JavaScript SDK v${version}`
 
 let logLevel = LogLevel.INFO
