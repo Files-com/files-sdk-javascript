@@ -169,6 +169,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_BufferedUploadDisabledForThisDestinationError
 ### ProcessingFailure_BundleOnlyAllowsPreviewsError
 ### ProcessingFailure_BundleOperationRequiresSubfolderError
+### ProcessingFailure_ConfigurationLockedPathError
 ### ProcessingFailure_CouldNotCreateParentError
 ### ProcessingFailure_DestinationExistsError
 ### ProcessingFailure_DestinationFolderLimitedError

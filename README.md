@@ -715,6 +715,7 @@ Error
 |     `ProcessingFailure_BufferedUploadDisabledForThisDestinationError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BundleOnlyAllowsPreviewsError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BundleOperationRequiresSubfolderError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_ConfigurationLockedPathError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_CouldNotCreateParentError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_DestinationExistsError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_DestinationFolderLimitedError`|  `ProcessingFailureError` |
