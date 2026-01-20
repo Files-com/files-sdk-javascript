@@ -621,6 +621,7 @@ Error
 |     `BadRequest_InvalidUploadOffsetError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartGapError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadPartSizeError`|  `BadRequestError` |
+|     `BadRequest_InvalidWorkspaceIdHeaderError`|  `BadRequestError` |
 |     `BadRequest_MethodNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_MultipleSortParamsNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_NoValidInputParamsError`|  `BadRequestError` |

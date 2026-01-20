@@ -75,6 +75,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidUploadOffsetError
 ### BadRequest_InvalidUploadPartGapError
 ### BadRequest_InvalidUploadPartSizeError
+### BadRequest_InvalidWorkspaceIdHeaderError
 ### BadRequest_MethodNotAllowedError
 ### BadRequest_MultipleSortParamsNotAllowedError
 ### BadRequest_NoValidInputParamsError
