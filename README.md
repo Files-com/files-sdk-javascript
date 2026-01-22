@@ -603,6 +603,7 @@ Error
 |     `BadRequest_DoesNotSupportSortingError`|  `BadRequestError` |
 |     `BadRequest_FolderMustNotBeAFileError`|  `BadRequestError` |
 |     `BadRequest_FoldersNotAllowedError`|  `BadRequestError` |
+|     `BadRequest_InternalGeneralErrorError`|  `BadRequestError` |
 |     `BadRequest_InvalidBodyError`|  `BadRequestError` |
 |     `BadRequest_InvalidCursorError`|  `BadRequestError` |
 |     `BadRequest_InvalidCursorTypeForSortError`|  `BadRequestError` |

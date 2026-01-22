@@ -57,6 +57,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_DoesNotSupportSortingError
 ### BadRequest_FolderMustNotBeAFileError
 ### BadRequest_FoldersNotAllowedError
+### BadRequest_InternalGeneralErrorError
 ### BadRequest_InvalidBodyError
 ### BadRequest_InvalidCursorError
 ### BadRequest_InvalidCursorTypeForSortError
