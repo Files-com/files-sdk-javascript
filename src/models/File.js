@@ -731,6 +731,35 @@ class File {
   destroy = (params = {}) =>
     this.delete(params)
 
+  // List the contents of a ZIP file
+  zipListContents = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    const response = await Api.sendRequest(`/file_actions/zip_list/${encodeURIComponent(params.path)}`, 'GET', params, this.options)
+
+    const ZipListEntry = require('./ZipListEntry.js').default
+    return response?.data?.map(obj => new ZipListEntry(obj, this.options)) || []
+  }
+
   // Copy File/Folder
   //
   // Parameters:
@@ -817,6 +846,56 @@ class File {
     }
 
     const response = await Api.sendRequest(`/file_actions/move/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, this.options)
+  }
+
+  // Extract a ZIP file to a destination folder
+  //
+  // Parameters:
+  //   destination (required) - string - Destination folder path for extracted files.
+  //   filename - string - Optional single entry filename to extract.
+  //   overwrite - boolean - Overwrite existing files in the destination?
+  unzip = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.filename && !isString(params.filename)) {
+      throw new errors.InvalidParameterError(`Bad parameter: filename must be of type String, received ${getType(params.filename)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.destination) {
+      if (this.attributes.destination) {
+        params.destination = this.destination
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: destination')
+      }
+    }
+
+    const response = await Api.sendRequest('/file_actions/unzip', 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return new FileAction(response?.data, this.options)
@@ -989,6 +1068,33 @@ class File {
 
   static get = (path, params = {}, options = {}) =>
     File.find(path, params, options)
+
+  // Parameters:
+  //   paths (required) - array(string) - Paths to include in the ZIP.
+  //   destination (required) - string - Destination file path for the ZIP.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  static zip = async (params = {}, options = {}) => {
+    if (!params.paths) {
+      throw new errors.MissingParameterError('Parameter missing: paths')
+    }
+
+    if (!params.destination) {
+      throw new errors.MissingParameterError('Parameter missing: destination')
+    }
+
+    if (params.paths && !isArray(params.paths)) {
+      throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params.paths)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    const response = await Api.sendRequest('/file_actions/zip', 'POST', params, options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, options)
+  }
 }
 
 export default File

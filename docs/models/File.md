@@ -154,6 +154,25 @@ await File.find(path, {
 
 ---
 
+## Create a ZIP from one or more paths and save it to a destination path
+
+```
+await File.zip({
+  'paths': "paths",
+  'destination': "destination",
+  'overwrite': false,
+})
+```
+
+
+### Parameters
+
+* `paths` (array(string)): Required - Paths to include in the ZIP.
+* `destination` (string): Required - Destination file path for the ZIP.
+* `overwrite` (boolean): Overwrite existing file in the destination?
+
+---
+
 ## Download File
 
 ```
@@ -314,6 +333,31 @@ await file.delete({
 
 ---
 
+## List the contents of a ZIP file
+
+```
+const file = await File.find(path)
+
+await file.zip_list_contents()
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+
+### Example Response
+
+```json
+[
+  {
+    "path": "example",
+    "size": 1
+  }
+]
+```
+
+---
+
 ## Copy File/Folder
 
 ```
@@ -360,6 +404,35 @@ await file.move({
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
 * `overwrite` (boolean): Overwrite existing file(s) in the destination?
+
+### Example Response
+
+```json
+{
+  "status": "pending",
+  "file_migration_id": 1
+}
+```
+
+---
+
+## Extract a ZIP file to a destination folder
+
+```
+const file = await File.find(path)
+
+await file.unzip({
+  'destination': "destination",
+  'overwrite': false,
+})
+```
+
+### Parameters
+
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (boolean): Overwrite existing files in the destination?
 
 ### Example Response
 
