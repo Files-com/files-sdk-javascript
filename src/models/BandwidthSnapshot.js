@@ -31,25 +31,25 @@ class BandwidthSnapshot {
   // int64 # Site bandwidth ID
   getId = () => this.attributes.id
 
-  // double # Site bandwidth report bytes received
+  // int64 # Site bandwidth report bytes received
   getBytesReceived = () => this.attributes.bytes_received
 
-  // double # Site bandwidth report bytes sent
+  // int64 # Site bandwidth report bytes sent
   getBytesSent = () => this.attributes.bytes_sent
 
-  // double # Site sync bandwidth report bytes received
+  // int64 # Site sync bandwidth report bytes received
   getSyncBytesReceived = () => this.attributes.sync_bytes_received
 
-  // double # Site sync bandwidth report bytes sent
+  // int64 # Site sync bandwidth report bytes sent
   getSyncBytesSent = () => this.attributes.sync_bytes_sent
 
-  // double # Site bandwidth report get requests
+  // int64 # Site bandwidth report get requests
   getRequestsGet = () => this.attributes.requests_get
 
-  // double # Site bandwidth report put requests
+  // int64 # Site bandwidth report put requests
   getRequestsPut = () => this.attributes.requests_put
 
-  // double # Site bandwidth report other requests
+  // int64 # Site bandwidth report other requests
   getRequestsOther = () => this.attributes.requests_other
 
   // date-time # Time the site bandwidth report was logged
