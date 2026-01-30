@@ -40,34 +40,34 @@ class UsageSnapshot {
   // int64 # Highest user count number in time period
   getHighWaterUserCount = () => this.attributes.high_water_user_count
 
-  // double # Current total Storage Usage GB as of end date (not necessarily high water mark, which is used for billing)
+  // int64 # Current total Storage Usage GB as of end date (not necessarily high water mark, which is used for billing)
   getCurrentStorage = () => this.attributes.current_storage
 
-  // double # Highest Storage Usage GB recorded in time period (used for billing)
+  // int64 # Highest Storage Usage GB recorded in time period (used for billing)
   getHighWaterStorage = () => this.attributes.high_water_storage
 
-  // double # Storage Usage for root folder as of end date (not necessarily high water mark, which is used for billing)
+  // int64 # Storage Usage for root folder as of end date (not necessarily high water mark, which is used for billing)
   getRootStorage = () => this.attributes.root_storage
 
-  // double # Storage Usage for files that are deleted but uploaded within last 30 days as of end date (not necessarily high water mark, which is used for billing)
+  // int64 # Storage Usage for files that are deleted but uploaded within last 30 days as of end date (not necessarily high water mark, which is used for billing)
   getDeletedFilesCountedInMinimum = () => this.attributes.deleted_files_counted_in_minimum
 
-  // double # Storage Usage for files that are deleted but retained as backups as of end date (not necessarily high water mark, which is used for billing)
+  // int64 # Storage Usage for files that are deleted but retained as backups as of end date (not necessarily high water mark, which is used for billing)
   getDeletedFilesStorage = () => this.attributes.deleted_files_storage
 
-  // double # Storage + Transfer Usage - Total Billable amount
+  // int64 # Storage + Transfer Usage - Total Billable amount
   getTotalBillableUsage = () => this.attributes.total_billable_usage
 
-  // double # Transfer usage for period - Total Billable amount
+  // int64 # Transfer usage for period - Total Billable amount
   getTotalBillableTransferUsage = () => this.attributes.total_billable_transfer_usage
 
-  // double # Transfer Usage for period - Outbound GB from Files Native Storage
+  // int64 # Transfer Usage for period - Outbound GB from Files Native Storage
   getBytesSent = () => this.attributes.bytes_sent
 
-  // double # Transfer Usage for period - Inbound GB to Remote Servers (Sync/Mount)
+  // int64 # Transfer Usage for period - Inbound GB to Remote Servers (Sync/Mount)
   getSyncBytesReceived = () => this.attributes.sync_bytes_received
 
-  // double # Transfer Usage for period - Outbound GB from Remote Servers (Sync/Mount)
+  // int64 # Transfer Usage for period - Outbound GB from Remote Servers (Sync/Mount)
   getSyncBytesSent = () => this.attributes.sync_bytes_sent
 
   // array(object) # Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
