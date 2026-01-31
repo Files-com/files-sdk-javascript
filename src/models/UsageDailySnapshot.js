@@ -46,16 +46,16 @@ class UsageDailySnapshot {
   // int64 # Number of billable users as of this day.
   getUserCount = () => this.attributes.user_count
 
-  // double # GB of Files Native Storage used on this day.
+  // int64 # GB of Files Native Storage used on this day.
   getCurrentStorage = () => this.attributes.current_storage
 
-  // double # GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
+  // int64 # GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
   getDeletedFilesStorage = () => this.attributes.deleted_files_storage
 
-  // double # GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
+  // int64 # GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
   getDeletedFilesCountedInMinimum = () => this.attributes.deleted_files_counted_in_minimum
 
-  // double # GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
+  // int64 # GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
   getRootStorage = () => this.attributes.root_storage
 
   // array(object) # Usage broken down by each top-level folder
