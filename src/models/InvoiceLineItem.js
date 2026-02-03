@@ -31,7 +31,7 @@ class InvoiceLineItem {
   // int64 # Invoice Line item Id
   getId = () => this.attributes.id
 
-  // double # Invoice line item amount
+  // decimal # Invoice line item amount
   getAmount = () => this.attributes.amount
 
   // date-time # Invoice line item created at date/time

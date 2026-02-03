@@ -28,7 +28,7 @@ class PaymentLineItem {
 
   isLoaded = () => !!this.attributes.id
 
-  // double # Payment line item amount
+  // decimal # Payment line item amount
   getAmount = () => this.attributes.amount
 
   // date-time # Payment line item created at date/time

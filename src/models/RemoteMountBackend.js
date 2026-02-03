@@ -84,14 +84,14 @@ class RemoteMountBackend {
     this.attributes.interval = value
   }
 
-  // double # Minimum free CPU percentage required for this backend to be considered healthy.
+  // decimal # Minimum free CPU percentage required for this backend to be considered healthy.
   getMinFreeCpu = () => this.attributes.min_free_cpu
 
   setMinFreeCpu = value => {
     this.attributes.min_free_cpu = value
   }
 
-  // double # Minimum free memory percentage required for this backend to be considered healthy.
+  // decimal # Minimum free memory percentage required for this backend to be considered healthy.
   getMinFreeMem = () => this.attributes.min_free_mem
 
   setMinFreeMem = value => {

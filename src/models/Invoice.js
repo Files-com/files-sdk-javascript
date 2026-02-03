@@ -31,10 +31,10 @@ class Invoice {
   // int64 # Line item Id
   getId = () => this.attributes.id
 
-  // double # Line item amount
+  // decimal # Line item amount
   getAmount = () => this.attributes.amount
 
-  // double # Line item balance
+  // decimal # Line item balance
   getBalance = () => this.attributes.balance
 
   // date-time # Line item created at

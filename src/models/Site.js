@@ -340,7 +340,7 @@ class Site {
   // boolean # Show message to users connecting via SFTP
   getMotdUseForSftp = () => this.attributes.motd_use_for_sftp
 
-  // double # Next billing amount
+  // decimal # Next billing amount
   getNextBillingAmount = () => this.attributes.next_billing_amount
 
   // string # Next billing date
