@@ -31,10 +31,10 @@ class RemoteBandwidthSnapshot {
   // int64 # Site bandwidth ID
   getId = () => this.attributes.id
 
-  // double # Site sync bandwidth report bytes received
+  // int64 # Site sync bandwidth report bytes received
   getSyncBytesReceived = () => this.attributes.sync_bytes_received
 
-  // double # Site sync bandwidth report bytes sent
+  // int64 # Site sync bandwidth report bytes sent
   getSyncBytesSent = () => this.attributes.sync_bytes_sent
 
   // date-time # Time the site bandwidth report was logged
