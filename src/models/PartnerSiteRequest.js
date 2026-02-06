@@ -56,6 +56,13 @@ class PartnerSiteRequest {
     this.attributes.status = value
   }
 
+  // string # Main Site Name
+  getMainSiteName = () => this.attributes.main_site_name
+
+  setMainSiteName = value => {
+    this.attributes.main_site_name = value
+  }
+
   // string # Pairing key used to approve this request on the target site
   getPairingKey = () => this.attributes.pairing_key
 

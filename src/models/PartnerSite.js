@@ -37,6 +37,21 @@ class PartnerSite {
   // int64 # Linked Site ID
   getLinkedSiteId = () => this.attributes.linked_site_id
 
+  // string # Linked Site Name
+  getLinkedSiteName = () => this.attributes.linked_site_name
+
+  // int64 # Main Site ID
+  getMainSiteId = () => this.attributes.main_site_id
+
+  // string # Main Site Name
+  getMainSiteName = () => this.attributes.main_site_name
+
+  static linkeds = async (options = {}) => {
+    const response = await Api.sendRequest('/partner_sites/linked_partner_sites', 'GET', {}, options)
+
+    return response?.data?.map(obj => new PartnerSite(obj, options)) || []
+  }
+
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
