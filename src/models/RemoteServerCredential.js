@@ -70,6 +70,27 @@ class RemoteServerCredential {
     this.attributes.aws_access_key = value
   }
 
+  // string # AWS IAM Role ARN for AssumeRole authentication.
+  getS3AssumeRoleArn = () => this.attributes.s3_assume_role_arn
+
+  setS3AssumeRoleArn = value => {
+    this.attributes.s3_assume_role_arn = value
+  }
+
+  // int64 # Session duration in seconds for AssumeRole authentication (900-43200).
+  getS3AssumeRoleDurationSeconds = () => this.attributes.s3_assume_role_duration_seconds
+
+  setS3AssumeRoleDurationSeconds = value => {
+    this.attributes.s3_assume_role_duration_seconds = value
+  }
+
+  // string # External ID for AssumeRole authentication.
+  getS3AssumeRoleExternalId = () => this.attributes.s3_assume_role_external_id
+
+  setS3AssumeRoleExternalId = value => {
+    this.attributes.s3_assume_role_external_id = value
+  }
+
   // string # Google Cloud Storage: S3-compatible Access Key.
   getGoogleCloudStorageS3CompatibleAccessKey = () => this.attributes.google_cloud_storage_s3_compatible_access_key
 
@@ -243,6 +264,8 @@ class RemoteServerCredential {
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
   //   aws_access_key - string - AWS Access Key.
+  //   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+  //   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   filebase_access_key - string - Filebase: Access Key.
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -295,6 +318,14 @@ class RemoteServerCredential {
 
     if (params.aws_access_key && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
+    }
+
+    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
+    }
+
+    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
@@ -499,6 +530,8 @@ class RemoteServerCredential {
   //   description - string - Internal description for your reference
   //   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
   //   aws_access_key - string - AWS Access Key.
+  //   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+  //   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
   //   cloudflare_access_key - string - Cloudflare: Access Key.
   //   filebase_access_key - string - Filebase: Access Key.
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -539,6 +572,14 @@ class RemoteServerCredential {
 
     if (params.aws_access_key && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
+    }
+
+    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
+    }
+
+    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
     if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {

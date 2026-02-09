@@ -154,6 +154,27 @@ class RemoteServer {
     this.attributes.aws_access_key = value
   }
 
+  // string # AWS IAM Role ARN for AssumeRole authentication.
+  getS3AssumeRoleArn = () => this.attributes.s3_assume_role_arn
+
+  setS3AssumeRoleArn = value => {
+    this.attributes.s3_assume_role_arn = value
+  }
+
+  // int64 # Session duration in seconds for AssumeRole authentication (900-43200).
+  getS3AssumeRoleDurationSeconds = () => this.attributes.s3_assume_role_duration_seconds
+
+  setS3AssumeRoleDurationSeconds = value => {
+    this.attributes.s3_assume_role_duration_seconds = value
+  }
+
+  // string # External ID for AssumeRole authentication.
+  getS3AssumeRoleExternalId = () => this.attributes.s3_assume_role_external_id
+
+  setS3AssumeRoleExternalId = value => {
+    this.attributes.s3_assume_role_external_id = value
+  }
+
   // string # Remote server certificate
   getServerCertificate = () => this.attributes.server_certificate
 
@@ -789,6 +810,8 @@ class RemoteServer {
   //   port - int64 - Port for remote server.
   //   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
   //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
+  //   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+  //   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1019,6 +1042,14 @@ class RemoteServer {
 
     if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: remote_server_credential_id must be of type Int, received ${getType(params.remote_server_credential_id)}`)
+    }
+
+    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
+    }
+
+    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
@@ -1259,6 +1290,8 @@ class RemoteServer {
   //   port - int64 - Port for remote server.
   //   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
   //   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
+  //   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+  //   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
   //   s3_bucket - string - S3 bucket name
   //   s3_compatible_access_key - string - S3-compatible: Access Key
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1477,6 +1510,14 @@ class RemoteServer {
 
     if (params.remote_server_credential_id && !isInt(params.remote_server_credential_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: remote_server_credential_id must be of type Int, received ${getType(params.remote_server_credential_id)}`)
+    }
+
+    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
+    }
+
+    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
     if (params.s3_bucket && !isString(params.s3_bucket)) {
