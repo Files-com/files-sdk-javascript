@@ -80,9 +80,9 @@ await Partner.create({
   'allow_providing_gpg_keys': false,
   'allow_user_creation': false,
   'notes': "This is a note about the partner.",
-  'root_folder': "/AcmeCorp",
   'tags': "example",
   'name': "Acme Corp",
+  'root_folder': "/AcmeCorp",
   'workspace_id': 1,
 })
 ```
@@ -95,9 +95,9 @@ await Partner.create({
 * `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
-* `root_folder` (string): The root folder path for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): Required - The name of the Partner.
+* `root_folder` (string): Required - The root folder path for this Partner.
 * `workspace_id` (int64): ID of the Workspace associated with this Partner.
 
 ---
@@ -113,9 +113,9 @@ await partner.update({
   'allow_providing_gpg_keys': false,
   'allow_user_creation': false,
   'notes': "This is a note about the partner.",
-  'root_folder': "/AcmeCorp",
   'tags': "example",
   'name': "Acme Corp",
+  'root_folder': "/AcmeCorp",
 })
 ```
 
@@ -127,9 +127,9 @@ await partner.update({
 * `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
-* `root_folder` (string): The root folder path for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
+* `root_folder` (string): The root folder path for this Partner.
 
 ### Example Response
 

@@ -118,9 +118,9 @@ class Partner {
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
   //   notes - string - Notes about this Partner.
-  //   root_folder - string - The root folder path for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name - string - The name of the Partner.
+  //   root_folder - string - The root folder path for this Partner.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -139,16 +139,16 @@ class Partner {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
     }
 
-    if (params.root_folder && !isString(params.root_folder)) {
-      throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
-    }
-
     if (params.tags && !isString(params.tags)) {
       throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
     }
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.root_folder && !isString(params.root_folder)) {
+      throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
     }
 
     if (!params.id) {
@@ -257,21 +257,21 @@ class Partner {
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
   //   notes - string - Notes about this Partner.
-  //   root_folder - string - The root folder path for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name (required) - string - The name of the Partner.
+  //   root_folder (required) - string - The root folder path for this Partner.
   //   workspace_id - int64 - ID of the Workspace associated with this Partner.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (params.notes && !isString(params.notes)) {
-      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    if (!params.root_folder) {
+      throw new errors.MissingParameterError('Parameter missing: root_folder')
     }
 
-    if (params.root_folder && !isString(params.root_folder)) {
-      throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
+    if (params.notes && !isString(params.notes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
     }
 
     if (params.tags && !isString(params.tags)) {
@@ -280,6 +280,10 @@ class Partner {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.root_folder && !isString(params.root_folder)) {
+      throw new errors.InvalidParameterError(`Bad parameter: root_folder must be of type String, received ${getType(params.root_folder)}`)
     }
 
     if (params.workspace_id && !isInt(params.workspace_id)) {
