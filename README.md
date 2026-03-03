@@ -747,6 +747,7 @@ Error
 |     `ProcessingFailure_InvalidPriorityColorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_InvalidRangeError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_InvalidSiteError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_InvalidZipFileError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_MetadataNotSupportedOnRemotesError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ModelSaveErrorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_MultipleProcessingErrorsError`|  `ProcessingFailureError` |

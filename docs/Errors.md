@@ -201,6 +201,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_InvalidPriorityColorError
 ### ProcessingFailure_InvalidRangeError
 ### ProcessingFailure_InvalidSiteError
+### ProcessingFailure_InvalidZipFileError
 ### ProcessingFailure_MetadataNotSupportedOnRemotesError
 ### ProcessingFailure_ModelSaveErrorError
 ### ProcessingFailure_MultipleProcessingErrorsError
