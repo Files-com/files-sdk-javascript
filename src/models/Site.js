@@ -67,6 +67,15 @@ class Site {
   // boolean # Are manual Bundle names allowed?
   getAllowBundleNames = () => this.attributes.allow_bundle_names
 
+  // boolean # Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
+  getAllowUserLevel2faOverride = () => this.attributes.allow_user_level_2fa_override
+
+  // boolean # Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
+  getAllowUserLevelAllowedIpOverride = () => this.attributes.allow_user_level_allowed_ip_override
+
+  // boolean # Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
+  getAllowUserLevelSslOverride = () => this.attributes.allow_user_level_ssl_override
+
   // string # Comma separated list of allowed Country codes
   getAllowedCountries = () => this.attributes.allowed_countries
 
@@ -617,6 +626,9 @@ class Site {
   //   include_password_in_welcome_email - boolean - Include password in emails to new users?
   //   allowed_countries - string - Comma separated list of allowed Country codes
   //   allowed_ips - string - List of allowed IP addresses
+  //   allow_user_level_2fa_override - boolean - Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
+  //   allow_user_level_allowed_ip_override - boolean - Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
+  //   allow_user_level_ssl_override - boolean - Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
   //   disallowed_countries - string - Comma separated list of disallowed Country codes
   //   days_to_retain_backups - int64 - Number of days to keep deleted files
   //   max_prior_passwords - int64 - Number of prior passwords to disallow
