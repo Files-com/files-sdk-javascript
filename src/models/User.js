@@ -143,6 +143,13 @@ class User {
     this.attributes.disabled_expired_or_inactive = value
   }
 
+  // int64 # Desktop Configuration Profile ID assigned directly to this user, if any.
+  getDesktopConfigurationProfileId = () => this.attributes.desktop_configuration_profile_id
+
+  setDesktopConfigurationProfileId = value => {
+    this.attributes.desktop_configuration_profile_id = value
+  }
+
   // email # User email address
   getEmail = () => this.attributes.email
 
@@ -718,6 +725,7 @@ class User {
   //   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
+  //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -812,6 +820,10 @@ class User {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
     }
 
     if (params.filesystem_layout && !isString(params.filesystem_layout)) {
@@ -1029,6 +1041,7 @@ class User {
   //   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
+  //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1113,6 +1126,10 @@ class User {
 
     if (params.authentication_method && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
+    }
+
+    if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
     }
 
     if (params.filesystem_layout && !isString(params.filesystem_layout)) {
