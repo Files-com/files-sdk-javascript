@@ -427,6 +427,9 @@ class Site {
   // boolean # Is SFTP enabled?
   getSftpEnabled = () => this.attributes.sftp_enabled
 
+  // boolean # Finalize partial SFTP uploads from interrupted connections? Default: true.
+  getSftpFinalizePartialUploads = () => this.attributes.sftp_finalize_partial_uploads
+
   // string # Sftp Host Key Type
   getSftpHostKeyType = () => this.attributes.sftp_host_key_type
 
@@ -666,6 +669,7 @@ class Site {
   //   dav_enabled - boolean - Is WebDAV enabled?
   //   ftp_enabled - boolean - Is FTP enabled?
   //   sftp_enabled - boolean - Is SFTP enabled?
+  //   sftp_finalize_partial_uploads - boolean - Finalize partial SFTP uploads from interrupted connections? Default: true.
   //   users_can_create_api_keys - boolean - Allow users to create their own API keys?
   //   users_can_create_ssh_keys - boolean - Allow users to create their own SSH keys?
   //   show_user_notifications_log_in_link - boolean - Show log in link in user notifications?

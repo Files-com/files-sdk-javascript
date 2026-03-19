@@ -187,12 +187,14 @@
     "calculate_file_checksums_sha1": true,
     "calculate_file_checksums_sha256": true,
     "legacy_checksums_mode": true,
+    "finalize_partial_uploads": true,
     "use_provided_modified_at": true,
     "windows_mode_ftp": false,
     "user_belongs_to_parent_site": false,
     "impersonator_user_id": 1
   },
   "sftp_enabled": true,
+  "sftp_finalize_partial_uploads": true,
   "sftp_host_key_type": "default",
   "active_sftp_host_key_id": 1,
   "sftp_insecure_ciphers": true,
@@ -451,6 +453,7 @@
 * `require_logout_from_bundles_and_inboxes` (boolean): If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
 * `session` (Session): Current session
 * `sftp_enabled` (boolean): Is SFTP enabled?
+* `sftp_finalize_partial_uploads` (boolean): Finalize partial SFTP uploads from interrupted connections? Default: true.
 * `sftp_host_key_type` (string): Sftp Host Key Type
 * `active_sftp_host_key_id` (int64): Id of the currently selected custom SFTP Host Key
 * `sftp_insecure_ciphers` (boolean): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -614,6 +617,7 @@ await Site.update({
   'dav_enabled': false,
   'ftp_enabled': false,
   'sftp_enabled': false,
+  'sftp_finalize_partial_uploads': false,
   'users_can_create_api_keys': false,
   'users_can_create_ssh_keys': false,
   'show_user_notifications_log_in_link': false,
@@ -779,6 +783,7 @@ await Site.update({
 * `dav_enabled` (boolean): Is WebDAV enabled?
 * `ftp_enabled` (boolean): Is FTP enabled?
 * `sftp_enabled` (boolean): Is SFTP enabled?
+* `sftp_finalize_partial_uploads` (boolean): Finalize partial SFTP uploads from interrupted connections? Default: true.
 * `users_can_create_api_keys` (boolean): Allow users to create their own API keys?
 * `users_can_create_ssh_keys` (boolean): Allow users to create their own SSH keys?
 * `show_user_notifications_log_in_link` (boolean): Show log in link in user notifications?
