@@ -37,13 +37,16 @@ class BundleDownload {
   // string # Download path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path
 
+  // int64 # Workspace ID. `0` means the default workspace.
+  getWorkspaceId = () => this.attributes.workspace_id
+
   // date-time # Download date/time
   getCreatedAt = () => this.attributes.created_at
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `created_at`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
   //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
   //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.

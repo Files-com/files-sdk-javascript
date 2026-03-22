@@ -283,6 +283,13 @@ class Bundle {
     this.attributes.send_one_time_password_to_recipient_at_registration = value
   }
 
+  // int64 # Workspace ID. `0` means the default workspace.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // boolean # Does this bundle have an associated inbox?
   getHasInbox = () => this.attributes.has_inbox
 
@@ -421,6 +428,7 @@ class Bundle {
   //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   //   user_id - int64 - The owning user id. Only site admins can set this.
   //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
@@ -492,6 +500,10 @@ class Bundle {
 
     if (params.start_access_on_date && !isString(params.start_access_on_date)) {
       throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(params.start_access_on_date)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.user_id && !isInt(params.user_id)) {
@@ -635,6 +647,7 @@ class Bundle {
   //   skip_company - boolean - BundleRegistrations can be saved without providing company?
   //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
   static create = async (params = {}, options = {}) => {
     if (!params.paths) {
@@ -703,6 +716,10 @@ class Bundle {
 
     if (params.snapshot_id && !isInt(params.snapshot_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: snapshot_id must be of type Int, received ${getType(params.snapshot_id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/bundles', 'POST', params, options)
