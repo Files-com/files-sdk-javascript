@@ -49,6 +49,13 @@ class KeyLifecycleRule {
     this.attributes.inactivity_days = value
   }
 
+  // boolean # If true, a default-workspace rule also applies to keys in all workspaces.
+  getApplyToAllWorkspaces = () => this.attributes.apply_to_all_workspaces
+
+  setApplyToAllWorkspaces = value => {
+    this.attributes.apply_to_all_workspaces = value
+  }
+
   // string # Key Lifecycle Rule name
   getName = () => this.attributes.name
 
@@ -56,10 +63,19 @@ class KeyLifecycleRule {
     this.attributes.name = value
   }
 
+  // int64 # Workspace ID. `0` means the default workspace.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // Parameters:
+  //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
   //   key_type - string - Key type for which the rule will apply (gpg or ssh).
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies.
   //   name - string - Key Lifecycle Rule name
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -84,6 +100,10 @@ class KeyLifecycleRule {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (!params.id) {
@@ -142,8 +162,8 @@ class KeyLifecycleRule {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `key_type`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `key_type`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `key_type`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -187,9 +207,11 @@ class KeyLifecycleRule {
     KeyLifecycleRule.find(id, params, options)
 
   // Parameters:
+  //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
   //   key_type - string - Key type for which the rule will apply (gpg or ssh).
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies.
   //   name - string - Key Lifecycle Rule name
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
     if (params.key_type && !isString(params.key_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: key_type must be of type String, received ${getType(params.key_type)}`)
@@ -201,6 +223,10 @@ class KeyLifecycleRule {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/key_lifecycle_rules', 'POST', params, options)

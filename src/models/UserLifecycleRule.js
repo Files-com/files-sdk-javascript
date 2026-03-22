@@ -77,6 +77,13 @@ class UserLifecycleRule {
     this.attributes.include_site_admins = value
   }
 
+  // boolean # If true, a default-workspace rule also applies to users in all workspaces.
+  getApplyToAllWorkspaces = () => this.attributes.apply_to_all_workspaces
+
+  setApplyToAllWorkspaces = value => {
+    this.attributes.apply_to_all_workspaces = value
+  }
+
   // string # User Lifecycle Rule name
   getName = () => this.attributes.name
 
@@ -98,6 +105,13 @@ class UserLifecycleRule {
     this.attributes.site_id = value
   }
 
+  // int64 # Workspace ID. `0` means the default workspace.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // string # State of the users to apply the rule to (inactive or disabled)
   getUserState = () => this.attributes.user_state
 
@@ -114,6 +128,7 @@ class UserLifecycleRule {
 
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
+  //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to users in all workspaces.
   //   authentication_method - string - User authentication method for which the rule will apply.
   //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
@@ -123,6 +138,7 @@ class UserLifecycleRule {
   //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -167,6 +183,10 @@ class UserLifecycleRule {
 
     if (params.user_tag && !isString(params.user_tag)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_tag must be of type String, received ${getType(params.user_tag)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (!params.id) {
@@ -225,7 +245,8 @@ class UserLifecycleRule {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id` and `workspace_id`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -270,6 +291,7 @@ class UserLifecycleRule {
 
   // Parameters:
   //   action - string - Action to take on inactive users (disable or delete)
+  //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to users in all workspaces.
   //   authentication_method - string - User authentication method for which the rule will apply.
   //   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies
@@ -279,6 +301,7 @@ class UserLifecycleRule {
   //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
     if (params.action && !isString(params.action)) {
       throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
@@ -310,6 +333,10 @@ class UserLifecycleRule {
 
     if (params.user_tag && !isString(params.user_tag)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_tag must be of type String, received ${getType(params.user_tag)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/user_lifecycle_rules', 'POST', params, options)
