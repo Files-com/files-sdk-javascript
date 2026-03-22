@@ -91,8 +91,16 @@ class FormFieldSet {
     this.attributes.user_id = value
   }
 
+  // int64 # Workspace ID
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // Parameters:
   //   title - string - Title to be displayed
+  //   workspace_id - int64 - Workspace ID
   //   skip_email - boolean - Skip validating form email
   //   skip_name - boolean - Skip validating form name
   //   skip_company - boolean - Skip validating company
@@ -113,6 +121,10 @@ class FormFieldSet {
 
     if (params.title && !isString(params.title)) {
       throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.form_fields && !isArray(params.form_fields)) {
@@ -225,6 +237,7 @@ class FormFieldSet {
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
   //   title - string - Title to be displayed
+  //   workspace_id - int64 - Workspace ID
   //   skip_email - boolean - Skip validating form email
   //   skip_name - boolean - Skip validating form name
   //   skip_company - boolean - Skip validating company
@@ -236,6 +249,10 @@ class FormFieldSet {
 
     if (params.title && !isString(params.title)) {
       throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.form_fields && !isArray(params.form_fields)) {
