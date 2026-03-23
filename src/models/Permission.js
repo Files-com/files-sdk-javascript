@@ -70,6 +70,20 @@ class Permission {
     this.attributes.group_name = value
   }
 
+  // array(int64) # Group IDs when this permission requires multiple groups
+  getGroupIds = () => this.attributes.group_ids
+
+  setGroupIds = value => {
+    this.attributes.group_ids = value
+  }
+
+  // array(string) # Group names when this permission requires multiple groups
+  getGroupNames = () => this.attributes.group_names
+
+  setGroupNames = value => {
+    this.attributes.group_names = value
+  }
+
   // int64 # Partner ID (if applicable)
   getPartnerId = () => this.attributes.partner_id
 
@@ -190,6 +204,7 @@ class Permission {
   // Parameters:
   //   path (required) - string - Folder path
   //   group_id - int64 - Group ID. Provide `group_name` or `group_id`
+  //   group_ids - string - Group IDs when the permission requires multiple groups. If sent as a string, it should be comma-delimited.
   //   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
   //   recursive - boolean - Apply to subfolders recursively?
   //   partner_id - int64 - Partner ID if this Permission belongs to a partner.
@@ -208,6 +223,10 @@ class Permission {
 
     if (params.group_id && !isInt(params.group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
+    }
+
+    if (params.group_ids && !isString(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
     if (params.permission && !isString(params.permission)) {
