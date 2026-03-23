@@ -140,6 +140,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_PasswordChangeNotRequiredError
 ### NotAuthorized_PasswordChangeRequiredError
 ### NotAuthorized_PaymentMethodErrorError
+### NotAuthorized_PreviewOnlyPermissionCannotDownloadError
 ### NotAuthorized_ReadOnlySessionError
 ### NotAuthorized_ReadPermissionRequiredError
 ### NotAuthorized_ReauthenticationFailedError

@@ -686,6 +686,7 @@ Error
 |     `NotAuthorized_PasswordChangeNotRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_PasswordChangeRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_PaymentMethodErrorError`|  `NotAuthorizedError` |
+|     `NotAuthorized_PreviewOnlyPermissionCannotDownloadError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReadOnlySessionError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReadPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReauthenticationFailedError`|  `NotAuthorizedError` |
