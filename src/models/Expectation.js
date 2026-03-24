@@ -210,7 +210,7 @@ class Expectation {
   getUpdatedAt = () => this.attributes.updated_at
 
   // Manually open an Expectation window
-  trigger = async (params = {}) => {
+  triggerEvaluation = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
     }
@@ -232,7 +232,7 @@ class Expectation {
       }
     }
 
-    const response = await Api.sendRequest(`/expectations/${encodeURIComponent(params.id)}/trigger`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/expectations/${encodeURIComponent(params.id)}/trigger_evaluation`, 'POST', params, this.options)
 
     const ExpectationEvaluation = require('./ExpectationEvaluation.js').default
     return new ExpectationEvaluation(response?.data, this.options)

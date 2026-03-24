@@ -162,7 +162,7 @@ await Expectation.create({
 ```
 const expectation = await Expectation.find(id)
 
-await expectation.trigger()
+await expectation.trigger_evaluation()
 ```
 
 ### Parameters
