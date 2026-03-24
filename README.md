@@ -728,6 +728,8 @@ Error
 |     `ProcessingFailure_DestinationParentConflictError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_DestinationParentDoesNotExistError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ExceededRuntimeLimitError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_ExpectationAlreadyHasOpenWindowError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_ExpectationNotManualTriggerError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ExpiredPrivateKeyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ExpiredPublicKeyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ExportFailureError`|  `ProcessingFailureError` |

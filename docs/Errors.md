@@ -180,6 +180,8 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_DestinationParentConflictError
 ### ProcessingFailure_DestinationParentDoesNotExistError
 ### ProcessingFailure_ExceededRuntimeLimitError
+### ProcessingFailure_ExpectationAlreadyHasOpenWindowError
+### ProcessingFailure_ExpectationNotManualTriggerError
 ### ProcessingFailure_ExpiredPrivateKeyError
 ### ProcessingFailure_ExpiredPublicKeyError
 ### ProcessingFailure_ExportFailureError
