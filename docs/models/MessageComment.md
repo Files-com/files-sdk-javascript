@@ -60,7 +60,7 @@ await MessageComment.find(id)
 ```
 await MessageComment.create({
   'user_id': 1,
-  'body': "body",
+  'body': "What a great idea, thank you!",
 })
 ```
 
@@ -78,7 +78,7 @@ await MessageComment.create({
 const message_comment = await MessageComment.find(id)
 
 await message_comment.update({
-  'body': "body",
+  'body': "What a great idea, thank you!",
 })
 ```
 

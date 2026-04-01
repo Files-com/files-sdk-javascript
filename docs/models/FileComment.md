@@ -41,7 +41,7 @@ await FileComment.listFor(path)
 
 ```
 await FileComment.create({
-  'body': "body",
+  'body': "What a great file!",
   'path': "path",
 })
 ```
@@ -60,7 +60,7 @@ await FileComment.create({
 const [file_comment] = await FileComment.list()
 
 await file_comment.update({
-  'body': "body",
+  'body': "What a great file!",
 })
 ```
 

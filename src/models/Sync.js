@@ -98,6 +98,20 @@ class Sync {
     this.attributes.dest_remote_server_id = value
   }
 
+  // int64 # Source site ID if syncing from a child or partner site
+  getSrcSiteId = () => this.attributes.src_site_id
+
+  setSrcSiteId = value => {
+    this.attributes.src_site_id = value
+  }
+
+  // int64 # Destination site ID if syncing to a child or partner site
+  getDestSiteId = () => this.attributes.dest_site_id
+
+  setDestSiteId = value => {
+    this.attributes.dest_site_id = value
+  }
+
   // boolean # Is this a two-way sync?
   getTwoWay = () => this.attributes.two_way
 
@@ -269,24 +283,28 @@ class Sync {
   }
 
   // Parameters:
-  //   name - string - Name for this sync job
-  //   description - string - Description for this sync job
-  //   src_path - string - Absolute source path
-  //   dest_path - string - Absolute destination path
-  //   src_remote_server_id - int64 - Remote server ID for the source
-  //   dest_remote_server_id - int64 - Remote server ID for the destination
-  //   keep_after_copy - boolean - Keep files after copying?
   //   delete_empty_folders - boolean - Delete empty folders after sync?
+  //   description - string - Description for this sync job
+  //   dest_path - string - Absolute destination path for the sync
+  //   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
+  //   dest_site_id - int64 - Destination site ID if syncing to a child or partner site
   //   disabled - boolean - Is this sync disabled?
+  //   exclude_patterns - array(string) - Array of glob patterns to exclude
+  //   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+  //   include_patterns - array(string) - Array of glob patterns to include
   //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+  //   keep_after_copy - boolean - Keep files after copying?
+  //   name - string - Name for this sync job
+  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+  //   src_path - string - Absolute source path for the sync
+  //   src_remote_server_id - int64 - Remote server ID for the source (if remote)
+  //   src_site_id - int64 - Source site ID if syncing from a child or partner site
+  //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-  //   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-  //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-  //   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -301,32 +319,72 @@ class Sync {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
-    }
-
     if (params.description && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
-    }
-
-    if (params.src_path && !isString(params.src_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: src_path must be of type String, received ${getType(params.src_path)}`)
     }
 
     if (params.dest_path && !isString(params.dest_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: dest_path must be of type String, received ${getType(params.dest_path)}`)
     }
 
-    if (params.src_remote_server_id && !isInt(params.src_remote_server_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: src_remote_server_id must be of type Int, received ${getType(params.src_remote_server_id)}`)
-    }
-
     if (params.dest_remote_server_id && !isInt(params.dest_remote_server_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: dest_remote_server_id must be of type Int, received ${getType(params.dest_remote_server_id)}`)
     }
 
+    if (params.dest_site_id && !isInt(params.dest_site_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dest_site_id must be of type Int, received ${getType(params.dest_site_id)}`)
+    }
+
+    if (params.exclude_patterns && !isArray(params.exclude_patterns)) {
+      throw new errors.InvalidParameterError(`Bad parameter: exclude_patterns must be of type Array, received ${getType(params.exclude_patterns)}`)
+    }
+
+    if (params.holiday_region && !isString(params.holiday_region)) {
+      throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
+    }
+
+    if (params.include_patterns && !isArray(params.include_patterns)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_patterns must be of type Array, received ${getType(params.include_patterns)}`)
+    }
+
     if (params.interval && !isString(params.interval)) {
       throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.recurring_day && !isInt(params.recurring_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
+    }
+
+    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
+    }
+
+    if (params.src_path && !isString(params.src_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_path must be of type String, received ${getType(params.src_path)}`)
+    }
+
+    if (params.src_remote_server_id && !isInt(params.src_remote_server_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_remote_server_id must be of type Int, received ${getType(params.src_remote_server_id)}`)
+    }
+
+    if (params.src_site_id && !isInt(params.src_site_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_site_id must be of type Int, received ${getType(params.src_site_id)}`)
+    }
+
+    if (params.sync_interval_minutes && !isInt(params.sync_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sync_interval_minutes must be of type Int, received ${getType(params.sync_interval_minutes)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
@@ -335,30 +393,6 @@ class Sync {
 
     if (params.trigger_file && !isString(params.trigger_file)) {
       throw new errors.InvalidParameterError(`Bad parameter: trigger_file must be of type String, received ${getType(params.trigger_file)}`)
-    }
-
-    if (params.holiday_region && !isString(params.holiday_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
-    }
-
-    if (params.sync_interval_minutes && !isInt(params.sync_interval_minutes)) {
-      throw new errors.InvalidParameterError(`Bad parameter: sync_interval_minutes must be of type Int, received ${getType(params.sync_interval_minutes)}`)
-    }
-
-    if (params.recurring_day && !isInt(params.recurring_day)) {
-      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
-    }
-
-    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
-    }
-
-    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
-    }
-
-    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
     }
 
     if (!params.id) {
@@ -462,52 +496,96 @@ class Sync {
     Sync.find(id, params, options)
 
   // Parameters:
-  //   name - string - Name for this sync job
-  //   description - string - Description for this sync job
-  //   src_path - string - Absolute source path
-  //   dest_path - string - Absolute destination path
-  //   src_remote_server_id - int64 - Remote server ID for the source
-  //   dest_remote_server_id - int64 - Remote server ID for the destination
-  //   keep_after_copy - boolean - Keep files after copying?
   //   delete_empty_folders - boolean - Delete empty folders after sync?
+  //   description - string - Description for this sync job
+  //   dest_path - string - Absolute destination path for the sync
+  //   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
+  //   dest_site_id - int64 - Destination site ID if syncing to a child or partner site
   //   disabled - boolean - Is this sync disabled?
+  //   exclude_patterns - array(string) - Array of glob patterns to exclude
+  //   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+  //   include_patterns - array(string) - Array of glob patterns to include
   //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+  //   keep_after_copy - boolean - Keep files after copying?
+  //   name - string - Name for this sync job
+  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+  //   src_path - string - Absolute source path for the sync
+  //   src_remote_server_id - int64 - Remote server ID for the source (if remote)
+  //   src_site_id - int64 - Source site ID if syncing from a child or partner site
+  //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-  //   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-  //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-  //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-  //   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-  //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-  //   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
   //   workspace_id - int64 - Workspace ID this sync belongs to
   static create = async (params = {}, options = {}) => {
-    if (params.name && !isString(params.name)) {
-      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
-    }
-
     if (params.description && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
-    }
-
-    if (params.src_path && !isString(params.src_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: src_path must be of type String, received ${getType(params.src_path)}`)
     }
 
     if (params.dest_path && !isString(params.dest_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: dest_path must be of type String, received ${getType(params.dest_path)}`)
     }
 
-    if (params.src_remote_server_id && !isInt(params.src_remote_server_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: src_remote_server_id must be of type Int, received ${getType(params.src_remote_server_id)}`)
-    }
-
     if (params.dest_remote_server_id && !isInt(params.dest_remote_server_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: dest_remote_server_id must be of type Int, received ${getType(params.dest_remote_server_id)}`)
     }
 
+    if (params.dest_site_id && !isInt(params.dest_site_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dest_site_id must be of type Int, received ${getType(params.dest_site_id)}`)
+    }
+
+    if (params.exclude_patterns && !isArray(params.exclude_patterns)) {
+      throw new errors.InvalidParameterError(`Bad parameter: exclude_patterns must be of type Array, received ${getType(params.exclude_patterns)}`)
+    }
+
+    if (params.holiday_region && !isString(params.holiday_region)) {
+      throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
+    }
+
+    if (params.include_patterns && !isArray(params.include_patterns)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_patterns must be of type Array, received ${getType(params.include_patterns)}`)
+    }
+
     if (params.interval && !isString(params.interval)) {
       throw new errors.InvalidParameterError(`Bad parameter: interval must be of type String, received ${getType(params.interval)}`)
+    }
+
+    if (params.name && !isString(params.name)) {
+      throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.recurring_day && !isInt(params.recurring_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
+    }
+
+    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
+    }
+
+    if (params.src_path && !isString(params.src_path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_path must be of type String, received ${getType(params.src_path)}`)
+    }
+
+    if (params.src_remote_server_id && !isInt(params.src_remote_server_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_remote_server_id must be of type Int, received ${getType(params.src_remote_server_id)}`)
+    }
+
+    if (params.src_site_id && !isInt(params.src_site_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: src_site_id must be of type Int, received ${getType(params.src_site_id)}`)
+    }
+
+    if (params.sync_interval_minutes && !isInt(params.sync_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sync_interval_minutes must be of type Int, received ${getType(params.sync_interval_minutes)}`)
     }
 
     if (params.trigger && !isString(params.trigger)) {
@@ -516,30 +594,6 @@ class Sync {
 
     if (params.trigger_file && !isString(params.trigger_file)) {
       throw new errors.InvalidParameterError(`Bad parameter: trigger_file must be of type String, received ${getType(params.trigger_file)}`)
-    }
-
-    if (params.holiday_region && !isString(params.holiday_region)) {
-      throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
-    }
-
-    if (params.sync_interval_minutes && !isInt(params.sync_interval_minutes)) {
-      throw new errors.InvalidParameterError(`Bad parameter: sync_interval_minutes must be of type Int, received ${getType(params.sync_interval_minutes)}`)
-    }
-
-    if (params.recurring_day && !isInt(params.recurring_day)) {
-      throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
-    }
-
-    if (params.schedule_time_zone && !isString(params.schedule_time_zone)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_zone must be of type String, received ${getType(params.schedule_time_zone)}`)
-    }
-
-    if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
-    }
-
-    if (params.schedule_times_of_day && !isArray(params.schedule_times_of_day)) {
-      throw new errors.InvalidParameterError(`Bad parameter: schedule_times_of_day must be of type Array, received ${getType(params.schedule_times_of_day)}`)
     }
 
     if (params.workspace_id && !isInt(params.workspace_id)) {
