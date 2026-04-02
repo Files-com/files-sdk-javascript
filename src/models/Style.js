@@ -49,6 +49,13 @@ class Style {
     this.attributes.logo = value
   }
 
+  // string # URL to open when a public visitor clicks the logo
+  getLogoClickHref = () => this.attributes.logo_click_href
+
+  setLogoClickHref = value => {
+    this.attributes.logo_click_href = value
+  }
+
   // Image # Logo thumbnail
   getThumbnail = () => this.attributes.thumbnail
 
@@ -56,7 +63,7 @@ class Style {
     this.attributes.thumbnail = value
   }
 
-  // file # Logo for custom branding.
+  // file # Logo for custom branding. Required when creating a new style.
   getFile = () => this.attributes.file
 
   setFile = value => {
@@ -64,7 +71,8 @@ class Style {
   }
 
   // Parameters:
-  //   file (required) - file - Logo for custom branding.
+  //   file - file - Logo for custom branding. Required when creating a new style.
+  //   logo_click_href - string - URL to open when a public visitor clicks the logo.
   update = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
@@ -79,19 +87,15 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
+    if (params.logo_click_href && !isString(params.logo_click_href)) {
+      throw new errors.InvalidParameterError(`Bad parameter: logo_click_href must be of type String, received ${getType(params.logo_click_href)}`)
+    }
+
     if (!params.path) {
       if (this.attributes.path) {
         params.path = this.path
       } else {
         throw new errors.MissingParameterError('Parameter missing: path')
-      }
-    }
-
-    if (!params.file) {
-      if (this.attributes.file) {
-        params.file = this.file
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: file')
       }
     }
 
