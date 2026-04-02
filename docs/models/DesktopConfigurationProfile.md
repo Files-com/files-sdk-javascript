@@ -18,7 +18,7 @@
 * `name` (string): Profile name
 * `workspace_id` (int64): Workspace ID
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
-* `mount_mappings` (object): Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 
 ---
 
@@ -66,7 +66,7 @@ await DesktopConfigurationProfile.create({
 ### Parameters
 
 * `name` (string): Required - Profile name
-* `mount_mappings` (object): Required - Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Required - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `workspace_id` (int64): Workspace ID
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
 
@@ -90,7 +90,7 @@ await desktop_configuration_profile.update({
 * `id` (int64): Required - Desktop Configuration Profile ID.
 * `name` (string): Profile name
 * `workspace_id` (int64): Workspace ID
-* `mount_mappings` (object): Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
 
 ### Example Response
