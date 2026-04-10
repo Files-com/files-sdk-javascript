@@ -56,6 +56,20 @@ class Notification {
     this.attributes.group_name = value
   }
 
+  // array(int64) # Group IDs when the notification requires multiple groups
+  getGroupIds = () => this.attributes.group_ids
+
+  setGroupIds = value => {
+    this.attributes.group_ids = value
+  }
+
+  // array(string) # Group names when the notification requires multiple groups
+  getGroupNames = () => this.attributes.group_names
+
+  setGroupNames = value => {
+    this.attributes.group_names = value
+  }
+
   // array(int64) # If set, will only notify on actions made by a member of one of the specified groups
   getTriggeringGroupIds = () => this.attributes.triggering_group_ids
 
@@ -358,6 +372,7 @@ class Notification {
   //   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
   //   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
   //   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
+  //   group_ids - string - Group IDs when the notification requires multiple groups. If sent as a string, it should be comma-delimited.
   //   path - string - Path
   //   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
   static create = async (params = {}, options = {}) => {
@@ -387,6 +402,10 @@ class Notification {
 
     if (params.group_id && !isInt(params.group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
+    }
+
+    if (params.group_ids && !isString(params.group_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
     if (params.path && !isString(params.path)) {
