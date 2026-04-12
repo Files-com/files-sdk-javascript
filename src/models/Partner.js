@@ -35,6 +35,13 @@ class Partner {
     this.attributes.allow_bypassing_2fa_policies = value
   }
 
+  // string # A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
+  getAllowedIps = () => this.attributes.allowed_ips
+
+  setAllowedIps = value => {
+    this.attributes.allowed_ips = value
+  }
+
   // boolean # Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   getAllowCredentialChanges = () => this.attributes.allow_credential_changes
 
@@ -113,6 +120,7 @@ class Partner {
   }
 
   // Parameters:
+  //   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
   //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -133,6 +141,10 @@ class Partner {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.allowed_ips && !isString(params.allowed_ips)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
     if (params.notes && !isString(params.notes)) {
@@ -252,6 +264,7 @@ class Partner {
     Partner.find(id, params, options)
 
   // Parameters:
+  //   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
   //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -268,6 +281,10 @@ class Partner {
 
     if (!params.root_folder) {
       throw new errors.MissingParameterError('Parameter missing: root_folder')
+    }
+
+    if (params.allowed_ips && !isString(params.allowed_ips)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
     if (params.notes && !isString(params.notes)) {

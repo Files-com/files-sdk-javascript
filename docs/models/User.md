@@ -52,6 +52,7 @@
   "partner_name": "example",
   "password_set_at": "2000-01-01T01:00:00Z",
   "password_validity_days": 1,
+  "primary_group_id": 1,
   "public_keys_count": 1,
   "receive_admin_alerts": true,
   "require_2fa": "always_require",
@@ -129,6 +130,7 @@
 * `partner_name` (string): Name of the Partner if this user belongs to a Partner
 * `password_set_at` (date-time): Last time the user's password was set
 * `password_validity_days` (int64): Number of days to allow user to use the same password
+* `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `public_keys_count` (int64): Number of public keys associated with this user
 * `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_2fa` (string): 2FA required setting
@@ -242,6 +244,7 @@ await User.create({
   'partner_admin': true,
   'partner_id': 1,
   'password_validity_days': 1,
+  'primary_group_id': 1,
   'readonly_site_admin': true,
   'receive_admin_alerts': true,
   'require_login_by': "2000-01-01T01:00:00Z",
@@ -302,6 +305,7 @@ await User.create({
 * `partner_admin` (boolean): Is this user a Partner administrator?
 * `partner_id` (int64): Partner ID if this user belongs to a Partner
 * `password_validity_days` (int64): Number of days to allow user to use the same password
+* `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
@@ -403,6 +407,7 @@ await user.update({
   'partner_admin': true,
   'partner_id': 1,
   'password_validity_days': 1,
+  'primary_group_id': 1,
   'readonly_site_admin': true,
   'receive_admin_alerts': true,
   'require_login_by': "2000-01-01T01:00:00Z",
@@ -464,6 +469,7 @@ await user.update({
 * `partner_admin` (boolean): Is this user a Partner administrator?
 * `partner_id` (int64): Partner ID if this user belongs to a Partner
 * `password_validity_days` (int64): Number of days to allow user to use the same password
+* `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
@@ -538,6 +544,7 @@ await user.update({
   "partner_name": "example",
   "password_set_at": "2000-01-01T01:00:00Z",
   "password_validity_days": 1,
+  "primary_group_id": 1,
   "public_keys_count": 1,
   "receive_admin_alerts": true,
   "require_2fa": "always_require",

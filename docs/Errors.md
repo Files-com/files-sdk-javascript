@@ -116,7 +116,6 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ApiKeyOnlyForDesktopAppError
 ### NotAuthorized_ApiKeyOnlyForMobileAppError
 ### NotAuthorized_ApiKeyOnlyForOfficeIntegrationError
-### NotAuthorized_BillingOrSiteAdminPermissionRequiredError
 ### NotAuthorized_BillingPermissionRequiredError
 ### NotAuthorized_BundleMaximumUsesReachedError
 ### NotAuthorized_BundlePermissionRequiredError
@@ -148,6 +147,11 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ReauthenticationNeededActionError
 ### NotAuthorized_RecaptchaFailedError
 ### NotAuthorized_SelfManagedRequiredError
+### NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError
+### NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError
+### NotAuthorized_SiteAdminOrWorkspaceAdminOrPartnerAdminOrFolderAdminPermissionRequiredError
+### NotAuthorized_SiteAdminOrWorkspaceAdminOrPartnerAdminPermissionRequiredError
+### NotAuthorized_SiteAdminOrWorkspaceAdminPermissionRequiredError
 ### NotAuthorized_SiteAdminRequiredError
 ### NotAuthorized_SiteFilesAreImmutableError
 ### NotAuthorized_TwoFactorAuthenticationRequiredError

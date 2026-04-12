@@ -664,7 +664,6 @@ Error
 |     `NotAuthorized_ApiKeyOnlyForDesktopAppError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForMobileAppError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForOfficeIntegrationError`|  `NotAuthorizedError` |
-|     `NotAuthorized_BillingOrSiteAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BillingPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundleMaximumUsesReachedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundlePermissionRequiredError`|  `NotAuthorizedError` |
@@ -696,6 +695,11 @@ Error
 |     `NotAuthorized_ReauthenticationNeededActionError`|  `NotAuthorizedError` |
 |     `NotAuthorized_RecaptchaFailedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SelfManagedRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_SiteAdminOrWorkspaceAdminOrPartnerAdminOrFolderAdminPermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_SiteAdminOrWorkspaceAdminOrPartnerAdminPermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_SiteAdminOrWorkspaceAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteAdminRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteFilesAreImmutableError`|  `NotAuthorizedError` |
 |     `NotAuthorized_TwoFactorAuthenticationRequiredError`|  `NotAuthorizedError` |

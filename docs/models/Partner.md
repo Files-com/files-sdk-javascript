@@ -5,6 +5,7 @@
 ```
 {
   "allow_bypassing_2fa_policies": true,
+  "allowed_ips": "10.0.0.0/8\n127.0.0.1",
   "allow_credential_changes": true,
   "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
@@ -28,6 +29,7 @@
 ```
 
 * `allow_bypassing_2fa_policies` (boolean): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (boolean): Allow Partner Admins to create users.
@@ -75,6 +77,7 @@ await Partner.find(id)
 
 ```
 await Partner.create({
+  'allowed_ips': "10.0.0.0/8\n127.0.0.1",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
   'allow_providing_gpg_keys': false,
@@ -90,6 +93,7 @@ await Partner.create({
 
 ### Parameters
 
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (boolean): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
@@ -108,6 +112,7 @@ await Partner.create({
 const partner = await Partner.find(id)
 
 await partner.update({
+  'allowed_ips': "10.0.0.0/8\n127.0.0.1",
   'allow_bypassing_2fa_policies': false,
   'allow_credential_changes': false,
   'allow_providing_gpg_keys': false,
@@ -122,6 +127,7 @@ await partner.update({
 ### Parameters
 
 * `id` (int64): Required - Partner ID.
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (boolean): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (boolean): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (boolean): Allow Partner Admins to provide GPG keys.
@@ -136,6 +142,7 @@ await partner.update({
 ```json
 {
   "allow_bypassing_2fa_policies": true,
+  "allowed_ips": "10.0.0.0/8\n127.0.0.1",
   "allow_credential_changes": true,
   "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
