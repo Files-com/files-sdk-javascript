@@ -37,6 +37,9 @@ class FileMigration {
   // string # Destination path
   getDestPath = () => this.attributes.dest_path
 
+  // string # Reason for the failure, if applicable.
+  getFailureMessage = () => this.attributes.failure_message
+
   // int64 # Number of files processed
   getFilesMoved = () => this.attributes.files_moved
 
