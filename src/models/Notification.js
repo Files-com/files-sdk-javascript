@@ -147,6 +147,13 @@ class Notification {
     this.attributes.send_interval = value
   }
 
+  // string # Custom subject line to use for notification emails
+  getSubject = () => this.attributes.subject
+
+  setSubject = value => {
+    this.attributes.subject = value
+  }
+
   // string # Custom message to include in notification emails
   getMessage = () => this.attributes.message
 
@@ -205,6 +212,7 @@ class Notification {
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+  //   subject - string - Custom subject line to use for notification emails
   //   message - string - Custom message to include in notification emails
   //   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
   //   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
@@ -226,6 +234,10 @@ class Notification {
 
     if (params.send_interval && !isString(params.send_interval)) {
       throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(params.send_interval)}`)
+    }
+
+    if (params.subject && !isString(params.subject)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(params.subject)}`)
     }
 
     if (params.message && !isString(params.message)) {
@@ -366,6 +378,7 @@ class Notification {
   //   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
   //   recursive - boolean - If `true`, enable notifications for each subfolder in this path
   //   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+  //   subject - string - Custom subject line to use for notification emails
   //   message - string - Custom message to include in notification emails
   //   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
   //   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
@@ -382,6 +395,10 @@ class Notification {
 
     if (params.send_interval && !isString(params.send_interval)) {
       throw new errors.InvalidParameterError(`Bad parameter: send_interval must be of type String, received ${getType(params.send_interval)}`)
+    }
+
+    if (params.subject && !isString(params.subject)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(params.subject)}`)
     }
 
     if (params.message && !isString(params.message)) {
