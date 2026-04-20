@@ -49,7 +49,7 @@ class Clickwrap {
     this.attributes.body = value
   }
 
-  // string # Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+  // string # Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
   getUseWithUsers = () => this.attributes.use_with_users
 
   setUseWithUsers = value => {
@@ -75,7 +75,7 @@ class Clickwrap {
   //   body - string - Body text of Clickwrap (supports Markdown formatting).
   //   use_with_bundles - string - Use this Clickwrap for Bundles?
   //   use_with_inboxes - string - Use this Clickwrap for Inboxes?
-  //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+  //   use_with_users - string - Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -214,7 +214,7 @@ class Clickwrap {
   //   body - string - Body text of Clickwrap (supports Markdown formatting).
   //   use_with_bundles - string - Use this Clickwrap for Bundles?
   //   use_with_inboxes - string - Use this Clickwrap for Inboxes?
-  //   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+  //   use_with_users - string - Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
   static create = async (params = {}, options = {}) => {
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
