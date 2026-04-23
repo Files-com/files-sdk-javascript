@@ -364,6 +364,13 @@ class RemoteServer {
     this.attributes.s3_compatible_region = value
   }
 
+  // boolean # S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+  getS3CompatibleVirtualHostedStyle = () => this.attributes.s3_compatible_virtual_hosted_style
+
+  setS3CompatibleVirtualHostedStyle = value => {
+    this.attributes.s3_compatible_virtual_hosted_style = value
+  }
+
   // string # S3-compatible: Access Key
   getS3CompatibleAccessKey = () => this.attributes.s3_compatible_access_key
 
@@ -817,6 +824,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
   //   s3_compatible_endpoint - string - S3-compatible: endpoint
   //   s3_compatible_region - string - S3-compatible: region
+  //   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
   //   s3_region - string - S3 region
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -1297,6 +1305,7 @@ class RemoteServer {
   //   s3_compatible_bucket - string - S3-compatible: Bucket name
   //   s3_compatible_endpoint - string - S3-compatible: endpoint
   //   s3_compatible_region - string - S3-compatible: region
+  //   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
   //   s3_region - string - S3 region
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
