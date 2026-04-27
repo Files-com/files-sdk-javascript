@@ -154,6 +154,9 @@ class SsoStrategy {
   // boolean # Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
   getEnabled = () => this.attributes.enabled
 
+  // boolean # Should this strategy be displayed on the login page?
+  getDisplayOnLoginPage = () => this.attributes.display_on_login_page
+
   // string # LDAP host
   getLdapHost = () => this.attributes.ldap_host
 
