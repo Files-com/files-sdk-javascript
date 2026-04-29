@@ -49,6 +49,13 @@ class KeyLifecycleRule {
     this.attributes.inactivity_days = value
   }
 
+  // int64 # Number of days after creation before an SSH key expires. Applies only to SSH keys.
+  getExpirationDays = () => this.attributes.expiration_days
+
+  setExpirationDays = value => {
+    this.attributes.expiration_days = value
+  }
+
   // boolean # If true, a default-workspace rule also applies to keys in all workspaces.
   getApplyToAllWorkspaces = () => this.attributes.apply_to_all_workspaces
 
@@ -72,6 +79,7 @@ class KeyLifecycleRule {
 
   // Parameters:
   //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
+  //   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
   //   key_type - string - Key type for which the rule will apply (gpg or ssh).
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies.
   //   name - string - Key Lifecycle Rule name
@@ -88,6 +96,10 @@ class KeyLifecycleRule {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.expiration_days && !isInt(params.expiration_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expiration_days must be of type Int, received ${getType(params.expiration_days)}`)
     }
 
     if (params.key_type && !isString(params.key_type)) {
@@ -208,11 +220,16 @@ class KeyLifecycleRule {
 
   // Parameters:
   //   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
+  //   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
   //   key_type - string - Key type for which the rule will apply (gpg or ssh).
   //   inactivity_days - int64 - Number of days of inactivity before the rule applies.
   //   name - string - Key Lifecycle Rule name
   //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
+    if (params.expiration_days && !isInt(params.expiration_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expiration_days must be of type Int, received ${getType(params.expiration_days)}`)
+    }
+
     if (params.key_type && !isString(params.key_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: key_type must be of type String, received ${getType(params.key_type)}`)
     }

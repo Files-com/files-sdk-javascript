@@ -52,6 +52,20 @@ class PublicKey {
   // date-time # Public key created at date/time
   getCreatedAt = () => this.attributes.created_at
 
+  // date-time # Public key expiration date/time
+  getExpiresAt = () => this.attributes.expires_at
+
+  setExpiresAt = value => {
+    this.attributes.expires_at = value
+  }
+
+  // boolean # Is this public key expired?
+  getExpired = () => this.attributes.expired
+
+  setExpired = value => {
+    this.attributes.expired = value
+  }
+
   // string # Public key fingerprint (MD5)
   getFingerprint = () => this.attributes.fingerprint
 
