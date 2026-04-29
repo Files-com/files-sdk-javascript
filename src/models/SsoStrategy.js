@@ -169,8 +169,14 @@ class SsoStrategy {
   // int64 # LDAP port
   getLdapPort = () => this.attributes.ldap_port
 
+  // boolean # Use LDAP server settings for scheduled provisioning while using this SSO provider for authentication?
+  getLdapProvisioningEnabled = () => this.attributes.ldap_provisioning_enabled
+
   // boolean # Use secure LDAP?
   getLdapSecure = () => this.attributes.ldap_secure
+
+  // string # LDAP server type
+  getLdapType = () => this.attributes.ldap_type
 
   // string # Username for signing in to LDAP server.
   getLdapUsername = () => this.attributes.ldap_username
