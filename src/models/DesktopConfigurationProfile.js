@@ -56,6 +56,13 @@ class DesktopConfigurationProfile {
     this.attributes.use_for_all_users = value
   }
 
+  // boolean # Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
+  getDisableDriveMounting = () => this.attributes.disable_drive_mounting
+
+  setDisableDriveMounting = value => {
+    this.attributes.disable_drive_mounting = value
+  }
+
   // object # Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
   getMountMappings = () => this.attributes.mount_mappings
 
@@ -68,6 +75,7 @@ class DesktopConfigurationProfile {
   //   workspace_id - int64 - Workspace ID
   //   mount_mappings - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
   //   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
+  //   disable_drive_mounting - boolean - Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -195,6 +203,7 @@ class DesktopConfigurationProfile {
   //   mount_mappings (required) - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
   //   workspace_id - int64 - Workspace ID
   //   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
+  //   disable_drive_mounting - boolean - Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')

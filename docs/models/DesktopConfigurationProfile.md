@@ -8,6 +8,7 @@
   "name": "North America Desktop Profile",
   "workspace_id": 1,
   "use_for_all_users": true,
+  "disable_drive_mounting": true,
   "mount_mappings": {
     "key": "example value"
   }
@@ -18,6 +19,7 @@
 * `name` (string): Profile name
 * `workspace_id` (int64): Workspace ID
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
+* `disable_drive_mounting` (boolean): Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
 * `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 
 ---
@@ -59,6 +61,7 @@ await DesktopConfigurationProfile.create({
   'mount_mappings': {"key":"example value"},
   'workspace_id': 1,
   'use_for_all_users': false,
+  'disable_drive_mounting': false,
 })
 ```
 
@@ -69,6 +72,7 @@ await DesktopConfigurationProfile.create({
 * `mount_mappings` (object): Required - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `workspace_id` (int64): Workspace ID
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
+* `disable_drive_mounting` (boolean): Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
 
 ---
 
@@ -82,6 +86,7 @@ await desktop_configuration_profile.update({
   'workspace_id': 1,
   'mount_mappings': {"key":"example value"},
   'use_for_all_users': false,
+  'disable_drive_mounting': false,
 })
 ```
 
@@ -92,6 +97,7 @@ await desktop_configuration_profile.update({
 * `workspace_id` (int64): Workspace ID
 * `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `use_for_all_users` (boolean): Whether this profile applies to all users in the Workspace by default
+* `disable_drive_mounting` (boolean): Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
 
 ### Example Response
 
@@ -101,6 +107,7 @@ await desktop_configuration_profile.update({
   "name": "North America Desktop Profile",
   "workspace_id": 1,
   "use_for_all_users": true,
+  "disable_drive_mounting": true,
   "mount_mappings": {
     "key": "example value"
   }
