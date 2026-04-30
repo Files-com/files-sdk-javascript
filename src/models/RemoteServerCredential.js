@@ -259,6 +259,13 @@ class RemoteServerCredential {
     this.attributes.wasabi_secret_key = value
   }
 
+  // int64 # ID of Remote Server Credential to copy omitted values from.
+  getCopyValuesFromCredentialId = () => this.attributes.copy_values_from_credential_id
+
+  setCopyValuesFromCredentialId = value => {
+    this.attributes.copy_values_from_credential_id = value
+  }
+
   // Parameters:
   //   name - string - Internal name for your reference
   //   description - string - Internal description for your reference
@@ -557,6 +564,7 @@ class RemoteServerCredential {
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
   //   wasabi_secret_key - string - Wasabi: Secret Key
   //   workspace_id - int64 - Workspace ID (0 for default workspace)
+  //   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
   static create = async (params = {}, options = {}) => {
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
@@ -680,6 +688,10 @@ class RemoteServerCredential {
 
     if (params.workspace_id && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
+    if (params.copy_values_from_credential_id && !isInt(params.copy_values_from_credential_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: copy_values_from_credential_id must be of type Int, received ${getType(params.copy_values_from_credential_id)}`)
     }
 
     const response = await Api.sendRequest('/remote_server_credentials', 'POST', params, options)
