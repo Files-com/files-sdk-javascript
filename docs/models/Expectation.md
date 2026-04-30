@@ -192,7 +192,7 @@ await expectation.trigger_evaluation()
 
   ],
   "criteria_errors": [
-
+    "count expected exactly 2, got 1"
   ],
   "summary": null,
   "created_at": "2000-01-01T01:00:00Z",
