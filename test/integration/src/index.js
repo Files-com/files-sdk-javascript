@@ -18,12 +18,12 @@
 //
 // Next, in the ../../../ directory, build the SDK:
 //
-// npm install
+// npm install --min-release-age=14
 // npm run build
 //
 // Then, in the ../ directory, build the test suite:
 //
-// npm install
+// npm install --min-release-age=14
 // npm run build
 //
 // Finally, execute the current file:

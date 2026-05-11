@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-rm -f ~/.npmrc && rm -f ~/.yarnrc
+rm -f ~/.npmrc
+rm -f ~/.yarnrc
 
 # Execute running tests from same directory as current script
 cd "$(dirname "$0")"
 
 # Install dependencies
-npm install
+npm install --min-release-age=14
 npm run lint && \
 npm run build && \
 npm run test
