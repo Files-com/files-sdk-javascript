@@ -63,6 +63,13 @@ class Partner {
     this.attributes.allow_user_creation = value
   }
 
+  // boolean # When `true`, emails sent to Partner users are copied to the responsible User or Group.
+  getCcEmailsToResponsibleParty = () => this.attributes.cc_emails_to_responsible_party
+
+  setCcEmailsToResponsibleParty = value => {
+    this.attributes.cc_emails_to_responsible_party = value
+  }
+
   // int64 # The unique ID of the Partner.
   getId = () => this.attributes.id
 
@@ -98,6 +105,20 @@ class Partner {
     this.attributes.partner_admin_ids = value
   }
 
+  // int64 # ID of the Group responsible for this Partner.
+  getResponsibleGroupId = () => this.attributes.responsible_group_id
+
+  setResponsibleGroupId = value => {
+    this.attributes.responsible_group_id = value
+  }
+
+  // int64 # ID of the User responsible for this Partner.
+  getResponsibleUserId = () => this.attributes.responsible_user_id
+
+  setResponsibleUserId = value => {
+    this.attributes.responsible_user_id = value
+  }
+
   // string # The root folder path for this Partner.
   getRootFolder = () => this.attributes.root_folder
 
@@ -125,7 +146,10 @@ class Partner {
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
+  //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
   //   notes - string - Notes about this Partner.
+  //   responsible_group_id - int64 - ID of the Group responsible for this Partner.
+  //   responsible_user_id - int64 - ID of the User responsible for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name - string - The name of the Partner.
   //   root_folder - string - The root folder path for this Partner.
@@ -149,6 +173,14 @@ class Partner {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
+    }
+
+    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
     if (params.tags && !isString(params.tags)) {
@@ -269,7 +301,10 @@ class Partner {
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
+  //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
   //   notes - string - Notes about this Partner.
+  //   responsible_group_id - int64 - ID of the Group responsible for this Partner.
+  //   responsible_user_id - int64 - ID of the User responsible for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name (required) - string - The name of the Partner.
   //   root_folder (required) - string - The root folder path for this Partner.
@@ -289,6 +324,14 @@ class Partner {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
+    }
+
+    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
     if (params.tags && !isString(params.tags)) {

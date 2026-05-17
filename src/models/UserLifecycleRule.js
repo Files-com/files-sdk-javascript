@@ -91,6 +91,13 @@ class UserLifecycleRule {
     this.attributes.name = value
   }
 
+  // boolean # If true, users will be emailed before the rule disables or deletes them.
+  getNotifyUsers = () => this.attributes.notify_users
+
+  setNotifyUsers = value => {
+    this.attributes.notify_users = value
+  }
+
   // string # If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   getPartnerTag = () => this.attributes.partner_tag
 
@@ -135,6 +142,7 @@ class UserLifecycleRule {
   //   include_site_admins - boolean - If true, the rule will apply to site admins.
   //   include_folder_admins - boolean - If true, the rule will apply to folder admins.
   //   name - string - User Lifecycle Rule name
+  //   notify_users - boolean - If true, users will be emailed before the rule disables or deletes them.
   //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -298,6 +306,7 @@ class UserLifecycleRule {
   //   include_site_admins - boolean - If true, the rule will apply to site admins.
   //   include_folder_admins - boolean - If true, the rule will apply to folder admins.
   //   name - string - User Lifecycle Rule name
+  //   notify_users - boolean - If true, users will be emailed before the rule disables or deletes them.
   //   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
   //   user_state - string - State of the users to apply the rule to (inactive or disabled)
   //   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
