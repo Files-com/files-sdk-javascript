@@ -55,6 +55,14 @@
   "primary_group_id": 1,
   "public_keys_count": 1,
   "receive_admin_alerts": true,
+  "notify_on_all_site_warnings": true,
+  "notify_on_all_sso_failures": true,
+  "notify_on_all_user_security_events": true,
+  "notify_on_all_pending_work_failures": true,
+  "notify_on_all_siem_http_destination_failures": true,
+  "notify_on_all_sync_failures": true,
+  "notify_on_all_automation_failures": true,
+  "notify_on_all_expectation_failures": true,
   "require_2fa": "always_require",
   "require_login_by": "2000-01-01T01:00:00Z",
   "active_2fa": true,
@@ -132,7 +140,15 @@
 * `password_validity_days` (int64): Number of days to allow user to use the same password
 * `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `public_keys_count` (int64): Number of public keys associated with this user
-* `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `receive_admin_alerts` (boolean): Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+* `notify_on_all_site_warnings` (boolean): Should the user receive site warnings via email?
+* `notify_on_all_sso_failures` (boolean): Should the user receive sso/scim/ldap configuration/sync failures via email?
+* `notify_on_all_user_security_events` (boolean): Should the user receive user security events via email?
+* `notify_on_all_pending_work_failures` (boolean): Should the user receive pending work failures via email?
+* `notify_on_all_siem_http_destination_failures` (boolean): Should the user receive siem failures via email?
+* `notify_on_all_sync_failures` (boolean): Should the user receive sync failures via email?
+* `notify_on_all_automation_failures` (boolean): Should the user receive automation failures via email?
+* `notify_on_all_expectation_failures` (boolean): Should the user receive expectation failures and misses via email?
 * `require_2fa` (string): 2FA required setting
 * `require_login_by` (date-time): Require user to login by specified date otherwise it will be disabled.
 * `active_2fa` (boolean): Is 2fa active for the user?
@@ -247,6 +263,14 @@ await User.create({
   'primary_group_id': 1,
   'readonly_site_admin': true,
   'receive_admin_alerts': true,
+  'notify_on_all_site_warnings': true,
+  'notify_on_all_sso_failures': true,
+  'notify_on_all_user_security_events': true,
+  'notify_on_all_pending_work_failures': true,
+  'notify_on_all_siem_http_destination_failures': true,
+  'notify_on_all_sync_failures': true,
+  'notify_on_all_automation_failures': true,
+  'notify_on_all_expectation_failures': true,
   'require_login_by': "2000-01-01T01:00:00Z",
   'require_password_change': true,
   'restapi_permission': true,
@@ -307,7 +331,15 @@ await User.create({
 * `password_validity_days` (int64): Number of days to allow user to use the same password
 * `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?
-* `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `receive_admin_alerts` (boolean): Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+* `notify_on_all_site_warnings` (boolean): Should the user receive site warnings via email?
+* `notify_on_all_sso_failures` (boolean): Should the user receive sso/scim/ldap configuration/sync failures via email?
+* `notify_on_all_user_security_events` (boolean): Should the user receive user security events via email?
+* `notify_on_all_pending_work_failures` (boolean): Should the user receive pending work failures via email?
+* `notify_on_all_siem_http_destination_failures` (boolean): Should the user receive siem failures via email?
+* `notify_on_all_sync_failures` (boolean): Should the user receive sync failures via email?
+* `notify_on_all_automation_failures` (boolean): Should the user receive automation failures via email?
+* `notify_on_all_expectation_failures` (boolean): Should the user receive expectation failures and misses via email?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (boolean): Is a password change required upon next user login?
 * `restapi_permission` (boolean): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -410,6 +442,14 @@ await user.update({
   'primary_group_id': 1,
   'readonly_site_admin': true,
   'receive_admin_alerts': true,
+  'notify_on_all_site_warnings': true,
+  'notify_on_all_sso_failures': true,
+  'notify_on_all_user_security_events': true,
+  'notify_on_all_pending_work_failures': true,
+  'notify_on_all_siem_http_destination_failures': true,
+  'notify_on_all_sync_failures': true,
+  'notify_on_all_automation_failures': true,
+  'notify_on_all_expectation_failures': true,
   'require_login_by': "2000-01-01T01:00:00Z",
   'require_password_change': true,
   'restapi_permission': true,
@@ -471,7 +511,15 @@ await user.update({
 * `password_validity_days` (int64): Number of days to allow user to use the same password
 * `primary_group_id` (int64): Primary group ID for Group Admin scoping
 * `readonly_site_admin` (boolean): Is the user an allowed to view all (non-billing) site configuration for this site?
-* `receive_admin_alerts` (boolean): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `receive_admin_alerts` (boolean): Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+* `notify_on_all_site_warnings` (boolean): Should the user receive site warnings via email?
+* `notify_on_all_sso_failures` (boolean): Should the user receive sso/scim/ldap configuration/sync failures via email?
+* `notify_on_all_user_security_events` (boolean): Should the user receive user security events via email?
+* `notify_on_all_pending_work_failures` (boolean): Should the user receive pending work failures via email?
+* `notify_on_all_siem_http_destination_failures` (boolean): Should the user receive siem failures via email?
+* `notify_on_all_sync_failures` (boolean): Should the user receive sync failures via email?
+* `notify_on_all_automation_failures` (boolean): Should the user receive automation failures via email?
+* `notify_on_all_expectation_failures` (boolean): Should the user receive expectation failures and misses via email?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (boolean): Is a password change required upon next user login?
 * `restapi_permission` (boolean): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -547,6 +595,14 @@ await user.update({
   "primary_group_id": 1,
   "public_keys_count": 1,
   "receive_admin_alerts": true,
+  "notify_on_all_site_warnings": true,
+  "notify_on_all_sso_failures": true,
+  "notify_on_all_user_security_events": true,
+  "notify_on_all_pending_work_failures": true,
+  "notify_on_all_siem_http_destination_failures": true,
+  "notify_on_all_sync_failures": true,
+  "notify_on_all_automation_failures": true,
+  "notify_on_all_expectation_failures": true,
   "require_2fa": "always_require",
   "require_login_by": "2000-01-01T01:00:00Z",
   "active_2fa": true,

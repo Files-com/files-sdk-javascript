@@ -360,11 +360,67 @@ class User {
     this.attributes.public_keys_count = value
   }
 
-  // boolean # Should the user receive admin alerts such a certificate expiration notifications and overages?
+  // boolean # Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
   getReceiveAdminAlerts = () => this.attributes.receive_admin_alerts
 
   setReceiveAdminAlerts = value => {
     this.attributes.receive_admin_alerts = value
+  }
+
+  // boolean # Should the user receive site warnings via email?
+  getNotifyOnAllSiteWarnings = () => this.attributes.notify_on_all_site_warnings
+
+  setNotifyOnAllSiteWarnings = value => {
+    this.attributes.notify_on_all_site_warnings = value
+  }
+
+  // boolean # Should the user receive sso/scim/ldap configuration/sync failures via email?
+  getNotifyOnAllSsoFailures = () => this.attributes.notify_on_all_sso_failures
+
+  setNotifyOnAllSsoFailures = value => {
+    this.attributes.notify_on_all_sso_failures = value
+  }
+
+  // boolean # Should the user receive user security events via email?
+  getNotifyOnAllUserSecurityEvents = () => this.attributes.notify_on_all_user_security_events
+
+  setNotifyOnAllUserSecurityEvents = value => {
+    this.attributes.notify_on_all_user_security_events = value
+  }
+
+  // boolean # Should the user receive pending work failures via email?
+  getNotifyOnAllPendingWorkFailures = () => this.attributes.notify_on_all_pending_work_failures
+
+  setNotifyOnAllPendingWorkFailures = value => {
+    this.attributes.notify_on_all_pending_work_failures = value
+  }
+
+  // boolean # Should the user receive siem failures via email?
+  getNotifyOnAllSiemHttpDestinationFailures = () => this.attributes.notify_on_all_siem_http_destination_failures
+
+  setNotifyOnAllSiemHttpDestinationFailures = value => {
+    this.attributes.notify_on_all_siem_http_destination_failures = value
+  }
+
+  // boolean # Should the user receive sync failures via email?
+  getNotifyOnAllSyncFailures = () => this.attributes.notify_on_all_sync_failures
+
+  setNotifyOnAllSyncFailures = value => {
+    this.attributes.notify_on_all_sync_failures = value
+  }
+
+  // boolean # Should the user receive automation failures via email?
+  getNotifyOnAllAutomationFailures = () => this.attributes.notify_on_all_automation_failures
+
+  setNotifyOnAllAutomationFailures = value => {
+    this.attributes.notify_on_all_automation_failures = value
+  }
+
+  // boolean # Should the user receive expectation failures and misses via email?
+  getNotifyOnAllExpectationFailures = () => this.attributes.notify_on_all_expectation_failures
+
+  setNotifyOnAllExpectationFailures = value => {
+    this.attributes.notify_on_all_expectation_failures = value
   }
 
   // string # 2FA required setting
@@ -748,7 +804,15 @@ class User {
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   primary_group_id - int64 - Primary group ID for Group Admin scoping
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
-  //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+  //   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+  //   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+  //   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+  //   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+  //   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+  //   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+  //   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+  //   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+  //   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -1069,7 +1133,15 @@ class User {
   //   password_validity_days - int64 - Number of days to allow user to use the same password
   //   primary_group_id - int64 - Primary group ID for Group Admin scoping
   //   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
-  //   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+  //   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+  //   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+  //   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+  //   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+  //   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+  //   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+  //   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+  //   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+  //   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)

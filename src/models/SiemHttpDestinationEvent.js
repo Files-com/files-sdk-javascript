@@ -7,9 +7,9 @@ import {
 /* eslint-enable no-unused-vars */
 
 /**
- * Class ExternalEvent
+ * Class SiemHttpDestinationEvent
  */
-class ExternalEvent {
+class SiemHttpDestinationEvent {
   attributes = {}
 
   options = {}
@@ -31,56 +31,32 @@ class ExternalEvent {
   // int64 # Event ID
   getId = () => this.attributes.id
 
-  setId = value => {
-    this.attributes.id = value
-  }
-
-  // string # Type of event being recorded.
+  // string # Type of SIEM event being recorded.
   getEventType = () => this.attributes.event_type
-
-  setEventType = value => {
-    this.attributes.event_type = value
-  }
 
   // string # Status of event.
   getStatus = () => this.attributes.status
 
-  setStatus = value => {
-    this.attributes.status = value
-  }
-
-  // string # Event body
+  // string # Event body.
   getBody = () => this.attributes.body
 
-  setBody = value => {
-    this.attributes.body = value
-  }
+  // array(string) # Event errors.
+  getEventErrors = () => this.attributes.event_errors
 
-  // date-time # External event create date/time
+  // date-time # Event create date/time.
   getCreatedAt = () => this.attributes.created_at
 
   // string # Link to log file.
   getBodyUrl = () => this.attributes.body_url
 
-  setBodyUrl = value => {
-    this.attributes.body_url = value
-  }
-
-  save = async () => {
-    if (this.attributes.id) {
-      throw new errors.NotImplementedError('The ExternalEvent object doesn\'t support updates.')
-    } else {
-      const newObject = await ExternalEvent.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
-      return true
-    }
-  }
+  // int64 # SIEM ID.
+  getSiemHttpDestinationId = () => this.attributes.siem_http_destination_id
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `event_type`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `status`. Valid field combinations are `[ status, created_at ]`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `siem_http_destination_id`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `siem_http_destination_id` or `status`. Valid field combinations are `[ siem_http_destination_id, created_at ]`, `[ status, created_at ]`, `[ siem_http_destination_id, status ]` or `[ siem_http_destination_id, status, created_at ]`.
   //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
   //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
   //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
@@ -94,16 +70,16 @@ class ExternalEvent {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest('/external_events', 'GET', params, options)
+    const response = await Api.sendRequest('/siem_http_destination_events', 'GET', params, options)
 
-    return response?.data?.map(obj => new ExternalEvent(obj, options)) || []
+    return response?.data?.map(obj => new SiemHttpDestinationEvent(obj, options)) || []
   }
 
   static all = (params = {}, options = {}) =>
-    ExternalEvent.list(params, options)
+    SiemHttpDestinationEvent.list(params, options)
 
   // Parameters:
-  //   id (required) - int64 - External Event ID.
+  //   id (required) - int64 - Siem Http Destination Event ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -119,41 +95,16 @@ class ExternalEvent {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    const response = await Api.sendRequest(`/external_events/${encodeURIComponent(params.id)}`, 'GET', params, options)
+    const response = await Api.sendRequest(`/siem_http_destination_events/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new ExternalEvent(response?.data, options)
+    return new SiemHttpDestinationEvent(response?.data, options)
   }
 
   static get = (id, params = {}, options = {}) =>
-    ExternalEvent.find(id, params, options)
-
-  // Parameters:
-  //   status (required) - string - Status of event.
-  //   body (required) - string - Event body
-  static create = async (params = {}, options = {}) => {
-    if (!params.status) {
-      throw new errors.MissingParameterError('Parameter missing: status')
-    }
-
-    if (!params.body) {
-      throw new errors.MissingParameterError('Parameter missing: body')
-    }
-
-    if (params.status && !isString(params.status)) {
-      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(params.status)}`)
-    }
-
-    if (params.body && !isString(params.body)) {
-      throw new errors.InvalidParameterError(`Bad parameter: body must be of type String, received ${getType(params.body)}`)
-    }
-
-    const response = await Api.sendRequest('/external_events', 'POST', params, options)
-
-    return new ExternalEvent(response?.data, options)
-  }
+    SiemHttpDestinationEvent.find(id, params, options)
 }
 
-export default ExternalEvent
+export default SiemHttpDestinationEvent
 
-module.exports = ExternalEvent
-module.exports.default = ExternalEvent
+module.exports = SiemHttpDestinationEvent
+module.exports.default = SiemHttpDestinationEvent
