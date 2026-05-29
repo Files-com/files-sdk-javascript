@@ -675,6 +675,7 @@ Error
 |     `NotAuthorized_FolderAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_FullPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_HistoryPermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_InAppAiAssistantUnavailableError`|  `NotAuthorizedError` |
 |     `NotAuthorized_InsufficientPermissionForParamsError`|  `NotAuthorizedError` |
 |     `NotAuthorized_InsufficientPermissionForSiteError`|  `NotAuthorizedError` |
 |     `NotAuthorized_MoverAccessDeniedError`|  `NotAuthorizedError` |

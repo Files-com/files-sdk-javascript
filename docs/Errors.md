@@ -127,6 +127,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_FolderAdminPermissionRequiredError
 ### NotAuthorized_FullPermissionRequiredError
 ### NotAuthorized_HistoryPermissionRequiredError
+### NotAuthorized_InAppAiAssistantUnavailableError
 ### NotAuthorized_InsufficientPermissionForParamsError
 ### NotAuthorized_InsufficientPermissionForSiteError
 ### NotAuthorized_MoverAccessDeniedError

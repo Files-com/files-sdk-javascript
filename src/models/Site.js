@@ -37,6 +37,9 @@ class Site {
   // array(string) # Additional extensions that are considered text files
   getAdditionalTextFileTypes = () => this.attributes.additional_text_file_types
 
+  // object # Availability settings for AI features by user class
+  getAiFeatureAvailability = () => this.attributes.ai_feature_availability
+
   // boolean # Is SMS two factor authentication allowed?
   getAllowed2faMethodSms = () => this.attributes.allowed_2fa_method_sms
 
@@ -216,6 +219,9 @@ class Site {
 
   // string # Comma separated list of disallowed Country codes
   getDisallowedCountries = () => this.attributes.disallowed_countries
+
+  // boolean # If true, all AI features are disabled for this site.
+  getDisableAllAiFeatures = () => this.attributes.disable_all_ai_features
 
   // boolean # If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
   getDisableFilesCertificateGeneration = () => this.attributes.disable_files_certificate_generation
@@ -625,6 +631,8 @@ class Site {
   //   motd_use_for_ftp - boolean - Show message to users connecting via FTP
   //   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
   //   left_navigation_visibility - object - Visibility settings for account navigation
+  //   disable_all_ai_features - boolean - If true, all AI features are disabled for this site.
+  //   ai_feature_availability - object - Availability settings for AI features by user class
   //   additional_text_file_types - array(string) - Additional extensions that are considered text files
   //   bundle_require_note - boolean - Do Bundles require internal notes?
   //   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
