@@ -514,6 +514,13 @@ class User {
     this.attributes.workspace_id = value
   }
 
+  // int64 # Workspace ID the user should land in by default when more than one Workspace is available.
+  getDefaultWorkspaceId = () => this.attributes.default_workspace_id
+
+  setDefaultWorkspaceId = value => {
+    this.attributes.default_workspace_id = value
+  }
+
   // boolean # Skip Welcome page in the UI?
   getSkipWelcomeScreen = () => this.attributes.skip_welcome_screen
 
@@ -789,6 +796,7 @@ class User {
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
   //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+  //   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -896,6 +904,10 @@ class User {
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
+    }
+
+    if (params.default_workspace_id && !isInt(params.default_workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_workspace_id must be of type Int, received ${getType(params.default_workspace_id)}`)
     }
 
     if (params.filesystem_layout && !isString(params.filesystem_layout)) {
@@ -1118,6 +1130,7 @@ class User {
   //   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
   //   dav_permission - boolean - Can the user connect with WebDAV?
   //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+  //   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
   //   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1215,6 +1228,10 @@ class User {
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
+    }
+
+    if (params.default_workspace_id && !isInt(params.default_workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_workspace_id must be of type Int, received ${getType(params.default_workspace_id)}`)
     }
 
     if (params.filesystem_layout && !isString(params.filesystem_layout)) {
