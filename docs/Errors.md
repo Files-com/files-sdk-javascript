@@ -84,6 +84,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_PartNumberTooLargeError
 ### BadRequest_PathCannotHaveTrailingWhitespaceError
 ### BadRequest_ReauthenticationNeededFieldsError
+### BadRequest_RequestBodyTooLargeError
 ### BadRequest_RequestParamsContainInvalidCharacterError
 ### BadRequest_RequestParamsInvalidError
 ### BadRequest_RequestParamsRequiredError
@@ -147,6 +148,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ReauthenticationFailedFinalError
 ### NotAuthorized_ReauthenticationNeededActionError
 ### NotAuthorized_RecaptchaFailedError
+### NotAuthorized_RemoteDesktopDebugLoggingDisabledError
 ### NotAuthorized_SelfManagedRequiredError
 ### NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError
 ### NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError

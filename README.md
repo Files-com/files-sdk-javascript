@@ -665,6 +665,7 @@ Error
 |     `BadRequest_PartNumberTooLargeError`|  `BadRequestError` |
 |     `BadRequest_PathCannotHaveTrailingWhitespaceError`|  `BadRequestError` |
 |     `BadRequest_ReauthenticationNeededFieldsError`|  `BadRequestError` |
+|     `BadRequest_RequestBodyTooLargeError`|  `BadRequestError` |
 |     `BadRequest_RequestParamsContainInvalidCharacterError`|  `BadRequestError` |
 |     `BadRequest_RequestParamsInvalidError`|  `BadRequestError` |
 |     `BadRequest_RequestParamsRequiredError`|  `BadRequestError` |
@@ -728,6 +729,7 @@ Error
 |     `NotAuthorized_ReauthenticationFailedFinalError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ReauthenticationNeededActionError`|  `NotAuthorizedError` |
 |     `NotAuthorized_RecaptchaFailedError`|  `NotAuthorizedError` |
+|     `NotAuthorized_RemoteDesktopDebugLoggingDisabledError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SelfManagedRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError`|  `NotAuthorizedError` |
