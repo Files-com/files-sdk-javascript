@@ -40,8 +40,14 @@ class OutboundConnectionLog {
   // int64 # Source Remote Server ID
   getSrcRemoteServerId = () => this.attributes.src_remote_server_id
 
+  // string # Source Remote Server name
+  getSrcRemoteServerName = () => this.attributes.src_remote_server_name
+
   // int64 # Destination Remote Server ID
   getDestRemoteServerId = () => this.attributes.dest_remote_server_id
+
+  // string # Destination Remote Server name
+  getDestRemoteServerName = () => this.attributes.dest_remote_server_name
 
   // string # Operation Type
   getOperation = () => this.attributes.operation
