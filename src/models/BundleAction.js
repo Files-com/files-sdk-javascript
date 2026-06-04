@@ -77,6 +77,8 @@ class BundleAction {
   //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
   //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
+  //   bundle_id - int64 - Bundle ID
+  //   bundle_registration_id - int64 - Bundle Registration ID
   static list = async (params = {}, options = {}) => {
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
@@ -88,6 +90,14 @@ class BundleAction {
 
     if (params.per_page && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
+    }
+
+    if (params.bundle_id && !isInt(params.bundle_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
+    }
+
+    if (params.bundle_registration_id && !isInt(params.bundle_registration_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_id must be of type Int, received ${getType(params.bundle_registration_id)}`)
     }
 
     const response = await Api.sendRequest('/bundle_actions', 'GET', params, options)

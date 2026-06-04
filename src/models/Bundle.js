@@ -255,6 +255,13 @@ class Bundle {
     this.attributes.username = value
   }
 
+  // int64 # Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+  getGroupId = () => this.attributes.group_id
+
+  setGroupId = value => {
+    this.attributes.group_id = value
+  }
+
   // int64 # ID of the clickwrap to use with this bundle.
   getClickwrapId = () => this.attributes.clickwrap_id
 
@@ -424,6 +431,7 @@ class Bundle {
   //   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
   //   inbox_id - int64 - ID of the associated inbox, if available.
   //   max_uses - int64 - Maximum number of times bundle can be accessed
+  //   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
   //   note - string - Bundle internal note
   //   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
   //   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
@@ -488,6 +496,10 @@ class Bundle {
 
     if (params.max_uses && !isInt(params.max_uses)) {
       throw new errors.InvalidParameterError(`Bad parameter: max_uses must be of type Int, received ${getType(params.max_uses)}`)
+    }
+
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
     if (params.note && !isString(params.note)) {
@@ -639,6 +651,7 @@ class Bundle {
   //   expires_at - string - Bundle expiration date/time
   //   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
   //   max_uses - int64 - Maximum number of times bundle can be accessed
+  //   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
   //   description - string - Public description
   //   note - string - Bundle internal note
   //   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -685,6 +698,10 @@ class Bundle {
 
     if (params.max_uses && !isInt(params.max_uses)) {
       throw new errors.InvalidParameterError(`Bad parameter: max_uses must be of type Int, received ${getType(params.max_uses)}`)
+    }
+
+    if (params.group_id && !isInt(params.group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
     if (params.description && !isString(params.description)) {
