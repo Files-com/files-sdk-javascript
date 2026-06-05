@@ -37,7 +37,7 @@ class Preview {
   // string # Link to download preview
   getDownloadUri = () => this.attributes.download_uri
 
-  // string # Preview type. Can be image, pdf, pdf_native, video, or audio
+  // string # Preview type. Can be image, pdf, pdf_native, video, audio, or text
   getType = () => this.attributes.type
 
   // string # Preview size
