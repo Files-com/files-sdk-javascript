@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Resolve the package path when npm runs this through node_modules/.bin.
+script_path=$0
+while [ -L "$script_path" ]; do
+  script_dir=$(CDPATH= cd "$(dirname "$script_path")" && pwd)
+  link_target=$(readlink "$script_path")
+  case "$link_target" in
+    /*) script_path=$link_target ;;
+    *) script_path=$script_dir/$link_target ;;
+  esac
+done
+
+script_dir=$(CDPATH= cd "$(dirname "$script_path")" && pwd)
+package_dir=$(CDPATH= cd "$script_dir/.." && pwd)
+
+FILES_CLI_USER_AGENT_SUFFIX="Files.com AI Assistant"
+export FILES_CLI_USER_AGENT_SUFFIX
+
+if [ -n "${FILES_CLI_BINARY:-}" ]; then
+  exec "$FILES_CLI_BINARY" "$@"
+fi
+
+for files_cli_path in \
+  "/usr/local/go/bin/files-cli" \
+  "$package_dir/files-cli" \
+  "$package_dir/bin/files-cli" \
+  "$package_dir/vendor/files-cli" \
+  "$package_dir/dist/files-cli"
+do
+  if [ -x "$files_cli_path" ] && [ "$files_cli_path" != "$script_path" ]; then
+    exec "$files_cli_path" "$@"
+  fi
+done
+
+printf '%s\n' "Unable to find files-cli. Set FILES_CLI_BINARY to the bundled files-cli path." >&2
+exit 127
