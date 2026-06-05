@@ -423,7 +423,7 @@ class User {
     this.attributes.notify_on_all_expectation_failures = value
   }
 
-  // string # 2FA required setting
+  // string # 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   getRequire2fa = () => this.attributes.require_2fa
 
   setRequire2fa = value => {
@@ -831,7 +831,7 @@ class User {
   //   ssl_required - string - SSL required setting
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
   //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
-  //   require_2fa - string - 2FA required setting
+  //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   time_zone - string - User time zone
   //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
@@ -1170,7 +1170,7 @@ class User {
   //   ssl_required - string - SSL required setting
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
   //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
-  //   require_2fa - string - 2FA required setting
+  //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   time_zone - string - User time zone
   //   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
