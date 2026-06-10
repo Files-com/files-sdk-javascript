@@ -154,6 +154,13 @@ class Sync {
     this.attributes.trigger_file = value
   }
 
+  // boolean # If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
+  getAlwaysWriteTriggerFile = () => this.attributes.always_write_trigger_file
+
+  setAlwaysWriteTriggerFile = value => {
+    this.attributes.always_write_trigger_file = value
+  }
+
   // array(string) # Array of glob patterns to include
   getIncludePatterns = () => this.attributes.include_patterns
 
@@ -303,6 +310,7 @@ class Sync {
   //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+  //   always_write_trigger_file - boolean - If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -506,6 +514,7 @@ class Sync {
   //   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
   //   trigger - string - Trigger type: daily, custom_schedule, or manual
   //   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+  //   always_write_trigger_file - boolean - If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
   //   workspace_id - int64 - Workspace ID this sync belongs to
   static create = async (params = {}, options = {}) => {
     if (params.description && !isString(params.description)) {
