@@ -568,6 +568,9 @@ class Site {
   // boolean # Allow users to create their own SSH keys?
   getUsersCanCreateSshKeys = () => this.attributes.users_can_create_ssh_keys
 
+  // string # How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
+  getUsernameDisplay = () => this.attributes.username_display
+
   // string # Custom text send in user welcome email
   getWelcomeCustomText = () => this.attributes.welcome_custom_text
 
@@ -650,6 +653,7 @@ class Site {
   //   legacy_checksums_mode - boolean - Use legacy checksums mode?
   //   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
   //   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
+  //   username_display - string - How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
   //   session_expiry_minutes - int64 - Session expiry in minutes
   //   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
   //   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -859,6 +863,10 @@ class Site {
 
     if (params.as2_message_retention_days && !isInt(params.as2_message_retention_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: as2_message_retention_days must be of type Int, received ${getType(params.as2_message_retention_days)}`)
+    }
+
+    if (params.username_display && !isString(params.username_display)) {
+      throw new errors.InvalidParameterError(`Bad parameter: username_display must be of type String, received ${getType(params.username_display)}`)
     }
 
     if (params.session_expiry_minutes && !isInt(params.session_expiry_minutes)) {
