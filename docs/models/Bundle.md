@@ -178,13 +178,16 @@ await Bundle.list({
 ## Show Share Link
 
 ```
-await Bundle.find(id)
+await Bundle.find(id, {
+  'deleted': false,
+})
 ```
 
 
 ### Parameters
 
 * `id` (int64): Required - Bundle ID.
+* `deleted` (boolean): If true, show a deleted Share Link.
 
 ---
 

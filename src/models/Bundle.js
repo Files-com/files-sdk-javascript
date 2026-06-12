@@ -632,6 +632,7 @@ class Bundle {
 
   // Parameters:
   //   id (required) - int64 - Bundle ID.
+  //   deleted - boolean - If true, show a deleted Share Link.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
