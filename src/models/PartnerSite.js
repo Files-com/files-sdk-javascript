@@ -28,23 +28,32 @@ class PartnerSite {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Partner ID
-  getPartnerId = () => this.attributes.partner_id
+  // int64 # Host Partner ID
+  getHostPartnerId = () => this.attributes.host_partner_id
 
-  // string # Partner Name
-  getPartnerName = () => this.attributes.partner_name
+  // string # Host Partner Name
+  getHostPartnerName = () => this.attributes.host_partner_name
 
-  // int64 # Linked Site ID
-  getLinkedSiteId = () => this.attributes.linked_site_id
+  // int64 # Guest Partner ID
+  getGuestPartnerId = () => this.attributes.guest_partner_id
 
-  // string # Linked Site Name
-  getLinkedSiteName = () => this.attributes.linked_site_name
+  // string # Guest Partner Name
+  getGuestPartnerName = () => this.attributes.guest_partner_name
 
-  // int64 # Main Site ID
-  getMainSiteId = () => this.attributes.main_site_id
+  // int64 # Host Site ID
+  getHostSiteId = () => this.attributes.host_site_id
 
-  // string # Main Site Name
-  getMainSiteName = () => this.attributes.main_site_name
+  // string # Host Site Name
+  getHostSiteName = () => this.attributes.host_site_name
+
+  // int64 # Guest Site ID
+  getGuestSiteId = () => this.attributes.guest_site_id
+
+  // string # Guest Site Name
+  getGuestSiteName = () => this.attributes.guest_site_name
+
+  // int64 # Workspace ID for the Host Partner
+  getWorkspaceId = () => this.attributes.workspace_id
 
   static linkeds = async (options = {}) => {
     const response = await Api.sendRequest('/partner_sites/linked_partner_sites', 'GET', {}, options)

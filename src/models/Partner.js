@@ -105,6 +105,13 @@ class Partner {
     this.attributes.partner_admin_ids = value
   }
 
+  // string # This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
+  getPartnershipRole = () => this.attributes.partnership_role
+
+  setPartnershipRole = value => {
+    this.attributes.partnership_role = value
+  }
+
   // int64 # ID of the Group responsible for this Partner.
   getResponsibleGroupId = () => this.attributes.responsible_group_id
 

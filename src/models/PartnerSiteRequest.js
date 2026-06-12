@@ -35,18 +35,18 @@ class PartnerSiteRequest {
     this.attributes.id = value
   }
 
-  // int64 # Partner ID
-  getPartnerId = () => this.attributes.partner_id
+  // int64 # Host Partner ID
+  getHostPartnerId = () => this.attributes.host_partner_id
 
-  setPartnerId = value => {
-    this.attributes.partner_id = value
+  setHostPartnerId = value => {
+    this.attributes.host_partner_id = value
   }
 
-  // int64 # Linked Site ID
-  getLinkedSiteId = () => this.attributes.linked_site_id
+  // int64 # Guest Site ID
+  getGuestSiteId = () => this.attributes.guest_site_id
 
-  setLinkedSiteId = value => {
-    this.attributes.linked_site_id = value
+  setGuestSiteId = value => {
+    this.attributes.guest_site_id = value
   }
 
   // string # Request status (pending, approved, rejected)
@@ -56,14 +56,14 @@ class PartnerSiteRequest {
     this.attributes.status = value
   }
 
-  // string # Main Site Name
-  getMainSiteName = () => this.attributes.main_site_name
+  // string # Host Site Name
+  getHostSiteName = () => this.attributes.host_site_name
 
-  setMainSiteName = value => {
-    this.attributes.main_site_name = value
+  setHostSiteName = value => {
+    this.attributes.host_site_name = value
   }
 
-  // string # Pairing key used to approve this request on the target site
+  // string # Pairing key used to approve this request on the Guest Site
   getPairingKey = () => this.attributes.pairing_key
 
   setPairingKey = value => {
@@ -208,19 +208,19 @@ class PartnerSiteRequest {
   }
 
   // Parameters:
-  //   partner_id (required) - int64 - Partner ID to link with
+  //   host_partner_id (required) - int64 - Host Partner ID to link with
   //   site_url (required) - string - Site URL to link to
   static create = async (params = {}, options = {}) => {
-    if (!params.partner_id) {
-      throw new errors.MissingParameterError('Parameter missing: partner_id')
+    if (!params.host_partner_id) {
+      throw new errors.MissingParameterError('Parameter missing: host_partner_id')
     }
 
     if (!params.site_url) {
       throw new errors.MissingParameterError('Parameter missing: site_url')
     }
 
-    if (params.partner_id && !isInt(params.partner_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
+    if (params.host_partner_id && !isInt(params.host_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: host_partner_id must be of type Int, received ${getType(params.host_partner_id)}`)
     }
 
     if (params.site_url && !isString(params.site_url)) {
