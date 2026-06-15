@@ -224,6 +224,20 @@ class RemoteServer {
     this.attributes.google_cloud_storage_bucket = value
   }
 
+  // string # Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
+  getGoogleCloudStorageAuthenticationMethod = () => this.attributes.google_cloud_storage_authentication_method
+
+  setGoogleCloudStorageAuthenticationMethod = value => {
+    this.attributes.google_cloud_storage_authentication_method = value
+  }
+
+  // string # Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
+  getGoogleCloudStorageOauthScope = () => this.attributes.google_cloud_storage_oauth_scope
+
+  setGoogleCloudStorageOauthScope = value => {
+    this.attributes.google_cloud_storage_oauth_scope = value
+  }
+
   // string # Google Cloud Storage: Project ID
   getGoogleCloudStorageProjectId = () => this.attributes.google_cloud_storage_project_id
 
@@ -803,7 +817,9 @@ class RemoteServer {
   //   files_agent_root - string - Agent local root path
   //   files_agent_version - string - Files Agent version
   //   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+  //   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
   //   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
+  //   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
   //   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   hostname - string - Hostname or IP address
@@ -1000,8 +1016,16 @@ class RemoteServer {
       throw new errors.InvalidParameterError(`Bad parameter: outbound_agent_id must be of type Int, received ${getType(params.outbound_agent_id)}`)
     }
 
+    if (params.google_cloud_storage_authentication_method && !isString(params.google_cloud_storage_authentication_method)) {
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_authentication_method must be of type String, received ${getType(params.google_cloud_storage_authentication_method)}`)
+    }
+
     if (params.google_cloud_storage_bucket && !isString(params.google_cloud_storage_bucket)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(params.google_cloud_storage_bucket)}`)
+    }
+
+    if (params.google_cloud_storage_oauth_scope && !isString(params.google_cloud_storage_oauth_scope)) {
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_oauth_scope must be of type String, received ${getType(params.google_cloud_storage_oauth_scope)}`)
     }
 
     if (params.google_cloud_storage_project_id && !isString(params.google_cloud_storage_project_id)) {
@@ -1284,7 +1308,9 @@ class RemoteServer {
   //   files_agent_root - string - Agent local root path
   //   files_agent_version - string - Files Agent version
   //   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+  //   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
   //   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
+  //   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
   //   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   hostname - string - Hostname or IP address
@@ -1469,8 +1495,16 @@ class RemoteServer {
       throw new errors.InvalidParameterError(`Bad parameter: outbound_agent_id must be of type Int, received ${getType(params.outbound_agent_id)}`)
     }
 
+    if (params.google_cloud_storage_authentication_method && !isString(params.google_cloud_storage_authentication_method)) {
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_authentication_method must be of type String, received ${getType(params.google_cloud_storage_authentication_method)}`)
+    }
+
     if (params.google_cloud_storage_bucket && !isString(params.google_cloud_storage_bucket)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_bucket must be of type String, received ${getType(params.google_cloud_storage_bucket)}`)
+    }
+
+    if (params.google_cloud_storage_oauth_scope && !isString(params.google_cloud_storage_oauth_scope)) {
+      throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_oauth_scope must be of type String, received ${getType(params.google_cloud_storage_oauth_scope)}`)
     }
 
     if (params.google_cloud_storage_project_id && !isString(params.google_cloud_storage_project_id)) {
