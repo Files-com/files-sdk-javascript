@@ -458,10 +458,10 @@ class Bundle {
   //   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
   //   skip_email - boolean - BundleRegistrations can be saved without providing email?
   //   skip_name - boolean - BundleRegistrations can be saved without providing name?
-  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   //   user_id - int64 - The owning user id. Only site admins can set this.
   //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -536,12 +536,12 @@ class Bundle {
       throw new errors.InvalidParameterError(`Bad parameter: start_access_on_date must be of type String, received ${getType(params.start_access_on_date)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
-    }
-
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (!params.id) {
@@ -602,7 +602,7 @@ class Bundle {
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `expires_at`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `expires_at`, `code`, `user_id` or `bypasses_site_expiration_rules`. Valid field combinations are `[ user_id, expires_at ]`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `expires_at`, `code`, `group_id`, `user_id` or `bypasses_site_expiration_rules`. Valid field combinations are `[ group_id, expires_at ]` and `[ user_id, expires_at ]`.
   //   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at` and `expires_at`.
   //   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at` and `expires_at`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `code`.

@@ -56,6 +56,13 @@ class BundleNotification {
     this.attributes.notify_on_upload = value
   }
 
+  // boolean # Is the current user the user to notify?
+  getNotifyCurrentUser = () => this.attributes.notify_current_user
+
+  setNotifyCurrentUser = value => {
+    this.attributes.notify_current_user = value
+  }
+
   // int64 # The id of the user to notify.
   getNotifyUserId = () => this.attributes.notify_user_id
 
