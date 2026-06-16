@@ -14,6 +14,10 @@ Files.setBaseUrl(API_URL)
 Files.setApiKey('test-key')
 
 describe('API client', () => {
+  afterEach(() => {
+    Files.setWorkspaceId(null)
+  })
+
   it('lists API keys', () => {
     const params = { user_id: 1 }
     nock(API_URL)
@@ -116,6 +120,49 @@ describe('API client', () => {
         expect(error.title).toBe('Not Found')
         expect(error.type).toBe('not-found')
       })
+  })
+
+  it('uses configured workspace id', () => {
+    Files.setWorkspaceId(123)
+
+    nock(API_URL, {
+      reqheaders: {
+        'X-Files-Workspace-Id': '123',
+      },
+    })
+      .get('/api/rest/v1/folders/%2F')
+      .query(true)
+      .reply(200, [])
+
+    return Folder.listFor('/')
+  })
+
+  it('uses per-call workspace id', () => {
+    Files.setWorkspaceId(123)
+
+    nock(API_URL, {
+      reqheaders: {
+        'X-Files-Workspace-Id': '456',
+      },
+    })
+      .get('/api/rest/v1/folders/%2F')
+      .query(true)
+      .reply(200, [])
+
+    return Folder.listFor('/', {}, { workspaceId: 456 })
+  })
+
+  it('allows per-call workspace id to be cleared', () => {
+    Files.setWorkspaceId(123)
+
+    nock(API_URL, {
+      badheaders: ['X-Files-Workspace-Id'],
+    })
+      .get('/api/rest/v1/folders/%2F')
+      .query(true)
+      .reply(200, [])
+
+    return Folder.listFor('/', {}, { workspaceId: null })
   })
 
   it('handles bad gateway', () => {

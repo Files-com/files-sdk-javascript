@@ -5,8 +5,9 @@ const endpointPrefix = '/api/rest/v1'
 let apiKey
 let baseUrl = 'https://app.files.com'
 let sessionId = null
+let workspaceId = null
 let language = null
-const version = '1.2.656'
+const version = '1.2.657'
 let userAgent = `Files.com JavaScript SDK v${version}`
 
 let logLevel = LogLevel.INFO
@@ -35,6 +36,10 @@ class Files {
   static setSessionId = value => { sessionId = value }
 
   static getSessionId = () => sessionId
+
+  static setWorkspaceId = value => { workspaceId = value }
+
+  static getWorkspaceId = () => workspaceId
 
   static getLanguage = () => language
 

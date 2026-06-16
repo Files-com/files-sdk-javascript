@@ -172,6 +172,8 @@ class Api {
   }
 
   static sendRequest = async (path, verb, params = null, options = {}, metadata = null) => {
+    const hasWorkspaceIdOption = Object.prototype.hasOwnProperty.call(options, 'workspaceId')
+    const workspaceId = hasWorkspaceIdOption ? options.workspaceId : Files.getWorkspaceId()
     const languageHeader = Files.getLanguage() ? { 'Accept-Language': Files.getLanguage() } : {}
 
     const headers = {
@@ -201,6 +203,10 @@ class Api {
 
           headers['X-FilesAPI-Key'] = apiKey
         }
+      }
+
+      if (workspaceId !== null && workspaceId !== undefined && `${workspaceId}` !== '') {
+        headers['X-Files-Workspace-Id'] = workspaceId
       }
     }
 
