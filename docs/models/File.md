@@ -421,6 +421,76 @@ await file.move({
 
 ---
 
+## Decrypt a GPG-encrypted file and save it to a destination path
+
+```
+const file = await File.find(path)
+
+await file.gpg_decrypt({
+  'destination': "destination",
+  'gpg_key_partner_id': 1,
+  'use_all_private_keys': false,
+  'ignore_mdc_error': false,
+  'overwrite': false,
+})
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the decrypted file.
+* `gpg_key_ids` (array(int64)): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for decryption.
+* `use_all_private_keys` (boolean): Use every accessible private GPG key in the source workspace for decryption.
+* `ignore_mdc_error` (boolean): Ignore errors from the MDC (modification detection code) check.
+* `overwrite` (boolean): Overwrite existing file in the destination?
+
+### Example Response
+
+```json
+{
+  "status": "pending",
+  "file_migration_id": 1
+}
+```
+
+---
+
+## Encrypt a file with GPG and save it to a destination path
+
+```
+const file = await File.find(path)
+
+await file.gpg_encrypt({
+  'destination': "destination",
+  'gpg_key_partner_id': 1,
+  'signing_key_id': 1,
+  'armor': false,
+  'overwrite': false,
+})
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (array(int64)): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (int64): Optional GPG Key ID to sign with.
+* `armor` (boolean): Output ASCII-armored encrypted data.
+* `overwrite` (boolean): Overwrite existing file in the destination?
+
+### Example Response
+
+```json
+{
+  "status": "pending",
+  "file_migration_id": 1
+}
+```
+
+---
+
 ## Extract a ZIP file to a destination folder
 
 ```

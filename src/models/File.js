@@ -859,6 +859,124 @@ class File {
     return new FileAction(response?.data, this.options)
   }
 
+  // Decrypt a GPG-encrypted file and save it to a destination path
+  //
+  // Parameters:
+  //   destination (required) - string - Destination file path for the decrypted file.
+  //   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+  //   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+  //   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  gpgDecrypt = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.gpg_key_ids && !isArray(params.gpg_key_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
+    }
+
+    if (params.gpg_key_partner_id && !isInt(params.gpg_key_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.destination) {
+      if (this.attributes.destination) {
+        params.destination = this.destination
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: destination')
+      }
+    }
+
+    const response = await Api.sendRequest(`/file_actions/gpg_decrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, this.options)
+  }
+
+  // Encrypt a file with GPG and save it to a destination path
+  //
+  // Parameters:
+  //   destination (required) - string - Destination file path for the encrypted file.
+  //   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+  //   signing_key_id - int64 - Optional GPG Key ID to sign with.
+  //   armor - boolean - Output ASCII-armored encrypted data.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  gpgEncrypt = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.gpg_key_ids && !isArray(params.gpg_key_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
+    }
+
+    if (params.gpg_key_partner_id && !isInt(params.gpg_key_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
+    }
+
+    if (params.signing_key_id && !isInt(params.signing_key_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: signing_key_id must be of type Int, received ${getType(params.signing_key_id)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.destination) {
+      if (this.attributes.destination) {
+        params.destination = this.destination
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: destination')
+      }
+    }
+
+    const response = await Api.sendRequest(`/file_actions/gpg_encrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, this.options)
+  }
+
   // Extract a ZIP file to a destination folder
   //
   // Parameters:
