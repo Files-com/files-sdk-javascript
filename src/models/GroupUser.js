@@ -56,11 +56,11 @@ class GroupUser {
     this.attributes.admin = value
   }
 
-  // string # Comma-delimited list of usernames who belong to this group (separated by commas).
-  getUsernames = () => this.attributes.usernames
+  // string # Username of the user
+  getUsername = () => this.attributes.username
 
-  setUsernames = value => {
-    this.attributes.usernames = value
+  setUsername = value => {
+    this.attributes.username = value
   }
 
   // int64 # Group User ID.
