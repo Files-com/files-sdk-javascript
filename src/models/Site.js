@@ -211,6 +211,9 @@ class Site {
   // boolean # If true, we will migrate all remote server syncs to the new Sync model.
   getMigrateRemoteServerSyncToSync = () => this.attributes.migrate_remote_server_sync_to_sync
 
+  // boolean # Is OAuth DCR (dynamic client registration) for MCP enabled?
+  getMcpDcrEnabled = () => this.attributes.mcp_dcr_enabled
+
   // boolean # Is the mobile app enabled?
   getMobileApp = () => this.attributes.mobile_app
 
@@ -642,6 +645,7 @@ class Site {
   //   left_navigation_visibility - object - Visibility settings for account navigation
   //   disable_all_ai_features - boolean - If true, all AI features are disabled for this site.
   //   ai_feature_availability - object - Availability settings for AI features by user class
+  //   mcp_dcr_enabled - boolean - Is OAuth DCR (dynamic client registration) for MCP enabled?
   //   additional_text_file_types - array(string) - Additional extensions that are considered text files
   //   bundle_require_note - boolean - Do Bundles require internal notes?
   //   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?

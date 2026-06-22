@@ -81,6 +81,7 @@
   "desktop_app_session_lifetime": 1,
   "legacy_checksums_mode": true,
   "migrate_remote_server_sync_to_sync": true,
+  "mcp_dcr_enabled": true,
   "mobile_app": true,
   "mobile_app_session_ip_pinning": true,
   "mobile_app_session_lifetime": 1,
@@ -411,6 +412,7 @@
 * `desktop_app_session_lifetime` (int64): Desktop app session lifetime (in hours)
 * `legacy_checksums_mode` (boolean): Use legacy checksums mode?
 * `migrate_remote_server_sync_to_sync` (boolean): If true, we will migrate all remote server syncs to the new Sync model.
+* `mcp_dcr_enabled` (boolean): Is OAuth DCR (dynamic client registration) for MCP enabled?
 * `mobile_app` (boolean): Is the mobile app enabled?
 * `mobile_app_session_ip_pinning` (boolean): Is mobile app session IP pinning enabled?
 * `mobile_app_session_lifetime` (int64): Mobile app session lifetime (in hours)
@@ -598,6 +600,7 @@ await Site.update({
   'motd_use_for_sftp': false,
   'disable_all_ai_features': false,
   'ai_feature_availability': {"in_app_ai_assistant":{"site_admins":true,"workspace_admins":true,"folder_admins":true,"all_users":true}},
+  'mcp_dcr_enabled': false,
   'additional_text_file_types': ["example"],
   'bundle_require_note': false,
   'bundle_send_shared_receipts': false,
@@ -776,6 +779,7 @@ await Site.update({
 * `left_navigation_visibility` (object): Visibility settings for account navigation
 * `disable_all_ai_features` (boolean): If true, all AI features are disabled for this site.
 * `ai_feature_availability` (object): Availability settings for AI features by user class
+* `mcp_dcr_enabled` (boolean): Is OAuth DCR (dynamic client registration) for MCP enabled?
 * `additional_text_file_types` (array(string)): Additional extensions that are considered text files
 * `bundle_require_note` (boolean): Do Bundles require internal notes?
 * `bundle_send_shared_receipts` (boolean): Do Bundle creators receive receipts of invitations?
