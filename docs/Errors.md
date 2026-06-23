@@ -117,6 +117,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ApiKeyOnlyForDesktopAppError
 ### NotAuthorized_ApiKeyOnlyForMobileAppError
 ### NotAuthorized_ApiKeyOnlyForOfficeIntegrationError
+### NotAuthorized_BillingInformationHiddenError
 ### NotAuthorized_BillingPermissionRequiredError
 ### NotAuthorized_BundleMaximumUsesReachedError
 ### NotAuthorized_BundlePermissionRequiredError
