@@ -28,7 +28,7 @@ class ChatSession {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Chat Session ID.
+  // string # Chat Session ID.
   getId = () => this.attributes.id
 
   // int64 # User ID.
@@ -67,7 +67,7 @@ class ChatSession {
     ChatSession.list(params, options)
 
   // Parameters:
-  //   id (required) - int64 - Chat Session ID.
+  //   id (required) - string - Chat Session ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -79,8 +79,8 @@ class ChatSession {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    if (params.id && !isString(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type String, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/chat_sessions/${encodeURIComponent(params.id)}`, 'GET', params, options)
