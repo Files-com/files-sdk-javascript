@@ -859,6 +859,87 @@ class File {
     return new FileAction(response?.data, this.options)
   }
 
+  // Transform a file and save the output to a destination path
+  //
+  // Parameters:
+  //   destination (required) - string - Destination file path for the transformed output.
+  //   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+  //   target_format (required) - string - Destination format to create.
+  //   width - int64 - Maximum output width for image_convert.
+  //   height - int64 - Maximum output height for image_convert.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  transform = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.destination && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.transform_type && !isString(params.transform_type)) {
+      throw new errors.InvalidParameterError(`Bad parameter: transform_type must be of type String, received ${getType(params.transform_type)}`)
+    }
+
+    if (params.target_format && !isString(params.target_format)) {
+      throw new errors.InvalidParameterError(`Bad parameter: target_format must be of type String, received ${getType(params.target_format)}`)
+    }
+
+    if (params.width && !isInt(params.width)) {
+      throw new errors.InvalidParameterError(`Bad parameter: width must be of type Int, received ${getType(params.width)}`)
+    }
+
+    if (params.height && !isInt(params.height)) {
+      throw new errors.InvalidParameterError(`Bad parameter: height must be of type Int, received ${getType(params.height)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.destination) {
+      if (this.attributes.destination) {
+        params.destination = this.destination
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: destination')
+      }
+    }
+
+    if (!params.transform_type) {
+      if (this.attributes.transform_type) {
+        params.transform_type = this.transform_type
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: transform_type')
+      }
+    }
+
+    if (!params.target_format) {
+      if (this.attributes.target_format) {
+        params.target_format = this.target_format
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: target_format')
+      }
+    }
+
+    const response = await Api.sendRequest(`/file_actions/transform/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, this.options)
+  }
+
   // Decrypt a GPG-encrypted file and save it to a destination path
   //
   // Parameters:
