@@ -741,6 +741,7 @@ Error
 |     `NotFound_SiteNotFoundError`|  `NotFoundError` |
 |     `NotFound_UserNotFoundError`|  `NotFoundError` |
 |     `ProcessingFailure_AgentUnavailableError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_AiTaskCannotBeRunManuallyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AlreadyCompletedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AutomationCannotBeRunManuallyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_BehaviorNotAllowedOnRemoteServerError`|  `ProcessingFailureError` |

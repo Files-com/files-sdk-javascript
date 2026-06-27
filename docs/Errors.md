@@ -175,6 +175,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_SiteNotFoundError
 ### NotFound_UserNotFoundError
 ### ProcessingFailure_AgentUnavailableError
+### ProcessingFailure_AiTaskCannotBeRunManuallyError
 ### ProcessingFailure_AlreadyCompletedError
 ### ProcessingFailure_AutomationCannotBeRunManuallyError
 ### ProcessingFailure_BehaviorNotAllowedOnRemoteServerError
