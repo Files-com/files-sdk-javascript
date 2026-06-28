@@ -77,6 +77,13 @@ class Group {
     this.attributes.usernames = value
   }
 
+  // int64 # AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
+  getAiAssistantPersonalityId = () => this.attributes.ai_assistant_personality_id
+
+  setAiAssistantPersonalityId = value => {
+    this.attributes.ai_assistant_personality_id = value
+  }
+
   // boolean # If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
   getFtpPermission = () => this.attributes.ftp_permission
 
@@ -130,6 +137,7 @@ class Group {
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
   //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
   //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -161,6 +169,10 @@ class Group {
 
     if (params.admin_ids && !isString(params.admin_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(params.admin_ids)}`)
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
@@ -286,6 +298,7 @@ class Group {
   //   notes - string - Group notes.
   //   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
   //   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
   //   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
   //   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -309,6 +322,10 @@ class Group {
 
     if (params.admin_ids && !isString(params.admin_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: admin_ids must be of type String, received ${getType(params.admin_ids)}`)
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {

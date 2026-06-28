@@ -11,6 +11,7 @@
   "notes": "example",
   "user_ids": "1",
   "usernames": "user",
+  "ai_assistant_personality_id": 1,
   "ftp_permission": true,
   "sftp_permission": true,
   "dav_permission": true,
@@ -28,6 +29,7 @@
 * `notes` (string): Notes about this group
 * `user_ids` (string): Comma-delimited list of user IDs who belong to this group (separated by commas)
 * `usernames` (string): Comma-delimited list of usernames who belong to this group (separated by commas)
+* `ai_assistant_personality_id` (int64): AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
 * `ftp_permission` (boolean): If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
 * `sftp_permission` (boolean): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -79,6 +81,7 @@ await Group.create({
   'notes': "example",
   'user_ids': "1",
   'admin_ids': "1",
+  'ai_assistant_personality_id': 1,
   'ftp_permission': true,
   'sftp_permission': true,
   'dav_permission': true,
@@ -96,6 +99,7 @@ await Group.create({
 * `notes` (string): Group notes.
 * `user_ids` (string): A list of user ids. If sent as a string, should be comma-delimited.
 * `admin_ids` (string): A list of group admin user ids. If sent as a string, should be comma-delimited.
+* `ai_assistant_personality_id` (int64): AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
 * `ftp_permission` (boolean): If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
 * `sftp_permission` (boolean): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -116,6 +120,7 @@ await group.update({
   'notes': "example",
   'user_ids': "1",
   'admin_ids': "1",
+  'ai_assistant_personality_id': 1,
   'ftp_permission': true,
   'sftp_permission': true,
   'dav_permission': true,
@@ -132,6 +137,7 @@ await group.update({
 * `notes` (string): Group notes.
 * `user_ids` (string): A list of user ids. If sent as a string, should be comma-delimited.
 * `admin_ids` (string): A list of group admin user ids. If sent as a string, should be comma-delimited.
+* `ai_assistant_personality_id` (int64): AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
 * `ftp_permission` (boolean): If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
 * `sftp_permission` (boolean): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -151,6 +157,7 @@ await group.update({
   "notes": "example",
   "user_ids": "1",
   "usernames": "user",
+  "ai_assistant_personality_id": 1,
   "ftp_permission": true,
   "sftp_permission": true,
   "dav_permission": true,

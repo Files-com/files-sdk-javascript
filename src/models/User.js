@@ -143,6 +143,13 @@ class User {
     this.attributes.disabled_expired_or_inactive = value
   }
 
+  // int64 # AI Assistant Personality ID assigned directly to this user, if any.
+  getAiAssistantPersonalityId = () => this.attributes.ai_assistant_personality_id
+
+  setAiAssistantPersonalityId = value => {
+    this.attributes.ai_assistant_personality_id = value
+  }
+
   // int64 # Desktop Configuration Profile ID assigned directly to this user, if any.
   getDesktopConfigurationProfileId = () => this.attributes.desktop_configuration_profile_id
 
@@ -787,6 +794,7 @@ class User {
   //   password - string - User password.
   //   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
   //   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
   //   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
@@ -889,6 +897,10 @@ class User {
 
     if (params.password_confirmation && !isString(params.password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(params.password_confirmation)}`)
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {
@@ -1126,6 +1138,7 @@ class User {
   //   password - string - User password.
   //   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
   //   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
   //   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
@@ -1217,6 +1230,10 @@ class User {
 
     if (params.password_confirmation && !isString(params.password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(params.password_confirmation)}`)
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {

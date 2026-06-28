@@ -77,6 +77,13 @@ class Partner {
     this.attributes.id = value
   }
 
+  // int64 # AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
+  getAiAssistantPersonalityId = () => this.attributes.ai_assistant_personality_id
+
+  setAiAssistantPersonalityId = value => {
+    this.attributes.ai_assistant_personality_id = value
+  }
+
   // int64 # ID of the Workspace associated with this Partner.
   getWorkspaceId = () => this.attributes.workspace_id
 
@@ -148,6 +155,7 @@ class Partner {
   }
 
   // Parameters:
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
   //   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
   //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -172,6 +180,10 @@ class Partner {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {
@@ -303,6 +315,7 @@ class Partner {
     Partner.find(id, params, options)
 
   // Parameters:
+  //   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
   //   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
   //   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -323,6 +336,10 @@ class Partner {
 
     if (!params.root_folder) {
       throw new errors.MissingParameterError('Parameter missing: root_folder')
+    }
+
+    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {
