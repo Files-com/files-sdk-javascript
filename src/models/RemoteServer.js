@@ -469,6 +469,13 @@ class RemoteServer {
     this.attributes.filebase_access_key = value
   }
 
+  // string # Files.com direct link: paired API key prefix.
+  getFilesApiKeyPrefix = () => this.attributes.files_api_key_prefix
+
+  setFilesApiKeyPrefix = value => {
+    this.attributes.files_api_key_prefix = value
+  }
+
   // string # Cloudflare: Bucket name
   getCloudflareBucket = () => this.attributes.cloudflare_bucket
 
@@ -658,6 +665,13 @@ class RemoteServer {
     this.attributes.wasabi_secret_key = value
   }
 
+  // string # Files.com direct link: API key used once to pair the remote server.
+  getFilesApiKey = () => this.attributes.files_api_key
+
+  setFilesApiKey = value => {
+    this.attributes.files_api_key = value
+  }
+
   // Push update to Files Agent
   agentPushUpdate = async (params = {}) => {
     if (!this.attributes.id) {
@@ -813,6 +827,7 @@ class RemoteServer {
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   filebase_access_key - string - Filebase: Access Key.
   //   filebase_bucket - string - Filebase: Bucket name
+  //   files_api_key - string - Files.com direct link: API key used once to pair the remote server.
   //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
   //   files_agent_root - string - Agent local root path
   //   files_agent_version - string - Files Agent version
@@ -998,6 +1013,10 @@ class RemoteServer {
 
     if (params.filebase_bucket && !isString(params.filebase_bucket)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(params.filebase_bucket)}`)
+    }
+
+    if (params.files_api_key && !isString(params.files_api_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_api_key must be of type String, received ${getType(params.files_api_key)}`)
     }
 
     if (params.files_agent_permission_set && !isString(params.files_agent_permission_set)) {
@@ -1304,6 +1323,7 @@ class RemoteServer {
   //   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
   //   filebase_access_key - string - Filebase: Access Key.
   //   filebase_bucket - string - Filebase: Bucket name
+  //   files_api_key - string - Files.com direct link: API key used once to pair the remote server.
   //   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
   //   files_agent_root - string - Agent local root path
   //   files_agent_version - string - Files Agent version
@@ -1477,6 +1497,10 @@ class RemoteServer {
 
     if (params.filebase_bucket && !isString(params.filebase_bucket)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_bucket must be of type String, received ${getType(params.filebase_bucket)}`)
+    }
+
+    if (params.files_api_key && !isString(params.files_api_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_api_key must be of type String, received ${getType(params.files_api_key)}`)
     }
 
     if (params.files_agent_permission_set && !isString(params.files_agent_permission_set)) {
