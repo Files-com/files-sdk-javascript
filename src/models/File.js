@@ -863,8 +863,9 @@ class File {
   //
   // Parameters:
   //   destination (required) - string - Destination file path for the transformed output.
-  //   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+  //   transform_type (required) - string - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
   //   target_format (required) - string - Destination format to create.
+  //   script - string - Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
   //   width - int64 - Maximum output width for image_convert.
   //   height - int64 - Maximum output height for image_convert.
   //   overwrite - boolean - Overwrite existing file in the destination?
@@ -892,6 +893,10 @@ class File {
 
     if (params.target_format && !isString(params.target_format)) {
       throw new errors.InvalidParameterError(`Bad parameter: target_format must be of type String, received ${getType(params.target_format)}`)
+    }
+
+    if (params.script && !isString(params.script)) {
+      throw new errors.InvalidParameterError(`Bad parameter: script must be of type String, received ${getType(params.script)}`)
     }
 
     if (params.width && !isInt(params.width)) {
