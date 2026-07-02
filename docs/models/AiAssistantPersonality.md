@@ -6,6 +6,7 @@
 {
   "id": 1,
   "workspace_id": 1,
+  "name": "Concise Assistant",
   "system_prompt": "Respond as a concise operations assistant.",
   "use_by_default": true,
   "apply_to_all_workspaces": true,
@@ -16,6 +17,7 @@
 
 * `id` (int64): AI Assistant Personality ID.
 * `workspace_id` (int64): Workspace ID. `0` means the default workspace.
+* `name` (string): AI Assistant Personality name.
 * `system_prompt` (string): System prompt injected into the in-app AI Assistant.
 * `use_by_default` (boolean): Whether this personality is the default personality for the Workspace.
 * `apply_to_all_workspaces` (boolean): If true, this default-workspace personality can apply to users in all workspaces.
@@ -58,6 +60,7 @@ await AiAssistantPersonality.find(id)
 ```
 await AiAssistantPersonality.create({
   'apply_to_all_workspaces': false,
+  'name': "Concise Assistant",
   'system_prompt': "Respond as a concise operations assistant.",
   'use_by_default': false,
   'workspace_id': 0,
@@ -68,6 +71,7 @@ await AiAssistantPersonality.create({
 ### Parameters
 
 * `apply_to_all_workspaces` (boolean): If true, this default-workspace personality can apply to users in all workspaces.
+* `name` (string): Required - AI Assistant Personality name.
 * `system_prompt` (string): Required - System prompt injected into the in-app AI Assistant.
 * `use_by_default` (boolean): Whether this personality is the default personality for the Workspace.
 * `workspace_id` (int64): Workspace ID. `0` means the default workspace.
@@ -81,6 +85,7 @@ const ai_assistant_personality = await AiAssistantPersonality.find(id)
 
 await ai_assistant_personality.update({
   'apply_to_all_workspaces': false,
+  'name': "Concise Assistant",
   'system_prompt': "Respond as a concise operations assistant.",
   'use_by_default': false,
   'workspace_id': 0,
@@ -91,6 +96,7 @@ await ai_assistant_personality.update({
 
 * `id` (int64): Required - Ai Assistant Personality ID.
 * `apply_to_all_workspaces` (boolean): If true, this default-workspace personality can apply to users in all workspaces.
+* `name` (string): AI Assistant Personality name.
 * `system_prompt` (string): System prompt injected into the in-app AI Assistant.
 * `use_by_default` (boolean): Whether this personality is the default personality for the Workspace.
 * `workspace_id` (int64): Workspace ID. `0` means the default workspace.
@@ -101,6 +107,7 @@ await ai_assistant_personality.update({
 {
   "id": 1,
   "workspace_id": 1,
+  "name": "Concise Assistant",
   "system_prompt": "Respond as a concise operations assistant.",
   "use_by_default": true,
   "apply_to_all_workspaces": true,
