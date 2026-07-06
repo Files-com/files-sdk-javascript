@@ -72,6 +72,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_InvalidOauthProviderError
 ### BadRequest_InvalidPathError
 ### BadRequest_InvalidReturnToUrlError
+### BadRequest_InvalidSearchQueryError
 ### BadRequest_InvalidSortFieldError
 ### BadRequest_InvalidSortFilterCombinationError
 ### BadRequest_InvalidUploadOffsetError

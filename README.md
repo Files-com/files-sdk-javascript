@@ -638,6 +638,7 @@ Error
 |     `BadRequest_InvalidOauthProviderError`|  `BadRequestError` |
 |     `BadRequest_InvalidPathError`|  `BadRequestError` |
 |     `BadRequest_InvalidReturnToUrlError`|  `BadRequestError` |
+|     `BadRequest_InvalidSearchQueryError`|  `BadRequestError` |
 |     `BadRequest_InvalidSortFieldError`|  `BadRequestError` |
 |     `BadRequest_InvalidSortFilterCombinationError`|  `BadRequestError` |
 |     `BadRequest_InvalidUploadOffsetError`|  `BadRequestError` |
