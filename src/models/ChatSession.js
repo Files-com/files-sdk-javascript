@@ -31,6 +31,9 @@ class ChatSession {
   // string # Chat Session ID.
   getId = () => this.attributes.id
 
+  // string # Short AI-generated chat title.
+  getTitle = () => this.attributes.title
+
   // int64 # User ID.
   getUserId = () => this.attributes.user_id
 
