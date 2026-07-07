@@ -5,7 +5,7 @@ import { Buffer } from 'safe-buffer'
 import Api from '../Api'
 import * as errors from '../Errors'
 import {
-  isBrowser, getType, isArray, isInt, isObject, isString,
+  isBrowser, pathNormalizer, getType, isArray, isInt, isObject, isString,
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
@@ -80,6 +80,54 @@ class File {
 
     return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params, options)
   }
+
+  static _underscoreDestinationPath = (root, id, relativePath = '') =>
+    pathNormalizer.normalize(`_/${root}/${id}/${relativePath || ''}`)
+
+  static uploadToRemoteServer = async (remoteServerId, destinationPath, sourceFilePath, params, options) =>
+    File.uploadFile(File._underscoreDestinationPath('RemoteServers', remoteServerId, destinationPath), sourceFilePath, params, options)
+
+  static uploadToSnapshot = async (snapshotId, destinationPath, sourceFilePath, params, options) =>
+    File.uploadFile(File._underscoreDestinationPath('Snapshots', snapshotId, destinationPath), sourceFilePath, params, options)
+
+  static uploadToChildSite = async (siteId, destinationPath, sourceFilePath, params, options) =>
+    File.uploadFile(File._underscoreDestinationPath('Sites', siteId, destinationPath), sourceFilePath, params, options)
+
+  static copyToRemoteServer = async (path, remoteServerId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/copy/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('RemoteServers', remoteServerId, destinationPath),
+    }, options)
+
+  static moveToRemoteServer = async (path, remoteServerId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/move/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('RemoteServers', remoteServerId, destinationPath),
+    }, options)
+
+  static copyToSnapshot = async (path, snapshotId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/copy/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('Snapshots', snapshotId, destinationPath),
+    }, options)
+
+  static moveToSnapshot = async (path, snapshotId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/move/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('Snapshots', snapshotId, destinationPath),
+    }, options)
+
+  static copyToChildSite = async (path, siteId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/copy/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('Sites', siteId, destinationPath),
+    }, options)
+
+  static moveToChildSite = async (path, siteId, destinationPath, params = {}, options = {}) =>
+    Api.sendRequest(`/file_actions/move/${encodeURIComponent(path)}`, 'POST', {
+      ...(params || {}),
+      destination: File._underscoreDestinationPath('Sites', siteId, destinationPath),
+    }, options)
 
   /**
    * @note see File.copy() for list of supported params
@@ -304,10 +352,28 @@ class File {
     return Api.sendRequest(`/file_actions/copy/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
 
+  copyToRemoteServer = async (remoteServerId, destinationPath, params = {}, options = this.options) =>
+    File.copyToRemoteServer(this.path, remoteServerId, destinationPath, params, options)
+
+  copyToSnapshot = async (snapshotId, destinationPath, params = {}, options = this.options) =>
+    File.copyToSnapshot(this.path, snapshotId, destinationPath, params, options)
+
+  copyToChildSite = async (siteId, destinationPath, params = {}, options = this.options) =>
+    File.copyToChildSite(this.path, siteId, destinationPath, params, options)
+
   moveTo = async (destinationFilePath, options) => {
     const params = { destination: destinationFilePath }
     return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
+
+  moveToRemoteServer = async (remoteServerId, destinationPath, params = {}, options = this.options) =>
+    File.moveToRemoteServer(this.path, remoteServerId, destinationPath, params, options)
+
+  moveToSnapshot = async (snapshotId, destinationPath, params = {}, options = this.options) =>
+    File.moveToSnapshot(this.path, snapshotId, destinationPath, params, options)
+
+  moveToChildSite = async (siteId, destinationPath, params = {}, options = this.options) =>
+    File.moveToChildSite(this.path, siteId, destinationPath, params, options)
 
   // string # File/Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
   getPath = () => this.attributes.path

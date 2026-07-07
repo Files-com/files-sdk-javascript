@@ -34,6 +34,11 @@ describe('pathNormalizer', () => {
     expect(pathNormalizer.keyLookup(undefined, undefined)).toBe(undefined)
   })
 
+  it('normalizes API paths without changing path identity', () => {
+    expect(pathNormalizer.normalize('/../../remote\\path//./to/file.txt')).toBe('remote/path/to/file.txt')
+    expect(pathNormalizer.normalize('remote/../path/to/file.txt')).toBe('remote/path/to/file.txt')
+  })
+
   it('looks up keys in a map', () => {
     const map = {
       '': { list: true },
