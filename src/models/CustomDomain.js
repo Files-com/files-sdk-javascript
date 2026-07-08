@@ -42,7 +42,7 @@ class CustomDomain {
     this.attributes.domain = value
   }
 
-  // string # Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
+  // string # Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
   getDestination = () => this.attributes.destination
 
   setDestination = value => {
@@ -70,7 +70,7 @@ class CustomDomain {
     this.attributes.brick_managed = value
   }
 
-  // int64 # Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+  // int64 # Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
   getFolderBehaviorId = () => this.attributes.folder_behavior_id
 
   setFolderBehaviorId = value => {
@@ -84,8 +84,8 @@ class CustomDomain {
   getUpdatedAt = () => this.attributes.updated_at
 
   // Parameters:
-  //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
-  //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+  //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
+  //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
   //   ssl_certificate_id - int64 - Current SSL certificate ID.
   //   domain - string - Customer-owned domain name.
   update = async (params = {}) => {
@@ -218,8 +218,8 @@ class CustomDomain {
     CustomDomain.find(id, params, options)
 
   // Parameters:
-  //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
-  //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+  //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
+  //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
   //   ssl_certificate_id - int64 - Current SSL certificate ID.
   //   domain (required) - string - Customer-owned domain name.
   static create = async (params = {}, options = {}) => {
