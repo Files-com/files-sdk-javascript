@@ -112,6 +112,13 @@ class Partner {
     this.attributes.partner_admin_ids = value
   }
 
+  // int64 # ID of the Partner Channel Template assigned to this Partner.
+  getPartnerChannelTemplateId = () => this.attributes.partner_channel_template_id
+
+  setPartnerChannelTemplateId = value => {
+    this.attributes.partner_channel_template_id = value
+  }
+
   // string # This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
   getPartnershipRole = () => this.attributes.partnership_role
 
@@ -163,6 +170,7 @@ class Partner {
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
   //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
   //   notes - string - Notes about this Partner.
+  //   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
   //   responsible_group_id - int64 - ID of the Group responsible for this Partner.
   //   responsible_user_id - int64 - ID of the User responsible for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -192,6 +200,10 @@ class Partner {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.partner_channel_template_id && !isInt(params.partner_channel_template_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_channel_template_id must be of type Int, received ${getType(params.partner_channel_template_id)}`)
     }
 
     if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
@@ -323,6 +335,7 @@ class Partner {
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
   //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
   //   notes - string - Notes about this Partner.
+  //   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
   //   responsible_group_id - int64 - ID of the Group responsible for this Partner.
   //   responsible_user_id - int64 - ID of the User responsible for this Partner.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -348,6 +361,10 @@ class Partner {
 
     if (params.notes && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
+    }
+
+    if (params.partner_channel_template_id && !isInt(params.partner_channel_template_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_channel_template_id must be of type Int, received ${getType(params.partner_channel_template_id)}`)
     }
 
     if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
