@@ -70,18 +70,18 @@ class PartnerChannelTemplate {
     this.attributes.from_partner_folder_name = value
   }
 
-  // string # Optional route path for files uploaded by the Partner.
-  getFromPartnerRoutePath = () => this.attributes.from_partner_route_path
+  // string # Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
+  getFromPartnerRoutePathPattern = () => this.attributes.from_partner_route_path_pattern
 
-  setFromPartnerRoutePath = value => {
-    this.attributes.from_partner_route_path = value
+  setFromPartnerRoutePathPattern = value => {
+    this.attributes.from_partner_route_path_pattern = value
   }
 
-  // string # Optional route path for files delivered to the Partner.
-  getToPartnerRoutePath = () => this.attributes.to_partner_route_path
+  // string # Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
+  getToPartnerRoutePathPattern = () => this.attributes.to_partner_route_path_pattern
 
-  setToPartnerRoutePath = value => {
-    this.attributes.to_partner_route_path = value
+  setToPartnerRoutePathPattern = value => {
+    this.attributes.to_partner_route_path_pattern = value
   }
 
   // array(string) # Managed folder paths inside the to-Partner folder.
@@ -115,10 +115,10 @@ class PartnerChannelTemplate {
   // Parameters:
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
-  //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
+  //   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
   //   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
   //   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
-  //   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+  //   to_partner_route_path_pattern - string - Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
   //   name - string - The name of the Partner Channel Template.
   //   path - string - Channel path relative to the Partner root folder.
   update = async (params = {}) => {
@@ -143,8 +143,8 @@ class PartnerChannelTemplate {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
     }
 
-    if (params.from_partner_route_path && !isString(params.from_partner_route_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path must be of type String, received ${getType(params.from_partner_route_path)}`)
+    if (params.from_partner_route_path_pattern && !isString(params.from_partner_route_path_pattern)) {
+      throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path_pattern must be of type String, received ${getType(params.from_partner_route_path_pattern)}`)
     }
 
     if (params.to_partner_folder_name && !isString(params.to_partner_folder_name)) {
@@ -155,8 +155,8 @@ class PartnerChannelTemplate {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_managed_folder_paths must be of type Array, received ${getType(params.to_partner_managed_folder_paths)}`)
     }
 
-    if (params.to_partner_route_path && !isString(params.to_partner_route_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path must be of type String, received ${getType(params.to_partner_route_path)}`)
+    if (params.to_partner_route_path_pattern && !isString(params.to_partner_route_path_pattern)) {
+      throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path_pattern must be of type String, received ${getType(params.to_partner_route_path_pattern)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -270,10 +270,10 @@ class PartnerChannelTemplate {
   // Parameters:
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
-  //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
+  //   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
   //   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
   //   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
-  //   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+  //   to_partner_route_path_pattern - string - Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
   //   name (required) - string - The name of the Partner Channel Template.
   //   path (required) - string - Channel path relative to the Partner root folder.
   //   workspace_id - int64 - ID of the Workspace associated with this Partner Channel Template.
@@ -294,8 +294,8 @@ class PartnerChannelTemplate {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
     }
 
-    if (params.from_partner_route_path && !isString(params.from_partner_route_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path must be of type String, received ${getType(params.from_partner_route_path)}`)
+    if (params.from_partner_route_path_pattern && !isString(params.from_partner_route_path_pattern)) {
+      throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path_pattern must be of type String, received ${getType(params.from_partner_route_path_pattern)}`)
     }
 
     if (params.to_partner_folder_name && !isString(params.to_partner_folder_name)) {
@@ -306,8 +306,8 @@ class PartnerChannelTemplate {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_managed_folder_paths must be of type Array, received ${getType(params.to_partner_managed_folder_paths)}`)
     }
 
-    if (params.to_partner_route_path && !isString(params.to_partner_route_path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path must be of type String, received ${getType(params.to_partner_route_path)}`)
+    if (params.to_partner_route_path_pattern && !isString(params.to_partner_route_path_pattern)) {
+      throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path_pattern must be of type String, received ${getType(params.to_partner_route_path_pattern)}`)
     }
 
     if (params.name && !isString(params.name)) {
