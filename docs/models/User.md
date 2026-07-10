@@ -25,6 +25,7 @@
   "disabled_expired_or_inactive": true,
   "ai_assistant_personality_id": 1,
   "desktop_configuration_profile_id": 1,
+  "integration_centric_profile_id": 1,
   "email": "john.doe@files.com",
   "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
@@ -113,6 +114,7 @@
 * `disabled_expired_or_inactive` (boolean): Computed property that returns true if user disabled or expired or inactive.
 * `ai_assistant_personality_id` (int64): AI Assistant Personality ID assigned directly to this user, if any.
 * `desktop_configuration_profile_id` (int64): Desktop Configuration Profile ID assigned directly to this user, if any.
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned directly to this user, if any.
 * `email` (email): User email address
 * `filesystem_layout` (string): File system layout
 * `first_login_at` (date-time): User's first login time
@@ -257,6 +259,7 @@ await User.create({
   'filesystem_layout': "site_root",
   'ftp_permission': true,
   'header_text': "User-specific message.",
+  'integration_centric_profile_id': 1,
   'language': "en",
   'notification_daily_send_time': 18,
   'name': "John Doe",
@@ -328,6 +331,7 @@ await User.create({
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (boolean): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned directly to this user, if any.
 * `language` (string): Preferred language
 * `notification_daily_send_time` (int64): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
@@ -440,6 +444,7 @@ await user.update({
   'filesystem_layout': "site_root",
   'ftp_permission': true,
   'header_text': "User-specific message.",
+  'integration_centric_profile_id': 1,
   'language': "en",
   'notification_daily_send_time': 18,
   'name': "John Doe",
@@ -513,6 +518,7 @@ await user.update({
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (boolean): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned directly to this user, if any.
 * `language` (string): Preferred language
 * `notification_daily_send_time` (int64): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
@@ -579,6 +585,7 @@ await user.update({
   "disabled_expired_or_inactive": true,
   "ai_assistant_personality_id": 1,
   "desktop_configuration_profile_id": 1,
+  "integration_centric_profile_id": 1,
   "email": "john.doe@files.com",
   "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",

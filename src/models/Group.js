@@ -119,6 +119,13 @@ class Group {
     this.attributes.desktop_configuration_profile_id = value
   }
 
+  // int64 # Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+  getIntegrationCentricProfileId = () => this.attributes.integration_centric_profile_id
+
+  setIntegrationCentricProfileId = value => {
+    this.attributes.integration_centric_profile_id = value
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -143,6 +150,7 @@ class Group {
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
   //   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
   //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+  //   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   name - string - Group name.
   update = async (params = {}) => {
@@ -177,6 +185,10 @@ class Group {
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
+    }
+
+    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {
@@ -304,6 +316,7 @@ class Group {
   //   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
   //   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
   //   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+  //   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   name (required) - string - Group name.
   //   workspace_id - int64 - Workspace ID
@@ -330,6 +343,10 @@ class Group {
 
     if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
+    }
+
+    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
     if (params.allowed_ips && !isString(params.allowed_ips)) {

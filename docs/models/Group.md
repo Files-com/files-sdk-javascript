@@ -17,6 +17,7 @@
   "dav_permission": true,
   "restapi_permission": true,
   "desktop_configuration_profile_id": 1,
+  "integration_centric_profile_id": 1,
   "site_id": 1,
   "workspace_id": 1
 }
@@ -35,6 +36,7 @@
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (boolean): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
 * `desktop_configuration_profile_id` (int64): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `site_id` (int64): Site ID
 * `workspace_id` (int64): Workspace ID
 
@@ -87,6 +89,7 @@ await Group.create({
   'dav_permission': true,
   'restapi_permission': true,
   'desktop_configuration_profile_id': 1,
+  'integration_centric_profile_id': 1,
   'allowed_ips': "10.0.0.0/8\n127.0.0.1",
   'name': "name",
   'workspace_id': 0,
@@ -105,6 +108,7 @@ await Group.create({
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (boolean): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
 * `desktop_configuration_profile_id` (int64): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Required - Group name.
 * `workspace_id` (int64): Workspace ID
@@ -126,6 +130,7 @@ await group.update({
   'dav_permission': true,
   'restapi_permission': true,
   'desktop_configuration_profile_id': 1,
+  'integration_centric_profile_id': 1,
   'allowed_ips': "10.0.0.0/8\n127.0.0.1",
   'name': "owners",
 })
@@ -143,6 +148,7 @@ await group.update({
 * `dav_permission` (boolean): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (boolean): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
 * `desktop_configuration_profile_id` (int64): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+* `integration_centric_profile_id` (int64): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Group name.
 
@@ -163,6 +169,7 @@ await group.update({
   "dav_permission": true,
   "restapi_permission": true,
   "desktop_configuration_profile_id": 1,
+  "integration_centric_profile_id": 1,
   "site_id": 1,
   "workspace_id": 1
 }

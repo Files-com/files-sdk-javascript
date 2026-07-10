@@ -157,6 +157,13 @@ class User {
     this.attributes.desktop_configuration_profile_id = value
   }
 
+  // int64 # Integration Centric Profile ID assigned directly to this user, if any.
+  getIntegrationCentricProfileId = () => this.attributes.integration_centric_profile_id
+
+  setIntegrationCentricProfileId = value => {
+    this.attributes.integration_centric_profile_id = value
+  }
+
   // email # User email address
   getEmail = () => this.attributes.email
 
@@ -809,6 +816,7 @@ class User {
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
   //   header_text - string - Text to display to the user in the header of the UI
+  //   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
   //   language - string - Preferred language
   //   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
   //   name - string - User's full name
@@ -929,6 +937,10 @@ class User {
 
     if (params.header_text && !isString(params.header_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(params.header_text)}`)
+    }
+
+    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
     if (params.language && !isString(params.language)) {
@@ -1153,6 +1165,7 @@ class User {
   //   filesystem_layout - string - File system layout
   //   ftp_permission - boolean - Can the user access with FTP/FTPS?
   //   header_text - string - Text to display to the user in the header of the UI
+  //   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
   //   language - string - Preferred language
   //   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
   //   name - string - User's full name
@@ -1262,6 +1275,10 @@ class User {
 
     if (params.header_text && !isString(params.header_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(params.header_text)}`)
+    }
+
+    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
     if (params.language && !isString(params.language)) {
