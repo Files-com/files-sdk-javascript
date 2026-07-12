@@ -268,6 +268,9 @@ class Site {
   // boolean # Allow group admins to create users in their groups
   getGroupAdminsCanAddUsers = () => this.attributes.group_admins_can_add_users
 
+  // boolean # Allow group admins to add or remove existing users in their groups
+  getGroupAdminsCanManageGroupMemberships = () => this.attributes.group_admins_can_manage_group_memberships
+
   // boolean # Allow group admins to delete users in their groups
   getGroupAdminsCanDeleteUsers = () => this.attributes.group_admins_can_delete_users
 
@@ -720,6 +723,7 @@ class Site {
   //   revoke_bundle_access_on_disable_or_delete - boolean - Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
   //   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   //   group_admins_can_add_users - boolean - Allow group admins to create users in their groups
+  //   group_admins_can_manage_group_memberships - boolean - Allow group admins to add or remove existing users in their groups
   //   group_admins_can_delete_users - boolean - Allow group admins to delete users in their groups
   //   group_admins_can_enable_disable_users - boolean - Allow group admins to enable or disable users in their groups
   //   group_admins_can_modify_users - boolean - Allow group admins to modify users in their groups
