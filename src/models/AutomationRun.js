@@ -34,6 +34,9 @@ class AutomationRun {
   // int64 # ID of the associated Automation.
   getAutomationId = () => this.attributes.automation_id
 
+  // int64 # ID of the immutable Automation version pinned by this run.
+  getAutomationVersionId = () => this.attributes.automation_version_id
+
   // int64 # Workspace ID.
   getWorkspaceId = () => this.attributes.workspace_id
 
@@ -66,6 +69,12 @@ class AutomationRun {
 
   // int64 # Count of failed operations.
   getFailedOperations = () => this.attributes.failed_operations
+
+  // object # Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
+  getDefinition = () => this.attributes.definition
+
+  // string # Link to the run journal artifact.
+  getJournalUrl = () => this.attributes.journal_url
 
   // string # Link to status messages log file.
   getStatusMessagesUrl = () => this.attributes.status_messages_url

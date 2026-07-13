@@ -77,6 +77,13 @@ class Automation {
     this.attributes.description = value
   }
 
+  // object # Automation v2 graph definition.
+  getDefinition = () => this.attributes.definition
+
+  setDefinition = value => {
+    this.attributes.definition = value
+  }
+
   // string # If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   getDestinationReplaceFrom = () => this.attributes.destination_replace_from
 
@@ -187,6 +194,13 @@ class Automation {
 
   setPathTimeZone = value => {
     this.attributes.path_time_zone = value
+  }
+
+  // int64 # Current Automation v2 definition version.
+  getVersion = () => this.attributes.version
+
+  setVersion = value => {
+    this.attributes.version = value
   }
 
   // int64 # If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
