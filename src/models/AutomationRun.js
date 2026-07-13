@@ -40,6 +40,9 @@ class AutomationRun {
   // int64 # Workspace ID.
   getWorkspaceId = () => this.attributes.workspace_id
 
+  // date-time # Date/time at which cancellation was requested.
+  getCancelRequestedAt = () => this.attributes.cancel_requested_at
+
   // date-time # Automation run completion/failure date/time.
   getCompletedAt = () => this.attributes.completed_at
 
@@ -61,7 +64,7 @@ class AutomationRun {
   // double # Automation run runtime.
   getRuntime = () => this.attributes.runtime
 
-  // string # The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
+  // string # The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
   getStatus = () => this.attributes.status
 
   // int64 # Count of successful operations.
@@ -73,11 +76,42 @@ class AutomationRun {
   // object # Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
   getDefinition = () => this.attributes.definition
 
+  // object # Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
+  getNodeStates = () => this.attributes.node_states
+
   // string # Link to the run journal artifact.
   getJournalUrl = () => this.attributes.journal_url
 
   // string # Link to status messages log file.
   getStatusMessagesUrl = () => this.attributes.status_messages_url
+
+  // Cancel Automation Run
+  cancel = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/cancel`, 'POST', params, this.options)
+
+    return new AutomationRun(response?.data, this.options)
+  }
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.

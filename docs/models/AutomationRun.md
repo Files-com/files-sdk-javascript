@@ -8,6 +8,7 @@
   "automation_id": 1,
   "automation_version_id": 1,
   "workspace_id": 1,
+  "cancel_requested_at": "2000-01-01T01:00:00Z",
   "completed_at": "2000-01-01T01:00:00Z",
   "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
@@ -19,6 +20,7 @@
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",
+  "node_states": "example",
   "journal_url": "example",
   "status_messages_url": "https://www.example.com/log_file.txt"
 }
@@ -28,6 +30,7 @@
 * `automation_id` (int64): ID of the associated Automation.
 * `automation_version_id` (int64): ID of the immutable Automation version pinned by this run.
 * `workspace_id` (int64): Workspace ID.
+* `cancel_requested_at` (date-time): Date/time at which cancellation was requested.
 * `completed_at` (date-time): Automation run completion/failure date/time.
 * `created_at` (date-time): Automation run start date/time.
 * `retry_at` (date-time): If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
@@ -35,10 +38,11 @@
 * `retried_in_run_id` (int64): ID of the run that is or will be retrying this run.
 * `retry_of_run_id` (int64): ID of the original run that this run is retrying.
 * `runtime` (double): Automation run runtime.
-* `status` (string): The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
+* `status` (string): The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
 * `successful_operations` (int64): Count of successful operations.
 * `failed_operations` (int64): Count of failed operations.
 * `definition` (object): Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
+* `node_states` (object): Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
 * `journal_url` (string): Link to the run journal artifact.
 * `status_messages_url` (string): Link to status messages log file.
 
@@ -75,3 +79,43 @@ await AutomationRun.find(id)
 ### Parameters
 
 * `id` (int64): Required - Automation Run ID.
+
+---
+
+## Cancel Automation Run
+
+```
+const automation_run = await AutomationRun.find(id)
+
+await automation_run.cancel()
+```
+
+### Parameters
+
+* `id` (int64): Required - Automation Run ID.
+
+### Example Response
+
+```json
+{
+  "id": 1,
+  "automation_id": 1,
+  "automation_version_id": 1,
+  "workspace_id": 1,
+  "cancel_requested_at": "2000-01-01T01:00:00Z",
+  "completed_at": "2000-01-01T01:00:00Z",
+  "created_at": "2000-01-01T01:00:00Z",
+  "retry_at": "2000-01-01T01:00:00Z",
+  "retried_at": "2000-01-01T01:00:00Z",
+  "retried_in_run_id": 1,
+  "retry_of_run_id": 1,
+  "runtime": 1.0,
+  "status": "success",
+  "successful_operations": 1,
+  "failed_operations": 1,
+  "definition": "example",
+  "node_states": "example",
+  "journal_url": "example",
+  "status_messages_url": "https://www.example.com/log_file.txt"
+}
+```
