@@ -31,6 +31,9 @@ class AutomationAuthoringSchema {
   // object # JSON Schema for active Automation v2 graph definitions.
   getDefinitionSchema = () => this.attributes.definition_schema
 
+  // array(object) # Typed error families accepted by Automation v2 on_error rules.
+  getErrorFamilies = () => this.attributes.error_families
+
   // array(object) # Active Automation v2 node authoring metadata.
   getNodes = () => this.attributes.nodes
 }
