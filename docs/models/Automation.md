@@ -177,6 +177,15 @@ await Automation.find(id)
 
 ---
 
+## Show the Automation v2 authoring schema and active node catalog
+
+```
+await Automation.getAuthoringSchema
+```
+
+
+---
+
 ## Create Automation
 
 ```

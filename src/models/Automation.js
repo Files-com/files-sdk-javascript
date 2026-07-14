@@ -607,6 +607,13 @@ class Automation {
   static get = (id, params = {}, options = {}) =>
     Automation.find(id, params, options)
 
+  static getAuthoringSchema = async (options = {}) => {
+    const response = await Api.sendRequest('/automations/authoring_schema', 'GET', {}, options)
+
+    const AutomationAuthoringSchema = require('./AutomationAuthoringSchema.js').default
+    return new AutomationAuthoringSchema(response?.data, options)
+  }
+
   // Parameters:
   //   source - string - Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
   //   destinations - array(string) - A list of destination paths. Use a trailing slash for folder destinations and omit it for file destinations.
