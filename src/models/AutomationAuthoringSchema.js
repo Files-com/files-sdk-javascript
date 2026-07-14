@@ -36,6 +36,9 @@ class AutomationAuthoringSchema {
 
   // array(object) # Active Automation v2 node authoring metadata.
   getNodes = () => this.attributes.nodes
+
+  // string # Stable public URL for the Automation v2 graph definition JSON Schema.
+  getSchemaUrl = () => this.attributes.schema_url
 }
 
 export default AutomationAuthoringSchema

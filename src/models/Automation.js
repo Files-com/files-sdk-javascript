@@ -126,6 +126,13 @@ class Automation {
     this.attributes.import_urls = value
   }
 
+  // string # If trigger is `email`, this is the address that triggers the Automation.
+  getInboundEmailAddress = () => this.attributes.inbound_email_address
+
+  setInboundEmailAddress = value => {
+    this.attributes.inbound_email_address = value
+  }
+
   // boolean # Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
   getFlattenDestinationStructure = () => this.attributes.flatten_destination_structure
 
@@ -329,7 +336,10 @@ class Automation {
     this.attributes.holiday_region = value
   }
 
-  // Manually Run Automation
+  // Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+  //
+  // Parameters:
+  //   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -342,6 +352,10 @@ class Automation {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.items && !isArray(params.items)) {
+      throw new errors.InvalidParameterError(`Bad parameter: items must be of type Array, received ${getType(params.items)}`)
     }
 
     if (!params.id) {

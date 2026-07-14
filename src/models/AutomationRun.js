@@ -61,6 +61,12 @@ class AutomationRun {
   // int64 # ID of the original run that this run is retrying.
   getRetryOfRunId = () => this.attributes.retry_of_run_id
 
+  // int64 # ID of the run whose persisted node outputs this run reused.
+  getRerunOfRunId = () => this.attributes.rerun_of_run_id
+
+  // string # Node at which this run resumed execution.
+  getRerunFromNodeId = () => this.attributes.rerun_from_node_id
+
   // double # Automation run runtime.
   getRuntime = () => this.attributes.runtime
 
@@ -78,6 +84,9 @@ class AutomationRun {
 
   // object # Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
   getNodeStates = () => this.attributes.node_states
+
+  // array(object) # Execution status, timing, and bounded output summaries for each node. For performance reasons, this is not provided when listing Automation runs.
+  getExecutionNodes = () => this.attributes.execution_nodes
 
   // string # Link to the run journal artifact.
   getJournalUrl = () => this.attributes.journal_url
@@ -109,6 +118,49 @@ class AutomationRun {
     }
 
     const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/cancel`, 'POST', params, this.options)
+
+    return new AutomationRun(response?.data, this.options)
+  }
+
+  // Re-run Automation from Node
+  //
+  // Parameters:
+  //   node_id (required) - string - Node ID at which execution should resume.
+  rerun = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.node_id && !isString(params.node_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: node_id must be of type String, received ${getType(params.node_id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    if (!params.node_id) {
+      if (this.attributes.node_id) {
+        params.node_id = this.node_id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: node_id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/rerun`, 'POST', params, this.options)
 
     return new AutomationRun(response?.data, this.options)
   }
@@ -173,6 +225,38 @@ class AutomationRun {
 
   static get = (id, params = {}, options = {}) =>
     AutomationRun.find(id, params, options)
+
+  // Parameters:
+  //   id (required) - int64 - Automation Run ID.
+  //   node_id (required) - string - Node ID from the pinned Automation definition.
+  static findNode = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = id
+
+    if (!params.id) {
+      throw new errors.MissingParameterError('Parameter missing: id')
+    }
+
+    if (!params.node_id) {
+      throw new errors.MissingParameterError('Parameter missing: node_id')
+    }
+
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.node_id && !isString(params.node_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: node_id must be of type String, received ${getType(params.node_id)}`)
+    }
+
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/node`, 'GET', params, options)
+
+    const AutomationExecutionNode = require('./AutomationExecutionNode.js').default
+    return new AutomationExecutionNode(response?.data, options)
+  }
 }
 
 export default AutomationRun
