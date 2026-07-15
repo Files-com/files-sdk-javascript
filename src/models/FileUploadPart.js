@@ -75,6 +75,9 @@ class FileUploadPart {
 
   // string # URI to upload this part to
   getUploadUri = () => this.attributes.upload_uri
+
+  // DirectConnectionInfo # Optional direct connection information for direct Agent transfer attempts
+  getDirectConnectionInfo = () => this.attributes.direct_connection_info
 }
 
 export default FileUploadPart

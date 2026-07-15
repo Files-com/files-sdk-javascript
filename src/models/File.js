@@ -595,6 +595,13 @@ class File {
     this.attributes.download_uri = value
   }
 
+  // DirectConnectionInfo # Optional direct connection information for direct Agent transfer attempts
+  getDirectConnectionInfo = () => this.attributes.direct_connection_info
+
+  setDirectConnectionInfo = value => {
+    this.attributes.direct_connection_info = value
+  }
+
   // string # Bookmark/priority color of file/folder
   getPriorityColor = () => this.attributes.priority_color
 
@@ -693,6 +700,13 @@ class File {
     this.attributes.buffered_upload = value
   }
 
+  // boolean # Include optional direct connection information for a direct Agent transfer attempt?
+  getWithDirectConnectionInfo = () => this.attributes.with_direct_connection_info
+
+  setWithDirectConnectionInfo = value => {
+    this.attributes.with_direct_connection_info = value
+  }
+
   // Download File
   //
   // Parameters:
@@ -700,6 +714,7 @@ class File {
   //   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
   //   with_previews - boolean - Include file preview information?
   //   with_priority_color - boolean - Include file priority color information?
+  //   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
   download = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
@@ -1190,6 +1205,7 @@ class File {
   //   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
   //   with_rename - boolean - Allow file rename instead of overwrite?
   //   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+  //   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
   beginUpload = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
@@ -1261,6 +1277,7 @@ class File {
   //   structure - string - If copying folder, copy just the structure?
   //   with_rename - boolean - Allow file rename instead of overwrite?
   //   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+  //   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)

@@ -248,6 +248,13 @@ class Folder {
     this.attributes.download_uri = value
   }
 
+  // DirectConnectionInfo # Optional direct connection information for direct Agent transfer attempts
+  getDirectConnectionInfo = () => this.attributes.direct_connection_info
+
+  setDirectConnectionInfo = value => {
+    this.attributes.direct_connection_info = value
+  }
+
   // string # Bookmark/priority color of file/folder
   getPriorityColor = () => this.attributes.priority_color
 
