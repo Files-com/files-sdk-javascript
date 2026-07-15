@@ -70,7 +70,7 @@ class ExpectationEvaluation {
   // array(object) # Captured evidence for required files that were missing.
   getMissingFiles = () => this.attributes.missing_files
 
-  // array(string) # Captured criteria failures for the window.
+  // array(string) # Captured criteria failures for the window, including file-scoped FTS errors and returned validation details.
   getCriteriaErrors = () => this.attributes.criteria_errors
 
   // object # Compact evaluator summary payload.
