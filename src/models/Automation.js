@@ -336,6 +336,34 @@ class Automation {
     this.attributes.holiday_region = value
   }
 
+  // Upgrade a legacy Automation to Automation v2
+  upgrade = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/automations/${encodeURIComponent(params.id)}/upgrade`, 'POST', params, this.options)
+
+    return new Automation(response?.data, this.options)
+  }
+
   // Manually Run Automation. v2 Automations require Site or Workspace Admin permission
   //
   // Parameters:

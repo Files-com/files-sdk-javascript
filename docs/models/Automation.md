@@ -269,6 +269,119 @@ await Automation.create({
 
 ---
 
+## Upgrade a legacy Automation to Automation v2
+
+```
+const automation = await Automation.find(id)
+
+await automation.upgrade()
+```
+
+### Parameters
+
+* `id` (int64): Required - Automation ID.
+
+### Example Response
+
+```json
+{
+  "id": 1,
+  "workspace_id": 1,
+  "always_serialize_jobs": true,
+  "always_overwrite_size_matching_files": true,
+  "automation": "create_folder",
+  "deleted": true,
+  "description": "example",
+  "definition": "example",
+  "destination_replace_from": "example",
+  "destination_replace_to": "example",
+  "destinations": [
+    "destination"
+  ],
+  "disabled": true,
+  "exclude_pattern": "path/to/exclude/*",
+  "import_urls": [
+    {
+      "name": "users.json",
+      "url": "http://example.com/users",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "content": {
+        "group": "support"
+      }
+    }
+  ],
+  "inbound_email_address": "example-automation-abc123@inbox.files.com",
+  "flatten_destination_structure": true,
+  "group_ids": [
+    1,
+    2
+  ],
+  "ignore_locked_folders": true,
+  "interval": "week",
+  "last_modified_at": "2000-01-01T01:00:00Z",
+  "legacy_folder_matching": true,
+  "name": "example",
+  "overwrite_files": true,
+  "path": "example",
+  "path_time_zone": "Eastern Time (US & Canada)",
+  "version": 1,
+  "recurring_day": 25,
+  "retry_on_failure_interval_in_minutes": 60,
+  "retry_on_failure_number_of_attempts": 10,
+  "schedule": {
+    "days_of_week": [
+      0,
+      2,
+      4
+    ],
+    "times_of_day": [
+      "06:30",
+      "14:30"
+    ],
+    "time_zone": "Eastern Time (US & Canada)"
+  },
+  "human_readable_schedule": "Triggered every Monday, Wednesday at 6:30 AM,\n  2:30 PM Eastern Time (US & Canada) TZ",
+  "schedule_days_of_week": [
+    0,
+    2,
+    4
+  ],
+  "schedule_times_of_day": [
+    "06:30",
+    "14:30"
+  ],
+  "schedule_time_zone": "Eastern Time (US & Canada)",
+  "source": "example",
+  "legacy_sync_ids": [
+    1,
+    2
+  ],
+  "sync_ids": [
+    1,
+    2
+  ],
+  "trigger_actions": [
+    "create"
+  ],
+  "trigger": "daily",
+  "user_id": 1,
+  "user_ids": [
+    1,
+    2
+  ],
+  "value": {
+    "limit": "1"
+  },
+  "webhook_url": "https://app.files.com/api/webhooks/abc123",
+  "holiday_region": "us_dc"
+}
+```
+
+---
+
 ## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
 
 ```
