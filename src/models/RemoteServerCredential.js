@@ -133,6 +133,27 @@ class RemoteServerCredential {
     this.attributes.linode_access_key = value
   }
 
+  // string # SharePoint: Microsoft Entra tenant ID for app-only authentication.
+  getSharepointTenantId = () => this.attributes.sharepoint_tenant_id
+
+  setSharepointTenantId = value => {
+    this.attributes.sharepoint_tenant_id = value
+  }
+
+  // string # SharePoint: Microsoft Entra application client ID for app-only authentication.
+  getSharepointClientId = () => this.attributes.sharepoint_client_id
+
+  setSharepointClientId = value => {
+    this.attributes.sharepoint_client_id = value
+  }
+
+  // string # SharePoint: App-only credential type. Either secret or certificate.
+  getSharepointAppCredentialType = () => this.attributes.sharepoint_app_credential_type
+
+  setSharepointAppCredentialType = value => {
+    this.attributes.sharepoint_app_credential_type = value
+  }
+
   // string # Remote server username.
   getUsername = () => this.attributes.username
 
@@ -252,6 +273,20 @@ class RemoteServerCredential {
     this.attributes.s3_compatible_secret_key = value
   }
 
+  // string # SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  getSharepointClientCertificate = () => this.attributes.sharepoint_client_certificate
+
+  setSharepointClientCertificate = value => {
+    this.attributes.sharepoint_client_certificate = value
+  }
+
+  // string # SharePoint: Microsoft Entra application client secret for app-only authentication.
+  getSharepointClientSecret = () => this.attributes.sharepoint_client_secret
+
+  setSharepointClientSecret = value => {
+    this.attributes.sharepoint_client_secret = value
+  }
+
   // string # Wasabi: Secret Key
   getWasabiSecretKey = () => this.attributes.wasabi_secret_key
 
@@ -278,6 +313,8 @@ class RemoteServerCredential {
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   linode_access_key - string - Linode: Access Key
   //   s3_compatible_access_key - string - S3-compatible: Access Key
+  //   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+  //   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
   //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
   //   password - string - Password, if needed.
@@ -296,6 +333,8 @@ class RemoteServerCredential {
   //   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
   //   linode_secret_key - string - Linode: Secret Key
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
+  //   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  //   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
   //   wasabi_secret_key - string - Wasabi: Secret Key
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -353,6 +392,14 @@ class RemoteServerCredential {
 
     if (params.s3_compatible_access_key && !isString(params.s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(params.s3_compatible_access_key)}`)
+    }
+
+    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
+    }
+
+    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
     if (params.username && !isString(params.username)) {
@@ -425,6 +472,14 @@ class RemoteServerCredential {
 
     if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(params.s3_compatible_secret_key)}`)
+    }
+
+    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
+    }
+
+    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
     if (params.wasabi_secret_key && !isString(params.wasabi_secret_key)) {
@@ -544,6 +599,8 @@ class RemoteServerCredential {
   //   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
   //   linode_access_key - string - Linode: Access Key
   //   s3_compatible_access_key - string - S3-compatible: Access Key
+  //   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+  //   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
   //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
   //   password - string - Password, if needed.
@@ -562,6 +619,8 @@ class RemoteServerCredential {
   //   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
   //   linode_secret_key - string - Linode: Secret Key
   //   s3_compatible_secret_key - string - S3-compatible: Secret Key
+  //   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  //   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
   //   wasabi_secret_key - string - Wasabi: Secret Key
   //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
@@ -608,6 +667,14 @@ class RemoteServerCredential {
 
     if (params.s3_compatible_access_key && !isString(params.s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(params.s3_compatible_access_key)}`)
+    }
+
+    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
+    }
+
+    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
     if (params.username && !isString(params.username)) {
@@ -680,6 +747,14 @@ class RemoteServerCredential {
 
     if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(params.s3_compatible_secret_key)}`)
+    }
+
+    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
+    }
+
+    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
     if (params.wasabi_secret_key && !isString(params.wasabi_secret_key)) {

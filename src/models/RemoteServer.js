@@ -308,6 +308,41 @@ class RemoteServer {
     this.attributes.one_drive_account_type = value
   }
 
+  // string # SharePoint: Microsoft Entra tenant ID for app-only authentication.
+  getSharepointTenantId = () => this.attributes.sharepoint_tenant_id
+
+  setSharepointTenantId = value => {
+    this.attributes.sharepoint_tenant_id = value
+  }
+
+  // string # SharePoint: Microsoft Entra application client ID for app-only authentication.
+  getSharepointClientId = () => this.attributes.sharepoint_client_id
+
+  setSharepointClientId = value => {
+    this.attributes.sharepoint_client_id = value
+  }
+
+  // boolean # SharePoint: If true, this remote server uses Microsoft Entra app-only authentication.
+  getSharepointAppAuthentication = () => this.attributes.sharepoint_app_authentication
+
+  setSharepointAppAuthentication = value => {
+    this.attributes.sharepoint_app_authentication = value
+  }
+
+  // string # SharePoint: App-only credential type. Either secret or certificate.
+  getSharepointAppCredentialType = () => this.attributes.sharepoint_app_credential_type
+
+  setSharepointAppCredentialType = value => {
+    this.attributes.sharepoint_app_credential_type = value
+  }
+
+  // string # SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+  getSharepointSiteUrl = () => this.attributes.sharepoint_site_url
+
+  setSharepointSiteUrl = value => {
+    this.attributes.sharepoint_site_url = value
+  }
+
   // string # Azure Blob Storage: Account name
   getAzureBlobStorageAccount = () => this.attributes.azure_blob_storage_account
 
@@ -567,6 +602,20 @@ class RemoteServer {
     this.attributes.reset_authentication = value
   }
 
+  // string # SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  getSharepointClientCertificate = () => this.attributes.sharepoint_client_certificate
+
+  setSharepointClientCertificate = value => {
+    this.attributes.sharepoint_client_certificate = value
+  }
+
+  // string # SharePoint: Microsoft Entra application client secret for app-only authentication.
+  getSharepointClientSecret = () => this.attributes.sharepoint_client_secret
+
+  setSharepointClientSecret = value => {
+    this.attributes.sharepoint_client_secret = value
+  }
+
   // string # SSL client certificate.
   getSslCertificate = () => this.attributes.ssl_certificate
 
@@ -799,6 +848,8 @@ class RemoteServer {
   //   private_key - string - Private key, if needed.
   //   private_key_passphrase - string - Passphrase for private key if needed.
   //   reset_authentication - boolean - Reset authenticated account?
+  //   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  //   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
   //   ssl_certificate - string - SSL client certificate.
   //   aws_secret_key - string - AWS: secret key.
   //   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
@@ -867,6 +918,9 @@ class RemoteServer {
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
   //   server_type - string - Remote server type.
+  //   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+  //   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+  //   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
   //   ssl - string - Should we require SSL?
   //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
@@ -896,6 +950,14 @@ class RemoteServer {
 
     if (params.private_key_passphrase && !isString(params.private_key_passphrase)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(params.private_key_passphrase)}`)
+    }
+
+    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
+    }
+
+    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
     if (params.ssl_certificate && !isString(params.ssl_certificate)) {
@@ -1144,6 +1206,18 @@ class RemoteServer {
 
     if (params.server_type && !isString(params.server_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(params.server_type)}`)
+    }
+
+    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
+    }
+
+    if (params.sharepoint_site_url && !isString(params.sharepoint_site_url)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_site_url must be of type String, received ${getType(params.sharepoint_site_url)}`)
+    }
+
+    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
     if (params.ssl && !isString(params.ssl)) {
@@ -1301,6 +1375,8 @@ class RemoteServer {
   //   private_key - string - Private key, if needed.
   //   private_key_passphrase - string - Passphrase for private key if needed.
   //   reset_authentication - boolean - Reset authenticated account?
+  //   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+  //   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
   //   ssl_certificate - string - SSL client certificate.
   //   aws_secret_key - string - AWS: secret key.
   //   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
@@ -1369,6 +1445,9 @@ class RemoteServer {
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
   //   server_type - string - Remote server type.
+  //   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+  //   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+  //   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
   //   ssl - string - Should we require SSL?
   //   username - string - Remote server username.
   //   wasabi_access_key - string - Wasabi: Access Key.
@@ -1390,6 +1469,14 @@ class RemoteServer {
 
     if (params.private_key_passphrase && !isString(params.private_key_passphrase)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(params.private_key_passphrase)}`)
+    }
+
+    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
+    }
+
+    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
     if (params.ssl_certificate && !isString(params.ssl_certificate)) {
@@ -1638,6 +1725,18 @@ class RemoteServer {
 
     if (params.server_type && !isString(params.server_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(params.server_type)}`)
+    }
+
+    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
+    }
+
+    if (params.sharepoint_site_url && !isString(params.sharepoint_site_url)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_site_url must be of type String, received ${getType(params.sharepoint_site_url)}`)
+    }
+
+    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
     if (params.ssl && !isString(params.ssl)) {
