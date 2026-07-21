@@ -70,6 +70,13 @@ class Snapshot {
     this.attributes.bundle_id = value
   }
 
+  // int64 # Workspace ID. `0` means the default workspace.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // array(string) # An array of paths to add to the snapshot.
   getPaths = () => this.attributes.paths
 
@@ -235,6 +242,7 @@ class Snapshot {
   //   expires_at - string - When the snapshot expires.
   //   name - string - A name for the snapshot.
   //   paths - array(string) - An array of paths to add to the snapshot.
+  //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
     if (params.expires_at && !isString(params.expires_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
@@ -246,6 +254,10 @@ class Snapshot {
 
     if (params.paths && !isArray(params.paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params.paths)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/snapshots', 'POST', params, options)

@@ -9,7 +9,8 @@
   "finalized_at": "2000-01-01T01:00:00Z",
   "name": "My Snapshot",
   "user_id": 1,
-  "bundle_id": 1
+  "bundle_id": 1,
+  "workspace_id": 1
 }
 ```
 
@@ -19,6 +20,7 @@
 * `name` (string): A name for the snapshot.
 * `user_id` (int64): The user that created this snapshot, if applicable.
 * `bundle_id` (int64): The bundle using this snapshot, if applicable.
+* `workspace_id` (int64): Workspace ID. `0` means the default workspace.
 * `paths` (array(string)): An array of paths to add to the snapshot.
 
 ---
@@ -56,6 +58,7 @@ await Snapshot.find(id)
 await Snapshot.create({
   'expires_at': "2000-01-01T01:00:00Z",
   'name': "My Snapshot",
+  'workspace_id': 0,
 })
 ```
 
@@ -65,6 +68,7 @@ await Snapshot.create({
 * `expires_at` (string): When the snapshot expires.
 * `name` (string): A name for the snapshot.
 * `paths` (array(string)): An array of paths to add to the snapshot.
+* `workspace_id` (int64): Workspace ID. `0` means the default workspace.
 
 ---
 
@@ -110,7 +114,8 @@ await snapshot.update({
   "finalized_at": "2000-01-01T01:00:00Z",
   "name": "My Snapshot",
   "user_id": 1,
-  "bundle_id": 1
+  "bundle_id": 1,
+  "workspace_id": 1
 }
 ```
 
