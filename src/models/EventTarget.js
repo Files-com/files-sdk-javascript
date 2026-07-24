@@ -70,14 +70,14 @@ class EventTarget {
     this.attributes.enabled = value
   }
 
-  // object # Event Target configuration.
+  // object # Event Target configuration. Folder targets accept path and format (json or csv).
   getConfig = () => this.attributes.config
 
   setConfig = value => {
     this.attributes.config = value
   }
 
-  // object # Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+  // object # Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
   getDeliveryPolicy = () => this.attributes.delivery_policy
 
   setDeliveryPolicy = value => {
@@ -94,10 +94,9 @@ class EventTarget {
   //   name - string - Event Target name.
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
-  //   target_type - string - Event Target type.
   //   enabled - boolean - Whether this Event Target can receive events.
-  //   config - object - Event Target configuration.
-  //   delivery_policy - object - Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+  //   config - object - Event Target configuration. Folder targets accept path and format (json or csv).
+  //   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -118,10 +117,6 @@ class EventTarget {
 
     if (params.workspace_id && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
-    }
-
-    if (params.target_type && !isString(params.target_type)) {
-      throw new errors.InvalidParameterError(`Bad parameter: target_type must be of type String, received ${getType(params.target_type)}`)
     }
 
     if (!params.id) {
@@ -228,21 +223,21 @@ class EventTarget {
   //   name (required) - string - Event Target name.
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
-  //   target_type (required) - string - Event Target type.
   //   enabled - boolean - Whether this Event Target can receive events.
-  //   config (required) - object - Event Target configuration.
-  //   delivery_policy - object - Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+  //   config (required) - object - Event Target configuration. Folder targets accept path and format (json or csv).
+  //   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
+  //   target_type (required) - string - Event Target type.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (!params.target_type) {
-      throw new errors.MissingParameterError('Parameter missing: target_type')
-    }
-
     if (!params.config) {
       throw new errors.MissingParameterError('Parameter missing: config')
+    }
+
+    if (!params.target_type) {
+      throw new errors.MissingParameterError('Parameter missing: target_type')
     }
 
     if (params.name && !isString(params.name)) {
