@@ -70,11 +70,25 @@ class ChildSiteManagementPolicy {
     this.attributes.applied_child_site_ids = value
   }
 
-  // array(int64) # IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+  // array(int64) # IDs of child sites excluded from this default policy.
   getSkipChildSiteIds = () => this.attributes.skip_child_site_ids
 
   setSkipChildSiteIds = value => {
     this.attributes.skip_child_site_ids = value
+  }
+
+  // array(int64) # IDs of child sites explicitly assigned to this non-default policy.
+  getChildSiteIds = () => this.attributes.child_site_ids
+
+  setChildSiteIds = value => {
+    this.attributes.child_site_ids = value
+  }
+
+  // boolean # Whether this policy applies to child sites not explicitly assigned to another policy.
+  getDefaultPolicy = () => this.attributes.default_policy
+
+  setDefaultPolicy = value => {
+    this.attributes.default_policy = value
   }
 
   // date-time # When this policy was created.
@@ -85,7 +99,9 @@ class ChildSiteManagementPolicy {
 
   // Parameters:
   //   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
-  //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+  //   skip_child_site_ids - array(int64) - IDs of child sites excluded from this default policy.
+  //   child_site_ids - array(int64) - IDs of child sites explicitly assigned to this non-default policy.
+  //   default_policy - boolean - Whether this policy applies to child sites not explicitly assigned to another policy.
   //   policy_type - string - Type of policy.  Valid values: `settings`.
   //   name - string - Name for this policy.
   //   description - string - Description for this policy.
@@ -105,6 +121,10 @@ class ChildSiteManagementPolicy {
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
+    }
+
+    if (params.child_site_ids && !isArray(params.child_site_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: child_site_ids must be of type Array, received ${getType(params.child_site_ids)}`)
     }
 
     if (params.policy_type && !isString(params.policy_type)) {
@@ -219,7 +239,9 @@ class ChildSiteManagementPolicy {
 
   // Parameters:
   //   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
-  //   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+  //   skip_child_site_ids - array(int64) - IDs of child sites excluded from this default policy.
+  //   child_site_ids - array(int64) - IDs of child sites explicitly assigned to this non-default policy.
+  //   default_policy - boolean - Whether this policy applies to child sites not explicitly assigned to another policy.
   //   policy_type (required) - string - Type of policy.  Valid values: `settings`.
   //   name - string - Name for this policy.
   //   description - string - Description for this policy.
@@ -230,6 +252,10 @@ class ChildSiteManagementPolicy {
 
     if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
+    }
+
+    if (params.child_site_ids && !isArray(params.child_site_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: child_site_ids must be of type Array, received ${getType(params.child_site_ids)}`)
     }
 
     if (params.policy_type && !isString(params.policy_type)) {
