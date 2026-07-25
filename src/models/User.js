@@ -472,6 +472,20 @@ class User {
     this.attributes.password_expired = value
   }
 
+  // int64 # ID of the internal Group responsible for this Partner User, overriding the Partner default.
+  getResponsibleGroupId = () => this.attributes.responsible_group_id
+
+  setResponsibleGroupId = value => {
+    this.attributes.responsible_group_id = value
+  }
+
+  // int64 # ID of the internal User responsible for this Partner User, overriding the Partner default.
+  getResponsibleUserId = () => this.attributes.responsible_user_id
+
+  setResponsibleUserId = value => {
+    this.attributes.responsible_user_id = value
+  }
+
   // boolean # Is the user an allowed to view all (non-billing) site configuration for this site?
   getReadonlySiteAdmin = () => this.attributes.readonly_site_admin
 
@@ -839,6 +853,8 @@ class User {
   //   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
+  //   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
+  //   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
   //   sftp_permission - boolean - Can the user access with SFTP?
@@ -977,6 +993,14 @@ class User {
 
     if (params.require_login_by && !isString(params.require_login_by)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(params.require_login_by)}`)
+    }
+
+    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
+    }
+
+    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
     if (params.ssl_required && !isString(params.ssl_required)) {
@@ -1188,6 +1212,8 @@ class User {
   //   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
   //   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
   //   require_password_change - boolean - Is a password change required upon next user login?
+  //   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
+  //   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
   //   sftp_permission - boolean - Can the user access with SFTP?
@@ -1315,6 +1341,14 @@ class User {
 
     if (params.require_login_by && !isString(params.require_login_by)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(params.require_login_by)}`)
+    }
+
+    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
+    }
+
+    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
     if (params.ssl_required && !isString(params.ssl_required)) {
