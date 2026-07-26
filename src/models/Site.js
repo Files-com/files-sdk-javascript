@@ -445,6 +445,12 @@ class Site {
   // boolean # Require two-factor authentication for all users?
   getRequire2fa = () => this.attributes.require_2fa
 
+  // boolean # If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+  getRestrictRootFolderBehaviorsToSiteAdmins = () => this.attributes.restrict_root_folder_behaviors_to_site_admins
+
+  // boolean # If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
+  getRootFolderBehaviorsApplyToWorkspaces = () => this.attributes.root_folder_behaviors_apply_to_workspaces
+
   // boolean # If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
   getRequire2faExemptAllSsoUsers = () => this.attributes.require_2fa_exempt_all_sso_users
 
@@ -701,6 +707,8 @@ class Site {
   //   document_edits_in_bundle_allowed - boolean - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
   //   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
   //   prevent_root_permissions_for_non_site_admins - boolean - If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
+  //   restrict_root_folder_behaviors_to_site_admins - boolean - If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+  //   root_folder_behaviors_apply_to_workspaces - boolean - If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
   //   opt_out_global - boolean - Use servers in the USA only?
   //   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
   //   custom_namespace - boolean - Is this site using a custom namespace for users?

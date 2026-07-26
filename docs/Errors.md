@@ -151,6 +151,8 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ReauthenticationNeededActionError
 ### NotAuthorized_RecaptchaFailedError
 ### NotAuthorized_RemoteDesktopDebugLoggingDisabledError
+### NotAuthorized_RootFolderBehaviorSiteAdminRequiredError
+### NotAuthorized_RootFolderBehaviorSkipSiteAdminRequiredError
 ### NotAuthorized_SelfManagedRequiredError
 ### NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError
 ### NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError

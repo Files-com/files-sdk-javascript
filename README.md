@@ -717,6 +717,8 @@ Error
 |     `NotAuthorized_ReauthenticationNeededActionError`|  `NotAuthorizedError` |
 |     `NotAuthorized_RecaptchaFailedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_RemoteDesktopDebugLoggingDisabledError`|  `NotAuthorizedError` |
+|     `NotAuthorized_RootFolderBehaviorSiteAdminRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_RootFolderBehaviorSkipSiteAdminRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SelfManagedRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteAdminOrPartnerAdminPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredError`|  `NotAuthorizedError` |

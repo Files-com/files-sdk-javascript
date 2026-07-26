@@ -98,6 +98,27 @@ class Behavior {
     this.attributes.recursive = value
   }
 
+  // boolean # If true, this behavior is inherited from a higher scope rather than owned by the requested workspace.
+  getInherited = () => this.attributes.inherited
+
+  setInherited = value => {
+    this.attributes.inherited = value
+  }
+
+  // boolean # If true, this behavior is controlled by a parent-site policy and cannot be modified locally.
+  getManaged = () => this.attributes.managed
+
+  setManaged = value => {
+    this.attributes.managed = value
+  }
+
+  // boolean # If true, this behavior may only be modified by a site admin because it is at the site root or disables a root behavior.
+  getRootBehaviorSiteAdminOnly = () => this.attributes.root_behavior_site_admin_only
+
+  setRootBehaviorSiteAdminOnly = value => {
+    this.attributes.root_behavior_site_admin_only = value
+  }
+
   // file # Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
   getAttachmentFile = () => this.attributes.attachment_file
 
