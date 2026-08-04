@@ -82,6 +82,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_MethodNotAllowedError
 ### BadRequest_MultipleSortParamsNotAllowedError
 ### BadRequest_NoValidInputParamsError
+### BadRequest_OffsetUploadNotAllowedWithMalwareScanningError
 ### BadRequest_PartNumberTooLargeError
 ### BadRequest_PathCannotHaveTrailingWhitespaceError
 ### BadRequest_ReauthenticationNeededFieldsError

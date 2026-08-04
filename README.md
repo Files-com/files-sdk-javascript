@@ -648,6 +648,7 @@ Error
 |     `BadRequest_MethodNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_MultipleSortParamsNotAllowedError`|  `BadRequestError` |
 |     `BadRequest_NoValidInputParamsError`|  `BadRequestError` |
+|     `BadRequest_OffsetUploadNotAllowedWithMalwareScanningError`|  `BadRequestError` |
 |     `BadRequest_PartNumberTooLargeError`|  `BadRequestError` |
 |     `BadRequest_PathCannotHaveTrailingWhitespaceError`|  `BadRequestError` |
 |     `BadRequest_ReauthenticationNeededFieldsError`|  `BadRequestError` |
