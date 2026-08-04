@@ -735,6 +735,35 @@ class RemoteServer {
     this.attributes.files_api_key = value
   }
 
+  // List Files.com Agent nodes
+  agentNodes = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = this.attributes.id
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/remote_servers/${encodeURIComponent(params.id)}/agent_nodes`, 'GET', params, this.options)
+
+    const AgentNode = require('./AgentNode.js').default
+    return new AgentNode(response?.data, this.options)
+  }
+
   // Push update to Files Agent
   agentPushUpdate = async (params = {}) => {
     if (!this.attributes.id) {

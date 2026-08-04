@@ -395,6 +395,36 @@ await RemoteServer.create({
 
 ---
 
+## List Files.com Agent nodes
+
+```
+const remote_server = await RemoteServer.find(id)
+
+await remote_server.agent_nodes()
+```
+
+### Parameters
+
+* `id` (int64): Required - Remote Server ID.
+
+### Example Response
+
+```json
+{
+  "node_id": "example",
+  "name": "example",
+  "hostname": "example",
+  "availability_role": "example",
+  "connection_status": "example",
+  "is_default": true,
+  "agent_version": "example",
+  "direct_transfer_available": true,
+  "last_seen_at": "2000-01-01T01:00:00Z"
+}
+```
+
+---
+
 ## Push update to Files Agent
 
 ```
@@ -466,6 +496,7 @@ await remote_server.configuration_file({
   "private_key": "example",
   "subdomain": "example",
   "root": "C:\\Users\\",
+  "node_name": "example",
   "follow_links": true,
   "prefer_protocol": "example",
   "dns": "example",

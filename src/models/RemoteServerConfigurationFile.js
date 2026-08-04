@@ -43,6 +43,9 @@ class RemoteServerConfigurationFile {
   // string # The root directory for the agent
   getRoot = () => this.attributes.root
 
+  // string # Optional customer-facing name for this Agent installation
+  getNodeName = () => this.attributes.node_name
+
   // boolean # Follow symlinks when traversing directories
   getFollowLinks = () => this.attributes.follow_links
 
