@@ -43,6 +43,9 @@ class SsoStrategy {
   // int64 # ID
   getId = () => this.attributes.id
 
+  // boolean # Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
+  getEnabled = () => this.attributes.enabled
+
   // int64 # Count of users with this SSO Strategy
   getUserCount = () => this.attributes.user_count
 
@@ -150,9 +153,6 @@ class SsoStrategy {
 
   // string # Domain name that will be appended to LDAP usernames
   getLdapDomain = () => this.attributes.ldap_domain
-
-  // boolean # Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
-  getEnabled = () => this.attributes.enabled
 
   // boolean # Should this strategy be displayed on the login page?
   getDisplayOnLoginPage = () => this.attributes.display_on_login_page
