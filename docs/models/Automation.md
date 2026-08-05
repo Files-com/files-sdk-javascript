@@ -382,7 +382,7 @@ await automation.upgrade()
 
 ---
 
-## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+## Manually Run Automation
 
 ```
 const automation = await Automation.find(id)

@@ -364,7 +364,7 @@ class Automation {
     return new Automation(response?.data, this.options)
   }
 
-  // Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+  // Manually Run Automation
   //
   // Parameters:
   //   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
