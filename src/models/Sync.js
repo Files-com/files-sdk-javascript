@@ -202,6 +202,13 @@ class Sync {
     this.attributes.recurring_day = value
   }
 
+  // int64 # If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
+  getScheduleId = () => this.attributes.schedule_id
+
+  setScheduleId = value => {
+    this.attributes.schedule_id = value
+  }
+
   // array(int64) # If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
   getScheduleDaysOfWeek = () => this.attributes.schedule_days_of_week
 
@@ -216,14 +223,14 @@ class Sync {
     this.attributes.schedule_times_of_day = value
   }
 
-  // string # Time zone for scheduled times. If not set, times are interpreted as UTC.
+  // string # Time zone for the schedule. If not set, times are interpreted as UTC.
   getScheduleTimeZone = () => this.attributes.schedule_time_zone
 
   setScheduleTimeZone = value => {
     this.attributes.schedule_time_zone = value
   }
 
-  // string # Skip sync if there is a formal, observed holiday for this region.
+  // string # Skip the sync if there is a formal, observed holiday for this region.
   getHolidayRegion = () => this.attributes.holiday_region
 
   setHolidayRegion = value => {
@@ -296,14 +303,15 @@ class Sync {
   //   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
   //   disabled - boolean - Is this sync disabled?
   //   exclude_patterns - array(string) - Array of glob patterns to exclude
-  //   holiday_region - string - Skip sync if there is a formal, observed holiday for this region.
+  //   holiday_region - string - Skip the sync if there is a formal, observed holiday for this region.
   //   include_patterns - array(string) - Array of glob patterns to include
   //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
   //   keep_after_copy - boolean - Keep files after copying?
   //   name - string - Name for this sync job
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-  //   schedule_time_zone - string - Time zone for scheduled times. If not set, times are interpreted as UTC.
+  //   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
   //   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
   //   src_path - string - Absolute source path for the sync
   //   src_remote_server_id - int64 - Remote server ID for the source (if remote)
@@ -359,6 +367,10 @@ class Sync {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.schedule_id && !isInt(params.schedule_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_id must be of type Int, received ${getType(params.schedule_id)}`)
     }
 
     if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
@@ -500,14 +512,15 @@ class Sync {
   //   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
   //   disabled - boolean - Is this sync disabled?
   //   exclude_patterns - array(string) - Array of glob patterns to exclude
-  //   holiday_region - string - Skip sync if there is a formal, observed holiday for this region.
+  //   holiday_region - string - Skip the sync if there is a formal, observed holiday for this region.
   //   include_patterns - array(string) - Array of glob patterns to include
   //   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
   //   keep_after_copy - boolean - Keep files after copying?
   //   name - string - Name for this sync job
   //   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+  //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-  //   schedule_time_zone - string - Time zone for scheduled times. If not set, times are interpreted as UTC.
+  //   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
   //   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
   //   src_path - string - Absolute source path for the sync
   //   src_remote_server_id - int64 - Remote server ID for the source (if remote)
@@ -551,6 +564,10 @@ class Sync {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.schedule_id && !isInt(params.schedule_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_id must be of type Int, received ${getType(params.schedule_id)}`)
     }
 
     if (params.schedule_days_of_week && !isArray(params.schedule_days_of_week)) {
