@@ -415,11 +415,27 @@ await remote_server.agent_nodes()
   "name": "example",
   "hostname": "example",
   "availability_role": "example",
-  "connection_status": "example",
+  "status": "example",
   "is_default": true,
-  "agent_version": "example",
   "direct_transfer_available": true,
-  "last_seen_at": "2000-01-01T01:00:00Z"
+  "last_seen_at": "2000-01-01T01:00:00Z",
+  "instances": [
+    {
+      "instance_id": "example",
+      "process_state": "example",
+      "status": "example",
+      "is_default": true,
+      "agent_version": "example",
+      "last_seen_at": "2000-01-01T01:00:00Z",
+      "connections": [
+        {
+          "mode": "example",
+          "status": "example",
+          "last_seen_at": "2000-01-01T01:00:00Z"
+        }
+      ]
+    }
+  ]
 }
 ```
 

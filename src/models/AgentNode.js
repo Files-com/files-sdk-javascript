@@ -40,20 +40,20 @@ class AgentNode {
   // string # Configured traffic preference
   getAvailabilityRole = () => this.attributes.availability_role
 
-  // string # Whether this node is currently available for traffic
-  getConnectionStatus = () => this.attributes.connection_status
+  // string # Whether this node currently has an available Agent instance
+  getStatus = () => this.attributes.status
 
   // boolean # Whether this node is the current default route for new unscoped work
   getIsDefault = () => this.attributes.is_default
-
-  // string # Agent version reported by this node
-  getAgentVersion = () => this.attributes.agent_version
 
   // boolean # Whether the proxy recently validated a direct connection to this Agent node. False means direct transfers are enabled but not currently available; null means disabled or unsupported.
   getDirectTransferAvailable = () => this.attributes.direct_transfer_available
 
   // date-time # Most recent successful node observation
   getLastSeenAt = () => this.attributes.last_seen_at
+
+  // array(object) # Current Agent processes for this node
+  getInstances = () => this.attributes.instances
 }
 
 export default AgentNode
