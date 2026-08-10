@@ -119,6 +119,13 @@ class AiTask {
     this.attributes.recurring_day = value
   }
 
+  // array(int64) # If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
+  getRecurringDays = () => this.attributes.recurring_days
+
+  setRecurringDays = value => {
+    this.attributes.recurring_days = value
+  }
+
   // int64 # If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
   getScheduleId = () => this.attributes.schedule_id
 
@@ -217,6 +224,7 @@ class AiTask {
   //   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
   //   prompt - string - Prompt sent when this AI Task is invoked.
   //   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+  //   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
   //   schedule_time_zone - string - Time zone used by the AI Task schedule.
@@ -269,6 +277,10 @@ class AiTask {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.recurring_days && !isArray(params.recurring_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_days must be of type Array, received ${getType(params.recurring_days)}`)
     }
 
     if (params.schedule_id && !isInt(params.schedule_id)) {
@@ -413,6 +425,7 @@ class AiTask {
   //   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
   //   prompt (required) - string - Prompt sent when this AI Task is invoked.
   //   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+  //   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
   //   schedule_time_zone - string - Time zone used by the AI Task schedule.
@@ -460,6 +473,10 @@ class AiTask {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.recurring_days && !isArray(params.recurring_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_days must be of type Array, received ${getType(params.recurring_days)}`)
     }
 
     if (params.schedule_id && !isInt(params.schedule_id)) {

@@ -16,6 +16,10 @@
   "trigger": "manual",
   "interval": "day",
   "recurring_day": 3,
+  "recurring_days": [
+    1,
+    15
+  ],
   "schedule_id": 1,
   "schedule_days_of_week": [
     1,
@@ -60,6 +64,7 @@
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (int64): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (array(int64)): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (int64): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (array(int64)): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (array(string)): Times of day in HH:MM format for the Expectation schedule.
@@ -121,6 +126,7 @@ await Expectation.create({
   'trigger': "manual",
   'interval': "day",
   'recurring_day': 3,
+  'recurring_days': [1,15],
   'schedule_id': 1,
   'schedule_days_of_week': [1,3,5],
   'schedule_times_of_day': ["06:00"],
@@ -147,6 +153,7 @@ await Expectation.create({
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (int64): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (array(int64)): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (int64): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (array(int64)): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (array(string)): Times of day in HH:MM format for the Expectation schedule.
@@ -221,6 +228,7 @@ await expectation.update({
   'trigger': "manual",
   'interval': "day",
   'recurring_day': 3,
+  'recurring_days': [1,15],
   'schedule_id': 1,
   'schedule_days_of_week': [1,3,5],
   'schedule_times_of_day': ["06:00"],
@@ -247,6 +255,7 @@ await expectation.update({
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (int64): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (array(int64)): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (int64): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (array(int64)): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (array(string)): Times of day in HH:MM format for the Expectation schedule.
@@ -275,6 +284,10 @@ await expectation.update({
   "trigger": "manual",
   "interval": "day",
   "recurring_day": 3,
+  "recurring_days": [
+    1,
+    15
+  ],
   "schedule_id": 1,
   "schedule_days_of_week": [
     1,

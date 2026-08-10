@@ -112,6 +112,13 @@ class Expectation {
     this.attributes.recurring_day = value
   }
 
+  // array(int64) # If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
+  getRecurringDays = () => this.attributes.recurring_days
+
+  setRecurringDays = value => {
+    this.attributes.recurring_days = value
+  }
+
   // int64 # If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
   getScheduleId = () => this.attributes.schedule_id
 
@@ -255,6 +262,7 @@ class Expectation {
   //   trigger - string - How this expectation opens windows.
   //   interval - string - If trigger is `daily`, this specifies how often to run the expectation.
   //   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+  //   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
   //   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
@@ -310,6 +318,10 @@ class Expectation {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.recurring_days && !isArray(params.recurring_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_days must be of type Array, received ${getType(params.recurring_days)}`)
     }
 
     if (params.schedule_id && !isInt(params.schedule_id)) {
@@ -462,6 +474,7 @@ class Expectation {
   //   trigger - string - How this expectation opens windows.
   //   interval - string - If trigger is `daily`, this specifies how often to run the expectation.
   //   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+  //   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
   //   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
@@ -504,6 +517,10 @@ class Expectation {
 
     if (params.recurring_day && !isInt(params.recurring_day)) {
       throw new errors.InvalidParameterError(`Bad parameter: recurring_day must be of type Int, received ${getType(params.recurring_day)}`)
+    }
+
+    if (params.recurring_days && !isArray(params.recurring_days)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recurring_days must be of type Array, received ${getType(params.recurring_days)}`)
     }
 
     if (params.schedule_id && !isInt(params.schedule_id)) {
