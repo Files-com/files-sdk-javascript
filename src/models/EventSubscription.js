@@ -63,6 +63,20 @@ class EventSubscription {
     this.attributes.name = value
   }
 
+  // string # Custom subject line to use for notification emails.
+  getSubject = () => this.attributes.subject
+
+  setSubject = value => {
+    this.attributes.subject = value
+  }
+
+  // string # Custom message to include in notification emails.
+  getMessage = () => this.attributes.message
+
+  setMessage = value => {
+    this.attributes.message = value
+  }
+
   // boolean # Whether this Event Subscription can dispatch events.
   getEnabled = () => this.attributes.enabled
 
@@ -109,6 +123,8 @@ class EventSubscription {
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace subscription applies to events from all workspaces.
   //   name - string - Event Subscription name.
+  //   subject - string - Custom subject line to use for notification emails.
+  //   message - string - Custom message to include in notification emails.
   //   enabled - boolean - Whether this Event Subscription can dispatch events.
   //   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
   //   filter - object - Structured event payload filter.
@@ -138,6 +154,14 @@ class EventSubscription {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.subject && !isString(params.subject)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(params.subject)}`)
+    }
+
+    if (params.message && !isString(params.message)) {
+      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(params.message)}`)
     }
 
     if (params.event_types && !isArray(params.event_types)) {
@@ -253,6 +277,8 @@ class EventSubscription {
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace subscription applies to events from all workspaces.
   //   name (required) - string - Event Subscription name.
+  //   subject - string - Custom subject line to use for notification emails.
+  //   message - string - Custom message to include in notification emails.
   //   enabled - boolean - Whether this Event Subscription can dispatch events.
   //   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
   //   filter - object - Structured event payload filter.
@@ -273,6 +299,14 @@ class EventSubscription {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.subject && !isString(params.subject)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subject must be of type String, received ${getType(params.subject)}`)
+    }
+
+    if (params.message && !isString(params.message)) {
+      throw new errors.InvalidParameterError(`Bad parameter: message must be of type String, received ${getType(params.message)}`)
     }
 
     if (params.event_types && !isArray(params.event_types)) {
