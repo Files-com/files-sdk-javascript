@@ -339,6 +339,13 @@ class Bundle {
     this.attributes.dont_allow_folders_in_uploads = value
   }
 
+  // array(object) # Upload slots requested by the associated Inbox. Each slot contains a name used as its label and destination subfolder name.
+  getRequestedUploadSlots = () => this.attributes.requested_upload_slots
+
+  setRequestedUploadSlots = value => {
+    this.attributes.requested_upload_slots = value
+  }
+
   // array(string) # A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
   getPaths = () => this.attributes.paths
 
