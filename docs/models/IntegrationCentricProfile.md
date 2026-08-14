@@ -7,7 +7,7 @@
   "id": 1,
   "name": "Business Systems Onboarding",
   "workspace_id": 1,
-  "use_for_all_users": true,
+  "use_for_all_users": false,
   "expected_remote_servers": [
     "example"
   ]
@@ -100,7 +100,7 @@ await integration_centric_profile.update({
   "id": 1,
   "name": "Business Systems Onboarding",
   "workspace_id": 1,
-  "use_for_all_users": true,
+  "use_for_all_users": false,
   "expected_remote_servers": [
     "example"
   ]

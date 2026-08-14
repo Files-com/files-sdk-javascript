@@ -31,7 +31,7 @@
   "remote_server_mount_id": 1,
   "rise": 1,
   "status": "healthy",
-  "undergoing_maintenance": true
+  "undergoing_maintenance": false
 }
 ```
 
@@ -205,7 +205,7 @@ await remote_mount_backend.update({
   "remote_server_mount_id": 1,
   "rise": 1,
   "status": "healthy",
-  "undergoing_maintenance": true
+  "undergoing_maintenance": false
 }
 ```
 

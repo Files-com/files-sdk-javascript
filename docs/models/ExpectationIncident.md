@@ -16,7 +16,8 @@
   "opened_by_evaluation_id": 1,
   "last_evaluation_id": 2,
   "resolved_by_evaluation_id": 3,
-  "summary": null,
+  "summary": {
+  },
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
@@ -97,7 +98,8 @@ await expectation_incident.resolve()
   "opened_by_evaluation_id": 1,
   "last_evaluation_id": 2,
   "resolved_by_evaluation_id": 3,
-  "summary": null,
+  "summary": {
+  },
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
@@ -136,7 +138,8 @@ await expectation_incident.snooze({
   "opened_by_evaluation_id": 1,
   "last_evaluation_id": 2,
   "resolved_by_evaluation_id": 3,
-  "summary": null,
+  "summary": {
+  },
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
@@ -172,7 +175,8 @@ await expectation_incident.acknowledge()
   "opened_by_evaluation_id": 1,
   "last_evaluation_id": 2,
   "resolved_by_evaluation_id": 3,
-  "summary": null,
+  "summary": {
+  },
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
