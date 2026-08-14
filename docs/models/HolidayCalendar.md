@@ -12,9 +12,9 @@
 }
 ```
 
-* `id` (int64): Holiday Calendar ID. Use `custom_<id>` as a scheduled resource's `holiday_region`.
+* `id` (int64): Holiday Calendar ID. Set a scheduled resource's `holiday_region` to `custom_` followed by this ID to make it skip the days in this calendar.
 * `name` (string): Holiday Calendar name.
-* `definition` (object): Holiday rules for the calendar. For more information, refer to the Holiday Calendars section of the Files.com documentation.
+* `definition` (object): Holiday rules for the calendar.
 * `created_at` (date-time): Creation time.
 * `updated_at` (date-time): Last update time.
 
@@ -52,6 +52,7 @@ await HolidayCalendar.find(id)
 
 ```
 await HolidayCalendar.create({
+  'definition': "example",
   'name': "Company Holidays",
 })
 ```
@@ -59,6 +60,7 @@ await HolidayCalendar.create({
 
 ### Parameters
 
+* `definition` (object): Required - Holiday rules for the calendar.
 * `name` (string): Required - Holiday Calendar name.
 
 ---
@@ -69,6 +71,7 @@ await HolidayCalendar.create({
 const holiday_calendar = await HolidayCalendar.find(id)
 
 await holiday_calendar.update({
+  'definition': "example",
   'name': "Company Holidays",
 })
 ```
@@ -76,6 +79,7 @@ await holiday_calendar.update({
 ### Parameters
 
 * `id` (int64): Required - Holiday Calendar ID.
+* `definition` (object): Holiday rules for the calendar.
 * `name` (string): Holiday Calendar name.
 
 ### Example Response

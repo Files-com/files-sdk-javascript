@@ -28,7 +28,7 @@ class HolidayCalendar {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Holiday Calendar ID. Use `custom_<id>` as a scheduled resource's `holiday_region`.
+  // int64 # Holiday Calendar ID. Set a scheduled resource's `holiday_region` to `custom_` followed by this ID to make it skip the days in this calendar.
   getId = () => this.attributes.id
 
   setId = value => {
@@ -42,7 +42,7 @@ class HolidayCalendar {
     this.attributes.name = value
   }
 
-  // object # Holiday rules for the calendar. For more information, refer to the Holiday Calendars section of the Files.com documentation.
+  // object # Holiday rules for the calendar.
   getDefinition = () => this.attributes.definition
 
   setDefinition = value => {
@@ -56,6 +56,7 @@ class HolidayCalendar {
   getUpdatedAt = () => this.attributes.updated_at
 
   // Parameters:
+  //   definition - object - Holiday rules for the calendar.
   //   name - string - Holiday Calendar name.
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -175,8 +176,13 @@ class HolidayCalendar {
     HolidayCalendar.find(id, params, options)
 
   // Parameters:
+  //   definition (required) - object - Holiday rules for the calendar.
   //   name (required) - string - Holiday Calendar name.
   static create = async (params = {}, options = {}) => {
+    if (!params.definition) {
+      throw new errors.MissingParameterError('Parameter missing: definition')
+    }
+
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
