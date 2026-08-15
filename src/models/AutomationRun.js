@@ -37,6 +37,9 @@ class AutomationRun {
   // int64 # ID of the immutable Automation version pinned by this run.
   getAutomationVersionId = () => this.attributes.automation_version_id
 
+  // int64 # Pinned Automation v2 definition version.
+  getVersion = () => this.attributes.version
+
   // int64 # Workspace ID.
   getWorkspaceId = () => this.attributes.workspace_id
 
