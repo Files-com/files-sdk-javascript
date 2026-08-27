@@ -28,6 +28,13 @@ class SftpHostKey {
 
   isLoaded = () => !!this.attributes.id
 
+  // boolean # If true, use this SFTP Host Key.
+  getActive = () => this.attributes.active
+
+  setActive = value => {
+    this.attributes.active = value
+  }
+
   // int64 # SFTP Host Key ID
   getId = () => this.attributes.id
 
@@ -40,6 +47,13 @@ class SftpHostKey {
 
   setName = value => {
     this.attributes.name = value
+  }
+
+  // string # SSH key type
+  getKeyType = () => this.attributes.key_type
+
+  setKeyType = value => {
+    this.attributes.key_type = value
   }
 
   // string # MD5 Fingerprint of the public key
@@ -64,6 +78,7 @@ class SftpHostKey {
   }
 
   // Parameters:
+  //   active - boolean - If true, use this SFTP Host Key.
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
   update = async (params = {}) => {
@@ -187,6 +202,7 @@ class SftpHostKey {
     SftpHostKey.find(id, params, options)
 
   // Parameters:
+  //   active - boolean - If true, use this SFTP Host Key.
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
   static create = async (params = {}, options = {}) => {

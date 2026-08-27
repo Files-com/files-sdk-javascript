@@ -4,15 +4,19 @@
 
 ```
 {
+  "active": true,
   "id": 1,
   "name": "My Key",
+  "key_type": "ssh-rsa",
   "fingerprint_md5": "12:7e:f8:61:78:a4:b2:c2:ee:12:51:92:25:a7:42:cc",
   "fingerprint_sha256": "SHA256:5ANRkDpXWA+PgOquzZAG9RtQ1Bt8KXYAH2hecr7LQk8"
 }
 ```
 
+* `active` (boolean): If true, use this SFTP Host Key.
 * `id` (int64): SFTP Host Key ID
 * `name` (string): The friendly name of this SFTP Host Key.
+* `key_type` (string): SSH key type
 * `fingerprint_md5` (string): MD5 Fingerprint of the public key
 * `fingerprint_sha256` (string): SHA256 Fingerprint of the public key
 * `private_key` (string): The private key data.
@@ -50,6 +54,7 @@ await SftpHostKey.find(id)
 
 ```
 await SftpHostKey.create({
+  'active': true,
   'name': "My Key",
 })
 ```
@@ -57,6 +62,7 @@ await SftpHostKey.create({
 
 ### Parameters
 
+* `active` (boolean): If true, use this SFTP Host Key.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -68,6 +74,7 @@ await SftpHostKey.create({
 const sftp_host_key = await SftpHostKey.find(id)
 
 await sftp_host_key.update({
+  'active': true,
   'name': "My Key",
 })
 ```
@@ -75,6 +82,7 @@ await sftp_host_key.update({
 ### Parameters
 
 * `id` (int64): Required - Sftp Host Key ID.
+* `active` (boolean): If true, use this SFTP Host Key.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -82,8 +90,10 @@ await sftp_host_key.update({
 
 ```json
 {
+  "active": true,
   "id": 1,
   "name": "My Key",
+  "key_type": "ssh-rsa",
   "fingerprint_md5": "12:7e:f8:61:78:a4:b2:c2:ee:12:51:92:25:a7:42:cc",
   "fingerprint_sha256": "SHA256:5ANRkDpXWA+PgOquzZAG9RtQ1Bt8KXYAH2hecr7LQk8"
 }
