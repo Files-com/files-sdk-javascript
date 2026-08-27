@@ -178,6 +178,7 @@ These errors are derived from the error groups listed above.
 ### NotFound_PlanNotFoundError
 ### NotFound_SiteNotFoundError
 ### NotFound_UserNotFoundError
+### ProcessingFailure_AgentPushUpdateBlockedError
 ### ProcessingFailure_AgentUnavailableError
 ### ProcessingFailure_AiTaskCannotBeRunManuallyError
 ### ProcessingFailure_AlreadyCompletedError

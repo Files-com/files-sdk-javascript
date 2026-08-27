@@ -744,6 +744,7 @@ Error
 |     `NotFound_PlanNotFoundError`|  `NotFoundError` |
 |     `NotFound_SiteNotFoundError`|  `NotFoundError` |
 |     `NotFound_UserNotFoundError`|  `NotFoundError` |
+|     `ProcessingFailure_AgentPushUpdateBlockedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AgentUnavailableError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AiTaskCannotBeRunManuallyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_AlreadyCompletedError`|  `ProcessingFailureError` |
