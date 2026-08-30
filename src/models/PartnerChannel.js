@@ -42,6 +42,13 @@ class PartnerChannel {
     this.attributes.workspace_id = value
   }
 
+  // string # Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+  getDirection = () => this.attributes.direction
+
+  setDirection = value => {
+    this.attributes.direction = value
+  }
+
   // int64 # ID of the Partner this Channel belongs to.
   getPartnerId = () => this.attributes.partner_id
 
@@ -141,6 +148,7 @@ class PartnerChannel {
   }
 
   // Parameters:
+  //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -160,6 +168,10 @@ class PartnerChannel {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.direction && !isString(params.direction)) {
+      throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
     if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {
@@ -291,6 +303,7 @@ class PartnerChannel {
     PartnerChannel.find(id, params, options)
 
   // Parameters:
+  //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -307,6 +320,10 @@ class PartnerChannel {
 
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.direction && !isString(params.direction)) {
+      throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
     if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {

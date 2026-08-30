@@ -42,6 +42,13 @@ class PartnerChannelTemplate {
     this.attributes.workspace_id = value
   }
 
+  // string # Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+  getDirection = () => this.attributes.direction
+
+  setDirection = value => {
+    this.attributes.direction = value
+  }
+
   // string # The name of the Partner Channel Template.
   getName = () => this.attributes.name
 
@@ -113,6 +120,7 @@ class PartnerChannelTemplate {
   }
 
   // Parameters:
+  //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -133,6 +141,10 @@ class PartnerChannelTemplate {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.direction && !isString(params.direction)) {
+      throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
     if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {
@@ -268,6 +280,7 @@ class PartnerChannelTemplate {
     PartnerChannelTemplate.find(id, params, options)
 
   // Parameters:
+  //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -284,6 +297,10 @@ class PartnerChannelTemplate {
 
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.direction && !isString(params.direction)) {
+      throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
     if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {
