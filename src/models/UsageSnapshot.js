@@ -40,6 +40,9 @@ class UsageSnapshot {
   // int64 # Highest user count number in time period
   getHighWaterUserCount = () => this.attributes.high_water_user_count
 
+  // int64 # Total Transformation and AI credits used in this usage period. Updated daily. Does not include credits consumed today.
+  getTransformationCreditsUsage = () => this.attributes.transformation_credits_usage
+
   // int64 # Current total Storage Usage GB as of end date (not necessarily high water mark, which is used for billing)
   getCurrentStorage = () => this.attributes.current_storage
 
