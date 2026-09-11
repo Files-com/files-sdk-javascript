@@ -347,7 +347,7 @@ class File {
     return saveUrlToFile(downloadUri, destinationPath)
   }
 
-  copyTo = async (destinationFilePath, options) => {
+  copyTo = async (destinationFilePath, options = this.options) => {
     const params = { destination: destinationFilePath }
     return Api.sendRequest(`/file_actions/copy/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
@@ -361,7 +361,7 @@ class File {
   copyToChildSite = async (siteId, destinationPath, params = {}, options = this.options) =>
     File.copyToChildSite(this.path, siteId, destinationPath, params, options)
 
-  moveTo = async (destinationFilePath, options) => {
+  moveTo = async (destinationFilePath, options = this.options) => {
     const params = { destination: destinationFilePath }
     return Api.sendRequest(`/file_actions/move/${encodeURIComponent(this.path)}`, 'POST', params, options)
   }
