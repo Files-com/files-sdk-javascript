@@ -61,10 +61,6 @@ class Api {
     Logger.debug('Sending options:', {
       method: verb,
       ...options,
-      headers: {
-        ...options.headers,
-        'X-FilesAPI-Key': '<redacted>',
-      },
     })
 
     try {
@@ -247,10 +243,6 @@ class Api {
         body: hasParams
           ? `payload keys: ${Object.keys(params).join(', ')}`
           : '(none)',
-        headers: {
-          ...headers,
-          'X-FilesAPI-Key': '<redacted>',
-        },
       })
     }
 
