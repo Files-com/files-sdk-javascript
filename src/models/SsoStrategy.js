@@ -73,7 +73,7 @@ class SsoStrategy {
   // string # SCIM username.
   getScimUsername = () => this.attributes.scim_username
 
-  // string # SCIM OAuth Access Token.
+  // string # SCIM OAuth Access Token. Only returned when the token is first issued or reset.
   getScimOauthAccessToken = () => this.attributes.scim_oauth_access_token
 
   // string # SCIM OAuth Access Token Expiration Time.
