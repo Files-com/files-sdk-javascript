@@ -77,6 +77,13 @@ class CustomDomain {
     this.attributes.folder_behavior_id = value
   }
 
+  // array(string) # Dedicated public IP addresses allocated to this Custom Domain.
+  getIpAddresses = () => this.attributes.ip_addresses
+
+  setIpAddresses = value => {
+    this.attributes.ip_addresses = value
+  }
+
   // date-time # When this Custom Domain was created.
   getCreatedAt = () => this.attributes.created_at
 
@@ -216,6 +223,37 @@ class CustomDomain {
 
   static get = (id, params = {}, options = {}) =>
     CustomDomain.find(id, params, options)
+
+  // Parameters:
+  //   id (required) - int64 - Custom Domain ID.
+  //   count (required) - int64 - Number of dedicated IP addresses to allocate.
+  static createAllocateIp = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.id = id
+
+    if (!params.id) {
+      throw new errors.MissingParameterError('Parameter missing: id')
+    }
+
+    if (!params.count) {
+      throw new errors.MissingParameterError('Parameter missing: count')
+    }
+
+    if (params.id && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.count && !isInt(params.count)) {
+      throw new errors.InvalidParameterError(`Bad parameter: count must be of type Int, received ${getType(params.count)}`)
+    }
+
+    const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}/allocate_ips`, 'POST', params, options)
+
+    return new CustomDomain(response?.data, options)
+  }
 
   // Parameters:
   //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.

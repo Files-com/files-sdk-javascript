@@ -35,6 +35,13 @@ class SftpHostKey {
     this.attributes.active = value
   }
 
+  // int64 # Custom Domain ID. If set, this key is used only for that Custom Domain.
+  getCustomDomainId = () => this.attributes.custom_domain_id
+
+  setCustomDomainId = value => {
+    this.attributes.custom_domain_id = value
+  }
+
   // int64 # SFTP Host Key ID
   getId = () => this.attributes.id
 
@@ -79,6 +86,7 @@ class SftpHostKey {
 
   // Parameters:
   //   active - boolean - If true, use this SFTP Host Key.
+  //   custom_domain_id - int64 - Custom Domain ID. If set, this key is used only for that Custom Domain.
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
   update = async (params = {}) => {
@@ -93,6 +101,10 @@ class SftpHostKey {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.custom_domain_id && !isInt(params.custom_domain_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: custom_domain_id must be of type Int, received ${getType(params.custom_domain_id)}`)
     }
 
     if (params.name && !isString(params.name)) {
@@ -203,9 +215,14 @@ class SftpHostKey {
 
   // Parameters:
   //   active - boolean - If true, use this SFTP Host Key.
+  //   custom_domain_id - int64 - Custom Domain ID. If set, this key is used only for that Custom Domain.
   //   name - string - The friendly name of this SFTP Host Key.
   //   private_key - string - The private key data.
   static create = async (params = {}, options = {}) => {
+    if (params.custom_domain_id && !isInt(params.custom_domain_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: custom_domain_id must be of type Int, received ${getType(params.custom_domain_id)}`)
+    }
+
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }

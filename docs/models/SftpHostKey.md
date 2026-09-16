@@ -5,6 +5,7 @@
 ```
 {
   "active": true,
+  "custom_domain_id": 1,
   "id": 1,
   "name": "My Key",
   "key_type": "ssh-rsa",
@@ -14,6 +15,7 @@
 ```
 
 * `active` (boolean): If true, use this SFTP Host Key.
+* `custom_domain_id` (int64): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `id` (int64): SFTP Host Key ID
 * `name` (string): The friendly name of this SFTP Host Key.
 * `key_type` (string): SSH key type
@@ -55,6 +57,7 @@ await SftpHostKey.find(id)
 ```
 await SftpHostKey.create({
   'active': true,
+  'custom_domain_id': 1,
   'name': "My Key",
 })
 ```
@@ -63,6 +66,7 @@ await SftpHostKey.create({
 ### Parameters
 
 * `active` (boolean): If true, use this SFTP Host Key.
+* `custom_domain_id` (int64): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -75,6 +79,7 @@ const sftp_host_key = await SftpHostKey.find(id)
 
 await sftp_host_key.update({
   'active': true,
+  'custom_domain_id': 1,
   'name': "My Key",
 })
 ```
@@ -83,6 +88,7 @@ await sftp_host_key.update({
 
 * `id` (int64): Required - Sftp Host Key ID.
 * `active` (boolean): If true, use this SFTP Host Key.
+* `custom_domain_id` (int64): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -91,6 +97,7 @@ await sftp_host_key.update({
 ```json
 {
   "active": true,
+  "custom_domain_id": 1,
   "id": 1,
   "name": "My Key",
   "key_type": "ssh-rsa",
