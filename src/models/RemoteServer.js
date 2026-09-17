@@ -35,7 +35,7 @@ class RemoteServer {
     this.attributes.id = value
   }
 
-  // boolean # If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+  // boolean # If true, this Remote Server is disabled. Updating it clears this flag, except for retired Agent v1 records, which remain disabled.
   getDisabled = () => this.attributes.disabled
 
   setDisabled = value => {
@@ -448,13 +448,6 @@ class RemoteServer {
     this.attributes.files_agent_root = value
   }
 
-  // string # Files Agent API Token
-  getFilesAgentApiToken = () => this.attributes.files_agent_api_token
-
-  setFilesAgentApiToken = value => {
-    this.attributes.files_agent_api_token = value
-  }
-
   // string # Files Agent version
   getFilesAgentVersion = () => this.attributes.files_agent_version
 
@@ -791,92 +784,6 @@ class RemoteServer {
 
     const AgentPushUpdate = require('./AgentPushUpdate.js').default
     return new AgentPushUpdate(response?.data, this.options)
-  }
-
-  // Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-  //
-  // Parameters:
-  //   api_token - string - Files Agent API Token
-  //   permission_set - string - The permission set for the agent ['read_write', 'read_only', 'write_only']
-  //   root - string - The root directory for the agent
-  //   hostname - string
-  //   port - int64 - Incoming port for files agent connections
-  //   status - string - either running or shutdown
-  //   config_version - string - agent config version
-  //   private_key - string - The private key for the agent
-  //   public_key - string - public key
-  //   server_host_key - string
-  //   subdomain - string - Files.com subdomain site name
-  configurationFile = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new errors.EmptyPropertyError('Current object has no id')
-    }
-
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.api_token && !isString(params.api_token)) {
-      throw new errors.InvalidParameterError(`Bad parameter: api_token must be of type String, received ${getType(params.api_token)}`)
-    }
-
-    if (params.permission_set && !isString(params.permission_set)) {
-      throw new errors.InvalidParameterError(`Bad parameter: permission_set must be of type String, received ${getType(params.permission_set)}`)
-    }
-
-    if (params.root && !isString(params.root)) {
-      throw new errors.InvalidParameterError(`Bad parameter: root must be of type String, received ${getType(params.root)}`)
-    }
-
-    if (params.hostname && !isString(params.hostname)) {
-      throw new errors.InvalidParameterError(`Bad parameter: hostname must be of type String, received ${getType(params.hostname)}`)
-    }
-
-    if (params.port && !isInt(params.port)) {
-      throw new errors.InvalidParameterError(`Bad parameter: port must be of type Int, received ${getType(params.port)}`)
-    }
-
-    if (params.status && !isString(params.status)) {
-      throw new errors.InvalidParameterError(`Bad parameter: status must be of type String, received ${getType(params.status)}`)
-    }
-
-    if (params.config_version && !isString(params.config_version)) {
-      throw new errors.InvalidParameterError(`Bad parameter: config_version must be of type String, received ${getType(params.config_version)}`)
-    }
-
-    if (params.private_key && !isString(params.private_key)) {
-      throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
-    }
-
-    if (params.public_key && !isString(params.public_key)) {
-      throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params.public_key)}`)
-    }
-
-    if (params.server_host_key && !isString(params.server_host_key)) {
-      throw new errors.InvalidParameterError(`Bad parameter: server_host_key must be of type String, received ${getType(params.server_host_key)}`)
-    }
-
-    if (params.subdomain && !isString(params.subdomain)) {
-      throw new errors.InvalidParameterError(`Bad parameter: subdomain must be of type String, received ${getType(params.subdomain)}`)
-    }
-
-    if (!params.id) {
-      if (this.attributes.id) {
-        params.id = this.id
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    const response = await Api.sendRequest(`/remote_servers/${encodeURIComponent(params.id)}/configuration_file`, 'POST', params, this.options)
-
-    const RemoteServerConfigurationFile = require('./RemoteServerConfigurationFile.js').default
-    return new RemoteServerConfigurationFile(response?.data, this.options)
   }
 
   // Parameters:

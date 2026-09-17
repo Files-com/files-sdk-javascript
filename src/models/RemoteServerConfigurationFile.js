@@ -94,27 +94,6 @@ class RemoteServerConfigurationFile {
 
   // string # Auto update policy ['manual_trigger', 'critical_only', 'always', 'never'] (default always)
   getAutoUpdatePolicy = () => this.attributes.auto_update_policy
-
-  // string # Files Agent API Token
-  getApiToken = () => this.attributes.api_token
-
-  // int64 # Incoming port for files agent connections
-  getPort = () => this.attributes.port
-
-  // string
-  getHostname = () => this.attributes.hostname
-
-  // string # public key
-  getPublicKey = () => this.attributes.public_key
-
-  // string # either running or shutdown
-  getStatus = () => this.attributes.status
-
-  // string
-  getServerHostKey = () => this.attributes.server_host_key
-
-  // string # agent config version
-  getConfigVersion = () => this.attributes.config_version
 }
 
 export default RemoteServerConfigurationFile

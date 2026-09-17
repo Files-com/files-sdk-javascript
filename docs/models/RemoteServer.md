@@ -64,7 +64,6 @@
   "enable_dedicated_ips": true,
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
-  "files_agent_api_token": "example",
   "files_agent_version": "example",
   "files_agent_up_to_date": true,
   "files_agent_latest_version": "example",
@@ -86,7 +85,7 @@
 ```
 
 * `id` (int64): Remote Server ID
-* `disabled` (boolean): If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+* `disabled` (boolean): If true, this Remote Server is disabled. Updating it clears this flag, except for retired Agent v1 records, which remain disabled.
 * `authentication_method` (string): Type of authentication method to use
 * `hostname` (string): Hostname or IP address
 * `remote_home_path` (string): Initial home folder on remote server
@@ -145,7 +144,6 @@
 * `enable_dedicated_ips` (boolean): `true` if remote server only accepts connections from dedicated IPs
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
-* `files_agent_api_token` (string): Files Agent API Token
 * `files_agent_version` (string): Files Agent version
 * `files_agent_up_to_date` (boolean): If true, the Files Agent is up to date.
 * `files_agent_latest_version` (string): Latest available Files Agent version
@@ -468,76 +466,6 @@ await remote_server.agent_push_update()
 
 ---
 
-## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-
-```
-const remote_server = await RemoteServer.find(id)
-
-await remote_server.configuration_file({
-  'api_token': "example",
-  'permission_set': "example",
-  'root': "C:\\Users\\",
-  'hostname': "example",
-  'port': 1,
-  'status': "example",
-  'config_version': "example",
-  'private_key': "example",
-  'public_key': "example",
-  'server_host_key': "example",
-  'subdomain': "example",
-})
-```
-
-### Parameters
-
-* `id` (int64): Required - Remote Server ID.
-* `api_token` (string): Files Agent API Token
-* `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
-* `root` (string): The root directory for the agent
-* `hostname` (string): 
-* `port` (int64): Incoming port for files agent connections
-* `status` (string): either running or shutdown
-* `config_version` (string): agent config version
-* `private_key` (string): The private key for the agent
-* `public_key` (string): public key
-* `server_host_key` (string): 
-* `subdomain` (string): Files.com subdomain site name
-
-### Example Response
-
-```json
-{
-  "id": 1,
-  "permission_set": "example",
-  "private_key": "example",
-  "subdomain": "example",
-  "root": "C:\\Users\\",
-  "node_name": "example",
-  "follow_links": true,
-  "prefer_protocol": "example",
-  "dns": "example",
-  "proxy_all_outbound": true,
-  "endpoint_override": "example",
-  "log_file": "example",
-  "log_level": "example",
-  "log_rotate_num": 1,
-  "log_rotate_size": 1,
-  "override_max_concurrent_jobs": 1,
-  "graceful_shutdown_timeout": 1,
-  "transfer_rate_limit": "example",
-  "auto_update_policy": "example",
-  "api_token": "example",
-  "port": 1,
-  "hostname": "example",
-  "public_key": "example",
-  "status": "example",
-  "server_host_key": "example",
-  "config_version": "example"
-}
-```
-
----
-
 ## Update Remote Server
 
 ```
@@ -758,7 +686,6 @@ await remote_server.update({
   "enable_dedicated_ips": true,
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
-  "files_agent_api_token": "example",
   "files_agent_version": "example",
   "files_agent_up_to_date": true,
   "files_agent_latest_version": "example",

@@ -668,7 +668,6 @@ Error
 |     `NotAuthenticated_ApiKeySessionsNotSupportedError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_AuthenticationRequiredError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_BundleRegistrationCodeFailedError`|  `NotAuthenticatedError` |
-|     `NotAuthenticated_FilesAgentTokenFailedError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_InboxRegistrationCodeFailedError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_InvalidCredentialsError`|  `NotAuthenticatedError` |
 |     `NotAuthenticated_InvalidOauthError`|  `NotAuthenticatedError` |
