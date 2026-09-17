@@ -500,6 +500,13 @@ class User {
     this.attributes.restapi_permission = value
   }
 
+  // boolean # Can the user access the S3-compatible endpoint? Defaults to true.
+  getS3CompatibleEndpointPermission = () => this.attributes.s3_compatible_endpoint_permission
+
+  setS3CompatibleEndpointPermission = value => {
+    this.attributes.s3_compatible_endpoint_permission = value
+  }
+
   // boolean # Does this user manage it's own credentials or is it a shared/bot user?
   getSelfManaged = () => this.attributes.self_managed
 
@@ -856,6 +863,7 @@ class User {
   //   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
   //   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+  //   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
   //   sftp_permission - boolean - Can the user access with SFTP?
   //   site_admin - boolean - Is the user an administrator for this site?
@@ -1215,6 +1223,7 @@ class User {
   //   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
   //   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
   //   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+  //   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
   //   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
   //   sftp_permission - boolean - Can the user access with SFTP?
   //   site_admin - boolean - Is the user an administrator for this site?
