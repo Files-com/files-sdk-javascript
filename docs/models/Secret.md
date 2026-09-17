@@ -10,7 +10,7 @@
   "description": "Used by production API integrations.",
   "secret_type": "token",
   "metadata": {
-    "key": "example value"
+    "header_name": "Authorization"
   },
   "value_field_names": [
     "example"
@@ -69,7 +69,7 @@ await Secret.create({
   'name': "Production API token",
   'description': "Used by production API integrations.",
   'secret_type': "token",
-  'metadata': {"key":"example value"},
+  'metadata': {"header_name":"Authorization"},
   'workspace_id': 0,
 })
 ```
@@ -94,7 +94,7 @@ await secret.update({
   'name': "Production API token",
   'description': "Used by production API integrations.",
   'secret_type': "token",
-  'metadata': {"key":"example value"},
+  'metadata': {"header_name":"Authorization"},
 })
 ```
 
@@ -116,7 +116,7 @@ await secret.update({
   "description": "Used by production API integrations.",
   "secret_type": "token",
   "metadata": {
-    "key": "example value"
+    "header_name": "Authorization"
   },
   "value_field_names": [
     "example"

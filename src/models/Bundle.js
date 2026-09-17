@@ -476,6 +476,7 @@ class Bundle {
   //   user_id - int64 - The owning user id. Only site admins can set this.
   //   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+  //   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -707,6 +708,7 @@ class Bundle {
   //   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
   //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   //   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+  //   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   static create = async (params = {}, options = {}) => {
     if (!params.paths) {
       throw new errors.MissingParameterError('Parameter missing: paths')

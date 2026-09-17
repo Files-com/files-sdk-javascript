@@ -12,7 +12,7 @@
   "server_certificate": "require_match",
   "http_auth_username": "username",
   "additional_http_headers": {
-    "key": "example value"
+    "X-Partner": "acme"
   },
   "default_mime_type": "application/octet-stream",
   "mdn_validation_level": "none",
@@ -92,7 +92,7 @@ await As2Partner.create({
   'signature_validation_level': "normal",
   'server_certificate': "require_match",
   'default_mime_type': "application/octet-stream",
-  'additional_http_headers': {"key":"example value"},
+  'additional_http_headers': {"X-Partner":"acme"},
   'as2_station_id': 1,
   'name': "AS2 Partner Name",
   'uri': "example",
@@ -130,7 +130,7 @@ await as2_partner.update({
   'signature_validation_level': "normal",
   'server_certificate': "require_match",
   'default_mime_type': "application/octet-stream",
-  'additional_http_headers': {"key":"example value"},
+  'additional_http_headers': {"X-Partner":"acme"},
   'name': "AS2 Partner Name",
   'uri': "example",
   'public_certificate': "example",
@@ -164,7 +164,7 @@ await as2_partner.update({
   "server_certificate": "require_match",
   "http_auth_username": "username",
   "additional_http_headers": {
-    "key": "example value"
+    "X-Partner": "acme"
   },
   "default_mime_type": "application/octet-stream",
   "mdn_validation_level": "none",

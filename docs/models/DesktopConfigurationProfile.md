@@ -10,7 +10,7 @@
   "use_for_all_users": false,
   "disable_drive_mounting": false,
   "mount_mappings": {
-    "key": "example value"
+    "W": "Americas"
   }
 }
 ```
@@ -58,7 +58,7 @@ await DesktopConfigurationProfile.find(id)
 ```
 await DesktopConfigurationProfile.create({
   'name': "North America Desktop Profile",
-  'mount_mappings': {"key":"example value"},
+  'mount_mappings': {"W":"Americas"},
   'workspace_id': 1,
   'use_for_all_users': false,
   'disable_drive_mounting': false,
@@ -84,7 +84,7 @@ const desktop_configuration_profile = await DesktopConfigurationProfile.find(id)
 await desktop_configuration_profile.update({
   'name': "North America Desktop Profile",
   'workspace_id': 1,
-  'mount_mappings': {"key":"example value"},
+  'mount_mappings': {"W":"Americas"},
   'use_for_all_users': false,
   'disable_drive_mounting': false,
 })
@@ -109,7 +109,7 @@ await desktop_configuration_profile.update({
   "use_for_all_users": false,
   "disable_drive_mounting": false,
   "mount_mappings": {
-    "key": "example value"
+    "W": "Americas"
   }
 }
 ```

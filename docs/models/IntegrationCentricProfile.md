@@ -9,7 +9,10 @@
   "workspace_id": 1,
   "use_for_all_users": false,
   "expected_remote_servers": [
-    "example"
+    {
+      "server_type": "dropbox",
+      "name": "Dropbox"
+    }
   ]
 }
 ```
@@ -56,7 +59,7 @@ await IntegrationCentricProfile.find(id)
 ```
 await IntegrationCentricProfile.create({
   'name': "Business Systems Onboarding",
-  'expected_remote_servers': ["example"],
+  'expected_remote_servers': [{"server_type":"dropbox","name":"Dropbox"}],
   'workspace_id': 1,
   'use_for_all_users': false,
 })
@@ -80,7 +83,7 @@ const integration_centric_profile = await IntegrationCentricProfile.find(id)
 await integration_centric_profile.update({
   'name': "Business Systems Onboarding",
   'workspace_id': 1,
-  'expected_remote_servers': ["example"],
+  'expected_remote_servers': [{"server_type":"dropbox","name":"Dropbox"}],
   'use_for_all_users': false,
 })
 ```
@@ -102,7 +105,10 @@ await integration_centric_profile.update({
   "workspace_id": 1,
   "use_for_all_users": false,
   "expected_remote_servers": [
-    "example"
+    {
+      "server_type": "dropbox",
+      "name": "Dropbox"
+    }
   ]
 }
 ```

@@ -77,14 +77,18 @@
     "uri": "https://mysite.files.com/.../my_image.png"
   },
   "watermark_value": {
-    "key": "example value"
+    "gravity": "SouthWest",
+    "max_height_or_width": 20,
+    "transparency": 25
   },
   "send_one_time_password_to_recipient_at_registration": true,
   "workspace_id": 1,
   "has_inbox": true,
   "dont_allow_folders_in_uploads": true,
   "requested_upload_slots": [
-    "example"
+    {
+      "name": "Photo ID"
+    }
   ],
   "paths": [
     "file.txt"
@@ -231,6 +235,7 @@ await Bundle.create({
   'start_access_on_date': "2000-01-01T01:00:00Z",
   'snapshot_id': 1,
   'workspace_id': 1,
+  'watermark_value': {"gravity":"SouthWest","max_height_or_width":20,"transparency":25},
 })
 ```
 
@@ -268,6 +273,7 @@ await Bundle.create({
 * `snapshot_id` (int64): ID of the snapshot containing this bundle's contents.
 * `workspace_id` (int64): Workspace ID. `0` means the default workspace.
 * `watermark_attachment_file` (file): Preview watermark image applied to all bundle items.
+* `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 
 ---
 
@@ -328,6 +334,7 @@ await bundle.update({
   'skip_name': true,
   'user_id': 1,
   'watermark_attachment_delete': false,
+  'watermark_value': {"gravity":"SouthWest","max_height_or_width":20,"transparency":25},
   'workspace_id': 1,
 })
 ```
@@ -365,6 +372,7 @@ await bundle.update({
 * `user_id` (int64): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (boolean): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (file): Preview watermark image applied to all bundle items.
+* `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (int64): Workspace ID. `0` means the default workspace.
 
 ### Example Response
@@ -444,14 +452,18 @@ await bundle.update({
     "uri": "https://mysite.files.com/.../my_image.png"
   },
   "watermark_value": {
-    "key": "example value"
+    "gravity": "SouthWest",
+    "max_height_or_width": 20,
+    "transparency": 25
   },
   "send_one_time_password_to_recipient_at_registration": true,
   "workspace_id": 1,
   "has_inbox": true,
   "dont_allow_folders_in_uploads": true,
   "requested_upload_slots": [
-    "example"
+    {
+      "name": "Photo ID"
+    }
   ],
   "paths": [
     "file.txt"
