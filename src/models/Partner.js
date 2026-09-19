@@ -119,7 +119,7 @@ class Partner {
     this.attributes.partner_channel_template_id = value
   }
 
-  // string # This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
+  // string # This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
   getPartnershipRole = () => this.attributes.partnership_role
 
   setPartnershipRole = value => {
@@ -183,6 +183,7 @@ class Partner {
   //   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
   //   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   name - string - The name of the Partner.
+  //   partnership_role - string - This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
   //   root_folder - string - The root folder path for this Partner.
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -228,6 +229,10 @@ class Partner {
 
     if (params.name && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.partnership_role && !isString(params.partnership_role)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partnership_role must be of type String, received ${getType(params.partnership_role)}`)
     }
 
     if (params.root_folder && !isString(params.root_folder)) {

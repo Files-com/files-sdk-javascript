@@ -191,6 +191,7 @@ class PartnerSiteRequest {
 
   // Parameters:
   //   pairing_key (required) - string - Pairing key for the partner site request
+  //   partner_id - int64 - ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
   static approve = async (params = {}, options = {}) => {
     if (!params.pairing_key) {
       throw new errors.MissingParameterError('Parameter missing: pairing_key')
@@ -198,6 +199,10 @@ class PartnerSiteRequest {
 
     if (params.pairing_key && !isString(params.pairing_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: pairing_key must be of type String, received ${getType(params.pairing_key)}`)
+    }
+
+    if (params.partner_id && !isInt(params.partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
     await Api.sendRequest('/partner_site_requests/approve', 'POST', params, options)
