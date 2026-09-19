@@ -116,6 +116,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_ApiKeyIsDisabledError
 ### NotAuthorized_ApiKeyIsPathRestrictedError
 ### NotAuthorized_ApiKeyOnlyForDesktopAppError
+### NotAuthorized_ApiKeyOnlyForFileOperationsError
 ### NotAuthorized_ApiKeyOnlyForMobileAppError
 ### NotAuthorized_ApiKeyOnlyForOfficeIntegrationError
 ### NotAuthorized_BillingInformationHiddenError

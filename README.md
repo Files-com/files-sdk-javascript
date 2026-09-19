@@ -682,6 +682,7 @@ Error
 |     `NotAuthorized_ApiKeyIsDisabledError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyIsPathRestrictedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForDesktopAppError`|  `NotAuthorizedError` |
+|     `NotAuthorized_ApiKeyOnlyForFileOperationsError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForMobileAppError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ApiKeyOnlyForOfficeIntegrationError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BillingInformationHiddenError`|  `NotAuthorizedError` |

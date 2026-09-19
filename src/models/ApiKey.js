@@ -101,7 +101,7 @@ class ApiKey {
     this.attributes.name = value
   }
 
-  // string # Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
+  // string # Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can use only the files, folders, and file_actions endpoints, where they perform file operations as a full-access file user in the key's workspace scope, along with `GET /file_migrations/{id}` and `GET /api_key`. They cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user, and every other endpoint denies them with `not-authorized/api-key-only-for-file-operations`.
   getPermissionSet = () => this.attributes.permission_set
 
   setPermissionSet = value => {
@@ -150,7 +150,7 @@ class ApiKey {
     this.attributes.workspace_id = value
   }
 
-  // string # Restricts this API key to the specified folder and its descendants. Applies to every permission set and all paths accessed by a request, including copy and move destinations. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read.
+  // string # Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions endpoints, to the specified folder and its descendants, including copy and move destinations. Other endpoints do not apply the path restriction; use the `files_only` permission set to confine a key to the endpoints that do. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read.
   getPath = () => this.attributes.path
 
   setPath = value => {
@@ -308,8 +308,8 @@ class ApiKey {
   //   expires_at - string - API Key expiration date
   //   name (required) - string - Internal name for the API Key.  For your use.
   //   aws_style_credentials - boolean - If `true`, this API key will be usable with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
-  //   path - string - Restricts this API key to the specified folder and its descendants. Applies to every permission set and all paths accessed by a request, including copy and move destinations. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read.
-  //   permission_set - string - Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
+  //   path - string - Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions endpoints, to the specified folder and its descendants, including copy and move destinations. Other endpoints do not apply the path restriction; use the `files_only` permission set to confine a key to the endpoints that do. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys, which require a path the owning user can read.
+  //   permission_set - string - Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can use only the files, folders, and file_actions endpoints, where they perform file operations as a full-access file user in the key's workspace scope, along with `GET /file_migrations/{id}` and `GET /api_key`. They cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user, and every other endpoint denies them with `not-authorized/api-key-only-for-file-operations`.
   //   workspace_id - int64 - Workspace ID for this API Key. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
@@ -352,7 +352,7 @@ class ApiKey {
   // Parameters:
   //   expires_at - string - API Key expiration date
   //   name - string - Internal name for the API Key.  For your use.
-  //   permission_set - string - Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
+  //   permission_set - string - Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can use only the files, folders, and file_actions endpoints, where they perform file operations as a full-access file user in the key's workspace scope, along with `GET /file_migrations/{id}` and `GET /api_key`. They cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user, and every other endpoint denies them with `not-authorized/api-key-only-for-file-operations`.
   static updateCurrent = async (params = {}, options = {}) => {
     if (params.expires_at && !isString(params.expires_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
