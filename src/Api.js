@@ -41,6 +41,20 @@ const fetchWithRetry = async (url, options, retries = 0) => {
   }
 }
 
+const isDisallowedExternalUrl = (url) => {
+  try {
+    const { protocol, hostname } = new URL(url)
+
+    if (!/^https?:$/.test(protocol)) {
+      return true
+    }
+
+    return /^(?:localhost|0\.|10\.|127\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|192\.168\.|\[?::1\]?|\[?fd[0-9a-f]{2}:)/i.test(hostname)
+  } catch {
+    return true
+  }
+}
+
 class Api {
   static _sendVerbatim = async (path, verb, optionsRaw) => {
     const { getAgentForUrl, ...options } = optionsRaw || {}
@@ -50,6 +64,10 @@ class Api {
 
     if (!isExternal && !baseUrl) {
       throw new errors.ConfigurationError('Base URL has not been set - use Files.setBaseUrl() to set it')
+    }
+
+    if (isExternal && isDisallowedExternalUrl(path)) {
+      throw new errors.ConfigurationError('Refusing to send request to a disallowed URL')
     }
 
     const url = isExternal
