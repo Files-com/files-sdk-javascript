@@ -70,6 +70,13 @@ class Partner {
     this.attributes.cc_emails_to_responsible_party = value
   }
 
+  // array(object) # Approved Connected Sites relationships for this Partner, in both directions. Empty when this Partner has no connections. Read-only.
+  getConnections = () => this.attributes.connections
+
+  setConnections = value => {
+    this.attributes.connections = value
+  }
+
   // int64 # The unique ID of the Partner.
   getId = () => this.attributes.id
 
