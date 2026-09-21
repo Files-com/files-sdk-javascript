@@ -5,25 +5,119 @@ import * as errors from './Errors'
 import Logger from './Logger'
 import { isEmpty, isObject } from './utils'
 
-const fetchWithTimeout = (url, { timeoutSecs, ...options } = {}) => {
+const withTimeout = (promise, timeoutSecs) => {
   let timeoutId
   return timeoutSecs <= 0
-    ? fetch(url, options)
+    ? promise
     : Promise.race([
-      fetch(url, options),
+      promise,
       new Promise((_, reject) => {
         timeoutId = setTimeout(() => reject(new errors.FilesError('Request timed out')), timeoutSecs * 1000)
       }),
     ]).finally(() => clearTimeout(timeoutId))
 }
 
-const fetchWithRetry = async (url, options, retries = 0) => {
+const FILES_AUTH_HEADERS = [
+  'X-FilesAPI-Key',
+  'X-FilesAPI-Auth',
+  'X-Files-Workspace-Id',
+]
+
+const NODE_FETCH_SENSITIVE_HEADERS = [
+  'authorization',
+  'www-authenticate',
+  'cookie',
+  'cookie2',
+]
+
+const REDIRECT_STATUSES = [301, 302, 303, 307, 308]
+const MAX_REDIRECTS = 20
+
+const withoutHeaders = (headers, names) => {
+  const normalizedNames = names.map(name => name.toLowerCase())
+  return Object.fromEntries(
+    Object.entries(headers || {}).filter(([name]) => !normalizedNames.includes(name.toLowerCase())),
+  )
+}
+
+const isDomainOrSubdomain = (originalUrl, destinationUrl) => {
+  const originalHostname = new URL(originalUrl).hostname
+  const destinationHostname = new URL(destinationUrl).hostname
+
+  return originalHostname === destinationHostname || destinationHostname.endsWith(`.${originalHostname}`)
+}
+
+const isSameProtocol = (firstUrl, secondUrl) => (
+  new URL(firstUrl).protocol === new URL(secondUrl).protocol
+)
+
+const drainResponse = response => {
+  if (response.body && typeof response.body.resume === 'function') {
+    response.body.resume()
+  }
+}
+
+const fetchWithRedirects = async (url, options, getAgentForUrl, redirectCount = 0) => {
+  const agent = getAgentForUrl?.(url) || options.agent || options.httpsAgent || options.httpAgent
+  const redirectMode = options.redirect || 'follow'
+  const response = await fetch(url, {
+    ...options,
+    agent,
+    redirect: redirectMode === 'follow' ? 'manual' : redirectMode,
+  })
+
+  const location = response.headers.get('location')
+
+  if (redirectMode !== 'follow' || !REDIRECT_STATUSES.includes(response.status) || !location) {
+    return response
+  }
+
+  const maxRedirects = options.follow ?? MAX_REDIRECTS
+  if (redirectCount >= maxRedirects) {
+    drainResponse(response)
+    throw new errors.FilesError(`maximum redirect reached at: ${url}`)
+  }
+
+  const redirectUrl = new URL(location, url).toString()
+  let redirectedHeaders = new URL(url).origin === new URL(redirectUrl).origin
+    ? options.headers
+    : withoutHeaders(options.headers, FILES_AUTH_HEADERS)
+
+  if (!isDomainOrSubdomain(url, redirectUrl) || !isSameProtocol(url, redirectUrl)) {
+    redirectedHeaders = withoutHeaders(redirectedHeaders, NODE_FETCH_SENSITIVE_HEADERS)
+  }
+
+  const redirectedOptions = {
+    ...options,
+    headers: redirectedHeaders,
+  }
+
+  const method = (redirectedOptions.method || 'GET').toUpperCase()
+
+  if (response.status !== 303 && redirectedOptions.body && typeof redirectedOptions.body.pipe === 'function') {
+    drainResponse(response)
+    throw new errors.FilesError('Cannot follow redirect with body being a readable stream')
+  }
+
+  if (response.status === 303 || ([301, 302].includes(response.status) && method === 'POST')) {
+    redirectedOptions.method = 'GET'
+    delete redirectedOptions.body
+    redirectedOptions.headers = withoutHeaders(redirectedOptions.headers, ['content-length'])
+  }
+
+  drainResponse(response)
+
+  return fetchWithRedirects(redirectUrl, redirectedOptions, getAgentForUrl, redirectCount + 1)
+}
+
+const fetchWithRetry = async (url, options, retries = 0, getAgentForUrl = null) => {
   const maxRetries = Files.getMaxNetworkRetries()
   const minRetryDelaySecs = Files.getMinNetworkRetryDelay()
   const maxRetryDelaySecs = Files.getMaxNetworkRetryDelay()
 
   try {
-    return await fetchWithTimeout(url, options)
+    const { timeoutSecs, ...requestOptions } = options
+    return await withTimeout(fetchWithRedirects(url, requestOptions, getAgentForUrl), timeoutSecs)
   } catch (error) {
     Logger.info(`Request #${retries + 1} failed: ${error.message}`)
 
@@ -36,7 +130,7 @@ const fetchWithRetry = async (url, options, retries = 0) => {
       const delaySecs = Math.min(minRetryDelaySecs * 2 ** retries, maxRetryDelaySecs) // exponential backoff
       await new Promise(resolve => { setTimeout(resolve, delaySecs * 1000) })
 
-      return fetchWithRetry(url, options, nextRetries)
+      return fetchWithRetry(url, options, nextRetries, getAgentForUrl)
     }
   }
 }
@@ -64,14 +158,11 @@ class Api {
     })
 
     try {
-      const agent = getAgentForUrl?.(url) || options?.agent || options?.httpsAgent || options?.httpAgent
-
       const response = await fetchWithRetry(url, {
-        agent,
         method: verb,
         timeoutSecs: Files.getNetworkTimeout(),
         ...options,
-      })
+      }, 0, getAgentForUrl)
 
       const headers = Object.fromEntries(response.headers.entries())
 

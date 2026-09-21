@@ -165,6 +165,63 @@ describe('API client', () => {
     return Folder.listFor('/', {}, { workspaceId: null })
   })
 
+  it('strips Files.com auth headers on cross-origin redirects', () => {
+    const storageUrl = 'http://storage.test'
+    Files.setWorkspaceId(123)
+
+    nock(API_URL)
+      .get('/api/rest/v1/folders/%2F')
+      .query(true)
+      .reply(302, '', { Location: `${storageUrl}/download` })
+
+    nock(storageUrl, {
+      badheaders: [
+        'X-FilesAPI-Key',
+        'X-FilesAPI-Auth',
+        'X-Files-Workspace-Id',
+        'Authorization',
+        'Cookie',
+      ],
+    })
+      .get('/download')
+      .reply(200, [])
+
+    return Folder.listFor('/', { action: 'redirect' }, {
+      headers: {
+        Authorization: 'Bearer test-token',
+        Cookie: 'session=test-session',
+        'X-FilesAPI-Auth': 'test-session',
+      },
+    })
+  })
+
+  it('keeps Files.com auth headers on same-origin redirects', () => {
+    Files.setWorkspaceId(123)
+
+    nock(API_URL)
+      .get('/api/rest/v1/folders/%2F')
+      .query(true)
+      .reply(302, '', { Location: '/redirected' })
+
+    nock(API_URL, {
+      reqheaders: {
+        Authorization: 'Bearer test-token',
+        Cookie: 'session=test-session',
+        'X-Files-Workspace-Id': '123',
+        'X-FilesAPI-Key': 'test-key',
+      },
+    })
+      .get('/redirected')
+      .reply(200, [])
+
+    return Folder.listFor('/', { action: 'redirect' }, {
+      headers: {
+        Authorization: 'Bearer test-token',
+        Cookie: 'session=test-session',
+      },
+    })
+  })
+
   it('handles bad gateway', () => {
     nock(API_URL)
       .get('/api/rest/v1/api_keys')
