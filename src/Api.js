@@ -273,7 +273,8 @@ class Api {
     const isExternal = /^[a-zA-Z]+:\/\//.test(path)
 
     if (!isExternal) {
-      const sessionId = options.sessionId || Files.getSessionId()
+      const hasApiKey = options.apiKey !== undefined && options.apiKey !== null
+      const sessionId = hasApiKey ? null : options.sessionId || options.session_id || Files.getSessionId()
 
       if (sessionId) {
         headers['X-FilesAPI-Auth'] = sessionId

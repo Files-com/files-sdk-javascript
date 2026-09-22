@@ -175,6 +175,10 @@ try {
 }
 ```
 
+The `sessionId` option is also supported. An explicit per-request or per-object
+`apiKey` takes precedence over session authentication. Otherwise, a session takes
+precedence over the globally configured API key.
+
 #### Logging Out
 
 User sessions can be ended calling the `destroy` method on the `session` object.
