@@ -119,7 +119,8 @@ const fetchWithRetry = async (url, options, retries = 0, getAgentForUrl = null) 
     const { timeoutSecs, ...requestOptions } = options
     return await withTimeout(fetchWithRedirects(url, requestOptions, getAgentForUrl), timeoutSecs)
   } catch (error) {
-    Logger.info(`Request #${retries + 1} failed: ${error.message}`)
+    Logger.info(`Request #${retries + 1} failed`)
+    Logger.debug(`Request #${retries + 1} failed: ${error.message}`)
 
     if (retries >= maxRetries) {
       throw error
