@@ -35,6 +35,13 @@ class ActionNotificationExport {
     this.attributes.id = value
   }
 
+  // int64 # Workspace whose logs are exported. Set to `0` for the default workspace. A null value means a site-wide export.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // string # Version of the underlying records for the export.
   getExportVersion = () => this.attributes.export_version
 
@@ -163,6 +170,7 @@ class ActionNotificationExport {
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+  //   workspace_id - int64 - Workspace whose logs are exported. Set to `0` for the default workspace. A null value means a site-wide export.
   //   start_at - string - Start date/time of export range.
   //   end_at - string - End date/time of export range.
   //   query_message - string - Error message associated with the request, if any.
@@ -175,6 +183,10 @@ class ActionNotificationExport {
   static create = async (params = {}, options = {}) => {
     if (params.user_id && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.start_at && !isString(params.start_at)) {
