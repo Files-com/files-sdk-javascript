@@ -175,6 +175,9 @@ class SsoStrategy {
   // boolean # Use secure LDAP?
   getLdapSecure = () => this.attributes.ldap_secure
 
+  // string # How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
+  getLdapServerCertificate = () => this.attributes.ldap_server_certificate
+
   // string # LDAP server type
   getLdapType = () => this.attributes.ldap_type
 

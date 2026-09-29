@@ -352,6 +352,9 @@ class Site {
   // boolean # Use secure LDAP?
   getLdapSecure = () => this.attributes.ldap_secure
 
+  // string # How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
+  getLdapServerCertificate = () => this.attributes.ldap_server_certificate
+
   // string # LDAP type
   getLdapType = () => this.attributes.ldap_type
 
@@ -786,6 +789,7 @@ class Site {
   //   ldap_host_3 - string - LDAP backup host
   //   ldap_port - int64 - LDAP port
   //   ldap_secure - boolean - Use secure LDAP?
+  //   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
   //   ldap_username - string - Username for signing in to LDAP server.
   //   ldap_username_field - string - LDAP username field
   //   ldap_domain - string - Domain name that will be appended to usernames
@@ -1059,6 +1063,10 @@ class Site {
 
     if (params.ldap_port && !isInt(params.ldap_port)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_port must be of type Int, received ${getType(params.ldap_port)}`)
+    }
+
+    if (params.ldap_server_certificate && !isString(params.ldap_server_certificate)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_server_certificate must be of type String, received ${getType(params.ldap_server_certificate)}`)
     }
 
     if (params.ldap_username && !isString(params.ldap_username)) {
