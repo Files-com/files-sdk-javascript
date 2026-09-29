@@ -7,6 +7,7 @@
   "id": 1,
   "workspace_id": 1,
   "direction": "two_way",
+  "use_channel_root": false,
   "partner_id": 1,
   "partner_channel_template_id": 1,
   "path": "claims/medical",
@@ -31,6 +32,7 @@
 * `id` (int64): The unique ID of the Partner Channel.
 * `workspace_id` (int64): ID of the Workspace associated with this Partner Channel.
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (boolean): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `partner_id` (int64): ID of the Partner this Channel belongs to.
 * `partner_channel_template_id` (int64): ID of the Partner Channel Template that manages this Channel, if any.
 * `path` (string): Channel path relative to the Partner root folder. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -40,8 +42,8 @@
 * `to_partner_route_path` (string): Optional route path for files delivered to the Partner.
 * `to_partner_managed_folder_paths` (array(string)): Managed folder paths inside the to-Partner folder.
 * `from_partner_managed_folder_paths` (array(string)): Managed folder paths inside the from-Partner folder.
-* `effective_to_partner_folder_name` (string): Resolved to-Partner folder name after Channel override and default.
-* `effective_from_partner_folder_name` (string): Resolved from-Partner folder name after Channel override and default.
+* `effective_to_partner_folder_name` (string): Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
+* `effective_from_partner_folder_name` (string): Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
 * `channel_path` (string): Resolved Channel folder path.
 * `to_partner_folder_path` (string): Resolved to-Partner folder path.
 * `from_partner_folder_path` (string): Resolved from-Partner folder path.
@@ -82,6 +84,7 @@ await PartnerChannel.find(id)
 ```
 await PartnerChannel.create({
   'direction': "two_way",
+  'use_channel_root': false,
   'from_partner_folder_name': "incoming",
   'from_partner_managed_folder_paths': ["claims/received"],
   'from_partner_route_path': "processing/from-partner",
@@ -98,6 +101,7 @@ await PartnerChannel.create({
 ### Parameters
 
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (boolean): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (array(string)): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
@@ -117,6 +121,7 @@ const partner_channel = await PartnerChannel.find(id)
 
 await partner_channel.update({
   'direction': "two_way",
+  'use_channel_root': false,
   'from_partner_folder_name': "incoming",
   'from_partner_managed_folder_paths': ["claims/received"],
   'from_partner_route_path': "processing/from-partner",
@@ -131,6 +136,7 @@ await partner_channel.update({
 
 * `id` (int64): Required - Partner Channel ID.
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (boolean): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (array(string)): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
@@ -146,6 +152,7 @@ await partner_channel.update({
   "id": 1,
   "workspace_id": 1,
   "direction": "two_way",
+  "use_channel_root": false,
   "partner_id": 1,
   "partner_channel_template_id": 1,
   "path": "claims/medical",

@@ -49,6 +49,13 @@ class PartnerChannel {
     this.attributes.direction = value
   }
 
+  // boolean # Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
+  getUseChannelRoot = () => this.attributes.use_channel_root
+
+  setUseChannelRoot = value => {
+    this.attributes.use_channel_root = value
+  }
+
   // int64 # ID of the Partner this Channel belongs to.
   getPartnerId = () => this.attributes.partner_id
 
@@ -112,14 +119,14 @@ class PartnerChannel {
     this.attributes.from_partner_managed_folder_paths = value
   }
 
-  // string # Resolved to-Partner folder name after Channel override and default.
+  // string # Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
   getEffectiveToPartnerFolderName = () => this.attributes.effective_to_partner_folder_name
 
   setEffectiveToPartnerFolderName = value => {
     this.attributes.effective_to_partner_folder_name = value
   }
 
-  // string # Resolved from-Partner folder name after Channel override and default.
+  // string # Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
   getEffectiveFromPartnerFolderName = () => this.attributes.effective_from_partner_folder_name
 
   setEffectiveFromPartnerFolderName = value => {
@@ -149,6 +156,7 @@ class PartnerChannel {
 
   // Parameters:
   //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+  //   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -304,6 +312,7 @@ class PartnerChannel {
 
   // Parameters:
   //   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+  //   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
