@@ -35,6 +35,27 @@ class CustomDomain {
     this.attributes.id = value
   }
 
+  // int64 # Workspace ID (0 for the default workspace).
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
+  // boolean # Allow all workspaces to use this default-workspace Custom Domain.
+  getAvailableToAllWorkspaces = () => this.attributes.available_to_all_workspaces
+
+  setAvailableToAllWorkspaces = value => {
+    this.attributes.available_to_all_workspaces = value
+  }
+
+  // array(string) # Eligible public IP addresses for Remote Server outbound connections. Empty when this Custom Domain is not eligible for outbound selection.
+  getOutboundIpAddresses = () => this.attributes.outbound_ip_addresses
+
+  setOutboundIpAddresses = value => {
+    this.attributes.outbound_ip_addresses = value
+  }
+
   // string # Customer-owned domain name.
   getDomain = () => this.attributes.domain
 
@@ -91,6 +112,8 @@ class CustomDomain {
   getUpdatedAt = () => this.attributes.updated_at
 
   // Parameters:
+  //   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+  //   workspace_id - int64 - Workspace ID (0 for the default workspace).
   //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
   //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
   //   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -107,6 +130,10 @@ class CustomDomain {
     params.id = this.attributes.id
     if (params.id && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.destination && !isString(params.destination)) {
@@ -181,7 +208,8 @@ class CustomDomain {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `id`.
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `id` or `available_to_all_workspaces`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
     if (params.cursor && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
@@ -256,6 +284,8 @@ class CustomDomain {
   }
 
   // Parameters:
+  //   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+  //   workspace_id - int64 - Workspace ID (0 for the default workspace).
   //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
   //   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
   //   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -263,6 +293,10 @@ class CustomDomain {
   static create = async (params = {}, options = {}) => {
     if (!params.domain) {
       throw new errors.MissingParameterError('Parameter missing: domain')
+    }
+
+    if (params.workspace_id && !isInt(params.workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     if (params.destination && !isString(params.destination)) {
