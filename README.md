@@ -688,6 +688,7 @@ Error
 |     `NotAuthorized_BillingPermissionRequiredError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundleMaximumUsesReachedError`|  `NotAuthorizedError` |
 |     `NotAuthorized_BundlePermissionRequiredError`|  `NotAuthorizedError` |
+|     `NotAuthorized_CannotAdministerHigherLevelUserError`|  `NotAuthorizedError` |
 |     `NotAuthorized_CannotLoginWhileUsingKeyError`|  `NotAuthorizedError` |
 |     `NotAuthorized_CantActForOtherUserError`|  `NotAuthorizedError` |
 |     `NotAuthorized_ContactAdminForPasswordChangeHelpError`|  `NotAuthorizedError` |
@@ -789,6 +790,7 @@ Error
 |     `ProcessingFailure_MultipleProcessingErrorsError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_PathTooLongError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_RecipientAlreadySharedError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_RemoteEntryReadOnlyError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_RemoteServerErrorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceBelongsToParentSiteError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceLockedError`|  `ProcessingFailureError` |

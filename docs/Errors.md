@@ -123,6 +123,7 @@ These errors are derived from the error groups listed above.
 ### NotAuthorized_BillingPermissionRequiredError
 ### NotAuthorized_BundleMaximumUsesReachedError
 ### NotAuthorized_BundlePermissionRequiredError
+### NotAuthorized_CannotAdministerHigherLevelUserError
 ### NotAuthorized_CannotLoginWhileUsingKeyError
 ### NotAuthorized_CantActForOtherUserError
 ### NotAuthorized_ContactAdminForPasswordChangeHelpError
@@ -224,6 +225,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_MultipleProcessingErrorsError
 ### ProcessingFailure_PathTooLongError
 ### ProcessingFailure_RecipientAlreadySharedError
+### ProcessingFailure_RemoteEntryReadOnlyError
 ### ProcessingFailure_RemoteServerErrorError
 ### ProcessingFailure_ResourceBelongsToParentSiteError
 ### ProcessingFailure_ResourceLockedError
