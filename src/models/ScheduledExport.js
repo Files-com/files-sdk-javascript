@@ -147,7 +147,7 @@ class ScheduledExport {
     this.attributes.human_readable_schedule = value
   }
 
-  // date-time # Most recent scheduled run time.
+  // date-time # Most recent scheduled attempt time, including attempts that failed validation.
   getLastRunAt = () => this.attributes.last_run_at
 
   setLastRunAt = value => {
@@ -159,6 +159,13 @@ class ScheduledExport {
 
   setLastExportId = value => {
     this.attributes.last_export_id = value
+  }
+
+  // string # Validation error from the most recent scheduled attempt. The schedule remains enabled and retries at its next scheduled time. Cleared when an export is successfully created; does not describe errors during export generation.
+  getLastError = () => this.attributes.last_error
+
+  setLastError = value => {
+    this.attributes.last_error = value
   }
 
   // date-time # Creation time.
