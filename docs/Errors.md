@@ -246,6 +246,7 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManySharesError
 ### ServiceUnavailable_AutomationsUnavailableError
 ### ServiceUnavailable_MigrationInProgressError
+### ServiceUnavailable_SearchUnavailableError
 ### ServiceUnavailable_SiteDisabledError
 ### ServiceUnavailable_UploadsUnavailableError
 ### SiteConfiguration_AccountAlreadyExistsError

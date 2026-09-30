@@ -811,6 +811,7 @@ Error
 |     `RateLimited_TooManySharesError`|  `RateLimitedError` |
 |     `ServiceUnavailable_AutomationsUnavailableError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_MigrationInProgressError`|  `ServiceUnavailableError` |
+|     `ServiceUnavailable_SearchUnavailableError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_SiteDisabledError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_UploadsUnavailableError`|  `ServiceUnavailableError` |
 |     `SiteConfiguration_AccountAlreadyExistsError`|  `SiteConfigurationError` |
