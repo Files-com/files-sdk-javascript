@@ -538,7 +538,7 @@ class Site {
   // int64 # SMTP server port
   getSmtpPort = () => this.attributes.smtp_port
 
-  // string # Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
+  // string # Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
   getSmtpSsl = () => this.attributes.smtp_ssl
 
   // string # SMTP server username
@@ -789,7 +789,7 @@ class Site {
   //   smtp_from - string - From address to use when mailing through custom SMTP
   //   smtp_username - string - SMTP server username
   //   smtp_port - int64 - SMTP server port
-  //   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
+  //   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
   //   ldap_enabled - boolean - Main LDAP setting: is LDAP enabled?
   //   ldap_type - string - LDAP type
   //   ldap_host - string - LDAP host
