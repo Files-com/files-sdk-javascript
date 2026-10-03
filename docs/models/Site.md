@@ -103,6 +103,7 @@
   "domain_letsencrypt_chain": "example",
   "email": "john.doe@files.com",
   "fedramp": true,
+  "files_com_remote_server_enabled": true,
   "ftp_enabled": true,
   "reply_to_email": "jane.doe@files.com",
   "non_sso_groups_allowed": true,
@@ -452,6 +453,7 @@
 * `domain_letsencrypt_chain` (string): Letsencrypt chain to use when registering SSL Certificate for domain. No longer used as of 2026.
 * `email` (email): Main email for this site
 * `fedramp` (boolean): Are FedRAMP security restrictions enabled for this site?
+* `files_com_remote_server_enabled` (boolean): Allow other Files.com sites to use this site's API keys for native Files.com Remote Server connections? Defaults to true and applies to all keys and workspaces on this site. When false, new pairings and access through existing connections are rejected without revoking keys or deleting connections. Re-enabling permits access again with usable keys. Does not disable this site's connections to other sites, ordinary API access, or Connected Sites.
 * `ftp_enabled` (boolean): Is FTP enabled?
 * `reply_to_email` (email): Reply-to email for this site
 * `non_sso_groups_allowed` (boolean): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
@@ -701,6 +703,7 @@ await Site.update({
   'user_requests_enabled': false,
   'user_requests_notify_admins': false,
   'dav_enabled': false,
+  'files_com_remote_server_enabled': false,
   'ftp_enabled': false,
   's3_compatible_endpoint_enabled': false,
   'sftp_enabled': false,
@@ -889,6 +892,7 @@ await Site.update({
 * `user_requests_enabled` (boolean): Enable User Requests feature
 * `user_requests_notify_admins` (boolean): Send email to site admins when a user request is received?
 * `dav_enabled` (boolean): Is WebDAV enabled?
+* `files_com_remote_server_enabled` (boolean): Allow other Files.com sites to use this site's API keys for native Files.com Remote Server connections? Defaults to true and applies to all keys and workspaces on this site. When false, new pairings and access through existing connections are rejected without revoking keys or deleting connections. Re-enabling permits access again with usable keys. Does not disable this site's connections to other sites, ordinary API access, or Connected Sites.
 * `ftp_enabled` (boolean): Is FTP enabled?
 * `s3_compatible_endpoint_enabled` (boolean): Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access.
 * `sftp_enabled` (boolean): Is SFTP enabled?
