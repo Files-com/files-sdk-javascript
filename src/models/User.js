@@ -528,7 +528,7 @@ class User {
     this.attributes.site_admin = value
   }
 
-  // boolean # Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
+  // boolean # Whether the user is an administrator of their own Custom Workspace. Does not reflect administration granted through Permissions.
   getWorkspaceAdmin = () => this.attributes.workspace_admin
 
   setWorkspaceAdmin = value => {
@@ -542,7 +542,7 @@ class User {
     this.attributes.site_id = value
   }
 
-  // int64 # Workspace ID
+  // int64 # ID of the Workspace the user belongs to. 0 is the Default Workspace.
   getWorkspaceId = () => this.attributes.workspace_id
 
   setWorkspaceId = value => {
@@ -876,7 +876,7 @@ class User {
   //   time_zone - string - User time zone
   //   user_root - string - If filesystem layout is user_root, this path is the root path the user is fixed to for all interfaces. If the filesystem layout is site_root or partner_root, this acts as a root folder only for FTP and SFTP (SFTP applicability also requires a site-wide setting to be set). For partner_root layout, this path is relative to the Partner root folder for all callers and blank opts out of an additional protocol root. In this situation, this path is not applied to the API, Desktop, or Web interface.
   //   user_home - string - Home folder for FTP/SFTP. For users with the partner_root filesystem layout, this path is relative to the Partner root folder. In all other cases, it is an absolute path. Only applies to FTP and SFTP, and not any other interface.
-  //   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
+  //   workspace_admin - boolean - Whether the user is an administrator of their own Custom Workspace. Does not reflect administration granted through Permissions.
   //   username - string - User's username
   //   workspace_id - int64 - Workspace ID. Only Site Administrators can change this field. Values supplied by Workspace Administrators, Group Administrators, or other non-Site Administrators using `/user` are ignored.
   //   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
@@ -1236,9 +1236,9 @@ class User {
   //   time_zone - string - User time zone
   //   user_root - string - If filesystem layout is user_root, this path is the root path the user is fixed to for all interfaces. If the filesystem layout is site_root or partner_root, this acts as a root folder only for FTP and SFTP (SFTP applicability also requires a site-wide setting to be set). For partner_root layout, this path is relative to the Partner root folder for all callers and blank opts out of an additional protocol root. In this situation, this path is not applied to the API, Desktop, or Web interface.
   //   user_home - string - Home folder for FTP/SFTP. For users with the partner_root filesystem layout, this path is relative to the Partner root folder. In all other cases, it is an absolute path. Only applies to FTP and SFTP, and not any other interface.
-  //   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
+  //   workspace_admin - boolean - Whether the user is an administrator of their own Custom Workspace. Does not reflect administration granted through Permissions.
   //   username (required) - string - User's username
-  //   workspace_id - int64 - Workspace ID
+  //   workspace_id - int64 - ID of the Workspace the user belongs to. 0 is the Default Workspace.
   static create = async (params = {}, options = {}) => {
     if (!params.username) {
       throw new errors.MissingParameterError('Parameter missing: username')
