@@ -28,6 +28,13 @@ class HistoryExport {
 
   isLoaded = () => !!this.attributes.id
 
+  // int64 # Workspace of the export. 0 represents the default workspace. A null value means a site-wide export.
+  getWorkspaceId = () => this.attributes.workspace_id
+
+  setWorkspaceId = value => {
+    this.attributes.workspace_id = value
+  }
+
   // int64 # History Export ID
   getId = () => this.attributes.id
 
