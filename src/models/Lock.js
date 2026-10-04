@@ -112,6 +112,13 @@ class Lock {
     this.attributes.username = value
   }
 
+  // string # Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
+  getExpectedToken = () => this.attributes.expected_token
+
+  setExpectedToken = value => {
+    this.attributes.expected_token = value
+  }
+
   // Parameters:
   //   token (required) - string - Lock token
   delete = async (params = {}) => {
@@ -195,6 +202,8 @@ class Lock {
 
   // Parameters:
   //   path (required) - string - Path
+  //   token - string - Lock token. With expected_token, use the same value to refresh or a different value to replace the existing token.
+  //   expected_token - string - Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
   //   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
   //   exclusive - boolean - Is lock exclusive?
   //   recursive - boolean - Does lock apply to subfolders?
@@ -212,6 +221,14 @@ class Lock {
 
     if (params.path && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.token && !isString(params.token)) {
+      throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params.token)}`)
+    }
+
+    if (params.expected_token && !isString(params.expected_token)) {
+      throw new errors.InvalidParameterError(`Bad parameter: expected_token must be of type String, received ${getType(params.expected_token)}`)
     }
 
     if (params.timeout && !isInt(params.timeout)) {
