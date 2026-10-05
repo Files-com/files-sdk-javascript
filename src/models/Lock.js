@@ -56,7 +56,7 @@ class Lock {
     this.attributes.recursive = value
   }
 
-  // string # Owner of the lock.  This can be any arbitrary string.
+  // string # Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
   getOwner = () => this.attributes.owner
 
   setOwner = value => {
@@ -207,6 +207,7 @@ class Lock {
   //   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
   //   exclusive - boolean - Is lock exclusive?
   //   recursive - boolean - Does lock apply to subfolders?
+  //   owner - string - Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
   //   timeout - int64 - Lock timeout in seconds
   static create = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -229,6 +230,10 @@ class Lock {
 
     if (params.expected_token && !isString(params.expected_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: expected_token must be of type String, received ${getType(params.expected_token)}`)
+    }
+
+    if (params.owner && !isString(params.owner)) {
+      throw new errors.InvalidParameterError(`Bad parameter: owner must be of type String, received ${getType(params.owner)}`)
     }
 
     if (params.timeout && !isInt(params.timeout)) {

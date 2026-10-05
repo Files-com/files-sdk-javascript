@@ -882,6 +882,7 @@ Error
 |     `RateLimited_TooManyRequestsError`|  `RateLimitedError` |
 |     `RateLimited_TooManySharesError`|  `RateLimitedError` |
 |     `ServiceUnavailable_AutomationsUnavailableError`|  `ServiceUnavailableError` |
+|     `ServiceUnavailable_LockOperationBusyError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_MigrationInProgressError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_SearchUnavailableError`|  `ServiceUnavailableError` |
 |     `ServiceUnavailable_SiteDisabledError`|  `ServiceUnavailableError` |

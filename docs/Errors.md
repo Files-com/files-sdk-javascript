@@ -245,6 +245,7 @@ These errors are derived from the error groups listed above.
 ### RateLimited_TooManyRequestsError
 ### RateLimited_TooManySharesError
 ### ServiceUnavailable_AutomationsUnavailableError
+### ServiceUnavailable_LockOperationBusyError
 ### ServiceUnavailable_MigrationInProgressError
 ### ServiceUnavailable_SearchUnavailableError
 ### ServiceUnavailable_SiteDisabledError
