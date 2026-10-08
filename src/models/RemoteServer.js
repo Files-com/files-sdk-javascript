@@ -147,6 +147,13 @@ class RemoteServer {
     this.attributes.s3_region = value
   }
 
+  // string # ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
+  getS3KmsKeyId = () => this.attributes.s3_kms_key_id
+
+  setS3KmsKeyId = value => {
+    this.attributes.s3_kms_key_id = value
+  }
+
   // string # AWS Access Key.
   getAwsAccessKey = () => this.attributes.aws_access_key
 
@@ -872,6 +879,7 @@ class RemoteServer {
   //   s3_compatible_endpoint - string - S3-compatible: endpoint
   //   s3_compatible_region - string - S3-compatible: region
   //   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+  //   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
   //   s3_region - string - S3 region
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -1154,6 +1162,10 @@ class RemoteServer {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_region must be of type String, received ${getType(params.s3_compatible_region)}`)
     }
 
+    if (params.s3_kms_key_id && !isString(params.s3_kms_key_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_kms_key_id must be of type String, received ${getType(params.s3_kms_key_id)}`)
+    }
+
     if (params.s3_region && !isString(params.s3_region)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_region must be of type String, received ${getType(params.s3_region)}`)
     }
@@ -1404,6 +1416,7 @@ class RemoteServer {
   //   s3_compatible_endpoint - string - S3-compatible: endpoint
   //   s3_compatible_region - string - S3-compatible: region
   //   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+  //   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
   //   s3_region - string - S3 region
   //   server_certificate - string - Remote server certificate
   //   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -1676,6 +1689,10 @@ class RemoteServer {
 
     if (params.s3_compatible_region && !isString(params.s3_compatible_region)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_region must be of type String, received ${getType(params.s3_compatible_region)}`)
+    }
+
+    if (params.s3_kms_key_id && !isString(params.s3_kms_key_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_kms_key_id must be of type String, received ${getType(params.s3_kms_key_id)}`)
     }
 
     if (params.s3_region && !isString(params.s3_region)) {
