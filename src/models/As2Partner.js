@@ -175,6 +175,20 @@ class As2Partner {
     this.attributes.http_auth_password = value
   }
 
+  // string # Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+  getPkcs12 = () => this.attributes.pkcs12
+
+  setPkcs12 = value => {
+    this.attributes.pkcs12 = value
+  }
+
+  // string # Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
+  getPkcs12Password = () => this.attributes.pkcs12_password
+
+  setPkcs12Password = value => {
+    this.attributes.pkcs12_password = value
+  }
+
   // Parameters:
   //   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
   //   http_auth_username - string - Username to send to server for HTTP Authentication.
@@ -187,6 +201,8 @@ class As2Partner {
   //   name - string - The partner's formal AS2 name.
   //   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
   //   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+  //   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+  //   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -235,6 +251,14 @@ class As2Partner {
 
     if (params.public_certificate && !isString(params.public_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
+    }
+
+    if (params.pkcs12 && !isString(params.pkcs12)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
+    }
+
+    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
     if (!params.id) {
@@ -349,7 +373,9 @@ class As2Partner {
   //   as2_station_id (required) - int64 - ID of the AS2 Station associated with this partner.
   //   name (required) - string - The partner's formal AS2 name.
   //   uri (required) - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
-  //   public_certificate (required) - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+  //   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+  //   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+  //   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
   static create = async (params = {}, options = {}) => {
     if (!params.as2_station_id) {
       throw new errors.MissingParameterError('Parameter missing: as2_station_id')
@@ -361,10 +387,6 @@ class As2Partner {
 
     if (!params.uri) {
       throw new errors.MissingParameterError('Parameter missing: uri')
-    }
-
-    if (!params.public_certificate) {
-      throw new errors.MissingParameterError('Parameter missing: public_certificate')
     }
 
     if (params.http_auth_username && !isString(params.http_auth_username)) {
@@ -405,6 +427,14 @@ class As2Partner {
 
     if (params.public_certificate && !isString(params.public_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
+    }
+
+    if (params.pkcs12 && !isString(params.pkcs12)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
+    }
+
+    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
     const response = await Api.sendRequest('/as2_partners', 'POST', params, options)

@@ -133,25 +133,41 @@ class As2Station {
     this.attributes.private_key_password_md5 = value
   }
 
-  // string
+  // string # PEM-encoded private key matching public_certificate.
   getPrivateKey = () => this.attributes.private_key
 
   setPrivateKey = value => {
     this.attributes.private_key = value
   }
 
-  // string
+  // string # Password for the PEM-encoded private key.
   getPrivateKeyPassword = () => this.attributes.private_key_password
 
   setPrivateKeyPassword = value => {
     this.attributes.private_key_password = value
   }
 
+  // string # Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+  getPkcs12 = () => this.attributes.pkcs12
+
+  setPkcs12 = value => {
+    this.attributes.pkcs12 = value
+  }
+
+  // string # Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
+  getPkcs12Password = () => this.attributes.pkcs12_password
+
+  setPkcs12Password = value => {
+    this.attributes.pkcs12_password = value
+  }
+
   // Parameters:
   //   name - string - The station's formal AS2 name.
-  //   public_certificate - string
-  //   private_key - string
-  //   private_key_password - string
+  //   public_certificate - string - Public certificate used for message security.
+  //   private_key - string - PEM-encoded private key matching public_certificate.
+  //   private_key_password - string - Password for the PEM-encoded private key.
+  //   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+  //   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -180,6 +196,14 @@ class As2Station {
 
     if (params.private_key_password && !isString(params.private_key_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
+    }
+
+    if (params.pkcs12 && !isString(params.pkcs12)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
+    }
+
+    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
     if (!params.id) {
@@ -285,20 +309,14 @@ class As2Station {
   // Parameters:
   //   name (required) - string - The station's formal AS2 name.
   //   workspace_id - int64 - ID of the Workspace associated with this AS2 Station.
-  //   public_certificate (required) - string
-  //   private_key (required) - string
-  //   private_key_password - string
+  //   public_certificate - string - Public certificate used for message security.
+  //   private_key - string - PEM-encoded private key matching public_certificate.
+  //   private_key_password - string - Password for the PEM-encoded private key.
+  //   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+  //   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
   static create = async (params = {}, options = {}) => {
     if (!params.name) {
       throw new errors.MissingParameterError('Parameter missing: name')
-    }
-
-    if (!params.public_certificate) {
-      throw new errors.MissingParameterError('Parameter missing: public_certificate')
-    }
-
-    if (!params.private_key) {
-      throw new errors.MissingParameterError('Parameter missing: private_key')
     }
 
     if (params.name && !isString(params.name)) {
@@ -319,6 +337,14 @@ class As2Station {
 
     if (params.private_key_password && !isString(params.private_key_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
+    }
+
+    if (params.pkcs12 && !isString(params.pkcs12)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
+    }
+
+    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
     const response = await Api.sendRequest('/as2_stations', 'POST', params, options)
