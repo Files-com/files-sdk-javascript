@@ -7,7 +7,7 @@ let baseUrl = 'https://app.files.com'
 let sessionId = null
 let workspaceId = null
 let language = null
-const version = '1.2.787'
+const version = '1.2.788'
 let userAgent = `Files.com JavaScript SDK v${version}`
 
 let logLevel = LogLevel.INFO
