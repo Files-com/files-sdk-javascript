@@ -848,6 +848,38 @@ class File {
     return response?.data?.map(obj => new ZipListEntry(obj, this.options)) || []
   }
 
+  // Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+  //
+  // Parameters:
+  //   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+  beginDelete = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    params.path = this.attributes.path
+    if (params.path && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    const response = await Api.sendRequest(`/file_actions/delete/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return new FileAction(response?.data, this.options)
+  }
+
   // Copy File/Folder
   //
   // Parameters:

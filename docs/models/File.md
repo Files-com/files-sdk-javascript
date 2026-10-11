@@ -396,6 +396,32 @@ await file.zip_list_contents()
 
 ---
 
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+
+```
+const file = await File.find(path)
+
+await file.begin_delete({
+  'recursive': false,
+})
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `recursive` (boolean): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+
+### Example Response
+
+```json
+{
+  "status": "pending",
+  "file_migration_id": 1
+}
+```
+
+---
+
 ## Copy File/Folder
 
 ```
