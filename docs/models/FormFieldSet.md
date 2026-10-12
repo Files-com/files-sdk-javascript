@@ -6,6 +6,7 @@
 {
   "id": 1,
   "title": "Sample Form Title",
+  "require_complete_metadata_capture": false,
   "form_layout": [
     1,
     2,
@@ -37,6 +38,7 @@
 
 * `id` (int64): Form field set id
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (boolean): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `form_layout` (array(int64)): Layout of the form
 * `form_fields` (array(object)): Associated form field definitions; authenticated form field set responses include historical definitions, while form_layout identifies current fields
 * `skip_name` (boolean): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
@@ -84,6 +86,7 @@ await FormFieldSet.find(id)
 await FormFieldSet.create({
   'user_id': 1,
   'title': "Sample Form Title",
+  'require_complete_metadata_capture': false,
   'workspace_id': 1,
   'skip_email': false,
   'skip_name': false,
@@ -97,6 +100,7 @@ await FormFieldSet.create({
 
 * `user_id` (int64): User ID.  Provide a value of `0` to operate the current session's user.
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (boolean): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `workspace_id` (int64): Workspace ID
 * `skip_email` (boolean): Skip validating form email
 * `skip_name` (boolean): Skip validating form name
@@ -112,6 +116,7 @@ const form_field_set = await FormFieldSet.find(id)
 
 await form_field_set.update({
   'title': "Sample Form Title",
+  'require_complete_metadata_capture': false,
   'workspace_id': 1,
   'skip_email': false,
   'skip_name': false,
@@ -124,6 +129,7 @@ await form_field_set.update({
 
 * `id` (int64): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (boolean): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `workspace_id` (int64): Workspace ID
 * `skip_email` (boolean): Skip validating form email
 * `skip_name` (boolean): Skip validating form name
@@ -136,6 +142,7 @@ await form_field_set.update({
 {
   "id": 1,
   "title": "Sample Form Title",
+  "require_complete_metadata_capture": false,
   "form_layout": [
     1,
     2,

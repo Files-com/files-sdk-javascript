@@ -97,6 +97,7 @@
   "disable_all_ai_features": true,
   "disable_files_certificate_generation": true,
   "disable_notifications": true,
+  "file_activity_events_enabled": true,
   "disable_password_reset": true,
   "domain": "my-custom-domain.com",
   "domain_hsts_header": true,
@@ -447,6 +448,7 @@
 * `disable_all_ai_features` (boolean): If true, all AI features are disabled for this site.
 * `disable_files_certificate_generation` (boolean): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
 * `disable_notifications` (boolean): Are notifications disabled?
+* `file_activity_events_enabled` (boolean): If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
 * `disable_password_reset` (boolean): Is password reset disabled?
 * `domain` (string): Custom domain
 * `domain_hsts_header` (boolean): Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
@@ -648,6 +650,7 @@ await Site.update({
   'legacy_checksums_mode': false,
   'migrate_remote_server_sync_to_sync': false,
   'as2_message_retention_days': 1,
+  'file_activity_events_enabled': false,
   'username_display': "username_only",
   'session_expiry_minutes': 1,
   'ssl_required': false,
@@ -837,6 +840,7 @@ await Site.update({
 * `legacy_checksums_mode` (boolean): Use legacy checksums mode?
 * `migrate_remote_server_sync_to_sync` (boolean): If true, we will migrate all remote server syncs to the new Sync model.
 * `as2_message_retention_days` (int64): Number of days to retain AS2 messages (incoming and outgoing).
+* `file_activity_events_enabled` (boolean): If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
 * `username_display` (string): How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
 * `session_expiry_minutes` (int64): Session expiry in minutes
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
