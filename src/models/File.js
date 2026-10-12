@@ -72,13 +72,16 @@ class File {
     return new FileUploadPart(partData)
   }
 
-  static _completeUpload = async (firstFileUploadPart, options) => {
+  // An upload ends at the path it was started at, as its parts are requested, in the caller's context. The path an
+  // upload part reports is the API's own, which need not resolve in that context: in a workspace it can be the site
+  // path, _/Workspaces/<id>/..., rather than the workspace path the caller gave.
+  static _completeUpload = async (path, firstFileUploadPart, options) => {
     const params = {
       action: 'end',
       ref: firstFileUploadPart.ref,
     }
 
-    return Api.sendRequest(`/files/${encodeURIComponent(firstFileUploadPart.path)}`, 'POST', params, options)
+    return Api.sendRequest(`/files/${encodeURIComponent(path)}`, 'POST', params, options)
   }
 
   static _underscoreDestinationPath = (root, id, relativePath = '') =>
@@ -173,7 +176,7 @@ class File {
 
             await Promise.all(concurrentUploads)
 
-            const response = await File._completeUpload(firstFileUploadPart, options)
+            const response = await File._completeUpload(destinationPath, firstFileUploadPart, options)
             const createdFile = new File(response.data, options)
 
             resolve(createdFile)
