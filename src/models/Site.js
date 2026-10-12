@@ -388,7 +388,7 @@ class Site {
   // int64 # Number of prior passwords to disallow
   getMaxPriorPasswords = () => this.attributes.max_prior_passwords
 
-  // object # List of site settings managed by the parent site
+  // object # Site settings managed by the parent site. Each key identifies a managed setting, with a null value. Non-secret effective values are returned in their own Site settings fields.
   getManagedSiteSettings = () => this.attributes.managed_site_settings
 
   // string # A message to show users when they connect via FTP or SFTP.
