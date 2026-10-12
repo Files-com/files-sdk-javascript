@@ -38,6 +38,10 @@ const toPascalCase = string =>
     .join('')
 
 export const handleErrorResponse = error => {
+  if (error instanceof FilesError) {
+    throw error
+  }
+
   const { response } = error
   let errorData = response?.data
 
