@@ -370,7 +370,7 @@ import User from 'files.com/lib/models/User';
 import * as FilesErrors from 'files.com/lib/Errors';
 
 try {
-  // Users who haven't logged in since 2024-01-01.
+  // Users who have logged in on or after 2024-01-01.
   const users = await User.list({
     filter_gteq: { last_login_at: "2024-01-01" }
   });
