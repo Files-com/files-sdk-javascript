@@ -154,6 +154,9 @@ class Site {
   // boolean # Calculate SHA256 checksums for files?
   getCalculateFileChecksumsSha256 = () => this.attributes.calculate_file_checksums_sha256
 
+  // boolean # If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
+  getChildSiteFolderAdminsCanSeeParentSiteDirectory = () => this.attributes.child_site_folder_admins_can_see_parent_site_directory
+
   // boolean # Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
   getUploadsViaEmailAuthentication = () => this.attributes.uploads_via_email_authentication
 
@@ -767,6 +770,7 @@ class Site {
   //   group_admins_can_bypass_user_lifecycle_rules - boolean - Allow group admins to exempt users in their groups from lifecycle rules
   //   group_admins_can_reset_passwords - boolean - Allow group admins to reset passwords for users in their groups
   //   group_admins_can_set_user_password - boolean - Allow group admins to set password authentication method
+  //   child_site_folder_admins_can_see_parent_site_directory - boolean - If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
   //   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
   //   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
   //   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.
