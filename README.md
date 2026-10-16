@@ -67,6 +67,16 @@ The Files.com Support team provides official support for all of our official Fil
 
 To initiate a support conversation, you can send an [Authenticated Support Request](https://www.files.com/docs/overview/requesting-support) or simply send an E-Mail to support@files.com.
 
+
+## Table Of Contents
+|                                   |                                                       |
+| --------------------------------- | ----------------------------------------------------- |
+| [Authentication](#authentication) | [Foreign Language Support](#foreign-language-support) |
+| [Configuration](#configuration)   | [Errors](#errors)                                     |
+| [Sort & Filter](#sort-and-filter) | [Pagination](#pagination)                             |
+| [Paths](#paths)                   | [Mock Server](#mock-server)                           |
+
+
 ## Authentication
 
 There are two ways to authenticate: API Key authentication and Session-based authentication.
