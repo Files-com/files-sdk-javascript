@@ -47,4 +47,37 @@ if [[ "${status}" -ne 0 && -f "${out}/server.log" ]]; then
   tail -n 200 "${out}/server.log"
 fi
 
-exit "${status}"
+# A failed contract test ends this script with its status, before the canonical namespace case runs.
+if [[ "${status}" -ne 0 ]]; then
+  exit "${status}"
+fi
+
+# The canonical namespace case, test/scenarios/namespace.cjs, rendered from the shared API scenarios
+# (verification/scenarios/api.json), runs the files.owned-folder-namespace scenario through this SDK against a new
+# server of the same Mock, loaded with its api-scenarios-canonical preset, through the same with-scenario.rb in
+# Bundler's original environment. It checks that the Mock in the directory it is given was generated from this SDK's
+# Swagger document, and keeps its evidence in a directory of its own under test-results/: the launcher's records and
+# the case's own receipt, javascript-namespace-case.json. The case allows itself 180 s, and 30 s more to remove what
+# it created after a failure, so the launcher allows it 210 s.
+mock_server_dir="$(cd "${mock_server}" && pwd)" || exit
+namespace_run_id="javascript-namespace-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+namespace_out="test-results/mock-namespace-${namespace_run_id}"
+ruby -rbundler -e 'Bundler.with_original_env { exec(RbConfig.ruby, *ARGV) }' -- \
+  "${mock_server}/with-scenario.rb" --scenario api-scenarios-canonical --out "${namespace_out}" \
+  --run-id "${namespace_run_id}" --schema-sha256 "${schema_sha256}" --startup-timeout 30 --consumer-timeout 210 \
+  --settle-timeout 5 -- "$(command -v node)" "${PWD}/test/scenarios/namespace.cjs" "${mock_server_dir}"
+namespace_status=$?
+
+echo "The canonical namespace case ended with status ${namespace_status}; its evidence is in ${PWD}/${namespace_out}"
+if [[ -f "${namespace_out}/run.json" ]]; then
+  cat "${namespace_out}/run.json"
+fi
+if [[ -f "${namespace_out}/javascript-namespace-case.json" ]]; then
+  cat "${namespace_out}/javascript-namespace-case.json"
+fi
+if [[ "${namespace_status}" -ne 0 && -f "${namespace_out}/server.log" ]]; then
+  echo "The last 200 lines of the Mock server's log, ${PWD}/${namespace_out}/server.log:"
+  tail -n 200 "${namespace_out}/server.log"
+fi
+
+exit "${namespace_status}"
