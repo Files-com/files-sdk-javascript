@@ -129,7 +129,7 @@
 ## List Syncs
 
 ```
-await Sync.list
+await Sync.list()
 ```
 
 
@@ -179,7 +179,6 @@ await Sync.create({
   'src_path': "example",
   'src_remote_server_id': 1,
   'sync_interval_minutes': 1,
-  'trigger': "example",
   'trigger_file': "example",
   'always_write_trigger_file': true,
   'workspace_id': 1,
@@ -221,7 +220,7 @@ await Sync.create({
 ```
 const sync = await Sync.find(id)
 
-await sync.dry_run()
+await sync.dryRun()
 ```
 
 ### Parameters
@@ -236,7 +235,7 @@ await sync.dry_run()
 ```
 const sync = await Sync.find(id)
 
-await sync.manual_run()
+await sync.manualRun()
 ```
 
 ### Parameters
@@ -272,7 +271,6 @@ await sync.update({
   'src_path': "example",
   'src_remote_server_id': 1,
   'sync_interval_minutes': 1,
-  'trigger': "example",
   'trigger_file': "example",
   'always_write_trigger_file': true,
 })

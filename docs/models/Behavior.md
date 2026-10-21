@@ -47,7 +47,7 @@
 ## List Behaviors
 
 ```
-await Behavior.list
+await Behavior.list()
 ```
 
 

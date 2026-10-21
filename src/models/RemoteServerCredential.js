@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class RemoteServerCredential
  */
@@ -15,14 +52,7 @@ class RemoteServerCredential {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class RemoteServerCredential {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // int64 # Workspace ID (0 for default workspace)
@@ -40,6 +71,7 @@ class RemoteServerCredential {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // string # Internal name for your reference
@@ -47,6 +79,7 @@ class RemoteServerCredential {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // string # Internal description for your reference
@@ -54,6 +87,7 @@ class RemoteServerCredential {
 
   setDescription = value => {
     this.attributes.description = value
+    exposeAttributes(this, ['description'])
   }
 
   // string # Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -61,6 +95,7 @@ class RemoteServerCredential {
 
   setServerType = value => {
     this.attributes.server_type = value
+    exposeAttributes(this, ['server_type'])
   }
 
   // string # AWS Access Key.
@@ -68,6 +103,7 @@ class RemoteServerCredential {
 
   setAwsAccessKey = value => {
     this.attributes.aws_access_key = value
+    exposeAttributes(this, ['aws_access_key'])
   }
 
   // string # AWS IAM Role ARN for AssumeRole authentication.
@@ -75,6 +111,7 @@ class RemoteServerCredential {
 
   setS3AssumeRoleArn = value => {
     this.attributes.s3_assume_role_arn = value
+    exposeAttributes(this, ['s3_assume_role_arn'])
   }
 
   // int64 # Session duration in seconds for AssumeRole authentication (900-43200).
@@ -82,6 +119,7 @@ class RemoteServerCredential {
 
   setS3AssumeRoleDurationSeconds = value => {
     this.attributes.s3_assume_role_duration_seconds = value
+    exposeAttributes(this, ['s3_assume_role_duration_seconds'])
   }
 
   // string # External ID for AssumeRole authentication.
@@ -89,6 +127,7 @@ class RemoteServerCredential {
 
   setS3AssumeRoleExternalId = value => {
     this.attributes.s3_assume_role_external_id = value
+    exposeAttributes(this, ['s3_assume_role_external_id'])
   }
 
   // string # Google Cloud Storage: S3-compatible Access Key.
@@ -96,6 +135,7 @@ class RemoteServerCredential {
 
   setGoogleCloudStorageS3CompatibleAccessKey = value => {
     this.attributes.google_cloud_storage_s3_compatible_access_key = value
+    exposeAttributes(this, ['google_cloud_storage_s3_compatible_access_key'])
   }
 
   // string # Wasabi: Access Key.
@@ -103,6 +143,7 @@ class RemoteServerCredential {
 
   setWasabiAccessKey = value => {
     this.attributes.wasabi_access_key = value
+    exposeAttributes(this, ['wasabi_access_key'])
   }
 
   // string # S3-compatible: Access Key
@@ -110,6 +151,7 @@ class RemoteServerCredential {
 
   setS3CompatibleAccessKey = value => {
     this.attributes.s3_compatible_access_key = value
+    exposeAttributes(this, ['s3_compatible_access_key'])
   }
 
   // string # Filebase: Access Key.
@@ -117,6 +159,7 @@ class RemoteServerCredential {
 
   setFilebaseAccessKey = value => {
     this.attributes.filebase_access_key = value
+    exposeAttributes(this, ['filebase_access_key'])
   }
 
   // string # Cloudflare: Access Key.
@@ -124,6 +167,7 @@ class RemoteServerCredential {
 
   setCloudflareAccessKey = value => {
     this.attributes.cloudflare_access_key = value
+    exposeAttributes(this, ['cloudflare_access_key'])
   }
 
   // string # Linode: Access Key
@@ -131,6 +175,7 @@ class RemoteServerCredential {
 
   setLinodeAccessKey = value => {
     this.attributes.linode_access_key = value
+    exposeAttributes(this, ['linode_access_key'])
   }
 
   // string # SharePoint: Microsoft Entra tenant ID for app-only authentication.
@@ -138,6 +183,7 @@ class RemoteServerCredential {
 
   setSharepointTenantId = value => {
     this.attributes.sharepoint_tenant_id = value
+    exposeAttributes(this, ['sharepoint_tenant_id'])
   }
 
   // string # SharePoint: Microsoft Entra application client ID for app-only authentication.
@@ -145,6 +191,7 @@ class RemoteServerCredential {
 
   setSharepointClientId = value => {
     this.attributes.sharepoint_client_id = value
+    exposeAttributes(this, ['sharepoint_client_id'])
   }
 
   // string # SharePoint: App-only credential type. Either secret or certificate.
@@ -152,6 +199,7 @@ class RemoteServerCredential {
 
   setSharepointAppCredentialType = value => {
     this.attributes.sharepoint_app_credential_type = value
+    exposeAttributes(this, ['sharepoint_app_credential_type'])
   }
 
   // string # Remote server username.
@@ -159,6 +207,7 @@ class RemoteServerCredential {
 
   setUsername = value => {
     this.attributes.username = value
+    exposeAttributes(this, ['username'])
   }
 
   // string # Password, if needed.
@@ -166,6 +215,7 @@ class RemoteServerCredential {
 
   setPassword = value => {
     this.attributes.password = value
+    exposeAttributes(this, ['password'])
   }
 
   // string # Private key, if needed.
@@ -173,6 +223,7 @@ class RemoteServerCredential {
 
   setPrivateKey = value => {
     this.attributes.private_key = value
+    exposeAttributes(this, ['private_key'])
   }
 
   // string # Passphrase for private key if needed.
@@ -180,6 +231,7 @@ class RemoteServerCredential {
 
   setPrivateKeyPassphrase = value => {
     this.attributes.private_key_passphrase = value
+    exposeAttributes(this, ['private_key_passphrase'])
   }
 
   // string # AWS: secret key.
@@ -187,6 +239,7 @@ class RemoteServerCredential {
 
   setAwsSecretKey = value => {
     this.attributes.aws_secret_key = value
+    exposeAttributes(this, ['aws_secret_key'])
   }
 
   // string # Azure Blob Storage: Access Key
@@ -194,6 +247,7 @@ class RemoteServerCredential {
 
   setAzureBlobStorageAccessKey = value => {
     this.attributes.azure_blob_storage_access_key = value
+    exposeAttributes(this, ['azure_blob_storage_access_key'])
   }
 
   // string # Azure Blob Storage: Shared Access Signature (SAS) token
@@ -201,6 +255,7 @@ class RemoteServerCredential {
 
   setAzureBlobStorageSasToken = value => {
     this.attributes.azure_blob_storage_sas_token = value
+    exposeAttributes(this, ['azure_blob_storage_sas_token'])
   }
 
   // string # Azure File Storage: Access Key
@@ -208,6 +263,7 @@ class RemoteServerCredential {
 
   setAzureFilesStorageAccessKey = value => {
     this.attributes.azure_files_storage_access_key = value
+    exposeAttributes(this, ['azure_files_storage_access_key'])
   }
 
   // string # Azure File Storage: Shared Access Signature (SAS) token
@@ -215,6 +271,7 @@ class RemoteServerCredential {
 
   setAzureFilesStorageSasToken = value => {
     this.attributes.azure_files_storage_sas_token = value
+    exposeAttributes(this, ['azure_files_storage_sas_token'])
   }
 
   // string # Backblaze B2 Cloud Storage: applicationKey
@@ -222,6 +279,7 @@ class RemoteServerCredential {
 
   setBackblazeB2ApplicationKey = value => {
     this.attributes.backblaze_b2_application_key = value
+    exposeAttributes(this, ['backblaze_b2_application_key'])
   }
 
   // string # Backblaze B2 Cloud Storage: keyID
@@ -229,6 +287,7 @@ class RemoteServerCredential {
 
   setBackblazeB2KeyId = value => {
     this.attributes.backblaze_b2_key_id = value
+    exposeAttributes(this, ['backblaze_b2_key_id'])
   }
 
   // string # Cloudflare: Secret Key
@@ -236,6 +295,7 @@ class RemoteServerCredential {
 
   setCloudflareSecretKey = value => {
     this.attributes.cloudflare_secret_key = value
+    exposeAttributes(this, ['cloudflare_secret_key'])
   }
 
   // string # Filebase: Secret Key
@@ -243,6 +303,7 @@ class RemoteServerCredential {
 
   setFilebaseSecretKey = value => {
     this.attributes.filebase_secret_key = value
+    exposeAttributes(this, ['filebase_secret_key'])
   }
 
   // string # Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
@@ -250,6 +311,7 @@ class RemoteServerCredential {
 
   setGoogleCloudStorageCredentialsJson = value => {
     this.attributes.google_cloud_storage_credentials_json = value
+    exposeAttributes(this, ['google_cloud_storage_credentials_json'])
   }
 
   // string # Google Cloud Storage: S3-compatible secret key
@@ -257,6 +319,7 @@ class RemoteServerCredential {
 
   setGoogleCloudStorageS3CompatibleSecretKey = value => {
     this.attributes.google_cloud_storage_s3_compatible_secret_key = value
+    exposeAttributes(this, ['google_cloud_storage_s3_compatible_secret_key'])
   }
 
   // string # Linode: Secret Key
@@ -264,6 +327,7 @@ class RemoteServerCredential {
 
   setLinodeSecretKey = value => {
     this.attributes.linode_secret_key = value
+    exposeAttributes(this, ['linode_secret_key'])
   }
 
   // string # S3-compatible: Secret Key
@@ -271,6 +335,7 @@ class RemoteServerCredential {
 
   setS3CompatibleSecretKey = value => {
     this.attributes.s3_compatible_secret_key = value
+    exposeAttributes(this, ['s3_compatible_secret_key'])
   }
 
   // string # SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
@@ -278,6 +343,7 @@ class RemoteServerCredential {
 
   setSharepointClientCertificate = value => {
     this.attributes.sharepoint_client_certificate = value
+    exposeAttributes(this, ['sharepoint_client_certificate'])
   }
 
   // string # SharePoint: Microsoft Entra application client secret for app-only authentication.
@@ -285,6 +351,7 @@ class RemoteServerCredential {
 
   setSharepointClientSecret = value => {
     this.attributes.sharepoint_client_secret = value
+    exposeAttributes(this, ['sharepoint_client_secret'])
   }
 
   // string # Wasabi: Secret Key
@@ -292,6 +359,7 @@ class RemoteServerCredential {
 
   setWasabiSecretKey = value => {
     this.attributes.wasabi_secret_key = value
+    exposeAttributes(this, ['wasabi_secret_key'])
   }
 
   // int64 # ID of Remote Server Credential to copy omitted values from.
@@ -299,6 +367,7 @@ class RemoteServerCredential {
 
   setCopyValuesFromCredentialId = value => {
     this.attributes.copy_values_from_credential_id = value
+    exposeAttributes(this, ['copy_values_from_credential_id'])
   }
 
   // Parameters:
@@ -345,144 +414,146 @@ class RemoteServerCredential {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.description && !isString(params.description)) {
+    if (params.description !== undefined && params.description !== null && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
-    if (params.server_type && !isString(params.server_type)) {
+    if (params.server_type !== undefined && params.server_type !== null && !isString(params.server_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(params.server_type)}`)
     }
 
-    if (params.aws_access_key && !isString(params.aws_access_key)) {
+    if (params.aws_access_key !== undefined && params.aws_access_key !== null && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
     }
 
-    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+    if (params.s3_assume_role_arn !== undefined && params.s3_assume_role_arn !== null && !isString(params.s3_assume_role_arn)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
     }
 
-    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+    if (params.s3_assume_role_duration_seconds !== undefined && params.s3_assume_role_duration_seconds !== null && !isInt(params.s3_assume_role_duration_seconds)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
-    if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
+    if (params.cloudflare_access_key !== undefined && params.cloudflare_access_key !== null && !isString(params.cloudflare_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_access_key must be of type String, received ${getType(params.cloudflare_access_key)}`)
     }
 
-    if (params.filebase_access_key && !isString(params.filebase_access_key)) {
+    if (params.filebase_access_key !== undefined && params.filebase_access_key !== null && !isString(params.filebase_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_access_key must be of type String, received ${getType(params.filebase_access_key)}`)
     }
 
-    if (params.google_cloud_storage_s3_compatible_access_key && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
+    if (params.google_cloud_storage_s3_compatible_access_key !== undefined && params.google_cloud_storage_s3_compatible_access_key !== null && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type String, received ${getType(params.google_cloud_storage_s3_compatible_access_key)}`)
     }
 
-    if (params.linode_access_key && !isString(params.linode_access_key)) {
+    if (params.linode_access_key !== undefined && params.linode_access_key !== null && !isString(params.linode_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_access_key must be of type String, received ${getType(params.linode_access_key)}`)
     }
 
-    if (params.s3_compatible_access_key && !isString(params.s3_compatible_access_key)) {
+    if (params.s3_compatible_access_key !== undefined && params.s3_compatible_access_key !== null && !isString(params.s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(params.s3_compatible_access_key)}`)
     }
 
-    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+    if (params.sharepoint_client_id !== undefined && params.sharepoint_client_id !== null && !isString(params.sharepoint_client_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
     }
 
-    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+    if (params.sharepoint_tenant_id !== undefined && params.sharepoint_tenant_id !== null && !isString(params.sharepoint_tenant_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
-    if (params.username && !isString(params.username)) {
+    if (params.username !== undefined && params.username !== null && !isString(params.username)) {
       throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    if (params.wasabi_access_key && !isString(params.wasabi_access_key)) {
+    if (params.wasabi_access_key !== undefined && params.wasabi_access_key !== null && !isString(params.wasabi_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_access_key must be of type String, received ${getType(params.wasabi_access_key)}`)
     }
 
-    if (params.password && !isString(params.password)) {
+    if (params.password !== undefined && params.password !== null && !isString(params.password)) {
       throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
     }
 
-    if (params.private_key && !isString(params.private_key)) {
+    if (params.private_key !== undefined && params.private_key !== null && !isString(params.private_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    if (params.private_key_passphrase && !isString(params.private_key_passphrase)) {
+    if (params.private_key_passphrase !== undefined && params.private_key_passphrase !== null && !isString(params.private_key_passphrase)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(params.private_key_passphrase)}`)
     }
 
-    if (params.aws_secret_key && !isString(params.aws_secret_key)) {
+    if (params.aws_secret_key !== undefined && params.aws_secret_key !== null && !isString(params.aws_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_secret_key must be of type String, received ${getType(params.aws_secret_key)}`)
     }
 
-    if (params.azure_blob_storage_access_key && !isString(params.azure_blob_storage_access_key)) {
+    if (params.azure_blob_storage_access_key !== undefined && params.azure_blob_storage_access_key !== null && !isString(params.azure_blob_storage_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(params.azure_blob_storage_access_key)}`)
     }
 
-    if (params.azure_blob_storage_sas_token && !isString(params.azure_blob_storage_sas_token)) {
+    if (params.azure_blob_storage_sas_token !== undefined && params.azure_blob_storage_sas_token !== null && !isString(params.azure_blob_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(params.azure_blob_storage_sas_token)}`)
     }
 
-    if (params.azure_files_storage_access_key && !isString(params.azure_files_storage_access_key)) {
+    if (params.azure_files_storage_access_key !== undefined && params.azure_files_storage_access_key !== null && !isString(params.azure_files_storage_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(params.azure_files_storage_access_key)}`)
     }
 
-    if (params.azure_files_storage_sas_token && !isString(params.azure_files_storage_sas_token)) {
+    if (params.azure_files_storage_sas_token !== undefined && params.azure_files_storage_sas_token !== null && !isString(params.azure_files_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(params.azure_files_storage_sas_token)}`)
     }
 
-    if (params.backblaze_b2_application_key && !isString(params.backblaze_b2_application_key)) {
+    if (params.backblaze_b2_application_key !== undefined && params.backblaze_b2_application_key !== null && !isString(params.backblaze_b2_application_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(params.backblaze_b2_application_key)}`)
     }
 
-    if (params.backblaze_b2_key_id && !isString(params.backblaze_b2_key_id)) {
+    if (params.backblaze_b2_key_id !== undefined && params.backblaze_b2_key_id !== null && !isString(params.backblaze_b2_key_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(params.backblaze_b2_key_id)}`)
     }
 
-    if (params.cloudflare_secret_key && !isString(params.cloudflare_secret_key)) {
+    if (params.cloudflare_secret_key !== undefined && params.cloudflare_secret_key !== null && !isString(params.cloudflare_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_secret_key must be of type String, received ${getType(params.cloudflare_secret_key)}`)
     }
 
-    if (params.filebase_secret_key && !isString(params.filebase_secret_key)) {
+    if (params.filebase_secret_key !== undefined && params.filebase_secret_key !== null && !isString(params.filebase_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_secret_key must be of type String, received ${getType(params.filebase_secret_key)}`)
     }
 
-    if (params.google_cloud_storage_credentials_json && !isString(params.google_cloud_storage_credentials_json)) {
+    if (params.google_cloud_storage_credentials_json !== undefined && params.google_cloud_storage_credentials_json !== null && !isString(params.google_cloud_storage_credentials_json)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(params.google_cloud_storage_credentials_json)}`)
     }
 
-    if (params.google_cloud_storage_s3_compatible_secret_key && !isString(params.google_cloud_storage_s3_compatible_secret_key)) {
+    if (params.google_cloud_storage_s3_compatible_secret_key !== undefined && params.google_cloud_storage_s3_compatible_secret_key !== null && !isString(params.google_cloud_storage_s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type String, received ${getType(params.google_cloud_storage_s3_compatible_secret_key)}`)
     }
 
-    if (params.linode_secret_key && !isString(params.linode_secret_key)) {
+    if (params.linode_secret_key !== undefined && params.linode_secret_key !== null && !isString(params.linode_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(params.linode_secret_key)}`)
     }
 
-    if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
+    if (params.s3_compatible_secret_key !== undefined && params.s3_compatible_secret_key !== null && !isString(params.s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(params.s3_compatible_secret_key)}`)
     }
 
-    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+    if (params.sharepoint_client_certificate !== undefined && params.sharepoint_client_certificate !== null && !isString(params.sharepoint_client_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
     }
 
-    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+    if (params.sharepoint_client_secret !== undefined && params.sharepoint_client_secret !== null && !isString(params.sharepoint_client_secret)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
-    if (params.wasabi_secret_key && !isString(params.wasabi_secret_key)) {
+    if (params.wasabi_secret_key !== undefined && params.wasabi_secret_key !== null && !isString(params.wasabi_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(params.wasabi_secret_key)}`)
     }
 
@@ -496,7 +567,8 @@ class RemoteServerCredential {
 
     const response = await Api.sendRequest(`/remote_server_credentials/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new RemoteServerCredential(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -508,8 +580,10 @@ class RemoteServerCredential {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -529,13 +603,12 @@ class RemoteServerCredential {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await RemoteServerCredential.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -546,21 +619,27 @@ class RemoteServerCredential {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id` and `name`. Valid field combinations are `[ workspace_id, name ]`.
   //   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/remote_server_credentials', 'GET', params, options)
 
-    return response?.data?.map(obj => new RemoteServerCredential(obj, options)) || []
+    return response?.data?.map(obj => new RemoteServerCredential(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     RemoteServerCredential.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      RemoteServerCredential.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Remote Server Credential ID.
@@ -569,19 +648,21 @@ class RemoteServerCredential {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/remote_server_credentials/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new RemoteServerCredential(response?.data, options)
+    return new RemoteServerCredential(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -625,153 +706,153 @@ class RemoteServerCredential {
   //   workspace_id - int64 - Workspace ID (0 for default workspace)
   //   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
   static create = async (params = {}, options = {}) => {
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.description && !isString(params.description)) {
+    if (params.description !== undefined && params.description !== null && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
-    if (params.server_type && !isString(params.server_type)) {
+    if (params.server_type !== undefined && params.server_type !== null && !isString(params.server_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: server_type must be of type String, received ${getType(params.server_type)}`)
     }
 
-    if (params.aws_access_key && !isString(params.aws_access_key)) {
+    if (params.aws_access_key !== undefined && params.aws_access_key !== null && !isString(params.aws_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_access_key must be of type String, received ${getType(params.aws_access_key)}`)
     }
 
-    if (params.s3_assume_role_arn && !isString(params.s3_assume_role_arn)) {
+    if (params.s3_assume_role_arn !== undefined && params.s3_assume_role_arn !== null && !isString(params.s3_assume_role_arn)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_arn must be of type String, received ${getType(params.s3_assume_role_arn)}`)
     }
 
-    if (params.s3_assume_role_duration_seconds && !isInt(params.s3_assume_role_duration_seconds)) {
+    if (params.s3_assume_role_duration_seconds !== undefined && params.s3_assume_role_duration_seconds !== null && !isInt(params.s3_assume_role_duration_seconds)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_assume_role_duration_seconds must be of type Int, received ${getType(params.s3_assume_role_duration_seconds)}`)
     }
 
-    if (params.cloudflare_access_key && !isString(params.cloudflare_access_key)) {
+    if (params.cloudflare_access_key !== undefined && params.cloudflare_access_key !== null && !isString(params.cloudflare_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_access_key must be of type String, received ${getType(params.cloudflare_access_key)}`)
     }
 
-    if (params.filebase_access_key && !isString(params.filebase_access_key)) {
+    if (params.filebase_access_key !== undefined && params.filebase_access_key !== null && !isString(params.filebase_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_access_key must be of type String, received ${getType(params.filebase_access_key)}`)
     }
 
-    if (params.google_cloud_storage_s3_compatible_access_key && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
+    if (params.google_cloud_storage_s3_compatible_access_key !== undefined && params.google_cloud_storage_s3_compatible_access_key !== null && !isString(params.google_cloud_storage_s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type String, received ${getType(params.google_cloud_storage_s3_compatible_access_key)}`)
     }
 
-    if (params.linode_access_key && !isString(params.linode_access_key)) {
+    if (params.linode_access_key !== undefined && params.linode_access_key !== null && !isString(params.linode_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_access_key must be of type String, received ${getType(params.linode_access_key)}`)
     }
 
-    if (params.s3_compatible_access_key && !isString(params.s3_compatible_access_key)) {
+    if (params.s3_compatible_access_key !== undefined && params.s3_compatible_access_key !== null && !isString(params.s3_compatible_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_access_key must be of type String, received ${getType(params.s3_compatible_access_key)}`)
     }
 
-    if (params.sharepoint_client_id && !isString(params.sharepoint_client_id)) {
+    if (params.sharepoint_client_id !== undefined && params.sharepoint_client_id !== null && !isString(params.sharepoint_client_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_id must be of type String, received ${getType(params.sharepoint_client_id)}`)
     }
 
-    if (params.sharepoint_tenant_id && !isString(params.sharepoint_tenant_id)) {
+    if (params.sharepoint_tenant_id !== undefined && params.sharepoint_tenant_id !== null && !isString(params.sharepoint_tenant_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_tenant_id must be of type String, received ${getType(params.sharepoint_tenant_id)}`)
     }
 
-    if (params.username && !isString(params.username)) {
+    if (params.username !== undefined && params.username !== null && !isString(params.username)) {
       throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    if (params.wasabi_access_key && !isString(params.wasabi_access_key)) {
+    if (params.wasabi_access_key !== undefined && params.wasabi_access_key !== null && !isString(params.wasabi_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_access_key must be of type String, received ${getType(params.wasabi_access_key)}`)
     }
 
-    if (params.password && !isString(params.password)) {
+    if (params.password !== undefined && params.password !== null && !isString(params.password)) {
       throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
     }
 
-    if (params.private_key && !isString(params.private_key)) {
+    if (params.private_key !== undefined && params.private_key !== null && !isString(params.private_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    if (params.private_key_passphrase && !isString(params.private_key_passphrase)) {
+    if (params.private_key_passphrase !== undefined && params.private_key_passphrase !== null && !isString(params.private_key_passphrase)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_passphrase must be of type String, received ${getType(params.private_key_passphrase)}`)
     }
 
-    if (params.aws_secret_key && !isString(params.aws_secret_key)) {
+    if (params.aws_secret_key !== undefined && params.aws_secret_key !== null && !isString(params.aws_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: aws_secret_key must be of type String, received ${getType(params.aws_secret_key)}`)
     }
 
-    if (params.azure_blob_storage_access_key && !isString(params.azure_blob_storage_access_key)) {
+    if (params.azure_blob_storage_access_key !== undefined && params.azure_blob_storage_access_key !== null && !isString(params.azure_blob_storage_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_access_key must be of type String, received ${getType(params.azure_blob_storage_access_key)}`)
     }
 
-    if (params.azure_blob_storage_sas_token && !isString(params.azure_blob_storage_sas_token)) {
+    if (params.azure_blob_storage_sas_token !== undefined && params.azure_blob_storage_sas_token !== null && !isString(params.azure_blob_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_blob_storage_sas_token must be of type String, received ${getType(params.azure_blob_storage_sas_token)}`)
     }
 
-    if (params.azure_files_storage_access_key && !isString(params.azure_files_storage_access_key)) {
+    if (params.azure_files_storage_access_key !== undefined && params.azure_files_storage_access_key !== null && !isString(params.azure_files_storage_access_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_access_key must be of type String, received ${getType(params.azure_files_storage_access_key)}`)
     }
 
-    if (params.azure_files_storage_sas_token && !isString(params.azure_files_storage_sas_token)) {
+    if (params.azure_files_storage_sas_token !== undefined && params.azure_files_storage_sas_token !== null && !isString(params.azure_files_storage_sas_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: azure_files_storage_sas_token must be of type String, received ${getType(params.azure_files_storage_sas_token)}`)
     }
 
-    if (params.backblaze_b2_application_key && !isString(params.backblaze_b2_application_key)) {
+    if (params.backblaze_b2_application_key !== undefined && params.backblaze_b2_application_key !== null && !isString(params.backblaze_b2_application_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_application_key must be of type String, received ${getType(params.backblaze_b2_application_key)}`)
     }
 
-    if (params.backblaze_b2_key_id && !isString(params.backblaze_b2_key_id)) {
+    if (params.backblaze_b2_key_id !== undefined && params.backblaze_b2_key_id !== null && !isString(params.backblaze_b2_key_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: backblaze_b2_key_id must be of type String, received ${getType(params.backblaze_b2_key_id)}`)
     }
 
-    if (params.cloudflare_secret_key && !isString(params.cloudflare_secret_key)) {
+    if (params.cloudflare_secret_key !== undefined && params.cloudflare_secret_key !== null && !isString(params.cloudflare_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: cloudflare_secret_key must be of type String, received ${getType(params.cloudflare_secret_key)}`)
     }
 
-    if (params.filebase_secret_key && !isString(params.filebase_secret_key)) {
+    if (params.filebase_secret_key !== undefined && params.filebase_secret_key !== null && !isString(params.filebase_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: filebase_secret_key must be of type String, received ${getType(params.filebase_secret_key)}`)
     }
 
-    if (params.google_cloud_storage_credentials_json && !isString(params.google_cloud_storage_credentials_json)) {
+    if (params.google_cloud_storage_credentials_json !== undefined && params.google_cloud_storage_credentials_json !== null && !isString(params.google_cloud_storage_credentials_json)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_credentials_json must be of type String, received ${getType(params.google_cloud_storage_credentials_json)}`)
     }
 
-    if (params.google_cloud_storage_s3_compatible_secret_key && !isString(params.google_cloud_storage_s3_compatible_secret_key)) {
+    if (params.google_cloud_storage_s3_compatible_secret_key !== undefined && params.google_cloud_storage_s3_compatible_secret_key !== null && !isString(params.google_cloud_storage_s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type String, received ${getType(params.google_cloud_storage_s3_compatible_secret_key)}`)
     }
 
-    if (params.linode_secret_key && !isString(params.linode_secret_key)) {
+    if (params.linode_secret_key !== undefined && params.linode_secret_key !== null && !isString(params.linode_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: linode_secret_key must be of type String, received ${getType(params.linode_secret_key)}`)
     }
 
-    if (params.s3_compatible_secret_key && !isString(params.s3_compatible_secret_key)) {
+    if (params.s3_compatible_secret_key !== undefined && params.s3_compatible_secret_key !== null && !isString(params.s3_compatible_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_secret_key must be of type String, received ${getType(params.s3_compatible_secret_key)}`)
     }
 
-    if (params.sharepoint_client_certificate && !isString(params.sharepoint_client_certificate)) {
+    if (params.sharepoint_client_certificate !== undefined && params.sharepoint_client_certificate !== null && !isString(params.sharepoint_client_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_certificate must be of type String, received ${getType(params.sharepoint_client_certificate)}`)
     }
 
-    if (params.sharepoint_client_secret && !isString(params.sharepoint_client_secret)) {
+    if (params.sharepoint_client_secret !== undefined && params.sharepoint_client_secret !== null && !isString(params.sharepoint_client_secret)) {
       throw new errors.InvalidParameterError(`Bad parameter: sharepoint_client_secret must be of type String, received ${getType(params.sharepoint_client_secret)}`)
     }
 
-    if (params.wasabi_secret_key && !isString(params.wasabi_secret_key)) {
+    if (params.wasabi_secret_key !== undefined && params.wasabi_secret_key !== null && !isString(params.wasabi_secret_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: wasabi_secret_key must be of type String, received ${getType(params.wasabi_secret_key)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
-    if (params.copy_values_from_credential_id && !isInt(params.copy_values_from_credential_id)) {
+    if (params.copy_values_from_credential_id !== undefined && params.copy_values_from_credential_id !== null && !isInt(params.copy_values_from_credential_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: copy_values_from_credential_id must be of type Int, received ${getType(params.copy_values_from_credential_id)}`)
     }
 
     const response = await Api.sendRequest('/remote_server_credentials', 'POST', params, options)
 
-    return new RemoteServerCredential(response?.data, options)
+    return new RemoteServerCredential(response?.data, retainedOptions(options))
   }
 }
 

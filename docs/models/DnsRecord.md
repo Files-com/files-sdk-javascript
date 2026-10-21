@@ -21,7 +21,7 @@
 ## Show Site DNS Configuration
 
 ```
-await DnsRecord.list
+await DnsRecord.list()
 ```
 
 

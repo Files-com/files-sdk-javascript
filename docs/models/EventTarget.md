@@ -33,7 +33,7 @@
 ## List Event Targets
 
 ```
-await EventTarget.list
+await EventTarget.list()
 ```
 
 
@@ -67,9 +67,8 @@ await EventTarget.create({
   'workspace_id': 1,
   'apply_to_all_workspaces': true,
   'enabled': true,
-  'config': "example",
-  'delivery_policy': "example",
-  'target_type': "example",
+  'config': {"path":"events","format":"json"},
+  'target_type': "folder",
 })
 ```
 
@@ -96,8 +95,6 @@ await event_target.update({
   'workspace_id': 1,
   'apply_to_all_workspaces': true,
   'enabled': true,
-  'config': "example",
-  'delivery_policy': "example",
 })
 ```
 

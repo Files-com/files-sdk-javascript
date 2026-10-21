@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class BundleNotification
  */
@@ -15,14 +52,7 @@ class BundleNotification {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class BundleNotification {
 
   setBundleId = value => {
     this.attributes.bundle_id = value
+    exposeAttributes(this, ['bundle_id'])
   }
 
   // int64 # Bundle Notification ID
@@ -40,6 +71,7 @@ class BundleNotification {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // boolean # Triggers bundle notification when a registration action occurs for it.
@@ -47,6 +79,7 @@ class BundleNotification {
 
   setNotifyOnRegistration = value => {
     this.attributes.notify_on_registration = value
+    exposeAttributes(this, ['notify_on_registration'])
   }
 
   // boolean # Triggers bundle notification when a upload action occurs for it.
@@ -54,6 +87,7 @@ class BundleNotification {
 
   setNotifyOnUpload = value => {
     this.attributes.notify_on_upload = value
+    exposeAttributes(this, ['notify_on_upload'])
   }
 
   // boolean # Is the current user the user to notify?
@@ -61,6 +95,7 @@ class BundleNotification {
 
   setNotifyCurrentUser = value => {
     this.attributes.notify_current_user = value
+    exposeAttributes(this, ['notify_current_user'])
   }
 
   // int64 # The id of the user to notify.
@@ -68,6 +103,7 @@ class BundleNotification {
 
   setNotifyUserId = value => {
     this.attributes.notify_user_id = value
+    exposeAttributes(this, ['notify_user_id'])
   }
 
   // int64 # Workspace ID. `0` means the default workspace.
@@ -75,6 +111,7 @@ class BundleNotification {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
@@ -82,6 +119,7 @@ class BundleNotification {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // Parameters:
@@ -96,9 +134,19 @@ class BundleNotification {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (isArray(params.notify_on_registration) || isObject(params.notify_on_registration)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_registration must be of type Boolean, received ${getType(params.notify_on_registration)}`)
+    }
+
+    if (isArray(params.notify_on_upload) || isObject(params.notify_on_upload)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_upload must be of type Boolean, received ${getType(params.notify_on_upload)}`)
     }
 
     if (!params.id) {
@@ -111,7 +159,8 @@ class BundleNotification {
 
     const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new BundleNotification(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -123,8 +172,10 @@ class BundleNotification {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -144,13 +195,12 @@ class BundleNotification {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await BundleNotification.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -162,29 +212,35 @@ class BundleNotification {
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
   //   bundle_id - int64 - Bundle ID
   static list = async (params = {}, options = {}) => {
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.bundle_id && !isInt(params.bundle_id)) {
+    if (params.bundle_id !== undefined && params.bundle_id !== null && !isInt(params.bundle_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
     const response = await Api.sendRequest('/bundle_notifications', 'GET', params, options)
 
-    return response?.data?.map(obj => new BundleNotification(obj, options)) || []
+    return response?.data?.map(obj => new BundleNotification(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     BundleNotification.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      BundleNotification.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Bundle Notification ID.
@@ -193,19 +249,21 @@ class BundleNotification {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/bundle_notifications/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new BundleNotification(response?.data, options)
+    return new BundleNotification(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -222,21 +280,29 @@ class BundleNotification {
       throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.bundle_id && !isInt(params.bundle_id)) {
+    if (params.bundle_id !== undefined && params.bundle_id !== null && !isInt(params.bundle_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
-    if (params.notify_user_id && !isInt(params.notify_user_id)) {
+    if (params.notify_user_id !== undefined && params.notify_user_id !== null && !isInt(params.notify_user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: notify_user_id must be of type Int, received ${getType(params.notify_user_id)}`)
+    }
+
+    if (isArray(params.notify_on_registration) || isObject(params.notify_on_registration)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_registration must be of type Boolean, received ${getType(params.notify_on_registration)}`)
+    }
+
+    if (isArray(params.notify_on_upload) || isObject(params.notify_on_upload)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_upload must be of type Boolean, received ${getType(params.notify_on_upload)}`)
     }
 
     const response = await Api.sendRequest('/bundle_notifications', 'POST', params, options)
 
-    return new BundleNotification(response?.data, options)
+    return new BundleNotification(response?.data, retainedOptions(options))
   }
 }
 

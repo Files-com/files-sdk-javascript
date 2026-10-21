@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class User
  */
@@ -15,14 +52,7 @@ class User {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class User {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # User's username
@@ -40,6 +71,7 @@ class User {
 
   setUsername = value => {
     this.attributes.username = value
+    exposeAttributes(this, ['username'])
   }
 
   // array(int64) # List of group IDs of which this user is an administrator
@@ -47,6 +79,7 @@ class User {
 
   setAdminGroupIds = value => {
     this.attributes.admin_group_ids = value
+    exposeAttributes(this, ['admin_group_ids'])
   }
 
   // string # A list of allowed IPs if applicable.  Newline delimited
@@ -54,6 +87,7 @@ class User {
 
   setAllowedIps = value => {
     this.attributes.allowed_ips = value
+    exposeAttributes(this, ['allowed_ips'])
   }
 
   // boolean # If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
@@ -61,6 +95,7 @@ class User {
 
   setAttachmentsPermission = value => {
     this.attributes.attachments_permission = value
+    exposeAttributes(this, ['attachments_permission'])
   }
 
   // int64 # Number of API keys associated with this user
@@ -68,6 +103,7 @@ class User {
 
   setApiKeysCount = value => {
     this.attributes.api_keys_count = value
+    exposeAttributes(this, ['api_keys_count'])
   }
 
   // date-time # Scheduled Date/Time at which user will be deactivated
@@ -75,6 +111,7 @@ class User {
 
   setAuthenticateUntil = value => {
     this.attributes.authenticate_until = value
+    exposeAttributes(this, ['authenticate_until'])
   }
 
   // string # How is this user authenticated?
@@ -82,6 +119,7 @@ class User {
 
   setAuthenticationMethod = value => {
     this.attributes.authentication_method = value
+    exposeAttributes(this, ['authentication_method'])
   }
 
   // string # URL holding the user's avatar
@@ -89,6 +127,7 @@ class User {
 
   setAvatarUrl = value => {
     this.attributes.avatar_url = value
+    exposeAttributes(this, ['avatar_url'])
   }
 
   // boolean # Is this a billable user record?
@@ -96,6 +135,7 @@ class User {
 
   setBillable = value => {
     this.attributes.billable = value
+    exposeAttributes(this, ['billable'])
   }
 
   // boolean # Allow this user to perform operations on the account, payments, and invoices?
@@ -103,6 +143,7 @@ class User {
 
   setBillingPermission = value => {
     this.attributes.billing_permission = value
+    exposeAttributes(this, ['billing_permission'])
   }
 
   // boolean # Allow this user to skip site-wide IP blacklists?
@@ -110,6 +151,7 @@ class User {
 
   setBypassSiteAllowedIps = value => {
     this.attributes.bypass_site_allowed_ips = value
+    exposeAttributes(this, ['bypass_site_allowed_ips'])
   }
 
   // boolean # Exempt this user from user lifecycle rules?
@@ -117,6 +159,7 @@ class User {
 
   setBypassUserLifecycleRules = value => {
     this.attributes.bypass_user_lifecycle_rules = value
+    exposeAttributes(this, ['bypass_user_lifecycle_rules'])
   }
 
   // date-time # When this user was created
@@ -127,6 +170,7 @@ class User {
 
   setDavPermission = value => {
     this.attributes.dav_permission = value
+    exposeAttributes(this, ['dav_permission'])
   }
 
   // boolean # Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -134,6 +178,7 @@ class User {
 
   setDisabled = value => {
     this.attributes.disabled = value
+    exposeAttributes(this, ['disabled'])
   }
 
   // boolean # Computed property that returns true if user disabled or expired or inactive.
@@ -141,6 +186,7 @@ class User {
 
   setDisabledExpiredOrInactive = value => {
     this.attributes.disabled_expired_or_inactive = value
+    exposeAttributes(this, ['disabled_expired_or_inactive'])
   }
 
   // int64 # AI Assistant Personality ID assigned directly to this user, if any.
@@ -148,6 +194,7 @@ class User {
 
   setAiAssistantPersonalityId = value => {
     this.attributes.ai_assistant_personality_id = value
+    exposeAttributes(this, ['ai_assistant_personality_id'])
   }
 
   // int64 # Desktop Configuration Profile ID assigned directly to this user, if any.
@@ -155,6 +202,7 @@ class User {
 
   setDesktopConfigurationProfileId = value => {
     this.attributes.desktop_configuration_profile_id = value
+    exposeAttributes(this, ['desktop_configuration_profile_id'])
   }
 
   // int64 # Integration Centric Profile ID assigned directly to this user, if any.
@@ -162,6 +210,7 @@ class User {
 
   setIntegrationCentricProfileId = value => {
     this.attributes.integration_centric_profile_id = value
+    exposeAttributes(this, ['integration_centric_profile_id'])
   }
 
   // email # User email address
@@ -169,6 +218,7 @@ class User {
 
   setEmail = value => {
     this.attributes.email = value
+    exposeAttributes(this, ['email'])
   }
 
   // string # File system layout
@@ -176,6 +226,7 @@ class User {
 
   setFilesystemLayout = value => {
     this.attributes.filesystem_layout = value
+    exposeAttributes(this, ['filesystem_layout'])
   }
 
   // date-time # User's first login time
@@ -183,6 +234,7 @@ class User {
 
   setFirstLoginAt = value => {
     this.attributes.first_login_at = value
+    exposeAttributes(this, ['first_login_at'])
   }
 
   // boolean # Can the user access with FTP/FTPS?
@@ -190,6 +242,7 @@ class User {
 
   setFtpPermission = value => {
     this.attributes.ftp_permission = value
+    exposeAttributes(this, ['ftp_permission'])
   }
 
   // string # Comma-separated list of group IDs of which this user is a member
@@ -197,6 +250,7 @@ class User {
 
   setGroupIds = value => {
     this.attributes.group_ids = value
+    exposeAttributes(this, ['group_ids'])
   }
 
   // string # Text to display to the user in the header of the UI
@@ -204,6 +258,7 @@ class User {
 
   setHeaderText = value => {
     this.attributes.header_text = value
+    exposeAttributes(this, ['header_text'])
   }
 
   // string # Preferred language
@@ -211,6 +266,7 @@ class User {
 
   setLanguage = value => {
     this.attributes.language = value
+    exposeAttributes(this, ['language'])
   }
 
   // date-time # User's most recent login time via any protocol
@@ -218,6 +274,7 @@ class User {
 
   setLastLoginAt = value => {
     this.attributes.last_login_at = value
+    exposeAttributes(this, ['last_login_at'])
   }
 
   // date-time # User's most recent login time via web
@@ -225,6 +282,7 @@ class User {
 
   setLastWebLoginAt = value => {
     this.attributes.last_web_login_at = value
+    exposeAttributes(this, ['last_web_login_at'])
   }
 
   // date-time # User's most recent login time via FTP
@@ -232,6 +290,7 @@ class User {
 
   setLastFtpLoginAt = value => {
     this.attributes.last_ftp_login_at = value
+    exposeAttributes(this, ['last_ftp_login_at'])
   }
 
   // date-time # User's most recent login time via SFTP
@@ -239,6 +298,7 @@ class User {
 
   setLastSftpLoginAt = value => {
     this.attributes.last_sftp_login_at = value
+    exposeAttributes(this, ['last_sftp_login_at'])
   }
 
   // date-time # User's most recent login time via WebDAV
@@ -246,6 +306,7 @@ class User {
 
   setLastDavLoginAt = value => {
     this.attributes.last_dav_login_at = value
+    exposeAttributes(this, ['last_dav_login_at'])
   }
 
   // date-time # User's most recent login time via Desktop app
@@ -253,6 +314,7 @@ class User {
 
   setLastDesktopLoginAt = value => {
     this.attributes.last_desktop_login_at = value
+    exposeAttributes(this, ['last_desktop_login_at'])
   }
 
   // date-time # User's most recent login time via Rest API
@@ -260,6 +322,7 @@ class User {
 
   setLastRestapiLoginAt = value => {
     this.attributes.last_restapi_login_at = value
+    exposeAttributes(this, ['last_restapi_login_at'])
   }
 
   // date-time # User's most recent API use time
@@ -267,6 +330,7 @@ class User {
 
   setLastApiUseAt = value => {
     this.attributes.last_api_use_at = value
+    exposeAttributes(this, ['last_api_use_at'])
   }
 
   // date-time # User's most recent activity time, which is the latest of most recent login, most recent API use, enablement, or creation
@@ -274,6 +338,7 @@ class User {
 
   setLastActiveAt = value => {
     this.attributes.last_active_at = value
+    exposeAttributes(this, ['last_active_at'])
   }
 
   // string # The most recent protocol and cipher used
@@ -281,6 +346,7 @@ class User {
 
   setLastProtocolCipher = value => {
     this.attributes.last_protocol_cipher = value
+    exposeAttributes(this, ['last_protocol_cipher'])
   }
 
   // date-time # Time in the future that the user will no longer be locked out if applicable
@@ -288,6 +354,7 @@ class User {
 
   setLockoutExpires = value => {
     this.attributes.lockout_expires = value
+    exposeAttributes(this, ['lockout_expires'])
   }
 
   // string # User's full name
@@ -295,6 +362,7 @@ class User {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // string # User's company
@@ -302,6 +370,7 @@ class User {
 
   setCompany = value => {
     this.attributes.company = value
+    exposeAttributes(this, ['company'])
   }
 
   // string # Any internal notes on the user
@@ -309,6 +378,7 @@ class User {
 
   setNotes = value => {
     this.attributes.notes = value
+    exposeAttributes(this, ['notes'])
   }
 
   // int64 # Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
@@ -316,6 +386,7 @@ class User {
 
   setNotificationDailySendTime = value => {
     this.attributes.notification_daily_send_time = value
+    exposeAttributes(this, ['notification_daily_send_time'])
   }
 
   // boolean # Enable integration with Office for the web?
@@ -323,6 +394,7 @@ class User {
 
   setOfficeIntegrationEnabled = value => {
     this.attributes.office_integration_enabled = value
+    exposeAttributes(this, ['office_integration_enabled'])
   }
 
   // boolean # Is this user a Partner administrator?
@@ -330,6 +402,7 @@ class User {
 
   setPartnerAdmin = value => {
     this.attributes.partner_admin = value
+    exposeAttributes(this, ['partner_admin'])
   }
 
   // int64 # Partner ID if this user belongs to a Partner
@@ -337,6 +410,7 @@ class User {
 
   setPartnerId = value => {
     this.attributes.partner_id = value
+    exposeAttributes(this, ['partner_id'])
   }
 
   // string # Name of the Partner if this user belongs to a Partner
@@ -344,6 +418,7 @@ class User {
 
   setPartnerName = value => {
     this.attributes.partner_name = value
+    exposeAttributes(this, ['partner_name'])
   }
 
   // date-time # Last time the user's password was set
@@ -351,6 +426,7 @@ class User {
 
   setPasswordSetAt = value => {
     this.attributes.password_set_at = value
+    exposeAttributes(this, ['password_set_at'])
   }
 
   // int64 # Number of days to allow user to use the same password
@@ -358,6 +434,7 @@ class User {
 
   setPasswordValidityDays = value => {
     this.attributes.password_validity_days = value
+    exposeAttributes(this, ['password_validity_days'])
   }
 
   // int64 # Primary group ID for Group Admin scoping
@@ -365,6 +442,7 @@ class User {
 
   setPrimaryGroupId = value => {
     this.attributes.primary_group_id = value
+    exposeAttributes(this, ['primary_group_id'])
   }
 
   // int64 # Number of public keys associated with this user
@@ -372,6 +450,7 @@ class User {
 
   setPublicKeysCount = value => {
     this.attributes.public_keys_count = value
+    exposeAttributes(this, ['public_keys_count'])
   }
 
   // boolean # Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
@@ -379,6 +458,7 @@ class User {
 
   setReceiveAdminAlerts = value => {
     this.attributes.receive_admin_alerts = value
+    exposeAttributes(this, ['receive_admin_alerts'])
   }
 
   // boolean # Should the user receive site warnings via email?
@@ -386,6 +466,7 @@ class User {
 
   setNotifyOnAllSiteWarnings = value => {
     this.attributes.notify_on_all_site_warnings = value
+    exposeAttributes(this, ['notify_on_all_site_warnings'])
   }
 
   // boolean # Should the user receive sso/scim/ldap configuration/sync failures via email?
@@ -393,6 +474,7 @@ class User {
 
   setNotifyOnAllSsoFailures = value => {
     this.attributes.notify_on_all_sso_failures = value
+    exposeAttributes(this, ['notify_on_all_sso_failures'])
   }
 
   // boolean # Should the user receive user security events via email?
@@ -400,6 +482,7 @@ class User {
 
   setNotifyOnAllUserSecurityEvents = value => {
     this.attributes.notify_on_all_user_security_events = value
+    exposeAttributes(this, ['notify_on_all_user_security_events'])
   }
 
   // boolean # Should the user receive pending work failures via email?
@@ -407,6 +490,7 @@ class User {
 
   setNotifyOnAllPendingWorkFailures = value => {
     this.attributes.notify_on_all_pending_work_failures = value
+    exposeAttributes(this, ['notify_on_all_pending_work_failures'])
   }
 
   // boolean # Should the user receive siem failures via email?
@@ -414,6 +498,7 @@ class User {
 
   setNotifyOnAllSiemHttpDestinationFailures = value => {
     this.attributes.notify_on_all_siem_http_destination_failures = value
+    exposeAttributes(this, ['notify_on_all_siem_http_destination_failures'])
   }
 
   // boolean # Should the user receive sync failures via email?
@@ -421,6 +506,7 @@ class User {
 
   setNotifyOnAllSyncFailures = value => {
     this.attributes.notify_on_all_sync_failures = value
+    exposeAttributes(this, ['notify_on_all_sync_failures'])
   }
 
   // boolean # Should the user receive automation failures via email?
@@ -428,6 +514,7 @@ class User {
 
   setNotifyOnAllAutomationFailures = value => {
     this.attributes.notify_on_all_automation_failures = value
+    exposeAttributes(this, ['notify_on_all_automation_failures'])
   }
 
   // boolean # Should the user receive expectation failures and misses via email?
@@ -435,6 +522,7 @@ class User {
 
   setNotifyOnAllExpectationFailures = value => {
     this.attributes.notify_on_all_expectation_failures = value
+    exposeAttributes(this, ['notify_on_all_expectation_failures'])
   }
 
   // string # 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
@@ -442,6 +530,7 @@ class User {
 
   setRequire2fa = value => {
     this.attributes.require_2fa = value
+    exposeAttributes(this, ['require_2fa'])
   }
 
   // date-time # Require user to login by specified date otherwise it will be disabled.
@@ -449,6 +538,7 @@ class User {
 
   setRequireLoginBy = value => {
     this.attributes.require_login_by = value
+    exposeAttributes(this, ['require_login_by'])
   }
 
   // boolean # Is 2fa active for the user?
@@ -456,6 +546,7 @@ class User {
 
   setActive2fa = value => {
     this.attributes.active_2fa = value
+    exposeAttributes(this, ['active_2fa'])
   }
 
   // boolean # Is a password change required upon next user login?
@@ -463,6 +554,7 @@ class User {
 
   setRequirePasswordChange = value => {
     this.attributes.require_password_change = value
+    exposeAttributes(this, ['require_password_change'])
   }
 
   // boolean # Is user's password expired?
@@ -470,6 +562,7 @@ class User {
 
   setPasswordExpired = value => {
     this.attributes.password_expired = value
+    exposeAttributes(this, ['password_expired'])
   }
 
   // int64 # ID of the internal Group responsible for this Partner User, overriding the Partner default.
@@ -477,6 +570,7 @@ class User {
 
   setResponsibleGroupId = value => {
     this.attributes.responsible_group_id = value
+    exposeAttributes(this, ['responsible_group_id'])
   }
 
   // int64 # ID of the internal User responsible for this Partner User, overriding the Partner default.
@@ -484,6 +578,7 @@ class User {
 
   setResponsibleUserId = value => {
     this.attributes.responsible_user_id = value
+    exposeAttributes(this, ['responsible_user_id'])
   }
 
   // boolean # Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -491,6 +586,7 @@ class User {
 
   setReadonlySiteAdmin = value => {
     this.attributes.readonly_site_admin = value
+    exposeAttributes(this, ['readonly_site_admin'])
   }
 
   // boolean # Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -498,6 +594,7 @@ class User {
 
   setRestapiPermission = value => {
     this.attributes.restapi_permission = value
+    exposeAttributes(this, ['restapi_permission'])
   }
 
   // boolean # Can the user access the S3-compatible endpoint? Defaults to true.
@@ -505,6 +602,7 @@ class User {
 
   setS3CompatibleEndpointPermission = value => {
     this.attributes.s3_compatible_endpoint_permission = value
+    exposeAttributes(this, ['s3_compatible_endpoint_permission'])
   }
 
   // boolean # Does this user manage it's own credentials or is it a shared/bot user?
@@ -512,6 +610,7 @@ class User {
 
   setSelfManaged = value => {
     this.attributes.self_managed = value
+    exposeAttributes(this, ['self_managed'])
   }
 
   // boolean # Can the user access with SFTP?
@@ -519,6 +618,7 @@ class User {
 
   setSftpPermission = value => {
     this.attributes.sftp_permission = value
+    exposeAttributes(this, ['sftp_permission'])
   }
 
   // boolean # Is the user an administrator for this site?
@@ -526,6 +626,7 @@ class User {
 
   setSiteAdmin = value => {
     this.attributes.site_admin = value
+    exposeAttributes(this, ['site_admin'])
   }
 
   // boolean # Whether the user is an administrator of their own Custom Workspace. Does not reflect administration granted through Permissions.
@@ -533,6 +634,7 @@ class User {
 
   setWorkspaceAdmin = value => {
     this.attributes.workspace_admin = value
+    exposeAttributes(this, ['workspace_admin'])
   }
 
   // int64 # Site ID
@@ -540,6 +642,7 @@ class User {
 
   setSiteId = value => {
     this.attributes.site_id = value
+    exposeAttributes(this, ['site_id'])
   }
 
   // int64 # ID of the Workspace the user belongs to. 0 is the Default Workspace.
@@ -547,6 +650,7 @@ class User {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // int64 # Workspace ID the user should land in by default when more than one Workspace is available.
@@ -554,6 +658,7 @@ class User {
 
   setDefaultWorkspaceId = value => {
     this.attributes.default_workspace_id = value
+    exposeAttributes(this, ['default_workspace_id'])
   }
 
   // boolean # Skip Welcome page in the UI?
@@ -561,6 +666,7 @@ class User {
 
   setSkipWelcomeScreen = value => {
     this.attributes.skip_welcome_screen = value
+    exposeAttributes(this, ['skip_welcome_screen'])
   }
 
   // string # SSL required setting
@@ -568,6 +674,7 @@ class User {
 
   setSslRequired = value => {
     this.attributes.ssl_required = value
+    exposeAttributes(this, ['ssl_required'])
   }
 
   // int64 # SSO (Single Sign On) strategy ID for the user, if applicable.
@@ -575,6 +682,7 @@ class User {
 
   setSsoStrategyId = value => {
     this.attributes.sso_strategy_id = value
+    exposeAttributes(this, ['sso_strategy_id'])
   }
 
   // boolean # Is the user subscribed to the newsletter?
@@ -582,6 +690,7 @@ class User {
 
   setSubscribeToNewsletter = value => {
     this.attributes.subscribe_to_newsletter = value
+    exposeAttributes(this, ['subscribe_to_newsletter'])
   }
 
   // boolean # Is this user managed by a SsoStrategy?
@@ -589,6 +698,7 @@ class User {
 
   setExternallyManaged = value => {
     this.attributes.externally_managed = value
+    exposeAttributes(this, ['externally_managed'])
   }
 
   // string # Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -596,6 +706,7 @@ class User {
 
   setTags = value => {
     this.attributes.tags = value
+    exposeAttributes(this, ['tags'])
   }
 
   // string # User time zone
@@ -603,6 +714,7 @@ class User {
 
   setTimeZone = value => {
     this.attributes.time_zone = value
+    exposeAttributes(this, ['time_zone'])
   }
 
   // string # Type(s) of 2FA methods in use, for programmatic use.  Will be either `sms`, `totp`, `webauthn`, `yubi`, `email`, or multiple values sorted alphabetically and joined by an underscore.  Does not specify whether user has more than one of a given method.
@@ -610,6 +722,7 @@ class User {
 
   setTypeOf2fa = value => {
     this.attributes.type_of_2fa = value
+    exposeAttributes(this, ['type_of_2fa'])
   }
 
   // string # Type(s) of 2FA methods in use, formatted for displaying in the UI.  Unlike `type_of_2fa`, this value will make clear when a user has more than 1 of the same type of method.
@@ -617,6 +730,7 @@ class User {
 
   setTypeOf2faForDisplay = value => {
     this.attributes.type_of_2fa_for_display = value
+    exposeAttributes(this, ['type_of_2fa_for_display'])
   }
 
   // string # If filesystem layout is user_root, this path is the root path the user is fixed to for all interfaces. If the filesystem layout is site_root or partner_root, this acts as a root folder only for FTP and SFTP (SFTP applicability also requires a site-wide setting to be set). For partner_root layout, this path is relative to the Partner root folder for all callers and blank opts out of an additional protocol root. In this situation, this path is not applied to the API, Desktop, or Web interface.
@@ -624,6 +738,7 @@ class User {
 
   setUserRoot = value => {
     this.attributes.user_root = value
+    exposeAttributes(this, ['user_root'])
   }
 
   // string # Home folder for FTP/SFTP. For users with the partner_root filesystem layout, this path is relative to the Partner root folder. In all other cases, it is an absolute path. Only applies to FTP and SFTP, and not any other interface.
@@ -631,6 +746,7 @@ class User {
 
   setUserHome = value => {
     this.attributes.user_home = value
+    exposeAttributes(this, ['user_home'])
   }
 
   // int64 # Number of days remaining until password expires
@@ -638,6 +754,7 @@ class User {
 
   setDaysRemainingUntilPasswordExpire = value => {
     this.attributes.days_remaining_until_password_expire = value
+    exposeAttributes(this, ['days_remaining_until_password_expire'])
   }
 
   // date-time # Password expiration datetime
@@ -645,6 +762,7 @@ class User {
 
   setPasswordExpireAt = value => {
     this.attributes.password_expire_at = value
+    exposeAttributes(this, ['password_expire_at'])
   }
 
   // file # An image file for your user avatar.
@@ -652,6 +770,7 @@ class User {
 
   setAvatarFile = value => {
     this.attributes.avatar_file = value
+    exposeAttributes(this, ['avatar_file'])
   }
 
   // boolean # If true, the avatar will be deleted.
@@ -659,6 +778,7 @@ class User {
 
   setAvatarDelete = value => {
     this.attributes.avatar_delete = value
+    exposeAttributes(this, ['avatar_delete'])
   }
 
   // string # Used for changing a password on an existing user.
@@ -666,6 +786,7 @@ class User {
 
   setChangePassword = value => {
     this.attributes.change_password = value
+    exposeAttributes(this, ['change_password'])
   }
 
   // string # Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
@@ -673,6 +794,7 @@ class User {
 
   setChangePasswordConfirmation = value => {
     this.attributes.change_password_confirmation = value
+    exposeAttributes(this, ['change_password_confirmation'])
   }
 
   // string # Permission to grant on the User Root upon creation, or on the Workspace root when the User Root is blank. For the Default Workspace, a blank User Root uses the site root. `admin` on a Custom Workspace's root grants Workspace Administrator access; on a subfolder it grants Folder Admin access. Can be blank or `admin`, `full`, `read`, `write`, `list`, `read+write`, `list+write`, or `history`.
@@ -680,6 +802,7 @@ class User {
 
   setGrantPermission = value => {
     this.attributes.grant_permission = value
+    exposeAttributes(this, ['grant_permission'])
   }
 
   // int64 # Group ID to associate this user with.
@@ -687,6 +810,7 @@ class User {
 
   setGroupId = value => {
     this.attributes.group_id = value
+    exposeAttributes(this, ['group_id'])
   }
 
   // string # Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash methods are MD5, SHA1, and SHA256.
@@ -694,6 +818,7 @@ class User {
 
   setImportedPasswordHash = value => {
     this.attributes.imported_password_hash = value
+    exposeAttributes(this, ['imported_password_hash'])
   }
 
   // string # User password.
@@ -701,6 +826,7 @@ class User {
 
   setPassword = value => {
     this.attributes.password = value
+    exposeAttributes(this, ['password'])
   }
 
   // string # Optional, but if provided, we will ensure that it matches the value sent in `password`.
@@ -708,6 +834,7 @@ class User {
 
   setPasswordConfirmation = value => {
     this.attributes.password_confirmation = value
+    exposeAttributes(this, ['password_confirmation'])
   }
 
   // boolean # Signifies that the user has read all the announcements in the UI.
@@ -715,6 +842,7 @@ class User {
 
   setAnnouncementsRead = value => {
     this.attributes.announcements_read = value
+    exposeAttributes(this, ['announcements_read'])
   }
 
   // boolean # If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
@@ -722,6 +850,7 @@ class User {
 
   setClear2fa = value => {
     this.attributes.clear_2fa = value
+    exposeAttributes(this, ['clear_2fa'])
   }
 
   // boolean # Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
@@ -729,6 +858,7 @@ class User {
 
   setConvertToPartnerUser = value => {
     this.attributes.convert_to_partner_user = value
+    exposeAttributes(this, ['convert_to_partner_user'])
   }
 
   // Unlock user who has been locked out due to failed logins
@@ -741,8 +871,10 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -767,8 +899,10 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -793,8 +927,10 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -890,161 +1026,291 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.change_password && !isString(params.change_password)) {
+    if (isArray(params.avatar_delete) || isObject(params.avatar_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: avatar_delete must be of type Boolean, received ${getType(params.avatar_delete)}`)
+    }
+
+    if (params.change_password !== undefined && params.change_password !== null && !isString(params.change_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: change_password must be of type String, received ${getType(params.change_password)}`)
     }
 
-    if (params.change_password_confirmation && !isString(params.change_password_confirmation)) {
+    if (params.change_password_confirmation !== undefined && params.change_password_confirmation !== null && !isString(params.change_password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: change_password_confirmation must be of type String, received ${getType(params.change_password_confirmation)}`)
     }
 
-    if (params.email && !isString(params.email)) {
+    if (params.email !== undefined && params.email !== null && !isString(params.email)) {
       throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params.email)}`)
     }
 
-    if (params.grant_permission && !isString(params.grant_permission)) {
+    if (params.grant_permission !== undefined && params.grant_permission !== null && !isString(params.grant_permission)) {
       throw new errors.InvalidParameterError(`Bad parameter: grant_permission must be of type String, received ${getType(params.grant_permission)}`)
     }
 
-    if (params.group_id && !isInt(params.group_id)) {
+    if (params.group_id !== undefined && params.group_id !== null && !isInt(params.group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
-    if (params.group_ids && !isString(params.group_ids)) {
+    if (params.group_ids !== undefined && params.group_ids !== null && !isString(params.group_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
-    if (params.imported_password_hash && !isString(params.imported_password_hash)) {
+    if (params.imported_password_hash !== undefined && params.imported_password_hash !== null && !isString(params.imported_password_hash)) {
       throw new errors.InvalidParameterError(`Bad parameter: imported_password_hash must be of type String, received ${getType(params.imported_password_hash)}`)
     }
 
-    if (params.password && !isString(params.password)) {
+    if (params.password !== undefined && params.password !== null && !isString(params.password)) {
       throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
     }
 
-    if (params.password_confirmation && !isString(params.password_confirmation)) {
+    if (params.password_confirmation !== undefined && params.password_confirmation !== null && !isString(params.password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(params.password_confirmation)}`)
     }
 
-    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+    if (isArray(params.announcements_read) || isObject(params.announcements_read)) {
+      throw new errors.InvalidParameterError(`Bad parameter: announcements_read must be of type Boolean, received ${getType(params.announcements_read)}`)
+    }
+
+    if (params.ai_assistant_personality_id !== undefined && params.ai_assistant_personality_id !== null && !isInt(params.ai_assistant_personality_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
-    if (params.allowed_ips && !isString(params.allowed_ips)) {
+    if (params.allowed_ips !== undefined && params.allowed_ips !== null && !isString(params.allowed_ips)) {
       throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
-    if (params.authenticate_until && !isString(params.authenticate_until)) {
+    if (isArray(params.attachments_permission) || isObject(params.attachments_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: attachments_permission must be of type Boolean, received ${getType(params.attachments_permission)}`)
+    }
+
+    if (params.authenticate_until !== undefined && params.authenticate_until !== null && !isString(params.authenticate_until)) {
       throw new errors.InvalidParameterError(`Bad parameter: authenticate_until must be of type String, received ${getType(params.authenticate_until)}`)
     }
 
-    if (params.authentication_method && !isString(params.authentication_method)) {
+    if (params.authentication_method !== undefined && params.authentication_method !== null && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
     }
 
-    if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
+    if (isArray(params.billing_permission) || isObject(params.billing_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: billing_permission must be of type Boolean, received ${getType(params.billing_permission)}`)
+    }
+
+    if (isArray(params.bypass_user_lifecycle_rules) || isObject(params.bypass_user_lifecycle_rules)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bypass_user_lifecycle_rules must be of type Boolean, received ${getType(params.bypass_user_lifecycle_rules)}`)
+    }
+
+    if (isArray(params.bypass_site_allowed_ips) || isObject(params.bypass_site_allowed_ips)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bypass_site_allowed_ips must be of type Boolean, received ${getType(params.bypass_site_allowed_ips)}`)
+    }
+
+    if (isArray(params.dav_permission) || isObject(params.dav_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dav_permission must be of type Boolean, received ${getType(params.dav_permission)}`)
+    }
+
+    if (params.desktop_configuration_profile_id !== undefined && params.desktop_configuration_profile_id !== null && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
     }
 
-    if (params.default_workspace_id && !isInt(params.default_workspace_id)) {
+    if (params.default_workspace_id !== undefined && params.default_workspace_id !== null && !isInt(params.default_workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: default_workspace_id must be of type Int, received ${getType(params.default_workspace_id)}`)
     }
 
-    if (params.filesystem_layout && !isString(params.filesystem_layout)) {
+    if (isArray(params.disabled) || isObject(params.disabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disabled must be of type Boolean, received ${getType(params.disabled)}`)
+    }
+
+    if (params.filesystem_layout !== undefined && params.filesystem_layout !== null && !isString(params.filesystem_layout)) {
       throw new errors.InvalidParameterError(`Bad parameter: filesystem_layout must be of type String, received ${getType(params.filesystem_layout)}`)
     }
 
-    if (params.header_text && !isString(params.header_text)) {
+    if (isArray(params.ftp_permission) || isObject(params.ftp_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ftp_permission must be of type Boolean, received ${getType(params.ftp_permission)}`)
+    }
+
+    if (params.header_text !== undefined && params.header_text !== null && !isString(params.header_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(params.header_text)}`)
     }
 
-    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+    if (params.integration_centric_profile_id !== undefined && params.integration_centric_profile_id !== null && !isInt(params.integration_centric_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
-    if (params.language && !isString(params.language)) {
+    if (params.language !== undefined && params.language !== null && !isString(params.language)) {
       throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(params.language)}`)
     }
 
-    if (params.notification_daily_send_time && !isInt(params.notification_daily_send_time)) {
+    if (params.notification_daily_send_time !== undefined && params.notification_daily_send_time !== null && !isInt(params.notification_daily_send_time)) {
       throw new errors.InvalidParameterError(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(params.notification_daily_send_time)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.company && !isString(params.company)) {
+    if (params.company !== undefined && params.company !== null && !isString(params.company)) {
       throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params.company)}`)
     }
 
-    if (params.notes && !isString(params.notes)) {
+    if (params.notes !== undefined && params.notes !== null && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
     }
 
-    if (params.partner_id && !isInt(params.partner_id)) {
+    if (isArray(params.office_integration_enabled) || isObject(params.office_integration_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: office_integration_enabled must be of type Boolean, received ${getType(params.office_integration_enabled)}`)
+    }
+
+    if (isArray(params.partner_admin) || isObject(params.partner_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_admin must be of type Boolean, received ${getType(params.partner_admin)}`)
+    }
+
+    if (params.partner_id !== undefined && params.partner_id !== null && !isInt(params.partner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
-    if (params.password_validity_days && !isInt(params.password_validity_days)) {
+    if (params.password_validity_days !== undefined && params.password_validity_days !== null && !isInt(params.password_validity_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(params.password_validity_days)}`)
     }
 
-    if (params.primary_group_id && !isInt(params.primary_group_id)) {
+    if (params.primary_group_id !== undefined && params.primary_group_id !== null && !isInt(params.primary_group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: primary_group_id must be of type Int, received ${getType(params.primary_group_id)}`)
     }
 
-    if (params.require_login_by && !isString(params.require_login_by)) {
+    if (isArray(params.readonly_site_admin) || isObject(params.readonly_site_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: readonly_site_admin must be of type Boolean, received ${getType(params.readonly_site_admin)}`)
+    }
+
+    if (isArray(params.receive_admin_alerts) || isObject(params.receive_admin_alerts)) {
+      throw new errors.InvalidParameterError(`Bad parameter: receive_admin_alerts must be of type Boolean, received ${getType(params.receive_admin_alerts)}`)
+    }
+
+    if (isArray(params.notify_on_all_site_warnings) || isObject(params.notify_on_all_site_warnings)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_site_warnings must be of type Boolean, received ${getType(params.notify_on_all_site_warnings)}`)
+    }
+
+    if (isArray(params.notify_on_all_sso_failures) || isObject(params.notify_on_all_sso_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_sso_failures must be of type Boolean, received ${getType(params.notify_on_all_sso_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_user_security_events) || isObject(params.notify_on_all_user_security_events)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_user_security_events must be of type Boolean, received ${getType(params.notify_on_all_user_security_events)}`)
+    }
+
+    if (isArray(params.notify_on_all_pending_work_failures) || isObject(params.notify_on_all_pending_work_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_pending_work_failures must be of type Boolean, received ${getType(params.notify_on_all_pending_work_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_siem_http_destination_failures) || isObject(params.notify_on_all_siem_http_destination_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_siem_http_destination_failures must be of type Boolean, received ${getType(params.notify_on_all_siem_http_destination_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_sync_failures) || isObject(params.notify_on_all_sync_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_sync_failures must be of type Boolean, received ${getType(params.notify_on_all_sync_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_automation_failures) || isObject(params.notify_on_all_automation_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_automation_failures must be of type Boolean, received ${getType(params.notify_on_all_automation_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_expectation_failures) || isObject(params.notify_on_all_expectation_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_expectation_failures must be of type Boolean, received ${getType(params.notify_on_all_expectation_failures)}`)
+    }
+
+    if (params.require_login_by !== undefined && params.require_login_by !== null && !isString(params.require_login_by)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(params.require_login_by)}`)
     }
 
-    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+    if (isArray(params.require_password_change) || isObject(params.require_password_change)) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_password_change must be of type Boolean, received ${getType(params.require_password_change)}`)
+    }
+
+    if (params.responsible_group_id !== undefined && params.responsible_group_id !== null && !isInt(params.responsible_group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
     }
 
-    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+    if (params.responsible_user_id !== undefined && params.responsible_user_id !== null && !isInt(params.responsible_user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
-    if (params.ssl_required && !isString(params.ssl_required)) {
+    if (isArray(params.restapi_permission) || isObject(params.restapi_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restapi_permission must be of type Boolean, received ${getType(params.restapi_permission)}`)
+    }
+
+    if (isArray(params.s3_compatible_endpoint_permission) || isObject(params.s3_compatible_endpoint_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_endpoint_permission must be of type Boolean, received ${getType(params.s3_compatible_endpoint_permission)}`)
+    }
+
+    if (isArray(params.self_managed) || isObject(params.self_managed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: self_managed must be of type Boolean, received ${getType(params.self_managed)}`)
+    }
+
+    if (isArray(params.sftp_permission) || isObject(params.sftp_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_permission must be of type Boolean, received ${getType(params.sftp_permission)}`)
+    }
+
+    if (isArray(params.site_admin) || isObject(params.site_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: site_admin must be of type Boolean, received ${getType(params.site_admin)}`)
+    }
+
+    if (isArray(params.skip_welcome_screen) || isObject(params.skip_welcome_screen)) {
+      throw new errors.InvalidParameterError(`Bad parameter: skip_welcome_screen must be of type Boolean, received ${getType(params.skip_welcome_screen)}`)
+    }
+
+    if (params.ssl_required !== undefined && params.ssl_required !== null && !isString(params.ssl_required)) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(params.ssl_required)}`)
     }
 
-    if (params.sso_strategy_id && !isInt(params.sso_strategy_id)) {
+    if (params.sso_strategy_id !== undefined && params.sso_strategy_id !== null && !isInt(params.sso_strategy_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(params.sso_strategy_id)}`)
     }
 
-    if (params.require_2fa && !isString(params.require_2fa)) {
+    if (isArray(params.subscribe_to_newsletter) || isObject(params.subscribe_to_newsletter)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subscribe_to_newsletter must be of type Boolean, received ${getType(params.subscribe_to_newsletter)}`)
+    }
+
+    if (params.require_2fa !== undefined && params.require_2fa !== null && !isString(params.require_2fa)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type String, received ${getType(params.require_2fa)}`)
     }
 
-    if (params.tags && !isString(params.tags)) {
+    if (params.tags !== undefined && params.tags !== null && !isString(params.tags)) {
       throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
     }
 
-    if (params.time_zone && !isString(params.time_zone)) {
+    if (params.time_zone !== undefined && params.time_zone !== null && !isString(params.time_zone)) {
       throw new errors.InvalidParameterError(`Bad parameter: time_zone must be of type String, received ${getType(params.time_zone)}`)
     }
 
-    if (params.user_root && !isString(params.user_root)) {
+    if (params.user_root !== undefined && params.user_root !== null && !isString(params.user_root)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(params.user_root)}`)
     }
 
-    if (params.user_home && !isString(params.user_home)) {
+    if (params.user_home !== undefined && params.user_home !== null && !isString(params.user_home)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_home must be of type String, received ${getType(params.user_home)}`)
     }
 
-    if (params.username && !isString(params.username)) {
+    if (isArray(params.workspace_admin) || isObject(params.workspace_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_admin must be of type Boolean, received ${getType(params.workspace_admin)}`)
+    }
+
+    if (params.username !== undefined && params.username !== null && !isString(params.username)) {
       throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
+    if (isArray(params.clear_2fa) || isObject(params.clear_2fa)) {
+      throw new errors.InvalidParameterError(`Bad parameter: clear_2fa must be of type Boolean, received ${getType(params.clear_2fa)}`)
+    }
+
+    if (isArray(params.convert_to_partner_user) || isObject(params.convert_to_partner_user)) {
+      throw new errors.InvalidParameterError(`Bad parameter: convert_to_partner_user must be of type Boolean, received ${getType(params.convert_to_partner_user)}`)
     }
 
     if (!params.id) {
@@ -1057,7 +1323,8 @@ class User {
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new User(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   // Parameters:
@@ -1071,12 +1338,14 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.new_owner_id && !isInt(params.new_owner_id)) {
+    if (params.new_owner_id !== undefined && params.new_owner_id !== null && !isInt(params.new_owner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: new_owner_id must be of type Int, received ${getType(params.new_owner_id)}`)
     }
 
@@ -1096,13 +1365,12 @@ class User {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await User.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -1121,29 +1389,43 @@ class User {
   //   include_default_workspace_users - boolean - When scoped to a Custom Workspace, include Default Workspace users who have permissions in that Workspace. Available to Site Administrators, and to Workspace Administrators and Folder Admins in that Workspace when the site shares its Default Workspace directory with Workspaces.
   //   search - string - Searches for partial matches of name, username, or email.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.ids && !isString(params.ids)) {
+    if (params.ids !== undefined && params.ids !== null && !isString(params.ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: ids must be of type String, received ${getType(params.ids)}`)
     }
 
-    if (params.search && !isString(params.search)) {
+    if (isArray(params.include_parent_site_users) || isObject(params.include_parent_site_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_parent_site_users must be of type Boolean, received ${getType(params.include_parent_site_users)}`)
+    }
+
+    if (isArray(params.include_default_workspace_users) || isObject(params.include_default_workspace_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_default_workspace_users must be of type Boolean, received ${getType(params.include_default_workspace_users)}`)
+    }
+
+    if (params.search !== undefined && params.search !== null && !isString(params.search)) {
       throw new errors.InvalidParameterError(`Bad parameter: search must be of type String, received ${getType(params.search)}`)
     }
 
     const response = await Api.sendRequest('/users', 'GET', params, options)
 
-    return response?.data?.map(obj => new User(obj, options)) || []
+    return response?.data?.map(obj => new User(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     User.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      User.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - User ID.
@@ -1152,19 +1434,21 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/users/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new User(response?.data, options)
+    return new User(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -1245,161 +1529,281 @@ class User {
       throw new errors.MissingParameterError('Parameter missing: username')
     }
 
-    if (params.change_password && !isString(params.change_password)) {
+    if (isArray(params.avatar_delete) || isObject(params.avatar_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: avatar_delete must be of type Boolean, received ${getType(params.avatar_delete)}`)
+    }
+
+    if (params.change_password !== undefined && params.change_password !== null && !isString(params.change_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: change_password must be of type String, received ${getType(params.change_password)}`)
     }
 
-    if (params.change_password_confirmation && !isString(params.change_password_confirmation)) {
+    if (params.change_password_confirmation !== undefined && params.change_password_confirmation !== null && !isString(params.change_password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: change_password_confirmation must be of type String, received ${getType(params.change_password_confirmation)}`)
     }
 
-    if (params.email && !isString(params.email)) {
+    if (params.email !== undefined && params.email !== null && !isString(params.email)) {
       throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params.email)}`)
     }
 
-    if (params.grant_permission && !isString(params.grant_permission)) {
+    if (params.grant_permission !== undefined && params.grant_permission !== null && !isString(params.grant_permission)) {
       throw new errors.InvalidParameterError(`Bad parameter: grant_permission must be of type String, received ${getType(params.grant_permission)}`)
     }
 
-    if (params.group_id && !isInt(params.group_id)) {
+    if (params.group_id !== undefined && params.group_id !== null && !isInt(params.group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_id must be of type Int, received ${getType(params.group_id)}`)
     }
 
-    if (params.group_ids && !isString(params.group_ids)) {
+    if (params.group_ids !== undefined && params.group_ids !== null && !isString(params.group_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: group_ids must be of type String, received ${getType(params.group_ids)}`)
     }
 
-    if (params.imported_password_hash && !isString(params.imported_password_hash)) {
+    if (params.imported_password_hash !== undefined && params.imported_password_hash !== null && !isString(params.imported_password_hash)) {
       throw new errors.InvalidParameterError(`Bad parameter: imported_password_hash must be of type String, received ${getType(params.imported_password_hash)}`)
     }
 
-    if (params.password && !isString(params.password)) {
+    if (params.password !== undefined && params.password !== null && !isString(params.password)) {
       throw new errors.InvalidParameterError(`Bad parameter: password must be of type String, received ${getType(params.password)}`)
     }
 
-    if (params.password_confirmation && !isString(params.password_confirmation)) {
+    if (params.password_confirmation !== undefined && params.password_confirmation !== null && !isString(params.password_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_confirmation must be of type String, received ${getType(params.password_confirmation)}`)
     }
 
-    if (params.ai_assistant_personality_id && !isInt(params.ai_assistant_personality_id)) {
+    if (isArray(params.announcements_read) || isObject(params.announcements_read)) {
+      throw new errors.InvalidParameterError(`Bad parameter: announcements_read must be of type Boolean, received ${getType(params.announcements_read)}`)
+    }
+
+    if (params.ai_assistant_personality_id !== undefined && params.ai_assistant_personality_id !== null && !isInt(params.ai_assistant_personality_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: ai_assistant_personality_id must be of type Int, received ${getType(params.ai_assistant_personality_id)}`)
     }
 
-    if (params.allowed_ips && !isString(params.allowed_ips)) {
+    if (params.allowed_ips !== undefined && params.allowed_ips !== null && !isString(params.allowed_ips)) {
       throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
-    if (params.authenticate_until && !isString(params.authenticate_until)) {
+    if (isArray(params.attachments_permission) || isObject(params.attachments_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: attachments_permission must be of type Boolean, received ${getType(params.attachments_permission)}`)
+    }
+
+    if (params.authenticate_until !== undefined && params.authenticate_until !== null && !isString(params.authenticate_until)) {
       throw new errors.InvalidParameterError(`Bad parameter: authenticate_until must be of type String, received ${getType(params.authenticate_until)}`)
     }
 
-    if (params.authentication_method && !isString(params.authentication_method)) {
+    if (params.authentication_method !== undefined && params.authentication_method !== null && !isString(params.authentication_method)) {
       throw new errors.InvalidParameterError(`Bad parameter: authentication_method must be of type String, received ${getType(params.authentication_method)}`)
     }
 
-    if (params.desktop_configuration_profile_id && !isInt(params.desktop_configuration_profile_id)) {
+    if (isArray(params.billing_permission) || isObject(params.billing_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: billing_permission must be of type Boolean, received ${getType(params.billing_permission)}`)
+    }
+
+    if (isArray(params.bypass_user_lifecycle_rules) || isObject(params.bypass_user_lifecycle_rules)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bypass_user_lifecycle_rules must be of type Boolean, received ${getType(params.bypass_user_lifecycle_rules)}`)
+    }
+
+    if (isArray(params.bypass_site_allowed_ips) || isObject(params.bypass_site_allowed_ips)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bypass_site_allowed_ips must be of type Boolean, received ${getType(params.bypass_site_allowed_ips)}`)
+    }
+
+    if (isArray(params.dav_permission) || isObject(params.dav_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dav_permission must be of type Boolean, received ${getType(params.dav_permission)}`)
+    }
+
+    if (params.desktop_configuration_profile_id !== undefined && params.desktop_configuration_profile_id !== null && !isInt(params.desktop_configuration_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_configuration_profile_id must be of type Int, received ${getType(params.desktop_configuration_profile_id)}`)
     }
 
-    if (params.default_workspace_id && !isInt(params.default_workspace_id)) {
+    if (params.default_workspace_id !== undefined && params.default_workspace_id !== null && !isInt(params.default_workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: default_workspace_id must be of type Int, received ${getType(params.default_workspace_id)}`)
     }
 
-    if (params.filesystem_layout && !isString(params.filesystem_layout)) {
+    if (isArray(params.disabled) || isObject(params.disabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disabled must be of type Boolean, received ${getType(params.disabled)}`)
+    }
+
+    if (params.filesystem_layout !== undefined && params.filesystem_layout !== null && !isString(params.filesystem_layout)) {
       throw new errors.InvalidParameterError(`Bad parameter: filesystem_layout must be of type String, received ${getType(params.filesystem_layout)}`)
     }
 
-    if (params.header_text && !isString(params.header_text)) {
+    if (isArray(params.ftp_permission) || isObject(params.ftp_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ftp_permission must be of type Boolean, received ${getType(params.ftp_permission)}`)
+    }
+
+    if (params.header_text !== undefined && params.header_text !== null && !isString(params.header_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: header_text must be of type String, received ${getType(params.header_text)}`)
     }
 
-    if (params.integration_centric_profile_id && !isInt(params.integration_centric_profile_id)) {
+    if (params.integration_centric_profile_id !== undefined && params.integration_centric_profile_id !== null && !isInt(params.integration_centric_profile_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: integration_centric_profile_id must be of type Int, received ${getType(params.integration_centric_profile_id)}`)
     }
 
-    if (params.language && !isString(params.language)) {
+    if (params.language !== undefined && params.language !== null && !isString(params.language)) {
       throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(params.language)}`)
     }
 
-    if (params.notification_daily_send_time && !isInt(params.notification_daily_send_time)) {
+    if (params.notification_daily_send_time !== undefined && params.notification_daily_send_time !== null && !isInt(params.notification_daily_send_time)) {
       throw new errors.InvalidParameterError(`Bad parameter: notification_daily_send_time must be of type Int, received ${getType(params.notification_daily_send_time)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.company && !isString(params.company)) {
+    if (params.company !== undefined && params.company !== null && !isString(params.company)) {
       throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params.company)}`)
     }
 
-    if (params.notes && !isString(params.notes)) {
+    if (params.notes !== undefined && params.notes !== null && !isString(params.notes)) {
       throw new errors.InvalidParameterError(`Bad parameter: notes must be of type String, received ${getType(params.notes)}`)
     }
 
-    if (params.partner_id && !isInt(params.partner_id)) {
+    if (isArray(params.office_integration_enabled) || isObject(params.office_integration_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: office_integration_enabled must be of type Boolean, received ${getType(params.office_integration_enabled)}`)
+    }
+
+    if (isArray(params.partner_admin) || isObject(params.partner_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: partner_admin must be of type Boolean, received ${getType(params.partner_admin)}`)
+    }
+
+    if (params.partner_id !== undefined && params.partner_id !== null && !isInt(params.partner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
-    if (params.password_validity_days && !isInt(params.password_validity_days)) {
+    if (params.password_validity_days !== undefined && params.password_validity_days !== null && !isInt(params.password_validity_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(params.password_validity_days)}`)
     }
 
-    if (params.primary_group_id && !isInt(params.primary_group_id)) {
+    if (params.primary_group_id !== undefined && params.primary_group_id !== null && !isInt(params.primary_group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: primary_group_id must be of type Int, received ${getType(params.primary_group_id)}`)
     }
 
-    if (params.require_login_by && !isString(params.require_login_by)) {
+    if (isArray(params.readonly_site_admin) || isObject(params.readonly_site_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: readonly_site_admin must be of type Boolean, received ${getType(params.readonly_site_admin)}`)
+    }
+
+    if (isArray(params.receive_admin_alerts) || isObject(params.receive_admin_alerts)) {
+      throw new errors.InvalidParameterError(`Bad parameter: receive_admin_alerts must be of type Boolean, received ${getType(params.receive_admin_alerts)}`)
+    }
+
+    if (isArray(params.notify_on_all_site_warnings) || isObject(params.notify_on_all_site_warnings)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_site_warnings must be of type Boolean, received ${getType(params.notify_on_all_site_warnings)}`)
+    }
+
+    if (isArray(params.notify_on_all_sso_failures) || isObject(params.notify_on_all_sso_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_sso_failures must be of type Boolean, received ${getType(params.notify_on_all_sso_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_user_security_events) || isObject(params.notify_on_all_user_security_events)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_user_security_events must be of type Boolean, received ${getType(params.notify_on_all_user_security_events)}`)
+    }
+
+    if (isArray(params.notify_on_all_pending_work_failures) || isObject(params.notify_on_all_pending_work_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_pending_work_failures must be of type Boolean, received ${getType(params.notify_on_all_pending_work_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_siem_http_destination_failures) || isObject(params.notify_on_all_siem_http_destination_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_siem_http_destination_failures must be of type Boolean, received ${getType(params.notify_on_all_siem_http_destination_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_sync_failures) || isObject(params.notify_on_all_sync_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_sync_failures must be of type Boolean, received ${getType(params.notify_on_all_sync_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_automation_failures) || isObject(params.notify_on_all_automation_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_automation_failures must be of type Boolean, received ${getType(params.notify_on_all_automation_failures)}`)
+    }
+
+    if (isArray(params.notify_on_all_expectation_failures) || isObject(params.notify_on_all_expectation_failures)) {
+      throw new errors.InvalidParameterError(`Bad parameter: notify_on_all_expectation_failures must be of type Boolean, received ${getType(params.notify_on_all_expectation_failures)}`)
+    }
+
+    if (params.require_login_by !== undefined && params.require_login_by !== null && !isString(params.require_login_by)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_login_by must be of type String, received ${getType(params.require_login_by)}`)
     }
 
-    if (params.responsible_group_id && !isInt(params.responsible_group_id)) {
+    if (isArray(params.require_password_change) || isObject(params.require_password_change)) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_password_change must be of type Boolean, received ${getType(params.require_password_change)}`)
+    }
+
+    if (params.responsible_group_id !== undefined && params.responsible_group_id !== null && !isInt(params.responsible_group_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: responsible_group_id must be of type Int, received ${getType(params.responsible_group_id)}`)
     }
 
-    if (params.responsible_user_id && !isInt(params.responsible_user_id)) {
+    if (params.responsible_user_id !== undefined && params.responsible_user_id !== null && !isInt(params.responsible_user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: responsible_user_id must be of type Int, received ${getType(params.responsible_user_id)}`)
     }
 
-    if (params.ssl_required && !isString(params.ssl_required)) {
+    if (isArray(params.restapi_permission) || isObject(params.restapi_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restapi_permission must be of type Boolean, received ${getType(params.restapi_permission)}`)
+    }
+
+    if (isArray(params.s3_compatible_endpoint_permission) || isObject(params.s3_compatible_endpoint_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_endpoint_permission must be of type Boolean, received ${getType(params.s3_compatible_endpoint_permission)}`)
+    }
+
+    if (isArray(params.self_managed) || isObject(params.self_managed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: self_managed must be of type Boolean, received ${getType(params.self_managed)}`)
+    }
+
+    if (isArray(params.sftp_permission) || isObject(params.sftp_permission)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_permission must be of type Boolean, received ${getType(params.sftp_permission)}`)
+    }
+
+    if (isArray(params.site_admin) || isObject(params.site_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: site_admin must be of type Boolean, received ${getType(params.site_admin)}`)
+    }
+
+    if (isArray(params.skip_welcome_screen) || isObject(params.skip_welcome_screen)) {
+      throw new errors.InvalidParameterError(`Bad parameter: skip_welcome_screen must be of type Boolean, received ${getType(params.skip_welcome_screen)}`)
+    }
+
+    if (params.ssl_required !== undefined && params.ssl_required !== null && !isString(params.ssl_required)) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(params.ssl_required)}`)
     }
 
-    if (params.sso_strategy_id && !isInt(params.sso_strategy_id)) {
+    if (params.sso_strategy_id !== undefined && params.sso_strategy_id !== null && !isInt(params.sso_strategy_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(params.sso_strategy_id)}`)
     }
 
-    if (params.require_2fa && !isString(params.require_2fa)) {
+    if (isArray(params.subscribe_to_newsletter) || isObject(params.subscribe_to_newsletter)) {
+      throw new errors.InvalidParameterError(`Bad parameter: subscribe_to_newsletter must be of type Boolean, received ${getType(params.subscribe_to_newsletter)}`)
+    }
+
+    if (params.require_2fa !== undefined && params.require_2fa !== null && !isString(params.require_2fa)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type String, received ${getType(params.require_2fa)}`)
     }
 
-    if (params.tags && !isString(params.tags)) {
+    if (params.tags !== undefined && params.tags !== null && !isString(params.tags)) {
       throw new errors.InvalidParameterError(`Bad parameter: tags must be of type String, received ${getType(params.tags)}`)
     }
 
-    if (params.time_zone && !isString(params.time_zone)) {
+    if (params.time_zone !== undefined && params.time_zone !== null && !isString(params.time_zone)) {
       throw new errors.InvalidParameterError(`Bad parameter: time_zone must be of type String, received ${getType(params.time_zone)}`)
     }
 
-    if (params.user_root && !isString(params.user_root)) {
+    if (params.user_root !== undefined && params.user_root !== null && !isString(params.user_root)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_root must be of type String, received ${getType(params.user_root)}`)
     }
 
-    if (params.user_home && !isString(params.user_home)) {
+    if (params.user_home !== undefined && params.user_home !== null && !isString(params.user_home)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_home must be of type String, received ${getType(params.user_home)}`)
     }
 
-    if (params.username && !isString(params.username)) {
+    if (isArray(params.workspace_admin) || isObject(params.workspace_admin)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_admin must be of type Boolean, received ${getType(params.workspace_admin)}`)
+    }
+
+    if (params.username !== undefined && params.username !== null && !isString(params.username)) {
       throw new errors.InvalidParameterError(`Bad parameter: username must be of type String, received ${getType(params.username)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/users', 'POST', params, options)
 
-    return new User(response?.data, options)
+    return new User(response?.data, retainedOptions(options))
   }
 }
 

@@ -47,7 +47,7 @@
 ## List AS2 Stations
 
 ```
-await As2Station.list
+await As2Station.list()
 ```
 
 

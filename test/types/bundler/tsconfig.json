@@ -1,0 +1,21 @@
+// Type-checks a browser bundle's use of the package, and every declaration of src/, as `npm run test:types` does for
+// ../tsconfig.json: bundler resolution with the DOM, no skipLibCheck. The package's own name resolves to this checkout.
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": [],
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": false,
+    "noEmit": true,
+    "paths": {
+      "files.com": ["../../../lib/Files.root.d.ts"],
+      "files.com/*": ["../../../*"]
+    }
+  },
+  "include": ["*.ts", "../../../src/**/*.d.ts"]
+}

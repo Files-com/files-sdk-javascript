@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class CustomDomain
  */
@@ -15,14 +52,7 @@ class CustomDomain {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class CustomDomain {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // int64 # Workspace ID (0 for the default workspace).
@@ -40,6 +71,7 @@ class CustomDomain {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // boolean # Allow all workspaces to use this default-workspace Custom Domain.
@@ -47,6 +79,7 @@ class CustomDomain {
 
   setAvailableToAllWorkspaces = value => {
     this.attributes.available_to_all_workspaces = value
+    exposeAttributes(this, ['available_to_all_workspaces'])
   }
 
   // array(string) # Eligible public IP addresses for Remote Server outbound connections. Empty when this Custom Domain is not eligible for outbound selection.
@@ -54,6 +87,7 @@ class CustomDomain {
 
   setOutboundIpAddresses = value => {
     this.attributes.outbound_ip_addresses = value
+    exposeAttributes(this, ['outbound_ip_addresses'])
   }
 
   // string # Customer-owned domain name.
@@ -61,6 +95,7 @@ class CustomDomain {
 
   setDomain = value => {
     this.attributes.domain = value
+    exposeAttributes(this, ['domain'])
   }
 
   // string # Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
@@ -68,6 +103,7 @@ class CustomDomain {
 
   setDestination = value => {
     this.attributes.destination = value
+    exposeAttributes(this, ['destination'])
   }
 
   // string # Current DNS verification status.
@@ -75,6 +111,7 @@ class CustomDomain {
 
   setDnsStatus = value => {
     this.attributes.dns_status = value
+    exposeAttributes(this, ['dns_status'])
   }
 
   // int64 # Current SSL certificate ID.
@@ -82,6 +119,7 @@ class CustomDomain {
 
   setSslCertificateId = value => {
     this.attributes.ssl_certificate_id = value
+    exposeAttributes(this, ['ssl_certificate_id'])
   }
 
   // boolean # Is this domain's SSL certificate automatically managed and renewed by Files.com?
@@ -89,6 +127,7 @@ class CustomDomain {
 
   setBrickManaged = value => {
     this.attributes.brick_managed = value
+    exposeAttributes(this, ['brick_managed'])
   }
 
   // int64 # Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
@@ -96,6 +135,7 @@ class CustomDomain {
 
   setFolderBehaviorId = value => {
     this.attributes.folder_behavior_id = value
+    exposeAttributes(this, ['folder_behavior_id'])
   }
 
   // array(string) # Dedicated public IP addresses allocated to this Custom Domain.
@@ -103,6 +143,7 @@ class CustomDomain {
 
   setIpAddresses = value => {
     this.attributes.ip_addresses = value
+    exposeAttributes(this, ['ip_addresses'])
   }
 
   // date-time # When this Custom Domain was created.
@@ -127,28 +168,34 @@ class CustomDomain {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (isArray(params.available_to_all_workspaces) || isObject(params.available_to_all_workspaces)) {
+      throw new errors.InvalidParameterError(`Bad parameter: available_to_all_workspaces must be of type Boolean, received ${getType(params.available_to_all_workspaces)}`)
+    }
+
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
-    if (params.destination && !isString(params.destination)) {
+    if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (params.folder_behavior_id && !isInt(params.folder_behavior_id)) {
+    if (params.folder_behavior_id !== undefined && params.folder_behavior_id !== null && !isInt(params.folder_behavior_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(params.folder_behavior_id)}`)
     }
 
-    if (params.ssl_certificate_id && !isInt(params.ssl_certificate_id)) {
+    if (params.ssl_certificate_id !== undefined && params.ssl_certificate_id !== null && !isInt(params.ssl_certificate_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_certificate_id must be of type Int, received ${getType(params.ssl_certificate_id)}`)
     }
 
-    if (params.domain && !isString(params.domain)) {
+    if (params.domain !== undefined && params.domain !== null && !isString(params.domain)) {
       throw new errors.InvalidParameterError(`Bad parameter: domain must be of type String, received ${getType(params.domain)}`)
     }
 
@@ -162,7 +209,8 @@ class CustomDomain {
 
     const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new CustomDomain(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -174,8 +222,10 @@ class CustomDomain {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -195,13 +245,12 @@ class CustomDomain {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await CustomDomain.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -211,21 +260,27 @@ class CustomDomain {
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `id` or `available_to_all_workspaces`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/custom_domains', 'GET', params, options)
 
-    return response?.data?.map(obj => new CustomDomain(obj, options)) || []
+    return response?.data?.map(obj => new CustomDomain(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     CustomDomain.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      CustomDomain.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Custom Domain ID.
@@ -234,19 +289,21 @@ class CustomDomain {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new CustomDomain(response?.data, options)
+    return new CustomDomain(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -260,6 +317,8 @@ class CustomDomain {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
@@ -270,17 +329,17 @@ class CustomDomain {
       throw new errors.MissingParameterError('Parameter missing: count')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.count && !isInt(params.count)) {
+    if (params.count !== undefined && params.count !== null && !isInt(params.count)) {
       throw new errors.InvalidParameterError(`Bad parameter: count must be of type Int, received ${getType(params.count)}`)
     }
 
     const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}/allocate_ips`, 'POST', params, options)
 
-    return new CustomDomain(response?.data, options)
+    return new CustomDomain(response?.data, retainedOptions(options))
   }
 
   // Parameters:
@@ -295,29 +354,33 @@ class CustomDomain {
       throw new errors.MissingParameterError('Parameter missing: domain')
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (isArray(params.available_to_all_workspaces) || isObject(params.available_to_all_workspaces)) {
+      throw new errors.InvalidParameterError(`Bad parameter: available_to_all_workspaces must be of type Boolean, received ${getType(params.available_to_all_workspaces)}`)
+    }
+
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
-    if (params.destination && !isString(params.destination)) {
+    if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (params.folder_behavior_id && !isInt(params.folder_behavior_id)) {
+    if (params.folder_behavior_id !== undefined && params.folder_behavior_id !== null && !isInt(params.folder_behavior_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: folder_behavior_id must be of type Int, received ${getType(params.folder_behavior_id)}`)
     }
 
-    if (params.ssl_certificate_id && !isInt(params.ssl_certificate_id)) {
+    if (params.ssl_certificate_id !== undefined && params.ssl_certificate_id !== null && !isInt(params.ssl_certificate_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_certificate_id must be of type Int, received ${getType(params.ssl_certificate_id)}`)
     }
 
-    if (params.domain && !isString(params.domain)) {
+    if (params.domain !== undefined && params.domain !== null && !isString(params.domain)) {
       throw new errors.InvalidParameterError(`Bad parameter: domain must be of type String, received ${getType(params.domain)}`)
     }
 
     const response = await Api.sendRequest('/custom_domains', 'POST', params, options)
 
-    return new CustomDomain(response?.data, options)
+    return new CustomDomain(response?.data, retainedOptions(options))
   }
 }
 

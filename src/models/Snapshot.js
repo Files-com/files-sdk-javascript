@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class Snapshot
  */
@@ -15,14 +52,7 @@ class Snapshot {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class Snapshot {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // date-time # When the snapshot expires.
@@ -40,6 +71,7 @@ class Snapshot {
 
   setExpiresAt = value => {
     this.attributes.expires_at = value
+    exposeAttributes(this, ['expires_at'])
   }
 
   // date-time # When the snapshot was finalized.
@@ -47,6 +79,7 @@ class Snapshot {
 
   setFinalizedAt = value => {
     this.attributes.finalized_at = value
+    exposeAttributes(this, ['finalized_at'])
   }
 
   // string # A name for the snapshot.
@@ -54,6 +87,7 @@ class Snapshot {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // int64 # The user that created this snapshot, if applicable.
@@ -61,6 +95,7 @@ class Snapshot {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // int64 # The bundle using this snapshot, if applicable.
@@ -68,6 +103,7 @@ class Snapshot {
 
   setBundleId = value => {
     this.attributes.bundle_id = value
+    exposeAttributes(this, ['bundle_id'])
   }
 
   // int64 # Workspace ID. `0` means the default workspace.
@@ -75,6 +111,7 @@ class Snapshot {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // array(string) # An array of paths to add to the snapshot.
@@ -82,6 +119,7 @@ class Snapshot {
 
   setPaths = value => {
     this.attributes.paths = value
+    exposeAttributes(this, ['paths'])
   }
 
   // Finalize Snapshot
@@ -94,8 +132,10 @@ class Snapshot {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -123,20 +163,22 @@ class Snapshot {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.expires_at && !isString(params.expires_at)) {
+    if (params.expires_at !== undefined && params.expires_at !== null && !isString(params.expires_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.paths && !isArray(params.paths)) {
+    if (params.paths !== undefined && params.paths !== null && !isArray(params.paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params.paths)}`)
     }
 
@@ -150,7 +192,8 @@ class Snapshot {
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new Snapshot(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -162,8 +205,10 @@ class Snapshot {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -183,13 +228,12 @@ class Snapshot {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await Snapshot.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -197,21 +241,27 @@ class Snapshot {
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/snapshots', 'GET', params, options)
 
-    return response?.data?.map(obj => new Snapshot(obj, options)) || []
+    return response?.data?.map(obj => new Snapshot(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     Snapshot.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      Snapshot.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Snapshot ID.
@@ -220,19 +270,21 @@ class Snapshot {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/snapshots/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new Snapshot(response?.data, options)
+    return new Snapshot(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -244,25 +296,25 @@ class Snapshot {
   //   paths - array(string) - An array of paths to add to the snapshot.
   //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
   static create = async (params = {}, options = {}) => {
-    if (params.expires_at && !isString(params.expires_at)) {
+    if (params.expires_at !== undefined && params.expires_at !== null && !isString(params.expires_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.paths && !isArray(params.paths)) {
+    if (params.paths !== undefined && params.paths !== null && !isArray(params.paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: paths must be of type Array, received ${getType(params.paths)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/snapshots', 'POST', params, options)
 
-    return new Snapshot(response?.data, options)
+    return new Snapshot(response?.data, retainedOptions(options))
   }
 }
 

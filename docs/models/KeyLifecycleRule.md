@@ -27,7 +27,7 @@
 ## List Key Lifecycle Rules
 
 ```
-await KeyLifecycleRule.list
+await KeyLifecycleRule.list()
 ```
 
 

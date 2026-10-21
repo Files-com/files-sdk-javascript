@@ -35,7 +35,7 @@
 ## List Inbound S3 Logs
 
 ```
-await InboundS3Log.list
+await InboundS3Log.list()
 ```
 
 

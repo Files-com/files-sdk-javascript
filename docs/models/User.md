@@ -407,7 +407,7 @@ await user.unlock()
 ```
 const user = await User.find(id)
 
-await user.resend_welcome_email()
+await user.resendWelcomeEmail()
 ```
 
 ### Parameters
@@ -422,7 +422,7 @@ await user.resend_welcome_email()
 ```
 const user = await User.find(id)
 
-await user.user_2fa_reset()
+await user.user2faReset()
 ```
 
 ### Parameters

@@ -176,7 +176,7 @@ await File.find(path, {
 
 ```
 await File.zip({
-  'paths': "paths",
+  'paths': ["paths"],
   'destination': "destination",
   'overwrite': false,
 })
@@ -376,7 +376,7 @@ await file.delete({
 ```
 const file = await File.find(path)
 
-await file.zip_list_contents()
+await file.zipListContents()
 ```
 
 ### Parameters
@@ -401,7 +401,7 @@ await file.zip_list_contents()
 ```
 const file = await File.find(path)
 
-await file.begin_delete({
+await file.beginDelete({
   'recursive': false,
 })
 ```
@@ -524,7 +524,7 @@ await file.transform({
 ```
 const file = await File.find(path)
 
-await file.gpg_decrypt({
+await file.gpgDecrypt({
   'destination': "destination",
   'gpg_key_partner_id': 1,
   'use_all_private_keys': false,
@@ -559,7 +559,7 @@ await file.gpg_decrypt({
 ```
 const file = await File.find(path)
 
-await file.gpg_encrypt({
+await file.gpgEncrypt({
   'destination': "destination",
   'gpg_key_partner_id': 1,
   'signing_key_id': 1,
@@ -623,7 +623,7 @@ await file.unzip({
 ```
 const file = await File.find(path)
 
-await file.begin_upload({
+await file.beginUpload({
   'mkdir_parents': false,
   'part': 1,
   'parts': 1,

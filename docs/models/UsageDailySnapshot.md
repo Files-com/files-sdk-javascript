@@ -43,7 +43,7 @@
 ## List Usage Daily Snapshots
 
 ```
-await UsageDailySnapshot.list
+await UsageDailySnapshot.list()
 ```
 
 

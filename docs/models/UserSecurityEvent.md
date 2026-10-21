@@ -29,7 +29,7 @@
 ## List User Security Events
 
 ```
-await UserSecurityEvent.list
+await UserSecurityEvent.list()
 ```
 
 

@@ -23,7 +23,7 @@
 ## List Remote Bandwidth Snapshots
 
 ```
-await RemoteBandwidthSnapshot.list
+await RemoteBandwidthSnapshot.list()
 ```
 
 

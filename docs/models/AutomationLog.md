@@ -45,7 +45,7 @@
 ## List Automation Logs
 
 ```
-await AutomationLog.list
+await AutomationLog.list()
 ```
 
 

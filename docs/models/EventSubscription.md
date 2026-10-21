@@ -54,7 +54,7 @@
 ## List Event Subscriptions
 
 ```
-await EventSubscription.list
+await EventSubscription.list()
 ```
 
 
@@ -94,7 +94,6 @@ await EventSubscription.create({
   'enabled': true,
   'event_types': ["sync_run.failure.v1"],
   'filter': {"payload.sync_name":{"prefix":"Nightly"},"payload.event_errors":{"exists":true}},
-  'delivery_policy': "example",
   'event_target_ids': [1],
 })
 ```
@@ -133,7 +132,6 @@ await event_subscription.update({
   'enabled': true,
   'event_types': ["sync_run.failure.v1"],
   'filter': {"payload.sync_name":{"prefix":"Nightly"},"payload.event_errors":{"exists":true}},
-  'delivery_policy': "example",
   'event_target_ids': [1],
 })
 ```

@@ -83,7 +83,7 @@ await Lock.create(path, {
 ## Delete Lock
 
 ```
-const [lock] = await Lock.list()
+const lock = new Lock({ "path": path })
 
 await lock.delete({
   'token': "token",

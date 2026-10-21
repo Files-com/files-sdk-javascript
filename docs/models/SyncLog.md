@@ -37,7 +37,7 @@
 ## List Sync Logs
 
 ```
-await SyncLog.list
+await SyncLog.list()
 ```
 
 

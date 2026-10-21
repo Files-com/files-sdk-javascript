@@ -58,7 +58,7 @@
 ## List AS2 Partners
 
 ```
-await As2Partner.list
+await As2Partner.list()
 ```
 
 

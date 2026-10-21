@@ -28,7 +28,7 @@
 ## List Snapshots
 
 ```
-await Snapshot.list
+await Snapshot.list()
 ```
 
 

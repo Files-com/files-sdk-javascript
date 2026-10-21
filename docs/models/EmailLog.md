@@ -33,7 +33,7 @@
 ## List Email Logs
 
 ```
-await EmailLog.list
+await EmailLog.list()
 ```
 
 

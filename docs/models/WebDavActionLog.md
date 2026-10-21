@@ -49,7 +49,7 @@
 ## List WebDAV Action Logs
 
 ```
-await WebDavActionLog.list
+await WebDavActionLog.list()
 ```
 
 

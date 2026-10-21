@@ -588,7 +588,7 @@
 ## Show Site Settings
 
 ```
-await Site.get
+await Site.get()
 ```
 
 
@@ -597,7 +597,7 @@ await Site.get
 ## Get the most recent usage snapshot (usage data for billing purposes) for a Site
 
 ```
-await Site.getUsage
+await Site.getUsage()
 ```
 
 

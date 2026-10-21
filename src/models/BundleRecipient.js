@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class BundleRecipient
  */
@@ -15,14 +52,7 @@ class BundleRecipient {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class BundleRecipient {
 
   setCompany = value => {
     this.attributes.company = value
+    exposeAttributes(this, ['company'])
   }
 
   // string # The recipient's name.
@@ -40,6 +71,7 @@ class BundleRecipient {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // string # A note sent to the recipient with the bundle.
@@ -47,6 +79,7 @@ class BundleRecipient {
 
   setNote = value => {
     this.attributes.note = value
+    exposeAttributes(this, ['note'])
   }
 
   // string # The recipient's email address.
@@ -54,6 +87,7 @@ class BundleRecipient {
 
   setRecipient = value => {
     this.attributes.recipient = value
+    exposeAttributes(this, ['recipient'])
   }
 
   // date-time # When the Bundle was shared with this recipient.
@@ -61,6 +95,7 @@ class BundleRecipient {
 
   setSentAt = value => {
     this.attributes.sent_at = value
+    exposeAttributes(this, ['sent_at'])
   }
 
   // int64 # Workspace ID. `0` means the default workspace.
@@ -68,6 +103,7 @@ class BundleRecipient {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
@@ -75,6 +111,7 @@ class BundleRecipient {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // int64 # Bundle to share.
@@ -82,6 +119,7 @@ class BundleRecipient {
 
   setBundleId = value => {
     this.attributes.bundle_id = value
+    exposeAttributes(this, ['bundle_id'])
   }
 
   // boolean # Set to true to share the link with the recipient upon creation.
@@ -89,6 +127,7 @@ class BundleRecipient {
 
   setShareAfterCreate = value => {
     this.attributes.share_after_create = value
+    exposeAttributes(this, ['share_after_create'])
   }
 
   save = async () => {
@@ -96,7 +135,7 @@ class BundleRecipient {
       throw new errors.NotImplementedError('The BundleRecipient object doesn\'t support updates.')
     } else {
       const newObject = await BundleRecipient.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
+      adoptAttributes(this, newObject.attributes)
       return true
     }
   }
@@ -113,29 +152,35 @@ class BundleRecipient {
       throw new errors.MissingParameterError('Parameter missing: bundle_id')
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.bundle_id && !isInt(params.bundle_id)) {
+    if (params.bundle_id !== undefined && params.bundle_id !== null && !isInt(params.bundle_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
     const response = await Api.sendRequest('/bundle_recipients', 'GET', params, options)
 
-    return response?.data?.map(obj => new BundleRecipient(obj, options)) || []
+    return response?.data?.map(obj => new BundleRecipient(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     BundleRecipient.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      BundleRecipient.list(pageParams, pageOptions))
 
   // Parameters:
   //   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
@@ -154,33 +199,37 @@ class BundleRecipient {
       throw new errors.MissingParameterError('Parameter missing: recipient')
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.bundle_id && !isInt(params.bundle_id)) {
+    if (params.bundle_id !== undefined && params.bundle_id !== null && !isInt(params.bundle_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_id must be of type Int, received ${getType(params.bundle_id)}`)
     }
 
-    if (params.recipient && !isString(params.recipient)) {
+    if (params.recipient !== undefined && params.recipient !== null && !isString(params.recipient)) {
       throw new errors.InvalidParameterError(`Bad parameter: recipient must be of type String, received ${getType(params.recipient)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.company && !isString(params.company)) {
+    if (params.company !== undefined && params.company !== null && !isString(params.company)) {
       throw new errors.InvalidParameterError(`Bad parameter: company must be of type String, received ${getType(params.company)}`)
     }
 
-    if (params.note && !isString(params.note)) {
+    if (params.note !== undefined && params.note !== null && !isString(params.note)) {
       throw new errors.InvalidParameterError(`Bad parameter: note must be of type String, received ${getType(params.note)}`)
+    }
+
+    if (isArray(params.share_after_create) || isObject(params.share_after_create)) {
+      throw new errors.InvalidParameterError(`Bad parameter: share_after_create must be of type Boolean, received ${getType(params.share_after_create)}`)
     }
 
     const response = await Api.sendRequest('/bundle_recipients', 'POST', params, options)
 
-    return new BundleRecipient(response?.data, options)
+    return new BundleRecipient(response?.data, retainedOptions(options))
   }
 }
 

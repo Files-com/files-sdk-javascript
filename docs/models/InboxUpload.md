@@ -34,7 +34,7 @@
 ## List Inbox Uploads
 
 ```
-await InboxUpload.list
+await InboxUpload.list()
 ```
 
 

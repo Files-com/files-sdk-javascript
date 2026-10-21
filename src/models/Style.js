@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class Style
  */
@@ -15,14 +52,7 @@ class Style {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class Style {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -40,6 +71,7 @@ class Style {
 
   setPath = value => {
     this.attributes.path = value
+    exposeAttributes(this, ['path'])
   }
 
   // Image # Logo
@@ -47,6 +79,7 @@ class Style {
 
   setLogo = value => {
     this.attributes.logo = value
+    exposeAttributes(this, ['logo'])
   }
 
   // string # URL to open when a public visitor clicks the logo
@@ -54,6 +87,7 @@ class Style {
 
   setLogoClickHref = value => {
     this.attributes.logo_click_href = value
+    exposeAttributes(this, ['logo_click_href'])
   }
 
   // Image # Logo thumbnail
@@ -61,6 +95,7 @@ class Style {
 
   setThumbnail = value => {
     this.attributes.thumbnail = value
+    exposeAttributes(this, ['thumbnail'])
   }
 
   // file # Logo for custom branding. Required when creating a new style.
@@ -68,6 +103,7 @@ class Style {
 
   setFile = value => {
     this.attributes.file = value
+    exposeAttributes(this, ['file'])
   }
 
   // Parameters:
@@ -82,12 +118,14 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.path = this.attributes.path
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.logo_click_href && !isString(params.logo_click_href)) {
+    if (params.logo_click_href !== undefined && params.logo_click_href !== null && !isString(params.logo_click_href)) {
       throw new errors.InvalidParameterError(`Bad parameter: logo_click_href must be of type String, received ${getType(params.logo_click_href)}`)
     }
 
@@ -101,7 +139,8 @@ class Style {
 
     const response = await Api.sendRequest(`/styles/${encodeURIComponent(params.path)}`, 'PATCH', params, this.options)
 
-    return new Style(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -113,8 +152,10 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.path = this.attributes.path
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
@@ -133,8 +174,7 @@ class Style {
     this.delete(params)
 
   save = async () => {
-    const newObject = await this.update(this.attributes)
-    this.attributes = { ...newObject.attributes }
+    await this.update(this.attributes)
     return true
   }
 
@@ -145,19 +185,21 @@ class Style {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.path = path
 
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
     const response = await Api.sendRequest(`/styles/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    return new Style(response?.data, options)
+    return new Style(response?.data, retainedOptions(options))
   }
 
   static get = (path, params = {}, options = {}) =>

@@ -45,7 +45,7 @@
 ## List Event Delivery Attempts
 
 ```
-await EventDeliveryAttempt.list
+await EventDeliveryAttempt.list()
 ```
 
 

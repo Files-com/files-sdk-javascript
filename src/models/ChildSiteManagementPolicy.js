@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class ChildSiteManagementPolicy
  */
@@ -15,14 +52,7 @@ class ChildSiteManagementPolicy {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class ChildSiteManagementPolicy {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # Type of policy.  Valid values: `settings`.
@@ -40,6 +71,7 @@ class ChildSiteManagementPolicy {
 
   setPolicyType = value => {
     this.attributes.policy_type = value
+    exposeAttributes(this, ['policy_type'])
   }
 
   // string # Name for this policy.
@@ -47,6 +79,7 @@ class ChildSiteManagementPolicy {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // string # Description for this policy.
@@ -54,6 +87,7 @@ class ChildSiteManagementPolicy {
 
   setDescription = value => {
     this.attributes.description = value
+    exposeAttributes(this, ['description'])
   }
 
   // object # Policy configuration data. On a Child Site, contains only managed setting names with null values. Settings policies accept site settings plus an optional `folder_behaviors` array for parent-managed root behaviors on child sites. For more information, refer to the Value Hash section of the developer documentation.
@@ -61,6 +95,7 @@ class ChildSiteManagementPolicy {
 
   setValue = value => {
     this.attributes.value = value
+    exposeAttributes(this, ['value'])
   }
 
   // array(int64) # IDs of child sites that this policy has been applied to. This field is read-only.
@@ -68,6 +103,7 @@ class ChildSiteManagementPolicy {
 
   setAppliedChildSiteIds = value => {
     this.attributes.applied_child_site_ids = value
+    exposeAttributes(this, ['applied_child_site_ids'])
   }
 
   // array(int64) # IDs of child sites excluded from this default policy.
@@ -75,6 +111,7 @@ class ChildSiteManagementPolicy {
 
   setSkipChildSiteIds = value => {
     this.attributes.skip_child_site_ids = value
+    exposeAttributes(this, ['skip_child_site_ids'])
   }
 
   // array(int64) # IDs of child sites explicitly assigned to this non-default policy.
@@ -82,6 +119,7 @@ class ChildSiteManagementPolicy {
 
   setChildSiteIds = value => {
     this.attributes.child_site_ids = value
+    exposeAttributes(this, ['child_site_ids'])
   }
 
   // boolean # Whether this policy applies to child sites not explicitly assigned to another policy.
@@ -89,6 +127,7 @@ class ChildSiteManagementPolicy {
 
   setDefaultPolicy = value => {
     this.attributes.default_policy = value
+    exposeAttributes(this, ['default_policy'])
   }
 
   // date-time # When this policy was created.
@@ -114,28 +153,34 @@ class ChildSiteManagementPolicy {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
+    if (params.skip_child_site_ids !== undefined && params.skip_child_site_ids !== null && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
     }
 
-    if (params.child_site_ids && !isArray(params.child_site_ids)) {
+    if (params.child_site_ids !== undefined && params.child_site_ids !== null && !isArray(params.child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: child_site_ids must be of type Array, received ${getType(params.child_site_ids)}`)
     }
 
-    if (params.policy_type && !isString(params.policy_type)) {
+    if (isArray(params.default_policy) || isObject(params.default_policy)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_policy must be of type Boolean, received ${getType(params.default_policy)}`)
+    }
+
+    if (params.policy_type !== undefined && params.policy_type !== null && !isString(params.policy_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: policy_type must be of type String, received ${getType(params.policy_type)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.description && !isString(params.description)) {
+    if (params.description !== undefined && params.description !== null && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
@@ -149,7 +194,8 @@ class ChildSiteManagementPolicy {
 
     const response = await Api.sendRequest(`/child_site_management_policies/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new ChildSiteManagementPolicy(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -161,8 +207,10 @@ class ChildSiteManagementPolicy {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -182,13 +230,12 @@ class ChildSiteManagementPolicy {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await ChildSiteManagementPolicy.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -196,21 +243,27 @@ class ChildSiteManagementPolicy {
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/child_site_management_policies', 'GET', params, options)
 
-    return response?.data?.map(obj => new ChildSiteManagementPolicy(obj, options)) || []
+    return response?.data?.map(obj => new ChildSiteManagementPolicy(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     ChildSiteManagementPolicy.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      ChildSiteManagementPolicy.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Child Site Management Policy ID.
@@ -219,19 +272,21 @@ class ChildSiteManagementPolicy {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/child_site_management_policies/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new ChildSiteManagementPolicy(response?.data, options)
+    return new ChildSiteManagementPolicy(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -250,29 +305,33 @@ class ChildSiteManagementPolicy {
       throw new errors.MissingParameterError('Parameter missing: policy_type')
     }
 
-    if (params.skip_child_site_ids && !isArray(params.skip_child_site_ids)) {
+    if (params.skip_child_site_ids !== undefined && params.skip_child_site_ids !== null && !isArray(params.skip_child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: skip_child_site_ids must be of type Array, received ${getType(params.skip_child_site_ids)}`)
     }
 
-    if (params.child_site_ids && !isArray(params.child_site_ids)) {
+    if (params.child_site_ids !== undefined && params.child_site_ids !== null && !isArray(params.child_site_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: child_site_ids must be of type Array, received ${getType(params.child_site_ids)}`)
     }
 
-    if (params.policy_type && !isString(params.policy_type)) {
+    if (isArray(params.default_policy) || isObject(params.default_policy)) {
+      throw new errors.InvalidParameterError(`Bad parameter: default_policy must be of type Boolean, received ${getType(params.default_policy)}`)
+    }
+
+    if (params.policy_type !== undefined && params.policy_type !== null && !isString(params.policy_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: policy_type must be of type String, received ${getType(params.policy_type)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.description && !isString(params.description)) {
+    if (params.description !== undefined && params.description !== null && !isString(params.description)) {
       throw new errors.InvalidParameterError(`Bad parameter: description must be of type String, received ${getType(params.description)}`)
     }
 
     const response = await Api.sendRequest('/child_site_management_policies', 'POST', params, options)
 
-    return new ChildSiteManagementPolicy(response?.data, options)
+    return new ChildSiteManagementPolicy(response?.data, retainedOptions(options))
   }
 }
 

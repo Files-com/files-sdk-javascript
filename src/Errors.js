@@ -37,20 +37,18 @@ const toPascalCase = string =>
     .map(part => part[0].toUpperCase() + part.substring(1))
     .join('')
 
-export const handleErrorResponse = error => {
-  if (error instanceof FilesError) {
-    throw error
-  }
-
+// The error a failed request becomes. log is the logger of the call that failed.
+const errorOf = (error, log) => {
   const { response } = error
   let errorData = response?.data
 
-  const message = errorData?.error || response?.statusText || error.message
+  // Api normalizes a failed response's status text to response.reason; it is the only message a non-JSON body leaves.
+  const message = errorData?.error || response?.statusText || response?.reason || error.message
   const code = response?.status || errorData?.['http-code'] || 0
 
   if (!errorData) {
-    Logger.debug('FilesApiError Exception:', code, message)
-    throw new FilesError(message, code)
+    log.debug('FilesApiError Exception:', code, message)
+    return new FilesError(message, code)
   }
 
   if (Array.isArray(errorData)) {
@@ -58,8 +56,8 @@ export const handleErrorResponse = error => {
   }
 
   if (!errorData.type) {
-    Logger.debug('FilesApiError Exception:', code, message)
-    throw new FilesError(message, code)
+    log.debug('FilesApiError Exception:', code, message)
+    return new FilesError(message, code)
   }
 
   const parts = errorData.type.split('/')
@@ -77,11 +75,29 @@ export const handleErrorResponse = error => {
   const ErrorClass = errorClasses[className] || FilesApiError
 
   if (!errorClasses[className]) {
-    Logger.debug(`Unable to find exception with name of ${className} - falling back to FilesApiError`)
+    log.debug(`Unable to find exception with name of ${className} - falling back to FilesApiError`)
   }
 
-  Logger.debug(`${ErrorClass.name} Exception >`, code, message)
-  throw new ErrorClass(message, code, errorData)
+  log.debug(`${ErrorClass.name} Exception >`, code, message)
+  return new ErrorClass(message, code, errorData)
+}
+
+// log is the logger of the call that failed: its client's, or Logger, with the global log settings, by default. A
+// lockout region mismatch the SDK did not follow (see Api._sendVerbatim) keeps its details as error.regionMismatch:
+// the host the API named, the HTTPS origin made of it, the origin the request was sent to, whether that host is
+// trusted, and why the request was not sent there.
+export const handleErrorResponse = (error, log = Logger) => {
+  if (error instanceof FilesError) {
+    throw error
+  }
+
+  const failure = errorOf(error, log)
+
+  if (error?.regionMismatch) {
+    failure.regionMismatch = error.regionMismatch
+  }
+
+  throw failure
 }
 
 // general errors

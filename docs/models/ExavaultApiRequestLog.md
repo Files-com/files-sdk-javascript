@@ -37,7 +37,7 @@
 ## List Exavault API Request Logs
 
 ```
-await ExavaultApiRequestLog.list
+await ExavaultApiRequestLog.list()
 ```
 
 

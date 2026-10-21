@@ -39,7 +39,7 @@
 ## List Schedules
 
 ```
-await Schedule.list
+await Schedule.list()
 ```
 
 

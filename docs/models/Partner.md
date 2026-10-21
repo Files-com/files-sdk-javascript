@@ -71,7 +71,7 @@
 ## List Partners
 
 ```
-await Partner.list
+await Partner.list()
 ```
 
 

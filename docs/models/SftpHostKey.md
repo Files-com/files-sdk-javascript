@@ -28,7 +28,7 @@
 ## List SFTP Host Keys
 
 ```
-await SftpHostKey.list
+await SftpHostKey.list()
 ```
 
 

@@ -28,7 +28,7 @@
 ## List Integration Centric Profiles
 
 ```
-await IntegrationCentricProfile.list
+await IntegrationCentricProfile.list()
 ```
 
 

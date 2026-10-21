@@ -15,5 +15,23 @@
       "loose": true
     }],
     "@babel/plugin-transform-runtime"
+  ],
+  "overrides": [
+    {
+      "test": [
+        "./src/isomorphic/File.node.js",
+        "./lib/isomorphic/File.node.js"
+      ],
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "22"
+            }
+          }
+        ]
+      ]
+    }
   ]
 }

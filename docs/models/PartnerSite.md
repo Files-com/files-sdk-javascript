@@ -4,8 +4,7 @@
 ## Delete Partner Site
 
 ```
-const partner_site = new PartnerSite()
-partner_site.path = myFilePath
+const partner_site = new PartnerSite({ "id": id })
 
 await partner_site.delete()
 ```

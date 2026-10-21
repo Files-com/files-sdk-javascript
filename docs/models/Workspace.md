@@ -17,7 +17,7 @@
 ## List Workspaces
 
 ```
-await Workspace.list
+await Workspace.list()
 ```
 
 

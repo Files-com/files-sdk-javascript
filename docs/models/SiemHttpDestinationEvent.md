@@ -31,7 +31,7 @@
 ## List SIEM HTTP Destination Events
 
 ```
-await SiemHttpDestinationEvent.list
+await SiemHttpDestinationEvent.list()
 ```
 
 

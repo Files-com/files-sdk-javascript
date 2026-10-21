@@ -78,7 +78,7 @@
 ```
 await Notification.list({
   'include_ancestors': false,
-  'group_id': 1,
+  'group_id': "1",
 })
 ```
 
@@ -130,7 +130,7 @@ await Notification.create({
   'trigger_by_share_recipients': true,
   'workspace_id': 1,
   'group_id': 1,
-  'group_ids': [1],
+  'group_ids': "1",
   'username': "User",
 })
 ```

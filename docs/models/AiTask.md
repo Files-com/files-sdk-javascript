@@ -72,7 +72,7 @@
 ## List Ai Tasks
 
 ```
-await AiTask.list
+await AiTask.list()
 ```
 
 
@@ -152,7 +152,7 @@ await AiTask.create({
 ```
 const ai_task = await AiTask.find(id)
 
-await ai_task.manual_run()
+await ai_task.manualRun()
 ```
 
 ### Parameters

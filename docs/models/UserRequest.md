@@ -23,7 +23,7 @@
 ## List User Requests
 
 ```
-await UserRequest.list
+await UserRequest.list()
 ```
 
 

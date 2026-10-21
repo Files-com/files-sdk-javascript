@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class FileCommentReaction
  */
@@ -15,14 +52,7 @@ class FileCommentReaction {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class FileCommentReaction {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # Emoji used in the reaction.
@@ -40,6 +71,7 @@ class FileCommentReaction {
 
   setEmoji = value => {
     this.attributes.emoji = value
+    exposeAttributes(this, ['emoji'])
   }
 
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
@@ -47,6 +79,7 @@ class FileCommentReaction {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // int64 # ID of file comment to attach reaction to.
@@ -54,6 +87,7 @@ class FileCommentReaction {
 
   setFileCommentId = value => {
     this.attributes.file_comment_id = value
+    exposeAttributes(this, ['file_comment_id'])
   }
 
   delete = async (params = {}) => {
@@ -65,8 +99,10 @@ class FileCommentReaction {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -89,7 +125,7 @@ class FileCommentReaction {
       throw new errors.NotImplementedError('The FileCommentReaction object doesn\'t support updates.')
     } else {
       const newObject = await FileCommentReaction.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
+      adoptAttributes(this, newObject.attributes)
       return true
     }
   }
@@ -107,21 +143,21 @@ class FileCommentReaction {
       throw new errors.MissingParameterError('Parameter missing: emoji')
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.file_comment_id && !isInt(params.file_comment_id)) {
+    if (params.file_comment_id !== undefined && params.file_comment_id !== null && !isInt(params.file_comment_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: file_comment_id must be of type Int, received ${getType(params.file_comment_id)}`)
     }
 
-    if (params.emoji && !isString(params.emoji)) {
+    if (params.emoji !== undefined && params.emoji !== null && !isString(params.emoji)) {
       throw new errors.InvalidParameterError(`Bad parameter: emoji must be of type String, received ${getType(params.emoji)}`)
     }
 
     const response = await Api.sendRequest('/file_comment_reactions', 'POST', params, options)
 
-    return new FileCommentReaction(response?.data, options)
+    return new FileCommentReaction(response?.data, retainedOptions(options))
   }
 }
 

@@ -45,7 +45,7 @@
 ## List Custom Domains
 
 ```
-await CustomDomain.list
+await CustomDomain.list()
 ```
 
 

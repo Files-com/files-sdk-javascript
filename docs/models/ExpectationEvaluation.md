@@ -56,7 +56,7 @@
 ## List Expectation Evaluations
 
 ```
-await ExpectationEvaluation.list
+await ExpectationEvaluation.list()
 ```
 
 

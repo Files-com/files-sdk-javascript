@@ -87,7 +87,7 @@
 ## List Expectations
 
 ```
-await Expectation.list
+await Expectation.list()
 ```
 
 
@@ -173,7 +173,7 @@ await Expectation.create({
 ```
 const expectation = await Expectation.find(id)
 
-await expectation.trigger_evaluation()
+await expectation.triggerEvaluation()
 ```
 
 ### Parameters

@@ -29,7 +29,7 @@
 ## List Event Channels
 
 ```
-await EventChannel.list
+await EventChannel.list()
 ```
 
 

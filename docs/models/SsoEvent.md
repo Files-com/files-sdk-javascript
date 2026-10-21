@@ -43,7 +43,7 @@
 ## List SSO Events
 
 ```
-await SsoEvent.list
+await SsoEvent.list()
 ```
 
 

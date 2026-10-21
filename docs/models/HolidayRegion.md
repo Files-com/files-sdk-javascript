@@ -17,7 +17,7 @@
 ## List all possible holiday regions
 
 ```
-await HolidayRegion.getSupported
+await HolidayRegion.getSupported()
 ```
 
 

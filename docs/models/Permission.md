@@ -46,9 +46,9 @@
 await Permission.list({
   'path': "example",
   'include_groups': false,
-  'group_id': 1,
-  'partner_id': 1,
-  'user_id': 1,
+  'group_id': "1",
+  'partner_id': "1",
+  'user_id': "1",
 })
 ```
 
@@ -74,7 +74,7 @@ await Permission.list({
 await Permission.create({
   'path': "path",
   'group_id': 1,
-  'group_ids': [1],
+  'group_ids': "1",
   'permission': "full",
   'recursive': false,
   'partner_id': 1,

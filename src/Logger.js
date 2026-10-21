@@ -19,6 +19,15 @@ class Logger {
     }
   }
 
+  static getApplicationLoggerMethod = level => {
+    switch (level) {
+      case Logger.LogLevel.ERROR: return 'error'
+      case Logger.LogLevel.WARN: return 'warn'
+      case Logger.LogLevel.INFO: return 'info'
+      default: return 'debug'
+    }
+  }
+
   static isPaused = false
 
   static getLogLevelName = level => {
@@ -48,13 +57,25 @@ class Logger {
   }
 
   static log = (level = Logger.LogLevel.INFO, ...messages) => {
+    Logger._log(require('./Files').default, level, ...messages)
+  }
+
+  // Logs with the log level and application logger of config: a client from Files.createClient(), or Files for the
+  // global settings. Pausing applies to every client.
+  static _log = (config, level, ...messages) => {
     if (Logger.isPaused || messages.length === 0) {
       return
     }
 
-    const Files = require('./Files').default
+    if (config.getLogLevel() < level) {
+      return
+    }
 
-    if (Files.getLogLevel() < level) {
+    // An application logger receives the messages unchanged, on the method for their level.
+    const applicationLogger = config.getLogger()
+
+    if (applicationLogger) {
+      applicationLogger[Logger.getApplicationLoggerMethod(level)](...messages)
       return
     }
 

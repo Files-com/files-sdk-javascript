@@ -31,7 +31,7 @@
 ## List Pending Work Events
 
 ```
-await PendingWorkEvent.list
+await PendingWorkEvent.list()
 ```
 
 

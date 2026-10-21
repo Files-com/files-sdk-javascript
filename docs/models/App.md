@@ -59,7 +59,7 @@
 ## List Apps
 
 ```
-await App.list
+await App.list()
 ```
 
 

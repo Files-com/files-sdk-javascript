@@ -73,7 +73,7 @@ await ApiKey.list({
 ## Show information about current API key.  (Requires current API connection to be using an API key.)
 
 ```
-await ApiKey.findCurrent
+await ApiKey.findCurrent()
 ```
 
 
@@ -143,7 +143,7 @@ await ApiKey.updateCurrent({
 ## Delete current API key.  (Requires current API connection to be using an API key.)
 
 ```
-await ApiKey.deleteCurrent
+await ApiKey.deleteCurrent()
 ```
 
 

@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class WebhookTest
  */
@@ -15,14 +52,7 @@ class WebhookTest {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class WebhookTest {
 
   setCode = value => {
     this.attributes.code = value
+    exposeAttributes(this, ['code'])
   }
 
   // string # Error message
@@ -40,6 +71,7 @@ class WebhookTest {
 
   setMessage = value => {
     this.attributes.message = value
+    exposeAttributes(this, ['message'])
   }
 
   // string # Status message
@@ -47,6 +79,7 @@ class WebhookTest {
 
   setStatus = value => {
     this.attributes.status = value
+    exposeAttributes(this, ['status'])
   }
 
   // Auto # Additional data
@@ -54,6 +87,7 @@ class WebhookTest {
 
   setData = value => {
     this.attributes.data = value
+    exposeAttributes(this, ['data'])
   }
 
   // boolean # The success status of the webhook test
@@ -61,6 +95,7 @@ class WebhookTest {
 
   setSuccess = value => {
     this.attributes.success = value
+    exposeAttributes(this, ['success'])
   }
 
   // string # URL for testing the webhook.
@@ -68,6 +103,7 @@ class WebhookTest {
 
   setUrl = value => {
     this.attributes.url = value
+    exposeAttributes(this, ['url'])
   }
 
   // string # HTTP method(GET or POST).
@@ -75,6 +111,7 @@ class WebhookTest {
 
   setMethod = value => {
     this.attributes.method = value
+    exposeAttributes(this, ['method'])
   }
 
   // string # HTTP encoding method.  Can be JSON, XML, or RAW (form data).
@@ -82,6 +119,7 @@ class WebhookTest {
 
   setEncoding = value => {
     this.attributes.encoding = value
+    exposeAttributes(this, ['encoding'])
   }
 
   // object # Additional request headers.
@@ -89,6 +127,7 @@ class WebhookTest {
 
   setHeaders = value => {
     this.attributes.headers = value
+    exposeAttributes(this, ['headers'])
   }
 
   // object # Additional body parameters.
@@ -96,6 +135,7 @@ class WebhookTest {
 
   setBody = value => {
     this.attributes.body = value
+    exposeAttributes(this, ['body'])
   }
 
   // string # raw body text
@@ -103,6 +143,7 @@ class WebhookTest {
 
   setRawBody = value => {
     this.attributes.raw_body = value
+    exposeAttributes(this, ['raw_body'])
   }
 
   // boolean # Send the file data as the request body?
@@ -110,6 +151,7 @@ class WebhookTest {
 
   setFileAsBody = value => {
     this.attributes.file_as_body = value
+    exposeAttributes(this, ['file_as_body'])
   }
 
   // string # Send the file data as a named parameter in the request POST body
@@ -117,6 +159,7 @@ class WebhookTest {
 
   setFileFormField = value => {
     this.attributes.file_form_field = value
+    exposeAttributes(this, ['file_form_field'])
   }
 
   // string # action for test body
@@ -124,6 +167,7 @@ class WebhookTest {
 
   setAction = value => {
     this.attributes.action = value
+    exposeAttributes(this, ['action'])
   }
 
   // boolean # Use dedicated IPs for sending the webhook?
@@ -131,6 +175,7 @@ class WebhookTest {
 
   setUseDedicatedIps = value => {
     this.attributes.use_dedicated_ips = value
+    exposeAttributes(this, ['use_dedicated_ips'])
   }
 
   save = async () => {
@@ -138,7 +183,7 @@ class WebhookTest {
       throw new errors.NotImplementedError('The WebhookTest object doesn\'t support updates.')
     } else {
       const newObject = await WebhookTest.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
+      adoptAttributes(this, newObject.attributes)
       return true
     }
   }
@@ -159,33 +204,41 @@ class WebhookTest {
       throw new errors.MissingParameterError('Parameter missing: url')
     }
 
-    if (params.url && !isString(params.url)) {
+    if (params.url !== undefined && params.url !== null && !isString(params.url)) {
       throw new errors.InvalidParameterError(`Bad parameter: url must be of type String, received ${getType(params.url)}`)
     }
 
-    if (params.method && !isString(params.method)) {
+    if (params.method !== undefined && params.method !== null && !isString(params.method)) {
       throw new errors.InvalidParameterError(`Bad parameter: method must be of type String, received ${getType(params.method)}`)
     }
 
-    if (params.encoding && !isString(params.encoding)) {
+    if (params.encoding !== undefined && params.encoding !== null && !isString(params.encoding)) {
       throw new errors.InvalidParameterError(`Bad parameter: encoding must be of type String, received ${getType(params.encoding)}`)
     }
 
-    if (params.raw_body && !isString(params.raw_body)) {
+    if (params.raw_body !== undefined && params.raw_body !== null && !isString(params.raw_body)) {
       throw new errors.InvalidParameterError(`Bad parameter: raw_body must be of type String, received ${getType(params.raw_body)}`)
     }
 
-    if (params.file_form_field && !isString(params.file_form_field)) {
+    if (isArray(params.file_as_body) || isObject(params.file_as_body)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_as_body must be of type Boolean, received ${getType(params.file_as_body)}`)
+    }
+
+    if (params.file_form_field !== undefined && params.file_form_field !== null && !isString(params.file_form_field)) {
       throw new errors.InvalidParameterError(`Bad parameter: file_form_field must be of type String, received ${getType(params.file_form_field)}`)
     }
 
-    if (params.action && !isString(params.action)) {
+    if (params.action !== undefined && params.action !== null && !isString(params.action)) {
       throw new errors.InvalidParameterError(`Bad parameter: action must be of type String, received ${getType(params.action)}`)
+    }
+
+    if (isArray(params.use_dedicated_ips) || isObject(params.use_dedicated_ips)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_dedicated_ips must be of type Boolean, received ${getType(params.use_dedicated_ips)}`)
     }
 
     const response = await Api.sendRequest('/webhook_tests', 'POST', params, options)
 
-    return new WebhookTest(response?.data, options)
+    return new WebhookTest(response?.data, retainedOptions(options))
   }
 }
 

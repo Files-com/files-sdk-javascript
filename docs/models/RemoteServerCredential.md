@@ -71,7 +71,7 @@
 ## List Remote Server Credentials
 
 ```
-await RemoteServerCredential.list
+await RemoteServerCredential.list()
 ```
 
 

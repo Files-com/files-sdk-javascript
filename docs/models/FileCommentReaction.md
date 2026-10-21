@@ -38,8 +38,7 @@ await FileCommentReaction.create({
 ## Delete File Comment Reaction
 
 ```
-const file_comment_reaction = new FileCommentReaction()
-file_comment_reaction.path = myFilePath
+const file_comment_reaction = new FileCommentReaction({ "id": id })
 
 await file_comment_reaction.delete()
 ```

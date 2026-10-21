@@ -47,7 +47,7 @@
 ## List User Lifecycle Rules
 
 ```
-await UserLifecycleRule.list
+await UserLifecycleRule.list()
 ```
 
 

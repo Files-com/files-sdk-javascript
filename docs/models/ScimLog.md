@@ -29,7 +29,7 @@
 ## List Scim Logs
 
 ```
-await ScimLog.list
+await ScimLog.list()
 ```
 
 

@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class PublicKey
  */
@@ -15,14 +52,7 @@ class PublicKey {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class PublicKey {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // int64 # Workspace ID (0 for default workspace).
@@ -40,6 +71,7 @@ class PublicKey {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // string # Public key title
@@ -47,6 +79,7 @@ class PublicKey {
 
   setTitle = value => {
     this.attributes.title = value
+    exposeAttributes(this, ['title'])
   }
 
   // date-time # Public key created at date/time
@@ -57,6 +90,7 @@ class PublicKey {
 
   setExpiresAt = value => {
     this.attributes.expires_at = value
+    exposeAttributes(this, ['expires_at'])
   }
 
   // boolean # Is this public key expired?
@@ -64,6 +98,7 @@ class PublicKey {
 
   setExpired = value => {
     this.attributes.expired = value
+    exposeAttributes(this, ['expired'])
   }
 
   // string # Public key fingerprint (MD5)
@@ -71,6 +106,7 @@ class PublicKey {
 
   setFingerprint = value => {
     this.attributes.fingerprint = value
+    exposeAttributes(this, ['fingerprint'])
   }
 
   // string # Public key fingerprint (SHA256)
@@ -78,6 +114,7 @@ class PublicKey {
 
   setFingerprintSha256 = value => {
     this.attributes.fingerprint_sha256 = value
+    exposeAttributes(this, ['fingerprint_sha256'])
   }
 
   // string # Only returned when generating keys. Can be invalid, not_generated, generating, complete
@@ -85,6 +122,7 @@ class PublicKey {
 
   setStatus = value => {
     this.attributes.status = value
+    exposeAttributes(this, ['status'])
   }
 
   // date-time # Key's most recent login time via SFTP
@@ -92,6 +130,7 @@ class PublicKey {
 
   setLastLoginAt = value => {
     this.attributes.last_login_at = value
+    exposeAttributes(this, ['last_login_at'])
   }
 
   // string # Only returned when generating keys. Private key generated for the user.
@@ -99,6 +138,7 @@ class PublicKey {
 
   setGeneratedPrivateKey = value => {
     this.attributes.generated_private_key = value
+    exposeAttributes(this, ['generated_private_key'])
   }
 
   // string # Only returned when generating keys. Public key generated for the user.
@@ -106,6 +146,7 @@ class PublicKey {
 
   setGeneratedPublicKey = value => {
     this.attributes.generated_public_key = value
+    exposeAttributes(this, ['generated_public_key'])
   }
 
   // string # Username of the user this public key is associated with
@@ -113,6 +154,7 @@ class PublicKey {
 
   setUsername = value => {
     this.attributes.username = value
+    exposeAttributes(this, ['username'])
   }
 
   // int64 # User ID this public key is associated with
@@ -120,6 +162,7 @@ class PublicKey {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // string # Actual contents of SSH key.
@@ -127,6 +170,7 @@ class PublicKey {
 
   setPublicKey = value => {
     this.attributes.public_key = value
+    exposeAttributes(this, ['public_key'])
   }
 
   // boolean # If true, generate a new SSH key pair. Can not be used with `public_key`
@@ -134,6 +178,7 @@ class PublicKey {
 
   setGenerateKeypair = value => {
     this.attributes.generate_keypair = value
+    exposeAttributes(this, ['generate_keypair'])
   }
 
   // string # Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -141,6 +186,7 @@ class PublicKey {
 
   setGeneratePrivateKeyPassword = value => {
     this.attributes.generate_private_key_password = value
+    exposeAttributes(this, ['generate_private_key_password'])
   }
 
   // string # Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -148,6 +194,7 @@ class PublicKey {
 
   setGenerateAlgorithm = value => {
     this.attributes.generate_algorithm = value
+    exposeAttributes(this, ['generate_algorithm'])
   }
 
   // int64 # Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -155,6 +202,7 @@ class PublicKey {
 
   setGenerateLength = value => {
     this.attributes.generate_length = value
+    exposeAttributes(this, ['generate_length'])
   }
 
   // Parameters:
@@ -168,12 +216,14 @@ class PublicKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.title && !isString(params.title)) {
+    if (params.title !== undefined && params.title !== null && !isString(params.title)) {
       throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
     }
 
@@ -195,7 +245,8 @@ class PublicKey {
 
     const response = await Api.sendRequest(`/public_keys/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new PublicKey(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -207,8 +258,10 @@ class PublicKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -228,13 +281,12 @@ class PublicKey {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await PublicKey.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -249,25 +301,31 @@ class PublicKey {
   //   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
   //   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
   static list = async (params = {}, options = {}) => {
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/public_keys', 'GET', params, options)
 
-    return response?.data?.map(obj => new PublicKey(obj, options)) || []
+    return response?.data?.map(obj => new PublicKey(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     PublicKey.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      PublicKey.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Public Key ID.
@@ -276,19 +334,21 @@ class PublicKey {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/public_keys/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new PublicKey(response?.data, options)
+    return new PublicKey(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -307,33 +367,37 @@ class PublicKey {
       throw new errors.MissingParameterError('Parameter missing: title')
     }
 
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.title && !isString(params.title)) {
+    if (params.title !== undefined && params.title !== null && !isString(params.title)) {
       throw new errors.InvalidParameterError(`Bad parameter: title must be of type String, received ${getType(params.title)}`)
     }
 
-    if (params.public_key && !isString(params.public_key)) {
+    if (params.public_key !== undefined && params.public_key !== null && !isString(params.public_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_key must be of type String, received ${getType(params.public_key)}`)
     }
 
-    if (params.generate_private_key_password && !isString(params.generate_private_key_password)) {
+    if (isArray(params.generate_keypair) || isObject(params.generate_keypair)) {
+      throw new errors.InvalidParameterError(`Bad parameter: generate_keypair must be of type Boolean, received ${getType(params.generate_keypair)}`)
+    }
+
+    if (params.generate_private_key_password !== undefined && params.generate_private_key_password !== null && !isString(params.generate_private_key_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: generate_private_key_password must be of type String, received ${getType(params.generate_private_key_password)}`)
     }
 
-    if (params.generate_algorithm && !isString(params.generate_algorithm)) {
+    if (params.generate_algorithm !== undefined && params.generate_algorithm !== null && !isString(params.generate_algorithm)) {
       throw new errors.InvalidParameterError(`Bad parameter: generate_algorithm must be of type String, received ${getType(params.generate_algorithm)}`)
     }
 
-    if (params.generate_length && !isInt(params.generate_length)) {
+    if (params.generate_length !== undefined && params.generate_length !== null && !isInt(params.generate_length)) {
       throw new errors.InvalidParameterError(`Bad parameter: generate_length must be of type Int, received ${getType(params.generate_length)}`)
     }
 
     const response = await Api.sendRequest('/public_keys', 'POST', params, options)
 
-    return new PublicKey(response?.data, options)
+    return new PublicKey(response?.data, retainedOptions(options))
   }
 }
 

@@ -51,7 +51,7 @@
 ## List Usage Snapshots
 
 ```
-await UsageSnapshot.list
+await UsageSnapshot.list()
 ```
 
 

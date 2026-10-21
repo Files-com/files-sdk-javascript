@@ -62,7 +62,7 @@
 ## List Payments
 
 ```
-await Payment.list
+await Payment.list()
 ```
 
 

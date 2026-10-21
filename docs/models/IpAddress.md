@@ -23,7 +23,7 @@
 ## List IP Addresses associated with the current site
 
 ```
-await IpAddress.list
+await IpAddress.list()
 ```
 
 
@@ -37,7 +37,7 @@ await IpAddress.list
 ## List all possible public SmartFile IP addresses
 
 ```
-await IpAddress.getSmartfileReserved
+await IpAddress.getSmartfileReserved()
 ```
 
 
@@ -51,7 +51,7 @@ await IpAddress.getSmartfileReserved
 ## List all possible public ExaVault IP addresses
 
 ```
-await IpAddress.getExavaultReserved
+await IpAddress.getExavaultReserved()
 ```
 
 
@@ -65,7 +65,7 @@ await IpAddress.getExavaultReserved
 ## List all possible public IP addresses
 
 ```
-await IpAddress.getReserved
+await IpAddress.getReserved()
 ```
 
 

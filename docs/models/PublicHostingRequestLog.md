@@ -35,7 +35,7 @@
 ## List Public Hosting Request Logs
 
 ```
-await PublicHostingRequestLog.list
+await PublicHostingRequestLog.list()
 ```
 
 

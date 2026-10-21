@@ -53,7 +53,7 @@
 ## List FTP Action Logs
 
 ```
-await FtpActionLog.list
+await FtpActionLog.list()
 ```
 
 

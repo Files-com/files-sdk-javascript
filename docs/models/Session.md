@@ -45,6 +45,6 @@ await Session.create({
 ## Delete user session (log out)
 
 ```
-await Session.delete
+await Session.delete()
 ```
 

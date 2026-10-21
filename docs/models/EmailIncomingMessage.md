@@ -31,7 +31,7 @@
 ## List Email Incoming Messages
 
 ```
-await EmailIncomingMessage.list
+await EmailIncomingMessage.list()
 ```
 
 

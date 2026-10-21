@@ -55,7 +55,7 @@
 ## List API Request Logs
 
 ```
-await ApiRequestLog.list
+await ApiRequestLog.list()
 ```
 
 

@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class PartnerChannel
  */
@@ -15,14 +52,7 @@ class PartnerChannel {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class PartnerChannel {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // int64 # ID of the Workspace associated with this Partner Channel.
@@ -40,6 +71,7 @@ class PartnerChannel {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // string # Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
@@ -47,6 +79,7 @@ class PartnerChannel {
 
   setDirection = value => {
     this.attributes.direction = value
+    exposeAttributes(this, ['direction'])
   }
 
   // boolean # Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
@@ -54,6 +87,7 @@ class PartnerChannel {
 
   setUseChannelRoot = value => {
     this.attributes.use_channel_root = value
+    exposeAttributes(this, ['use_channel_root'])
   }
 
   // int64 # ID of the Partner this Channel belongs to.
@@ -61,6 +95,7 @@ class PartnerChannel {
 
   setPartnerId = value => {
     this.attributes.partner_id = value
+    exposeAttributes(this, ['partner_id'])
   }
 
   // int64 # ID of the Partner Channel Template that manages this Channel, if any.
@@ -68,6 +103,7 @@ class PartnerChannel {
 
   setPartnerChannelTemplateId = value => {
     this.attributes.partner_channel_template_id = value
+    exposeAttributes(this, ['partner_channel_template_id'])
   }
 
   // string # Channel path relative to the Partner root folder. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -75,6 +111,7 @@ class PartnerChannel {
 
   setPath = value => {
     this.attributes.path = value
+    exposeAttributes(this, ['path'])
   }
 
   // string # Optional Channel-level to-Partner folder name override.
@@ -82,6 +119,7 @@ class PartnerChannel {
 
   setToPartnerFolderName = value => {
     this.attributes.to_partner_folder_name = value
+    exposeAttributes(this, ['to_partner_folder_name'])
   }
 
   // string # Optional Channel-level from-Partner folder name override.
@@ -89,6 +127,7 @@ class PartnerChannel {
 
   setFromPartnerFolderName = value => {
     this.attributes.from_partner_folder_name = value
+    exposeAttributes(this, ['from_partner_folder_name'])
   }
 
   // string # Optional route path for files uploaded by the Partner.
@@ -96,6 +135,7 @@ class PartnerChannel {
 
   setFromPartnerRoutePath = value => {
     this.attributes.from_partner_route_path = value
+    exposeAttributes(this, ['from_partner_route_path'])
   }
 
   // string # Optional route path for files delivered to the Partner.
@@ -103,6 +143,7 @@ class PartnerChannel {
 
   setToPartnerRoutePath = value => {
     this.attributes.to_partner_route_path = value
+    exposeAttributes(this, ['to_partner_route_path'])
   }
 
   // array(string) # Managed folder paths inside the to-Partner folder.
@@ -110,6 +151,7 @@ class PartnerChannel {
 
   setToPartnerManagedFolderPaths = value => {
     this.attributes.to_partner_managed_folder_paths = value
+    exposeAttributes(this, ['to_partner_managed_folder_paths'])
   }
 
   // array(string) # Managed folder paths inside the from-Partner folder.
@@ -117,6 +159,7 @@ class PartnerChannel {
 
   setFromPartnerManagedFolderPaths = value => {
     this.attributes.from_partner_managed_folder_paths = value
+    exposeAttributes(this, ['from_partner_managed_folder_paths'])
   }
 
   // string # Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
@@ -124,6 +167,7 @@ class PartnerChannel {
 
   setEffectiveToPartnerFolderName = value => {
     this.attributes.effective_to_partner_folder_name = value
+    exposeAttributes(this, ['effective_to_partner_folder_name'])
   }
 
   // string # Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
@@ -131,6 +175,7 @@ class PartnerChannel {
 
   setEffectiveFromPartnerFolderName = value => {
     this.attributes.effective_from_partner_folder_name = value
+    exposeAttributes(this, ['effective_from_partner_folder_name'])
   }
 
   // string # Resolved Channel folder path.
@@ -138,6 +183,7 @@ class PartnerChannel {
 
   setChannelPath = value => {
     this.attributes.channel_path = value
+    exposeAttributes(this, ['channel_path'])
   }
 
   // string # Resolved to-Partner folder path.
@@ -145,6 +191,7 @@ class PartnerChannel {
 
   setToPartnerFolderPath = value => {
     this.attributes.to_partner_folder_path = value
+    exposeAttributes(this, ['to_partner_folder_path'])
   }
 
   // string # Resolved from-Partner folder path.
@@ -152,6 +199,7 @@ class PartnerChannel {
 
   setFromPartnerFolderPath = value => {
     this.attributes.from_partner_folder_path = value
+    exposeAttributes(this, ['from_partner_folder_path'])
   }
 
   // Parameters:
@@ -173,40 +221,46 @@ class PartnerChannel {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.direction && !isString(params.direction)) {
+    if (params.direction !== undefined && params.direction !== null && !isString(params.direction)) {
       throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
-    if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {
+    if (isArray(params.use_channel_root) || isObject(params.use_channel_root)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_channel_root must be of type Boolean, received ${getType(params.use_channel_root)}`)
+    }
+
+    if (params.from_partner_folder_name !== undefined && params.from_partner_folder_name !== null && !isString(params.from_partner_folder_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_folder_name must be of type String, received ${getType(params.from_partner_folder_name)}`)
     }
 
-    if (params.from_partner_managed_folder_paths && !isArray(params.from_partner_managed_folder_paths)) {
+    if (params.from_partner_managed_folder_paths !== undefined && params.from_partner_managed_folder_paths !== null && !isArray(params.from_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
     }
 
-    if (params.from_partner_route_path && !isString(params.from_partner_route_path)) {
+    if (params.from_partner_route_path !== undefined && params.from_partner_route_path !== null && !isString(params.from_partner_route_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path must be of type String, received ${getType(params.from_partner_route_path)}`)
     }
 
-    if (params.to_partner_folder_name && !isString(params.to_partner_folder_name)) {
+    if (params.to_partner_folder_name !== undefined && params.to_partner_folder_name !== null && !isString(params.to_partner_folder_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_folder_name must be of type String, received ${getType(params.to_partner_folder_name)}`)
     }
 
-    if (params.to_partner_managed_folder_paths && !isArray(params.to_partner_managed_folder_paths)) {
+    if (params.to_partner_managed_folder_paths !== undefined && params.to_partner_managed_folder_paths !== null && !isArray(params.to_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_managed_folder_paths must be of type Array, received ${getType(params.to_partner_managed_folder_paths)}`)
     }
 
-    if (params.to_partner_route_path && !isString(params.to_partner_route_path)) {
+    if (params.to_partner_route_path !== undefined && params.to_partner_route_path !== null && !isString(params.to_partner_route_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path must be of type String, received ${getType(params.to_partner_route_path)}`)
     }
 
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
@@ -220,7 +274,8 @@ class PartnerChannel {
 
     const response = await Api.sendRequest(`/partner_channels/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new PartnerChannel(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -232,8 +287,10 @@ class PartnerChannel {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -253,13 +310,12 @@ class PartnerChannel {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await PartnerChannel.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -269,21 +325,27 @@ class PartnerChannel {
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `path` or `partner_id`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `partner_id` and `workspace_id`. Valid field combinations are `[ workspace_id, partner_id ]`.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/partner_channels', 'GET', params, options)
 
-    return response?.data?.map(obj => new PartnerChannel(obj, options)) || []
+    return response?.data?.map(obj => new PartnerChannel(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     PartnerChannel.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      PartnerChannel.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Partner Channel ID.
@@ -292,19 +354,21 @@ class PartnerChannel {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/partner_channels/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new PartnerChannel(response?.data, options)
+    return new PartnerChannel(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -331,49 +395,53 @@ class PartnerChannel {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params.direction && !isString(params.direction)) {
+    if (params.direction !== undefined && params.direction !== null && !isString(params.direction)) {
       throw new errors.InvalidParameterError(`Bad parameter: direction must be of type String, received ${getType(params.direction)}`)
     }
 
-    if (params.from_partner_folder_name && !isString(params.from_partner_folder_name)) {
+    if (isArray(params.use_channel_root) || isObject(params.use_channel_root)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_channel_root must be of type Boolean, received ${getType(params.use_channel_root)}`)
+    }
+
+    if (params.from_partner_folder_name !== undefined && params.from_partner_folder_name !== null && !isString(params.from_partner_folder_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_folder_name must be of type String, received ${getType(params.from_partner_folder_name)}`)
     }
 
-    if (params.from_partner_managed_folder_paths && !isArray(params.from_partner_managed_folder_paths)) {
+    if (params.from_partner_managed_folder_paths !== undefined && params.from_partner_managed_folder_paths !== null && !isArray(params.from_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
     }
 
-    if (params.from_partner_route_path && !isString(params.from_partner_route_path)) {
+    if (params.from_partner_route_path !== undefined && params.from_partner_route_path !== null && !isString(params.from_partner_route_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_route_path must be of type String, received ${getType(params.from_partner_route_path)}`)
     }
 
-    if (params.to_partner_folder_name && !isString(params.to_partner_folder_name)) {
+    if (params.to_partner_folder_name !== undefined && params.to_partner_folder_name !== null && !isString(params.to_partner_folder_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_folder_name must be of type String, received ${getType(params.to_partner_folder_name)}`)
     }
 
-    if (params.to_partner_managed_folder_paths && !isArray(params.to_partner_managed_folder_paths)) {
+    if (params.to_partner_managed_folder_paths !== undefined && params.to_partner_managed_folder_paths !== null && !isArray(params.to_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_managed_folder_paths must be of type Array, received ${getType(params.to_partner_managed_folder_paths)}`)
     }
 
-    if (params.to_partner_route_path && !isString(params.to_partner_route_path)) {
+    if (params.to_partner_route_path !== undefined && params.to_partner_route_path !== null && !isString(params.to_partner_route_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: to_partner_route_path must be of type String, received ${getType(params.to_partner_route_path)}`)
     }
 
-    if (params.partner_id && !isInt(params.partner_id)) {
+    if (params.partner_id !== undefined && params.partner_id !== null && !isInt(params.partner_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: partner_id must be of type Int, received ${getType(params.partner_id)}`)
     }
 
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
     const response = await Api.sendRequest('/partner_channels', 'POST', params, options)
 
-    return new PartnerChannel(response?.data, options)
+    return new PartnerChannel(response?.data, retainedOptions(options))
   }
 }
 

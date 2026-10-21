@@ -119,7 +119,7 @@
 ## List SSO Strategies
 
 ```
-await SsoStrategy.list
+await SsoStrategy.list()
 ```
 
 

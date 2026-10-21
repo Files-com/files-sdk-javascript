@@ -47,7 +47,7 @@
 ## List Outbound Connection Logs
 
 ```
-await OutboundConnectionLog.list
+await OutboundConnectionLog.list()
 ```
 
 

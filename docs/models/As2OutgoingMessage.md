@@ -81,7 +81,7 @@
 ## List AS2 Outgoing Messages
 
 ```
-await As2OutgoingMessage.list
+await As2OutgoingMessage.list()
 ```
 
 

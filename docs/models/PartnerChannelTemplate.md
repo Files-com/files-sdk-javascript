@@ -45,7 +45,7 @@
 ## List Partner Channel Templates
 
 ```
-await PartnerChannelTemplate.list
+await PartnerChannelTemplate.list()
 ```
 
 

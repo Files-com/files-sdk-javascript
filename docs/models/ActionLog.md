@@ -41,7 +41,7 @@
 ## List Action Logs
 
 ```
-await ActionLog.list
+await ActionLog.list()
 ```
 
 

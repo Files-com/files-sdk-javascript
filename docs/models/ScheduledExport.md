@@ -68,7 +68,7 @@
 ## List Scheduled Exports
 
 ```
-await ScheduledExport.list
+await ScheduledExport.list()
 ```
 
 

@@ -58,7 +58,7 @@
 ## List Remote Mount Backends
 
 ```
-await RemoteMountBackend.list
+await RemoteMountBackend.list()
 ```
 
 
@@ -92,8 +92,8 @@ await RemoteMountBackend.create({
   'health_check_enabled': true,
   'health_check_type': "active",
   'interval': 60,
-  'min_free_cpu': "1.0",
-  'min_free_mem': "1.0",
+  'min_free_cpu': 1.0,
+  'min_free_mem': 1.0,
   'priority': 1,
   'remote_path': "/path/on/remote",
   'rise': 1,
@@ -127,7 +127,7 @@ await RemoteMountBackend.create({
 ```
 const remote_mount_backend = await RemoteMountBackend.find(id)
 
-await remote_mount_backend.reset_status()
+await remote_mount_backend.resetStatus()
 ```
 
 ### Parameters
@@ -148,8 +148,8 @@ await remote_mount_backend.update({
   'health_check_enabled': true,
   'health_check_type': "active",
   'interval': 60,
-  'min_free_cpu': "1.0",
-  'min_free_mem': "1.0",
+  'min_free_cpu': 1.0,
+  'min_free_mem': 1.0,
   'priority': 1,
   'remote_path': "/path/on/remote",
   'rise': 1,

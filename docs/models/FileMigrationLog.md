@@ -31,7 +31,7 @@
 ## List File Migration Logs
 
 ```
-await FileMigrationLog.list
+await FileMigrationLog.list()
 ```
 
 

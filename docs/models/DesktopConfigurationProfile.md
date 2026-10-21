@@ -27,7 +27,7 @@
 ## List Desktop Configuration Profiles
 
 ```
-await DesktopConfigurationProfile.list
+await DesktopConfigurationProfile.list()
 ```
 
 

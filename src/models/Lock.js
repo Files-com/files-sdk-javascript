@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class Lock
  */
@@ -15,14 +52,7 @@ class Lock {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class Lock {
 
   setPath = value => {
     this.attributes.path = value
+    exposeAttributes(this, ['path'])
   }
 
   // int64 # Lock timeout in seconds
@@ -40,6 +71,7 @@ class Lock {
 
   setTimeout = value => {
     this.attributes.timeout = value
+    exposeAttributes(this, ['timeout'])
   }
 
   // string
@@ -47,6 +79,7 @@ class Lock {
 
   setDepth = value => {
     this.attributes.depth = value
+    exposeAttributes(this, ['depth'])
   }
 
   // boolean # Does lock apply to subfolders?
@@ -54,6 +87,7 @@ class Lock {
 
   setRecursive = value => {
     this.attributes.recursive = value
+    exposeAttributes(this, ['recursive'])
   }
 
   // string # Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
@@ -61,6 +95,7 @@ class Lock {
 
   setOwner = value => {
     this.attributes.owner = value
+    exposeAttributes(this, ['owner'])
   }
 
   // string
@@ -68,6 +103,7 @@ class Lock {
 
   setScope = value => {
     this.attributes.scope = value
+    exposeAttributes(this, ['scope'])
   }
 
   // boolean # Is lock exclusive?
@@ -75,6 +111,7 @@ class Lock {
 
   setExclusive = value => {
     this.attributes.exclusive = value
+    exposeAttributes(this, ['exclusive'])
   }
 
   // string # Lock token.  Use to release lock.
@@ -82,6 +119,7 @@ class Lock {
 
   setToken = value => {
     this.attributes.token = value
+    exposeAttributes(this, ['token'])
   }
 
   // string
@@ -89,6 +127,7 @@ class Lock {
 
   setType = value => {
     this.attributes.type = value
+    exposeAttributes(this, ['type'])
   }
 
   // boolean # Can lock be modified by users other than its creator?
@@ -96,6 +135,7 @@ class Lock {
 
   setAllowAccessByAnyUser = value => {
     this.attributes.allow_access_by_any_user = value
+    exposeAttributes(this, ['allow_access_by_any_user'])
   }
 
   // int64 # Lock creator user ID
@@ -103,6 +143,7 @@ class Lock {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   // string # Lock creator username
@@ -110,6 +151,7 @@ class Lock {
 
   setUsername = value => {
     this.attributes.username = value
+    exposeAttributes(this, ['username'])
   }
 
   // string # Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
@@ -117,6 +159,7 @@ class Lock {
 
   setExpectedToken = value => {
     this.attributes.expected_token = value
+    exposeAttributes(this, ['expected_token'])
   }
 
   // Parameters:
@@ -130,12 +173,14 @@ class Lock {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.path = this.attributes.path
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.token && !isString(params.token)) {
+    if (params.token !== undefined && params.token !== null && !isString(params.token)) {
       throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params.token)}`)
     }
 
@@ -163,7 +208,7 @@ class Lock {
 
   save = async () => {
     const newObject = await Lock.create(this.attributes.path, this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -177,28 +222,40 @@ class Lock {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.path = path
 
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (isArray(params.include_children) || isObject(params.include_children)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_children must be of type Boolean, received ${getType(params.include_children)}`)
     }
 
     const response = await Api.sendRequest(`/locks/${encodeURIComponent(params.path)}`, 'GET', params, options)
 
-    return response?.data?.map(obj => new Lock(obj, options)) || []
+    return response?.data?.map(obj => new Lock(obj, retainedOptions(options))) || []
   }
+
+  // The items listFor() lists, one at a time: an async iterator that requests each page
+  // through listFor() only once the items before it have been taken (see Api._iterate).
+  static listForIterator = (path, params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      Lock.listFor(path, pageParams, pageOptions))
 
   // Parameters:
   //   path (required) - string - Path
@@ -214,35 +271,49 @@ class Lock {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.path = path
 
     if (!params.path) {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
-    if (params.path && !isString(params.path)) {
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.token && !isString(params.token)) {
+    if (params.token !== undefined && params.token !== null && !isString(params.token)) {
       throw new errors.InvalidParameterError(`Bad parameter: token must be of type String, received ${getType(params.token)}`)
     }
 
-    if (params.expected_token && !isString(params.expected_token)) {
+    if (params.expected_token !== undefined && params.expected_token !== null && !isString(params.expected_token)) {
       throw new errors.InvalidParameterError(`Bad parameter: expected_token must be of type String, received ${getType(params.expected_token)}`)
     }
 
-    if (params.owner && !isString(params.owner)) {
+    if (isArray(params.allow_access_by_any_user) || isObject(params.allow_access_by_any_user)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allow_access_by_any_user must be of type Boolean, received ${getType(params.allow_access_by_any_user)}`)
+    }
+
+    if (isArray(params.exclusive) || isObject(params.exclusive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: exclusive must be of type Boolean, received ${getType(params.exclusive)}`)
+    }
+
+    if (isArray(params.recursive) || isObject(params.recursive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type Boolean, received ${getType(params.recursive)}`)
+    }
+
+    if (params.owner !== undefined && params.owner !== null && !isString(params.owner)) {
       throw new errors.InvalidParameterError(`Bad parameter: owner must be of type String, received ${getType(params.owner)}`)
     }
 
-    if (params.timeout && !isInt(params.timeout)) {
+    if (params.timeout !== undefined && params.timeout !== null && !isInt(params.timeout)) {
       throw new errors.InvalidParameterError(`Bad parameter: timeout must be of type Int, received ${getType(params.timeout)}`)
     }
 
     const response = await Api.sendRequest(`/locks/${encodeURIComponent(params.path)}`, 'POST', params, options)
 
-    return new Lock(response?.data, options)
+    return new Lock(response?.data, retainedOptions(options))
   }
 }
 

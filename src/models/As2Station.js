@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class As2Station
  */
@@ -15,14 +52,7 @@ class As2Station {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class As2Station {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // int64 # ID of the Workspace associated with this AS2 Station.
@@ -40,6 +71,7 @@ class As2Station {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // string # The station's formal AS2 name.
@@ -47,6 +79,7 @@ class As2Station {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // string # Public URI for sending AS2 message to.
@@ -54,6 +87,7 @@ class As2Station {
 
   setUri = value => {
     this.attributes.uri = value
+    exposeAttributes(this, ['uri'])
   }
 
   // string # The station's AS2 domain name.
@@ -61,6 +95,7 @@ class As2Station {
 
   setDomain = value => {
     this.attributes.domain = value
+    exposeAttributes(this, ['domain'])
   }
 
   // string # Serial of public certificate used for message security in hex format.
@@ -68,6 +103,7 @@ class As2Station {
 
   setHexPublicCertificateSerial = value => {
     this.attributes.hex_public_certificate_serial = value
+    exposeAttributes(this, ['hex_public_certificate_serial'])
   }
 
   // string # MD5 hash of public certificate used for message security.
@@ -75,6 +111,7 @@ class As2Station {
 
   setPublicCertificateMd5 = value => {
     this.attributes.public_certificate_md5 = value
+    exposeAttributes(this, ['public_certificate_md5'])
   }
 
   // string # Public certificate used for message security.
@@ -82,6 +119,7 @@ class As2Station {
 
   setPublicCertificate = value => {
     this.attributes.public_certificate = value
+    exposeAttributes(this, ['public_certificate'])
   }
 
   // string # MD5 hash of private key used for message security.
@@ -89,6 +127,7 @@ class As2Station {
 
   setPrivateKeyMd5 = value => {
     this.attributes.private_key_md5 = value
+    exposeAttributes(this, ['private_key_md5'])
   }
 
   // string # Subject of public certificate used for message security.
@@ -96,6 +135,7 @@ class As2Station {
 
   setPublicCertificateSubject = value => {
     this.attributes.public_certificate_subject = value
+    exposeAttributes(this, ['public_certificate_subject'])
   }
 
   // string # Issuer of public certificate used for message security.
@@ -103,6 +143,7 @@ class As2Station {
 
   setPublicCertificateIssuer = value => {
     this.attributes.public_certificate_issuer = value
+    exposeAttributes(this, ['public_certificate_issuer'])
   }
 
   // string # Serial of public certificate used for message security.
@@ -110,6 +151,7 @@ class As2Station {
 
   setPublicCertificateSerial = value => {
     this.attributes.public_certificate_serial = value
+    exposeAttributes(this, ['public_certificate_serial'])
   }
 
   // string # Not before value of public certificate used for message security.
@@ -117,6 +159,7 @@ class As2Station {
 
   setPublicCertificateNotBefore = value => {
     this.attributes.public_certificate_not_before = value
+    exposeAttributes(this, ['public_certificate_not_before'])
   }
 
   // string # Not after value of public certificate used for message security.
@@ -124,6 +167,7 @@ class As2Station {
 
   setPublicCertificateNotAfter = value => {
     this.attributes.public_certificate_not_after = value
+    exposeAttributes(this, ['public_certificate_not_after'])
   }
 
   // string # MD5 hash of private key password used for message security.
@@ -131,6 +175,7 @@ class As2Station {
 
   setPrivateKeyPasswordMd5 = value => {
     this.attributes.private_key_password_md5 = value
+    exposeAttributes(this, ['private_key_password_md5'])
   }
 
   // string # PEM-encoded private key matching public_certificate.
@@ -138,6 +183,7 @@ class As2Station {
 
   setPrivateKey = value => {
     this.attributes.private_key = value
+    exposeAttributes(this, ['private_key'])
   }
 
   // string # Password for the PEM-encoded private key.
@@ -145,6 +191,7 @@ class As2Station {
 
   setPrivateKeyPassword = value => {
     this.attributes.private_key_password = value
+    exposeAttributes(this, ['private_key_password'])
   }
 
   // string # Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
@@ -152,6 +199,7 @@ class As2Station {
 
   setPkcs12 = value => {
     this.attributes.pkcs12 = value
+    exposeAttributes(this, ['pkcs12'])
   }
 
   // string # Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
@@ -159,6 +207,7 @@ class As2Station {
 
   setPkcs12Password = value => {
     this.attributes.pkcs12_password = value
+    exposeAttributes(this, ['pkcs12_password'])
   }
 
   // Parameters:
@@ -177,32 +226,34 @@ class As2Station {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.public_certificate && !isString(params.public_certificate)) {
+    if (params.public_certificate !== undefined && params.public_certificate !== null && !isString(params.public_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
     }
 
-    if (params.private_key && !isString(params.private_key)) {
+    if (params.private_key !== undefined && params.private_key !== null && !isString(params.private_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    if (params.private_key_password && !isString(params.private_key_password)) {
+    if (params.private_key_password !== undefined && params.private_key_password !== null && !isString(params.private_key_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
     }
 
-    if (params.pkcs12 && !isString(params.pkcs12)) {
+    if (params.pkcs12 !== undefined && params.pkcs12 !== null && !isString(params.pkcs12)) {
       throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
     }
 
-    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+    if (params.pkcs12_password !== undefined && params.pkcs12_password !== null && !isString(params.pkcs12_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
@@ -216,7 +267,8 @@ class As2Station {
 
     const response = await Api.sendRequest(`/as2_stations/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new As2Station(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -228,8 +280,10 @@ class As2Station {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -249,13 +303,12 @@ class As2Station {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await As2Station.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -265,21 +318,27 @@ class As2Station {
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/as2_stations', 'GET', params, options)
 
-    return response?.data?.map(obj => new As2Station(obj, options)) || []
+    return response?.data?.map(obj => new As2Station(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     As2Station.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      As2Station.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - As2 Station ID.
@@ -288,19 +347,21 @@ class As2Station {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/as2_stations/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new As2Station(response?.data, options)
+    return new As2Station(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -319,37 +380,37 @@ class As2Station {
       throw new errors.MissingParameterError('Parameter missing: name')
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
     }
 
-    if (params.public_certificate && !isString(params.public_certificate)) {
+    if (params.public_certificate !== undefined && params.public_certificate !== null && !isString(params.public_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: public_certificate must be of type String, received ${getType(params.public_certificate)}`)
     }
 
-    if (params.private_key && !isString(params.private_key)) {
+    if (params.private_key !== undefined && params.private_key !== null && !isString(params.private_key)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key must be of type String, received ${getType(params.private_key)}`)
     }
 
-    if (params.private_key_password && !isString(params.private_key_password)) {
+    if (params.private_key_password !== undefined && params.private_key_password !== null && !isString(params.private_key_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: private_key_password must be of type String, received ${getType(params.private_key_password)}`)
     }
 
-    if (params.pkcs12 && !isString(params.pkcs12)) {
+    if (params.pkcs12 !== undefined && params.pkcs12 !== null && !isString(params.pkcs12)) {
       throw new errors.InvalidParameterError(`Bad parameter: pkcs12 must be of type String, received ${getType(params.pkcs12)}`)
     }
 
-    if (params.pkcs12_password && !isString(params.pkcs12_password)) {
+    if (params.pkcs12_password !== undefined && params.pkcs12_password !== null && !isString(params.pkcs12_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: pkcs12_password must be of type String, received ${getType(params.pkcs12_password)}`)
     }
 
     const response = await Api.sendRequest('/as2_stations', 'POST', params, options)
 
-    return new As2Station(response?.data, options)
+    return new As2Station(response?.data, retainedOptions(options))
   }
 }
 

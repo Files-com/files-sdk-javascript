@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class Site
  */
@@ -15,14 +52,7 @@ class Site {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -637,14 +667,14 @@ class Site {
   static get = async (options = {}) => {
     const response = await Api.sendRequest('/site', 'GET', {}, options)
 
-    return new Site(response?.data, options)
+    return new Site(response?.data, retainedOptions(options))
   }
 
   static getUsage = async (options = {}) => {
     const response = await Api.sendRequest('/site/usage', 'GET', {}, options)
 
     const UsageSnapshot = require('./UsageSnapshot.js').default
-    return new UsageSnapshot(response?.data, options)
+    return new UsageSnapshot(response?.data, retainedOptions(options))
   }
 
   // Parameters:
@@ -845,309 +875,753 @@ class Site {
   //   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
   //   smtp_password - string - Password for SMTP server.
   static update = async (params = {}, options = {}) => {
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.subdomain && !isString(params.subdomain)) {
+    if (params.subdomain !== undefined && params.subdomain !== null && !isString(params.subdomain)) {
       throw new errors.InvalidParameterError(`Bad parameter: subdomain must be of type String, received ${getType(params.subdomain)}`)
     }
 
-    if (params.domain && !isString(params.domain)) {
+    if (params.domain !== undefined && params.domain !== null && !isString(params.domain)) {
       throw new errors.InvalidParameterError(`Bad parameter: domain must be of type String, received ${getType(params.domain)}`)
     }
 
-    if (params.domain_letsencrypt_chain && !isString(params.domain_letsencrypt_chain)) {
+    if (isArray(params.domain_hsts_header) || isObject(params.domain_hsts_header)) {
+      throw new errors.InvalidParameterError(`Bad parameter: domain_hsts_header must be of type Boolean, received ${getType(params.domain_hsts_header)}`)
+    }
+
+    if (params.domain_letsencrypt_chain !== undefined && params.domain_letsencrypt_chain !== null && !isString(params.domain_letsencrypt_chain)) {
       throw new errors.InvalidParameterError(`Bad parameter: domain_letsencrypt_chain must be of type String, received ${getType(params.domain_letsencrypt_chain)}`)
     }
 
-    if (params.email && !isString(params.email)) {
+    if (params.email !== undefined && params.email !== null && !isString(params.email)) {
       throw new errors.InvalidParameterError(`Bad parameter: email must be of type String, received ${getType(params.email)}`)
     }
 
-    if (params.reply_to_email && !isString(params.reply_to_email)) {
+    if (params.reply_to_email !== undefined && params.reply_to_email !== null && !isString(params.reply_to_email)) {
       throw new errors.InvalidParameterError(`Bad parameter: reply_to_email must be of type String, received ${getType(params.reply_to_email)}`)
     }
 
-    if (params.bundle_expiration && !isInt(params.bundle_expiration)) {
+    if (isArray(params.allow_bundle_names) || isObject(params.allow_bundle_names)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allow_bundle_names must be of type Boolean, received ${getType(params.allow_bundle_names)}`)
+    }
+
+    if (params.bundle_expiration !== undefined && params.bundle_expiration !== null && !isInt(params.bundle_expiration)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_expiration must be of type Int, received ${getType(params.bundle_expiration)}`)
     }
 
-    if (params.welcome_email_cc && !isString(params.welcome_email_cc)) {
+    if (isArray(params.welcome_email_enabled) || isObject(params.welcome_email_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: welcome_email_enabled must be of type Boolean, received ${getType(params.welcome_email_enabled)}`)
+    }
+
+    if (isArray(params.ask_about_overwrites) || isObject(params.ask_about_overwrites)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ask_about_overwrites must be of type Boolean, received ${getType(params.ask_about_overwrites)}`)
+    }
+
+    if (isArray(params.show_request_access_link) || isObject(params.show_request_access_link)) {
+      throw new errors.InvalidParameterError(`Bad parameter: show_request_access_link must be of type Boolean, received ${getType(params.show_request_access_link)}`)
+    }
+
+    if (isArray(params.always_mkdir_parents) || isObject(params.always_mkdir_parents)) {
+      throw new errors.InvalidParameterError(`Bad parameter: always_mkdir_parents must be of type Boolean, received ${getType(params.always_mkdir_parents)}`)
+    }
+
+    if (params.welcome_email_cc !== undefined && params.welcome_email_cc !== null && !isString(params.welcome_email_cc)) {
       throw new errors.InvalidParameterError(`Bad parameter: welcome_email_cc must be of type String, received ${getType(params.welcome_email_cc)}`)
     }
 
-    if (params.welcome_email_subject && !isString(params.welcome_email_subject)) {
+    if (params.welcome_email_subject !== undefined && params.welcome_email_subject !== null && !isString(params.welcome_email_subject)) {
       throw new errors.InvalidParameterError(`Bad parameter: welcome_email_subject must be of type String, received ${getType(params.welcome_email_subject)}`)
     }
 
-    if (params.welcome_custom_text && !isString(params.welcome_custom_text)) {
+    if (params.welcome_custom_text !== undefined && params.welcome_custom_text !== null && !isString(params.welcome_custom_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: welcome_custom_text must be of type String, received ${getType(params.welcome_custom_text)}`)
     }
 
-    if (params.language && !isString(params.language)) {
+    if (params.language !== undefined && params.language !== null && !isString(params.language)) {
       throw new errors.InvalidParameterError(`Bad parameter: language must be of type String, received ${getType(params.language)}`)
     }
 
-    if (params.default_time_zone && !isString(params.default_time_zone)) {
+    if (isArray(params.windows_mode_ftp) || isObject(params.windows_mode_ftp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: windows_mode_ftp must be of type Boolean, received ${getType(params.windows_mode_ftp)}`)
+    }
+
+    if (params.default_time_zone !== undefined && params.default_time_zone !== null && !isString(params.default_time_zone)) {
       throw new errors.InvalidParameterError(`Bad parameter: default_time_zone must be of type String, received ${getType(params.default_time_zone)}`)
     }
 
-    if (params.desktop_app_session_lifetime && !isInt(params.desktop_app_session_lifetime)) {
+    if (isArray(params.desktop_app) || isObject(params.desktop_app)) {
+      throw new errors.InvalidParameterError(`Bad parameter: desktop_app must be of type Boolean, received ${getType(params.desktop_app)}`)
+    }
+
+    if (isArray(params.desktop_app_session_ip_pinning) || isObject(params.desktop_app_session_ip_pinning)) {
+      throw new errors.InvalidParameterError(`Bad parameter: desktop_app_session_ip_pinning must be of type Boolean, received ${getType(params.desktop_app_session_ip_pinning)}`)
+    }
+
+    if (params.desktop_app_session_lifetime !== undefined && params.desktop_app_session_lifetime !== null && !isInt(params.desktop_app_session_lifetime)) {
       throw new errors.InvalidParameterError(`Bad parameter: desktop_app_session_lifetime must be of type Int, received ${getType(params.desktop_app_session_lifetime)}`)
     }
 
-    if (params.mobile_app_session_lifetime && !isInt(params.mobile_app_session_lifetime)) {
+    if (isArray(params.mobile_app) || isObject(params.mobile_app)) {
+      throw new errors.InvalidParameterError(`Bad parameter: mobile_app must be of type Boolean, received ${getType(params.mobile_app)}`)
+    }
+
+    if (isArray(params.mobile_app_session_ip_pinning) || isObject(params.mobile_app_session_ip_pinning)) {
+      throw new errors.InvalidParameterError(`Bad parameter: mobile_app_session_ip_pinning must be of type Boolean, received ${getType(params.mobile_app_session_ip_pinning)}`)
+    }
+
+    if (params.mobile_app_session_lifetime !== undefined && params.mobile_app_session_lifetime !== null && !isInt(params.mobile_app_session_lifetime)) {
       throw new errors.InvalidParameterError(`Bad parameter: mobile_app_session_lifetime must be of type Int, received ${getType(params.mobile_app_session_lifetime)}`)
     }
 
-    if (params.welcome_screen && !isString(params.welcome_screen)) {
+    if (isArray(params.folder_permissions_groups_only) || isObject(params.folder_permissions_groups_only)) {
+      throw new errors.InvalidParameterError(`Bad parameter: folder_permissions_groups_only must be of type Boolean, received ${getType(params.folder_permissions_groups_only)}`)
+    }
+
+    if (params.welcome_screen !== undefined && params.welcome_screen !== null && !isString(params.welcome_screen)) {
       throw new errors.InvalidParameterError(`Bad parameter: welcome_screen must be of type String, received ${getType(params.welcome_screen)}`)
     }
 
-    if (params.office_integration_type && !isString(params.office_integration_type)) {
+    if (isArray(params.office_integration_available) || isObject(params.office_integration_available)) {
+      throw new errors.InvalidParameterError(`Bad parameter: office_integration_available must be of type Boolean, received ${getType(params.office_integration_available)}`)
+    }
+
+    if (params.office_integration_type !== undefined && params.office_integration_type !== null && !isString(params.office_integration_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: office_integration_type must be of type String, received ${getType(params.office_integration_type)}`)
     }
 
-    if (params.motd_text && !isString(params.motd_text)) {
+    if (isArray(params.pin_all_remote_servers_to_site_region) || isObject(params.pin_all_remote_servers_to_site_region)) {
+      throw new errors.InvalidParameterError(`Bad parameter: pin_all_remote_servers_to_site_region must be of type Boolean, received ${getType(params.pin_all_remote_servers_to_site_region)}`)
+    }
+
+    if (params.motd_text !== undefined && params.motd_text !== null && !isString(params.motd_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: motd_text must be of type String, received ${getType(params.motd_text)}`)
     }
 
-    if (params.additional_text_file_types && !isArray(params.additional_text_file_types)) {
+    if (isArray(params.motd_use_for_ftp) || isObject(params.motd_use_for_ftp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: motd_use_for_ftp must be of type Boolean, received ${getType(params.motd_use_for_ftp)}`)
+    }
+
+    if (isArray(params.motd_use_for_sftp) || isObject(params.motd_use_for_sftp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: motd_use_for_sftp must be of type Boolean, received ${getType(params.motd_use_for_sftp)}`)
+    }
+
+    if (isArray(params.disable_all_ai_features) || isObject(params.disable_all_ai_features)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_all_ai_features must be of type Boolean, received ${getType(params.disable_all_ai_features)}`)
+    }
+
+    if (isArray(params.mcp_dcr_enabled) || isObject(params.mcp_dcr_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: mcp_dcr_enabled must be of type Boolean, received ${getType(params.mcp_dcr_enabled)}`)
+    }
+
+    if (params.additional_text_file_types !== undefined && params.additional_text_file_types !== null && !isArray(params.additional_text_file_types)) {
       throw new errors.InvalidParameterError(`Bad parameter: additional_text_file_types must be of type Array, received ${getType(params.additional_text_file_types)}`)
     }
 
-    if (params.as2_message_retention_days && !isInt(params.as2_message_retention_days)) {
+    if (isArray(params.bundle_require_note) || isObject(params.bundle_require_note)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_require_note must be of type Boolean, received ${getType(params.bundle_require_note)}`)
+    }
+
+    if (isArray(params.bundle_send_shared_receipts) || isObject(params.bundle_send_shared_receipts)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_send_shared_receipts must be of type Boolean, received ${getType(params.bundle_send_shared_receipts)}`)
+    }
+
+    if (isArray(params.bundles_default_owned_by_primary_group) || isObject(params.bundles_default_owned_by_primary_group)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundles_default_owned_by_primary_group must be of type Boolean, received ${getType(params.bundles_default_owned_by_primary_group)}`)
+    }
+
+    if (isArray(params.calculate_file_checksums_crc32) || isObject(params.calculate_file_checksums_crc32)) {
+      throw new errors.InvalidParameterError(`Bad parameter: calculate_file_checksums_crc32 must be of type Boolean, received ${getType(params.calculate_file_checksums_crc32)}`)
+    }
+
+    if (isArray(params.calculate_file_checksums_md5) || isObject(params.calculate_file_checksums_md5)) {
+      throw new errors.InvalidParameterError(`Bad parameter: calculate_file_checksums_md5 must be of type Boolean, received ${getType(params.calculate_file_checksums_md5)}`)
+    }
+
+    if (isArray(params.calculate_file_checksums_sha1) || isObject(params.calculate_file_checksums_sha1)) {
+      throw new errors.InvalidParameterError(`Bad parameter: calculate_file_checksums_sha1 must be of type Boolean, received ${getType(params.calculate_file_checksums_sha1)}`)
+    }
+
+    if (isArray(params.calculate_file_checksums_sha256) || isObject(params.calculate_file_checksums_sha256)) {
+      throw new errors.InvalidParameterError(`Bad parameter: calculate_file_checksums_sha256 must be of type Boolean, received ${getType(params.calculate_file_checksums_sha256)}`)
+    }
+
+    if (isArray(params.legacy_checksums_mode) || isObject(params.legacy_checksums_mode)) {
+      throw new errors.InvalidParameterError(`Bad parameter: legacy_checksums_mode must be of type Boolean, received ${getType(params.legacy_checksums_mode)}`)
+    }
+
+    if (isArray(params.migrate_remote_server_sync_to_sync) || isObject(params.migrate_remote_server_sync_to_sync)) {
+      throw new errors.InvalidParameterError(`Bad parameter: migrate_remote_server_sync_to_sync must be of type Boolean, received ${getType(params.migrate_remote_server_sync_to_sync)}`)
+    }
+
+    if (params.as2_message_retention_days !== undefined && params.as2_message_retention_days !== null && !isInt(params.as2_message_retention_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: as2_message_retention_days must be of type Int, received ${getType(params.as2_message_retention_days)}`)
     }
 
-    if (params.username_display && !isString(params.username_display)) {
+    if (isArray(params.file_activity_events_enabled) || isObject(params.file_activity_events_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: file_activity_events_enabled must be of type Boolean, received ${getType(params.file_activity_events_enabled)}`)
+    }
+
+    if (params.username_display !== undefined && params.username_display !== null && !isString(params.username_display)) {
       throw new errors.InvalidParameterError(`Bad parameter: username_display must be of type String, received ${getType(params.username_display)}`)
     }
 
-    if (params.session_expiry_minutes && !isInt(params.session_expiry_minutes)) {
+    if (params.session_expiry_minutes !== undefined && params.session_expiry_minutes !== null && !isInt(params.session_expiry_minutes)) {
       throw new errors.InvalidParameterError(`Bad parameter: session_expiry_minutes must be of type Int, received ${getType(params.session_expiry_minutes)}`)
     }
 
-    if (params.user_lockout_tries && !isInt(params.user_lockout_tries)) {
+    if (isArray(params.ssl_required) || isObject(params.ssl_required)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type Boolean, received ${getType(params.ssl_required)}`)
+    }
+
+    if (isArray(params.sftp_insecure_ciphers) || isObject(params.sftp_insecure_ciphers)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_insecure_ciphers must be of type Boolean, received ${getType(params.sftp_insecure_ciphers)}`)
+    }
+
+    if (isArray(params.sftp_insecure_diffie_hellman) || isObject(params.sftp_insecure_diffie_hellman)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_insecure_diffie_hellman must be of type Boolean, received ${getType(params.sftp_insecure_diffie_hellman)}`)
+    }
+
+    if (isArray(params.disable_files_certificate_generation) || isObject(params.disable_files_certificate_generation)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_files_certificate_generation must be of type Boolean, received ${getType(params.disable_files_certificate_generation)}`)
+    }
+
+    if (isArray(params.fedramp) || isObject(params.fedramp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: fedramp must be of type Boolean, received ${getType(params.fedramp)}`)
+    }
+
+    if (isArray(params.user_lockout) || isObject(params.user_lockout)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_lockout must be of type Boolean, received ${getType(params.user_lockout)}`)
+    }
+
+    if (params.user_lockout_tries !== undefined && params.user_lockout_tries !== null && !isInt(params.user_lockout_tries)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_lockout_tries must be of type Int, received ${getType(params.user_lockout_tries)}`)
     }
 
-    if (params.user_lockout_within && !isInt(params.user_lockout_within)) {
+    if (params.user_lockout_within !== undefined && params.user_lockout_within !== null && !isInt(params.user_lockout_within)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_lockout_within must be of type Int, received ${getType(params.user_lockout_within)}`)
     }
 
-    if (params.user_lockout_lock_period && !isInt(params.user_lockout_lock_period)) {
+    if (params.user_lockout_lock_period !== undefined && params.user_lockout_lock_period !== null && !isInt(params.user_lockout_lock_period)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_lockout_lock_period must be of type Int, received ${getType(params.user_lockout_lock_period)}`)
     }
 
-    if (params.allowed_countries && !isString(params.allowed_countries)) {
+    if (isArray(params.include_password_in_welcome_email) || isObject(params.include_password_in_welcome_email)) {
+      throw new errors.InvalidParameterError(`Bad parameter: include_password_in_welcome_email must be of type Boolean, received ${getType(params.include_password_in_welcome_email)}`)
+    }
+
+    if (params.allowed_countries !== undefined && params.allowed_countries !== null && !isString(params.allowed_countries)) {
       throw new errors.InvalidParameterError(`Bad parameter: allowed_countries must be of type String, received ${getType(params.allowed_countries)}`)
     }
 
-    if (params.allowed_ips && !isString(params.allowed_ips)) {
+    if (params.allowed_ips !== undefined && params.allowed_ips !== null && !isString(params.allowed_ips)) {
       throw new errors.InvalidParameterError(`Bad parameter: allowed_ips must be of type String, received ${getType(params.allowed_ips)}`)
     }
 
-    if (params.disallowed_countries && !isString(params.disallowed_countries)) {
+    if (isArray(params.allow_user_level_2fa_override) || isObject(params.allow_user_level_2fa_override)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allow_user_level_2fa_override must be of type Boolean, received ${getType(params.allow_user_level_2fa_override)}`)
+    }
+
+    if (isArray(params.allow_user_level_allowed_ip_override) || isObject(params.allow_user_level_allowed_ip_override)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allow_user_level_allowed_ip_override must be of type Boolean, received ${getType(params.allow_user_level_allowed_ip_override)}`)
+    }
+
+    if (isArray(params.allow_user_level_ssl_override) || isObject(params.allow_user_level_ssl_override)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allow_user_level_ssl_override must be of type Boolean, received ${getType(params.allow_user_level_ssl_override)}`)
+    }
+
+    if (params.disallowed_countries !== undefined && params.disallowed_countries !== null && !isString(params.disallowed_countries)) {
       throw new errors.InvalidParameterError(`Bad parameter: disallowed_countries must be of type String, received ${getType(params.disallowed_countries)}`)
     }
 
-    if (params.days_to_retain_backups && !isInt(params.days_to_retain_backups)) {
+    if (params.days_to_retain_backups !== undefined && params.days_to_retain_backups !== null && !isInt(params.days_to_retain_backups)) {
       throw new errors.InvalidParameterError(`Bad parameter: days_to_retain_backups must be of type Int, received ${getType(params.days_to_retain_backups)}`)
     }
 
-    if (params.max_prior_passwords && !isInt(params.max_prior_passwords)) {
+    if (params.max_prior_passwords !== undefined && params.max_prior_passwords !== null && !isInt(params.max_prior_passwords)) {
       throw new errors.InvalidParameterError(`Bad parameter: max_prior_passwords must be of type Int, received ${getType(params.max_prior_passwords)}`)
     }
 
-    if (params.password_validity_days && !isInt(params.password_validity_days)) {
+    if (params.password_validity_days !== undefined && params.password_validity_days !== null && !isInt(params.password_validity_days)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_validity_days must be of type Int, received ${getType(params.password_validity_days)}`)
     }
 
-    if (params.password_min_length && !isInt(params.password_min_length)) {
+    if (params.password_min_length !== undefined && params.password_min_length !== null && !isInt(params.password_min_length)) {
       throw new errors.InvalidParameterError(`Bad parameter: password_min_length must be of type Int, received ${getType(params.password_min_length)}`)
     }
 
-    if (params.bundle_not_found_message && !isString(params.bundle_not_found_message)) {
+    if (isArray(params.password_require_letter) || isObject(params.password_require_letter)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_require_letter must be of type Boolean, received ${getType(params.password_require_letter)}`)
+    }
+
+    if (isArray(params.password_require_mixed) || isObject(params.password_require_mixed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_require_mixed must be of type Boolean, received ${getType(params.password_require_mixed)}`)
+    }
+
+    if (isArray(params.password_require_special) || isObject(params.password_require_special)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_require_special must be of type Boolean, received ${getType(params.password_require_special)}`)
+    }
+
+    if (isArray(params.password_require_number) || isObject(params.password_require_number)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_require_number must be of type Boolean, received ${getType(params.password_require_number)}`)
+    }
+
+    if (isArray(params.password_require_unbreached) || isObject(params.password_require_unbreached)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_require_unbreached must be of type Boolean, received ${getType(params.password_require_unbreached)}`)
+    }
+
+    if (isArray(params.require_logout_from_bundles_and_inboxes) || isObject(params.require_logout_from_bundles_and_inboxes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_logout_from_bundles_and_inboxes must be of type Boolean, received ${getType(params.require_logout_from_bundles_and_inboxes)}`)
+    }
+
+    if (isArray(params.dav_user_root_enabled) || isObject(params.dav_user_root_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dav_user_root_enabled must be of type Boolean, received ${getType(params.dav_user_root_enabled)}`)
+    }
+
+    if (isArray(params.sftp_user_root_enabled) || isObject(params.sftp_user_root_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_user_root_enabled must be of type Boolean, received ${getType(params.sftp_user_root_enabled)}`)
+    }
+
+    if (isArray(params.disable_password_reset) || isObject(params.disable_password_reset)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_password_reset must be of type Boolean, received ${getType(params.disable_password_reset)}`)
+    }
+
+    if (isArray(params.immutable_files) || isObject(params.immutable_files)) {
+      throw new errors.InvalidParameterError(`Bad parameter: immutable_files must be of type Boolean, received ${getType(params.immutable_files)}`)
+    }
+
+    if (params.bundle_not_found_message !== undefined && params.bundle_not_found_message !== null && !isString(params.bundle_not_found_message)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_not_found_message must be of type String, received ${getType(params.bundle_not_found_message)}`)
     }
 
-    if (params.bundle_registration_notifications && !isString(params.bundle_registration_notifications)) {
+    if (isArray(params.bundle_password_required) || isObject(params.bundle_password_required)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_password_required must be of type Boolean, received ${getType(params.bundle_password_required)}`)
+    }
+
+    if (isArray(params.bundle_require_registration) || isObject(params.bundle_require_registration)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_require_registration must be of type Boolean, received ${getType(params.bundle_require_registration)}`)
+    }
+
+    if (isArray(params.bundle_require_share_recipient) || isObject(params.bundle_require_share_recipient)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_require_share_recipient must be of type Boolean, received ${getType(params.bundle_require_share_recipient)}`)
+    }
+
+    if (isArray(params.bundle_send_one_time_password_to_recipient_at_registration) || isObject(params.bundle_send_one_time_password_to_recipient_at_registration)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_send_one_time_password_to_recipient_at_registration must be of type Boolean, received ${getType(params.bundle_send_one_time_password_to_recipient_at_registration)}`)
+    }
+
+    if (params.bundle_registration_notifications !== undefined && params.bundle_registration_notifications !== null && !isString(params.bundle_registration_notifications)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_registration_notifications must be of type String, received ${getType(params.bundle_registration_notifications)}`)
     }
 
-    if (params.bundle_activity_notifications && !isString(params.bundle_activity_notifications)) {
+    if (params.bundle_activity_notifications !== undefined && params.bundle_activity_notifications !== null && !isString(params.bundle_activity_notifications)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_activity_notifications must be of type String, received ${getType(params.bundle_activity_notifications)}`)
     }
 
-    if (params.bundle_upload_receipt_notifications && !isString(params.bundle_upload_receipt_notifications)) {
+    if (params.bundle_upload_receipt_notifications !== undefined && params.bundle_upload_receipt_notifications !== null && !isString(params.bundle_upload_receipt_notifications)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_upload_receipt_notifications must be of type String, received ${getType(params.bundle_upload_receipt_notifications)}`)
     }
 
-    if (params.sftp_host_key_type && !isString(params.sftp_host_key_type)) {
+    if (isArray(params.document_edits_in_bundle_allowed) || isObject(params.document_edits_in_bundle_allowed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: document_edits_in_bundle_allowed must be of type Boolean, received ${getType(params.document_edits_in_bundle_allowed)}`)
+    }
+
+    if (isArray(params.password_requirements_apply_to_bundles) || isObject(params.password_requirements_apply_to_bundles)) {
+      throw new errors.InvalidParameterError(`Bad parameter: password_requirements_apply_to_bundles must be of type Boolean, received ${getType(params.password_requirements_apply_to_bundles)}`)
+    }
+
+    if (isArray(params.prevent_root_permissions_for_non_site_admins) || isObject(params.prevent_root_permissions_for_non_site_admins)) {
+      throw new errors.InvalidParameterError(`Bad parameter: prevent_root_permissions_for_non_site_admins must be of type Boolean, received ${getType(params.prevent_root_permissions_for_non_site_admins)}`)
+    }
+
+    if (isArray(params.restrict_root_folder_behaviors_to_site_admins) || isObject(params.restrict_root_folder_behaviors_to_site_admins)) {
+      throw new errors.InvalidParameterError(`Bad parameter: restrict_root_folder_behaviors_to_site_admins must be of type Boolean, received ${getType(params.restrict_root_folder_behaviors_to_site_admins)}`)
+    }
+
+    if (isArray(params.root_folder_behaviors_apply_to_workspaces) || isObject(params.root_folder_behaviors_apply_to_workspaces)) {
+      throw new errors.InvalidParameterError(`Bad parameter: root_folder_behaviors_apply_to_workspaces must be of type Boolean, received ${getType(params.root_folder_behaviors_apply_to_workspaces)}`)
+    }
+
+    if (isArray(params.opt_out_global) || isObject(params.opt_out_global)) {
+      throw new errors.InvalidParameterError(`Bad parameter: opt_out_global must be of type Boolean, received ${getType(params.opt_out_global)}`)
+    }
+
+    if (isArray(params.use_provided_modified_at) || isObject(params.use_provided_modified_at)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_provided_modified_at must be of type Boolean, received ${getType(params.use_provided_modified_at)}`)
+    }
+
+    if (isArray(params.custom_namespace) || isObject(params.custom_namespace)) {
+      throw new errors.InvalidParameterError(`Bad parameter: custom_namespace must be of type Boolean, received ${getType(params.custom_namespace)}`)
+    }
+
+    if (isArray(params.non_sso_groups_allowed) || isObject(params.non_sso_groups_allowed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: non_sso_groups_allowed must be of type Boolean, received ${getType(params.non_sso_groups_allowed)}`)
+    }
+
+    if (isArray(params.non_sso_users_allowed) || isObject(params.non_sso_users_allowed)) {
+      throw new errors.InvalidParameterError(`Bad parameter: non_sso_users_allowed must be of type Boolean, received ${getType(params.non_sso_users_allowed)}`)
+    }
+
+    if (isArray(params.sharing_enabled) || isObject(params.sharing_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sharing_enabled must be of type Boolean, received ${getType(params.sharing_enabled)}`)
+    }
+
+    if (isArray(params.snapshot_sharing_enabled) || isObject(params.snapshot_sharing_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: snapshot_sharing_enabled must be of type Boolean, received ${getType(params.snapshot_sharing_enabled)}`)
+    }
+
+    if (isArray(params.user_requests_enabled) || isObject(params.user_requests_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_requests_enabled must be of type Boolean, received ${getType(params.user_requests_enabled)}`)
+    }
+
+    if (isArray(params.user_requests_notify_admins) || isObject(params.user_requests_notify_admins)) {
+      throw new errors.InvalidParameterError(`Bad parameter: user_requests_notify_admins must be of type Boolean, received ${getType(params.user_requests_notify_admins)}`)
+    }
+
+    if (isArray(params.dav_enabled) || isObject(params.dav_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: dav_enabled must be of type Boolean, received ${getType(params.dav_enabled)}`)
+    }
+
+    if (isArray(params.files_com_remote_server_enabled) || isObject(params.files_com_remote_server_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: files_com_remote_server_enabled must be of type Boolean, received ${getType(params.files_com_remote_server_enabled)}`)
+    }
+
+    if (isArray(params.ftp_enabled) || isObject(params.ftp_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ftp_enabled must be of type Boolean, received ${getType(params.ftp_enabled)}`)
+    }
+
+    if (isArray(params.s3_compatible_endpoint_enabled) || isObject(params.s3_compatible_endpoint_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: s3_compatible_endpoint_enabled must be of type Boolean, received ${getType(params.s3_compatible_endpoint_enabled)}`)
+    }
+
+    if (isArray(params.sftp_enabled) || isObject(params.sftp_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_enabled must be of type Boolean, received ${getType(params.sftp_enabled)}`)
+    }
+
+    if (isArray(params.sftp_finalize_partial_uploads) || isObject(params.sftp_finalize_partial_uploads)) {
+      throw new errors.InvalidParameterError(`Bad parameter: sftp_finalize_partial_uploads must be of type Boolean, received ${getType(params.sftp_finalize_partial_uploads)}`)
+    }
+
+    if (isArray(params.users_can_create_api_keys) || isObject(params.users_can_create_api_keys)) {
+      throw new errors.InvalidParameterError(`Bad parameter: users_can_create_api_keys must be of type Boolean, received ${getType(params.users_can_create_api_keys)}`)
+    }
+
+    if (isArray(params.users_can_create_ssh_keys) || isObject(params.users_can_create_ssh_keys)) {
+      throw new errors.InvalidParameterError(`Bad parameter: users_can_create_ssh_keys must be of type Boolean, received ${getType(params.users_can_create_ssh_keys)}`)
+    }
+
+    if (isArray(params.show_user_notifications_log_in_link) || isObject(params.show_user_notifications_log_in_link)) {
+      throw new errors.InvalidParameterError(`Bad parameter: show_user_notifications_log_in_link must be of type Boolean, received ${getType(params.show_user_notifications_log_in_link)}`)
+    }
+
+    if (params.sftp_host_key_type !== undefined && params.sftp_host_key_type !== null && !isString(params.sftp_host_key_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: sftp_host_key_type must be of type String, received ${getType(params.sftp_host_key_type)}`)
     }
 
-    if (params.active_sftp_host_key_id && !isInt(params.active_sftp_host_key_id)) {
+    if (params.active_sftp_host_key_id !== undefined && params.active_sftp_host_key_id !== null && !isInt(params.active_sftp_host_key_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: active_sftp_host_key_id must be of type Int, received ${getType(params.active_sftp_host_key_id)}`)
     }
 
-    if (params.active_sftp_host_key_ids && !isArray(params.active_sftp_host_key_ids)) {
+    if (params.active_sftp_host_key_ids !== undefined && params.active_sftp_host_key_ids !== null && !isArray(params.active_sftp_host_key_ids)) {
       throw new errors.InvalidParameterError(`Bad parameter: active_sftp_host_key_ids must be of type Array, received ${getType(params.active_sftp_host_key_ids)}`)
     }
 
-    if (params.bundle_recipient_blacklist_domains && !isArray(params.bundle_recipient_blacklist_domains)) {
+    if (isArray(params.protocol_access_groups_only) || isObject(params.protocol_access_groups_only)) {
+      throw new errors.InvalidParameterError(`Bad parameter: protocol_access_groups_only must be of type Boolean, received ${getType(params.protocol_access_groups_only)}`)
+    }
+
+    if (isArray(params.revoke_bundle_access_on_disable_or_delete) || isObject(params.revoke_bundle_access_on_disable_or_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: revoke_bundle_access_on_disable_or_delete must be of type Boolean, received ${getType(params.revoke_bundle_access_on_disable_or_delete)}`)
+    }
+
+    if (isArray(params.group_admins_can_add_users) || isObject(params.group_admins_can_add_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_add_users must be of type Boolean, received ${getType(params.group_admins_can_add_users)}`)
+    }
+
+    if (isArray(params.group_admins_can_manage_group_memberships) || isObject(params.group_admins_can_manage_group_memberships)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_manage_group_memberships must be of type Boolean, received ${getType(params.group_admins_can_manage_group_memberships)}`)
+    }
+
+    if (isArray(params.group_admins_can_delete_users) || isObject(params.group_admins_can_delete_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_delete_users must be of type Boolean, received ${getType(params.group_admins_can_delete_users)}`)
+    }
+
+    if (isArray(params.group_admins_can_enable_disable_users) || isObject(params.group_admins_can_enable_disable_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_enable_disable_users must be of type Boolean, received ${getType(params.group_admins_can_enable_disable_users)}`)
+    }
+
+    if (isArray(params.group_admins_can_modify_users) || isObject(params.group_admins_can_modify_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_modify_users must be of type Boolean, received ${getType(params.group_admins_can_modify_users)}`)
+    }
+
+    if (isArray(params.group_admins_can_bypass_user_lifecycle_rules) || isObject(params.group_admins_can_bypass_user_lifecycle_rules)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_bypass_user_lifecycle_rules must be of type Boolean, received ${getType(params.group_admins_can_bypass_user_lifecycle_rules)}`)
+    }
+
+    if (isArray(params.group_admins_can_reset_passwords) || isObject(params.group_admins_can_reset_passwords)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_reset_passwords must be of type Boolean, received ${getType(params.group_admins_can_reset_passwords)}`)
+    }
+
+    if (isArray(params.group_admins_can_set_user_password) || isObject(params.group_admins_can_set_user_password)) {
+      throw new errors.InvalidParameterError(`Bad parameter: group_admins_can_set_user_password must be of type Boolean, received ${getType(params.group_admins_can_set_user_password)}`)
+    }
+
+    if (isArray(params.child_site_folder_admins_can_see_parent_site_directory) || isObject(params.child_site_folder_admins_can_see_parent_site_directory)) {
+      throw new errors.InvalidParameterError(`Bad parameter: child_site_folder_admins_can_see_parent_site_directory must be of type Boolean, received ${getType(params.child_site_folder_admins_can_see_parent_site_directory)}`)
+    }
+
+    if (isArray(params.workspace_folder_admins_can_see_default_workspace_directory) || isObject(params.workspace_folder_admins_can_see_default_workspace_directory)) {
+      throw new errors.InvalidParameterError(`Bad parameter: workspace_folder_admins_can_see_default_workspace_directory must be of type Boolean, received ${getType(params.workspace_folder_admins_can_see_default_workspace_directory)}`)
+    }
+
+    if (isArray(params.bundle_recipient_blacklist_free_email_domains) || isObject(params.bundle_recipient_blacklist_free_email_domains)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_recipient_blacklist_free_email_domains must be of type Boolean, received ${getType(params.bundle_recipient_blacklist_free_email_domains)}`)
+    }
+
+    if (params.bundle_recipient_blacklist_domains !== undefined && params.bundle_recipient_blacklist_domains !== null && !isArray(params.bundle_recipient_blacklist_domains)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_recipient_blacklist_domains must be of type Array, received ${getType(params.bundle_recipient_blacklist_domains)}`)
     }
 
-    if (params.require_2fa_user_type && !isString(params.require_2fa_user_type)) {
+    if (isArray(params.admins_bypass_locked_subfolders) || isObject(params.admins_bypass_locked_subfolders)) {
+      throw new errors.InvalidParameterError(`Bad parameter: admins_bypass_locked_subfolders must be of type Boolean, received ${getType(params.admins_bypass_locked_subfolders)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_sms) || isObject(params.allowed_2fa_method_sms)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_sms must be of type Boolean, received ${getType(params.allowed_2fa_method_sms)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_totp) || isObject(params.allowed_2fa_method_totp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_totp must be of type Boolean, received ${getType(params.allowed_2fa_method_totp)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_webauthn) || isObject(params.allowed_2fa_method_webauthn)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_webauthn must be of type Boolean, received ${getType(params.allowed_2fa_method_webauthn)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_yubi) || isObject(params.allowed_2fa_method_yubi)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_yubi must be of type Boolean, received ${getType(params.allowed_2fa_method_yubi)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_email) || isObject(params.allowed_2fa_method_email)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_email must be of type Boolean, received ${getType(params.allowed_2fa_method_email)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_static) || isObject(params.allowed_2fa_method_static)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_static must be of type Boolean, received ${getType(params.allowed_2fa_method_static)}`)
+    }
+
+    if (isArray(params.allowed_2fa_method_bypass_for_ftp_sftp_dav) || isObject(params.allowed_2fa_method_bypass_for_ftp_sftp_dav)) {
+      throw new errors.InvalidParameterError(`Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav must be of type Boolean, received ${getType(params.allowed_2fa_method_bypass_for_ftp_sftp_dav)}`)
+    }
+
+    if (isArray(params.require_2fa) || isObject(params.require_2fa)) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type Boolean, received ${getType(params.require_2fa)}`)
+    }
+
+    if (isArray(params.require_2fa_exempt_all_sso_users) || isObject(params.require_2fa_exempt_all_sso_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: require_2fa_exempt_all_sso_users must be of type Boolean, received ${getType(params.require_2fa_exempt_all_sso_users)}`)
+    }
+
+    if (params.require_2fa_user_type !== undefined && params.require_2fa_user_type !== null && !isString(params.require_2fa_user_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_2fa_user_type must be of type String, received ${getType(params.require_2fa_user_type)}`)
     }
 
-    if (params.color2_top && !isString(params.color2_top)) {
+    if (params.color2_top !== undefined && params.color2_top !== null && !isString(params.color2_top)) {
       throw new errors.InvalidParameterError(`Bad parameter: color2_top must be of type String, received ${getType(params.color2_top)}`)
     }
 
-    if (params.color2_left && !isString(params.color2_left)) {
+    if (params.color2_left !== undefined && params.color2_left !== null && !isString(params.color2_left)) {
       throw new errors.InvalidParameterError(`Bad parameter: color2_left must be of type String, received ${getType(params.color2_left)}`)
     }
 
-    if (params.color2_link && !isString(params.color2_link)) {
+    if (params.color2_link !== undefined && params.color2_link !== null && !isString(params.color2_link)) {
       throw new errors.InvalidParameterError(`Bad parameter: color2_link must be of type String, received ${getType(params.color2_link)}`)
     }
 
-    if (params.color2_text && !isString(params.color2_text)) {
+    if (params.color2_text !== undefined && params.color2_text !== null && !isString(params.color2_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: color2_text must be of type String, received ${getType(params.color2_text)}`)
     }
 
-    if (params.color2_top_text && !isString(params.color2_top_text)) {
+    if (params.color2_top_text !== undefined && params.color2_top_text !== null && !isString(params.color2_top_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: color2_top_text must be of type String, received ${getType(params.color2_top_text)}`)
     }
 
-    if (params.site_header && !isString(params.site_header)) {
+    if (params.site_header !== undefined && params.site_header !== null && !isString(params.site_header)) {
       throw new errors.InvalidParameterError(`Bad parameter: site_header must be of type String, received ${getType(params.site_header)}`)
     }
 
-    if (params.site_footer && !isString(params.site_footer)) {
+    if (params.site_footer !== undefined && params.site_footer !== null && !isString(params.site_footer)) {
       throw new errors.InvalidParameterError(`Bad parameter: site_footer must be of type String, received ${getType(params.site_footer)}`)
     }
 
-    if (params.site_public_header && !isString(params.site_public_header)) {
+    if (params.site_public_header !== undefined && params.site_public_header !== null && !isString(params.site_public_header)) {
       throw new errors.InvalidParameterError(`Bad parameter: site_public_header must be of type String, received ${getType(params.site_public_header)}`)
     }
 
-    if (params.site_public_footer && !isString(params.site_public_footer)) {
+    if (params.site_public_footer !== undefined && params.site_public_footer !== null && !isString(params.site_public_footer)) {
       throw new errors.InvalidParameterError(`Bad parameter: site_public_footer must be of type String, received ${getType(params.site_public_footer)}`)
     }
 
-    if (params.login_help_text && !isString(params.login_help_text)) {
+    if (params.login_help_text !== undefined && params.login_help_text !== null && !isString(params.login_help_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: login_help_text must be of type String, received ${getType(params.login_help_text)}`)
     }
 
-    if (params.email_footer_custom_text && !isString(params.email_footer_custom_text)) {
+    if (isArray(params.use_dedicated_ips_for_smtp) || isObject(params.use_dedicated_ips_for_smtp)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_dedicated_ips_for_smtp must be of type Boolean, received ${getType(params.use_dedicated_ips_for_smtp)}`)
+    }
+
+    if (params.email_footer_custom_text !== undefined && params.email_footer_custom_text !== null && !isString(params.email_footer_custom_text)) {
       throw new errors.InvalidParameterError(`Bad parameter: email_footer_custom_text must be of type String, received ${getType(params.email_footer_custom_text)}`)
     }
 
-    if (params.smtp_address && !isString(params.smtp_address)) {
+    if (params.smtp_address !== undefined && params.smtp_address !== null && !isString(params.smtp_address)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_address must be of type String, received ${getType(params.smtp_address)}`)
     }
 
-    if (params.smtp_authentication && !isString(params.smtp_authentication)) {
+    if (params.smtp_authentication !== undefined && params.smtp_authentication !== null && !isString(params.smtp_authentication)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_authentication must be of type String, received ${getType(params.smtp_authentication)}`)
     }
 
-    if (params.smtp_from && !isString(params.smtp_from)) {
+    if (params.smtp_from !== undefined && params.smtp_from !== null && !isString(params.smtp_from)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_from must be of type String, received ${getType(params.smtp_from)}`)
     }
 
-    if (params.smtp_username && !isString(params.smtp_username)) {
+    if (params.smtp_username !== undefined && params.smtp_username !== null && !isString(params.smtp_username)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_username must be of type String, received ${getType(params.smtp_username)}`)
     }
 
-    if (params.smtp_port && !isInt(params.smtp_port)) {
+    if (params.smtp_port !== undefined && params.smtp_port !== null && !isInt(params.smtp_port)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_port must be of type Int, received ${getType(params.smtp_port)}`)
     }
 
-    if (params.smtp_ssl && !isString(params.smtp_ssl)) {
+    if (params.smtp_ssl !== undefined && params.smtp_ssl !== null && !isString(params.smtp_ssl)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_ssl must be of type String, received ${getType(params.smtp_ssl)}`)
     }
 
-    if (params.ldap_type && !isString(params.ldap_type)) {
+    if (isArray(params.ldap_enabled) || isObject(params.ldap_enabled)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_enabled must be of type Boolean, received ${getType(params.ldap_enabled)}`)
+    }
+
+    if (params.ldap_type !== undefined && params.ldap_type !== null && !isString(params.ldap_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_type must be of type String, received ${getType(params.ldap_type)}`)
     }
 
-    if (params.ldap_host && !isString(params.ldap_host)) {
+    if (params.ldap_host !== undefined && params.ldap_host !== null && !isString(params.ldap_host)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_host must be of type String, received ${getType(params.ldap_host)}`)
     }
 
-    if (params.ldap_host_2 && !isString(params.ldap_host_2)) {
+    if (params.ldap_host_2 !== undefined && params.ldap_host_2 !== null && !isString(params.ldap_host_2)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_host_2 must be of type String, received ${getType(params.ldap_host_2)}`)
     }
 
-    if (params.ldap_host_3 && !isString(params.ldap_host_3)) {
+    if (params.ldap_host_3 !== undefined && params.ldap_host_3 !== null && !isString(params.ldap_host_3)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_host_3 must be of type String, received ${getType(params.ldap_host_3)}`)
     }
 
-    if (params.ldap_port && !isInt(params.ldap_port)) {
+    if (params.ldap_port !== undefined && params.ldap_port !== null && !isInt(params.ldap_port)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_port must be of type Int, received ${getType(params.ldap_port)}`)
     }
 
-    if (params.ldap_server_certificate && !isString(params.ldap_server_certificate)) {
+    if (isArray(params.ldap_secure) || isObject(params.ldap_secure)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ldap_secure must be of type Boolean, received ${getType(params.ldap_secure)}`)
+    }
+
+    if (params.ldap_server_certificate !== undefined && params.ldap_server_certificate !== null && !isString(params.ldap_server_certificate)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_server_certificate must be of type String, received ${getType(params.ldap_server_certificate)}`)
     }
 
-    if (params.ldap_username && !isString(params.ldap_username)) {
+    if (params.ldap_username !== undefined && params.ldap_username !== null && !isString(params.ldap_username)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_username must be of type String, received ${getType(params.ldap_username)}`)
     }
 
-    if (params.ldap_username_field && !isString(params.ldap_username_field)) {
+    if (params.ldap_username_field !== undefined && params.ldap_username_field !== null && !isString(params.ldap_username_field)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_username_field must be of type String, received ${getType(params.ldap_username_field)}`)
     }
 
-    if (params.ldap_domain && !isString(params.ldap_domain)) {
+    if (params.ldap_domain !== undefined && params.ldap_domain !== null && !isString(params.ldap_domain)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_domain must be of type String, received ${getType(params.ldap_domain)}`)
     }
 
-    if (params.ldap_user_action && !isString(params.ldap_user_action)) {
+    if (params.ldap_user_action !== undefined && params.ldap_user_action !== null && !isString(params.ldap_user_action)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_user_action must be of type String, received ${getType(params.ldap_user_action)}`)
     }
 
-    if (params.ldap_group_action && !isString(params.ldap_group_action)) {
+    if (params.ldap_group_action !== undefined && params.ldap_group_action !== null && !isString(params.ldap_group_action)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_group_action must be of type String, received ${getType(params.ldap_group_action)}`)
     }
 
-    if (params.ldap_user_include_groups && !isString(params.ldap_user_include_groups)) {
+    if (params.ldap_user_include_groups !== undefined && params.ldap_user_include_groups !== null && !isString(params.ldap_user_include_groups)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_user_include_groups must be of type String, received ${getType(params.ldap_user_include_groups)}`)
     }
 
-    if (params.ldap_group_exclusion && !isString(params.ldap_group_exclusion)) {
+    if (params.ldap_group_exclusion !== undefined && params.ldap_group_exclusion !== null && !isString(params.ldap_group_exclusion)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_group_exclusion must be of type String, received ${getType(params.ldap_group_exclusion)}`)
     }
 
-    if (params.ldap_group_inclusion && !isString(params.ldap_group_inclusion)) {
+    if (params.ldap_group_inclusion !== undefined && params.ldap_group_inclusion !== null && !isString(params.ldap_group_inclusion)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_group_inclusion must be of type String, received ${getType(params.ldap_group_inclusion)}`)
     }
 
-    if (params.ldap_base_dn && !isString(params.ldap_base_dn)) {
+    if (params.ldap_base_dn !== undefined && params.ldap_base_dn !== null && !isString(params.ldap_base_dn)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_base_dn must be of type String, received ${getType(params.ldap_base_dn)}`)
     }
 
-    if (params.ldap_password_change && !isString(params.ldap_password_change)) {
+    if (isArray(params.uploads_via_email_authentication) || isObject(params.uploads_via_email_authentication)) {
+      throw new errors.InvalidParameterError(`Bad parameter: uploads_via_email_authentication must be of type Boolean, received ${getType(params.uploads_via_email_authentication)}`)
+    }
+
+    if (isArray(params.icon16_delete) || isObject(params.icon16_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: icon16_delete must be of type Boolean, received ${getType(params.icon16_delete)}`)
+    }
+
+    if (isArray(params.icon32_delete) || isObject(params.icon32_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: icon32_delete must be of type Boolean, received ${getType(params.icon32_delete)}`)
+    }
+
+    if (isArray(params.icon48_delete) || isObject(params.icon48_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: icon48_delete must be of type Boolean, received ${getType(params.icon48_delete)}`)
+    }
+
+    if (isArray(params.icon128_delete) || isObject(params.icon128_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: icon128_delete must be of type Boolean, received ${getType(params.icon128_delete)}`)
+    }
+
+    if (isArray(params.logo_delete) || isObject(params.logo_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: logo_delete must be of type Boolean, received ${getType(params.logo_delete)}`)
+    }
+
+    if (isArray(params.bundle_watermark_attachment_delete) || isObject(params.bundle_watermark_attachment_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_watermark_attachment_delete must be of type Boolean, received ${getType(params.bundle_watermark_attachment_delete)}`)
+    }
+
+    if (isArray(params.login_page_background_image_delete) || isObject(params.login_page_background_image_delete)) {
+      throw new errors.InvalidParameterError(`Bad parameter: login_page_background_image_delete must be of type Boolean, received ${getType(params.login_page_background_image_delete)}`)
+    }
+
+    if (isArray(params.disable_2fa_with_delay) || isObject(params.disable_2fa_with_delay)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_2fa_with_delay must be of type Boolean, received ${getType(params.disable_2fa_with_delay)}`)
+    }
+
+    if (params.ldap_password_change !== undefined && params.ldap_password_change !== null && !isString(params.ldap_password_change)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change must be of type String, received ${getType(params.ldap_password_change)}`)
     }
 
-    if (params.ldap_password_change_confirmation && !isString(params.ldap_password_change_confirmation)) {
+    if (params.ldap_password_change_confirmation !== undefined && params.ldap_password_change_confirmation !== null && !isString(params.ldap_password_change_confirmation)) {
       throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change_confirmation must be of type String, received ${getType(params.ldap_password_change_confirmation)}`)
     }
 
-    if (params.smtp_password && !isString(params.smtp_password)) {
+    if (isArray(params.redirect_old_subdomain) || isObject(params.redirect_old_subdomain)) {
+      throw new errors.InvalidParameterError(`Bad parameter: redirect_old_subdomain must be of type Boolean, received ${getType(params.redirect_old_subdomain)}`)
+    }
+
+    if (params.smtp_password !== undefined && params.smtp_password !== null && !isString(params.smtp_password)) {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_password must be of type String, received ${getType(params.smtp_password)}`)
     }
 
     const response = await Api.sendRequest('/site', 'PATCH', params, options)
 
-    return new Site(response?.data, options)
+    return new Site(response?.data, retainedOptions(options))
   }
 }
 

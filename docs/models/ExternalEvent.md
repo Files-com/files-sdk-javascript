@@ -25,7 +25,7 @@
 ## List External Events
 
 ```
-await ExternalEvent.list
+await ExternalEvent.list()
 ```
 
 
@@ -59,7 +59,7 @@ await ExternalEvent.find(id)
 
 ```
 await ExternalEvent.create({
-  'status': "example",
+  'status': "success",
   'body': "example",
 })
 ```

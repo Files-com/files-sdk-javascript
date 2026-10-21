@@ -29,7 +29,7 @@
 ## List Partner Site Requests
 
 ```
-await PartnerSiteRequest.list
+await PartnerSiteRequest.list()
 ```
 
 

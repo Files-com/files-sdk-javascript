@@ -132,7 +132,7 @@
 ## List SIEM HTTP Destinations
 
 ```
-await SiemHttpDestination.list
+await SiemHttpDestination.list()
 ```
 
 
@@ -163,9 +163,7 @@ await SiemHttpDestination.create({
   'name': "example",
   'additional_headers': {"Authorization":"Bearer YOUR_TOKEN"},
   'sending_active': true,
-  'generic_payload_type': "example",
   'file_destination_path': "example",
-  'file_format': "example",
   'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
@@ -184,7 +182,7 @@ await SiemHttpDestination.create({
   'email_send_enabled': true,
   'exavault_api_request_send_enabled': true,
   'settings_change_send_enabled': true,
-  'destination_type': "example",
+  'destination_type': "generic",
   'destination_url': "example",
 })
 ```
@@ -233,14 +231,11 @@ await SiemHttpDestination.create({
 ```
 await SiemHttpDestination.sendTestEntry({
   'siem_http_destination_id': 1,
-  'destination_type': "example",
   'destination_url': "example",
   'name': "example",
   'additional_headers': {"Authorization":"Bearer YOUR_TOKEN"},
   'sending_active': true,
-  'generic_payload_type': "example",
   'file_destination_path': "example",
-  'file_format': "example",
   'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
@@ -311,9 +306,7 @@ await siem_http_destination.update({
   'name': "example",
   'additional_headers': {"Authorization":"Bearer YOUR_TOKEN"},
   'sending_active': true,
-  'generic_payload_type': "example",
   'file_destination_path': "example",
-  'file_format': "example",
   'file_interval_minutes': 1,
   'azure_dcr_immutable_id': "example",
   'azure_stream_name': "example",
@@ -332,7 +325,6 @@ await siem_http_destination.update({
   'email_send_enabled': true,
   'exavault_api_request_send_enabled': true,
   'settings_change_send_enabled': true,
-  'destination_type': "example",
   'destination_url': "example",
 })
 ```

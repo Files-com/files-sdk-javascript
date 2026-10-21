@@ -29,7 +29,7 @@
 ## List Settings Changes
 
 ```
-await SettingsChange.list
+await SettingsChange.list()
 ```
 
 

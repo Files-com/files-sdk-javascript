@@ -31,7 +31,7 @@
 ## List Bandwidth Snapshots
 
 ```
-await BandwidthSnapshot.list
+await BandwidthSnapshot.list()
 ```
 
 

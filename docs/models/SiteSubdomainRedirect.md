@@ -21,7 +21,7 @@
 ## List Site Subdomain Redirects
 
 ```
-await SiteSubdomainRedirect.list
+await SiteSubdomainRedirect.list()
 ```
 
 

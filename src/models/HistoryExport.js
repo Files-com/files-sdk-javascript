@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class HistoryExport
  */
@@ -15,14 +52,7 @@ class HistoryExport {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class HistoryExport {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // int64 # History Export ID
@@ -40,6 +71,7 @@ class HistoryExport {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # Version of the history for the export.
@@ -47,6 +79,7 @@ class HistoryExport {
 
   setHistoryVersion = value => {
     this.attributes.history_version = value
+    exposeAttributes(this, ['history_version'])
   }
 
   // date-time # Start date/time of export range.
@@ -54,6 +87,7 @@ class HistoryExport {
 
   setStartAt = value => {
     this.attributes.start_at = value
+    exposeAttributes(this, ['start_at'])
   }
 
   // date-time # End date/time of export range.
@@ -61,6 +95,7 @@ class HistoryExport {
 
   setEndAt = value => {
     this.attributes.end_at = value
+    exposeAttributes(this, ['end_at'])
   }
 
   // string # Status of export.  Will be: `building`, `ready`, or `failed`
@@ -68,6 +103,7 @@ class HistoryExport {
 
   setStatus = value => {
     this.attributes.status = value
+    exposeAttributes(this, ['status'])
   }
 
   // string # Filter results by this this action type. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`, `archived_delete`
@@ -75,6 +111,7 @@ class HistoryExport {
 
   setQueryAction = value => {
     this.attributes.query_action = value
+    exposeAttributes(this, ['query_action'])
   }
 
   // string # Filter results by this this interface type. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`, `office`, `mobile`, `as2`, `inbound_email`, `remote`, `inbound_s3`
@@ -82,6 +119,7 @@ class HistoryExport {
 
   setQueryInterface = value => {
     this.attributes.query_interface = value
+    exposeAttributes(this, ['query_interface'])
   }
 
   // string # Return results that are actions performed by the user indicated by this User ID
@@ -89,6 +127,7 @@ class HistoryExport {
 
   setQueryUserId = value => {
     this.attributes.query_user_id = value
+    exposeAttributes(this, ['query_user_id'])
   }
 
   // string # Return results that are file actions related to the file indicated by this File ID
@@ -96,6 +135,7 @@ class HistoryExport {
 
   setQueryFileId = value => {
     this.attributes.query_file_id = value
+    exposeAttributes(this, ['query_file_id'])
   }
 
   // string # Return results that are file actions inside the parent folder specified by this folder ID
@@ -103,6 +143,7 @@ class HistoryExport {
 
   setQueryParentId = value => {
     this.attributes.query_parent_id = value
+    exposeAttributes(this, ['query_parent_id'])
   }
 
   // string # Return results that are file actions related to paths matching this pattern.
@@ -110,6 +151,7 @@ class HistoryExport {
 
   setQueryPath = value => {
     this.attributes.query_path = value
+    exposeAttributes(this, ['query_path'])
   }
 
   // string # Return results that are file actions related to files or folders inside folder paths matching this pattern.
@@ -117,6 +159,7 @@ class HistoryExport {
 
   setQueryFolder = value => {
     this.attributes.query_folder = value
+    exposeAttributes(this, ['query_folder'])
   }
 
   // string # Return results that are file moves originating from paths matching this pattern.
@@ -124,6 +167,7 @@ class HistoryExport {
 
   setQuerySrc = value => {
     this.attributes.query_src = value
+    exposeAttributes(this, ['query_src'])
   }
 
   // string # Return results that are file moves with paths matching this pattern as destination.
@@ -131,6 +175,7 @@ class HistoryExport {
 
   setQueryDestination = value => {
     this.attributes.query_destination = value
+    exposeAttributes(this, ['query_destination'])
   }
 
   // string # Filter results by this IP address.
@@ -138,6 +183,7 @@ class HistoryExport {
 
   setQueryIp = value => {
     this.attributes.query_ip = value
+    exposeAttributes(this, ['query_ip'])
   }
 
   // string # Filter results by this username.
@@ -145,6 +191,7 @@ class HistoryExport {
 
   setQueryUsername = value => {
     this.attributes.query_username = value
+    exposeAttributes(this, ['query_username'])
   }
 
   // string # If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`, `insecure_ftp`, `insecure_cipher`, `rate_limited`, `no_s3_compatible_endpoint_permission`, `mobile_ip_mismatch`, `mobile_api_key_not_used_quickly_enough`, `desktop_app_disabled`, `mobile_app_disabled`
@@ -152,6 +199,7 @@ class HistoryExport {
 
   setQueryFailureType = value => {
     this.attributes.query_failure_type = value
+    exposeAttributes(this, ['query_failure_type'])
   }
 
   // string # If searching for Histories about specific objects (such as Users, or API Keys), this parameter restricts results to objects that match this ID.
@@ -159,6 +207,7 @@ class HistoryExport {
 
   setQueryTargetId = value => {
     this.attributes.query_target_id = value
+    exposeAttributes(this, ['query_target_id'])
   }
 
   // string # If searching for Histories about Users, Groups or other objects with names, this parameter restricts results to objects with this name/username.
@@ -166,6 +215,7 @@ class HistoryExport {
 
   setQueryTargetName = value => {
     this.attributes.query_target_name = value
+    exposeAttributes(this, ['query_target_name'])
   }
 
   // string # If searching for Histories about Permissions, this parameter restricts results to permissions of this level.
@@ -173,6 +223,7 @@ class HistoryExport {
 
   setQueryTargetPermission = value => {
     this.attributes.query_target_permission = value
+    exposeAttributes(this, ['query_target_permission'])
   }
 
   // string # If searching for Histories about API keys, this parameter restricts results to API keys created by/for this user ID.
@@ -180,6 +231,7 @@ class HistoryExport {
 
   setQueryTargetUserId = value => {
     this.attributes.query_target_user_id = value
+    exposeAttributes(this, ['query_target_user_id'])
   }
 
   // string # If searching for Histories about API keys, this parameter restricts results to API keys created by/for this username.
@@ -187,6 +239,7 @@ class HistoryExport {
 
   setQueryTargetUsername = value => {
     this.attributes.query_target_username = value
+    exposeAttributes(this, ['query_target_username'])
   }
 
   // string # If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
@@ -194,6 +247,7 @@ class HistoryExport {
 
   setQueryTargetPlatform = value => {
     this.attributes.query_target_platform = value
+    exposeAttributes(this, ['query_target_platform'])
   }
 
   // string # If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
@@ -201,6 +255,7 @@ class HistoryExport {
 
   setQueryTargetPermissionSet = value => {
     this.attributes.query_target_permission_set = value
+    exposeAttributes(this, ['query_target_permission_set'])
   }
 
   // string # If `status` is `ready`, this will be a URL where all the results can be downloaded at once as a CSV.
@@ -208,6 +263,7 @@ class HistoryExport {
 
   setResultsUrl = value => {
     this.attributes.results_url = value
+    exposeAttributes(this, ['results_url'])
   }
 
   // int64 # User ID.  Provide a value of `0` to operate the current session's user.
@@ -215,6 +271,7 @@ class HistoryExport {
 
   setUserId = value => {
     this.attributes.user_id = value
+    exposeAttributes(this, ['user_id'])
   }
 
   save = async () => {
@@ -222,7 +279,7 @@ class HistoryExport {
       throw new errors.NotImplementedError('The HistoryExport object doesn\'t support updates.')
     } else {
       const newObject = await HistoryExport.create(this.attributes, this.options)
-      this.attributes = { ...newObject.attributes }
+      adoptAttributes(this, newObject.attributes)
       return true
     }
   }
@@ -234,19 +291,21 @@ class HistoryExport {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/history_exports/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new HistoryExport(response?.data, options)
+    return new HistoryExport(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -276,97 +335,97 @@ class HistoryExport {
   //   query_target_platform - string - If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
   //   query_target_permission_set - string - If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
   static create = async (params = {}, options = {}) => {
-    if (params.user_id && !isInt(params.user_id)) {
+    if (params.user_id !== undefined && params.user_id !== null && !isInt(params.user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: user_id must be of type Int, received ${getType(params.user_id)}`)
     }
 
-    if (params.start_at && !isString(params.start_at)) {
+    if (params.start_at !== undefined && params.start_at !== null && !isString(params.start_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: start_at must be of type String, received ${getType(params.start_at)}`)
     }
 
-    if (params.end_at && !isString(params.end_at)) {
+    if (params.end_at !== undefined && params.end_at !== null && !isString(params.end_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: end_at must be of type String, received ${getType(params.end_at)}`)
     }
 
-    if (params.query_action && !isString(params.query_action)) {
+    if (params.query_action !== undefined && params.query_action !== null && !isString(params.query_action)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_action must be of type String, received ${getType(params.query_action)}`)
     }
 
-    if (params.query_interface && !isString(params.query_interface)) {
+    if (params.query_interface !== undefined && params.query_interface !== null && !isString(params.query_interface)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_interface must be of type String, received ${getType(params.query_interface)}`)
     }
 
-    if (params.query_user_id && !isString(params.query_user_id)) {
+    if (params.query_user_id !== undefined && params.query_user_id !== null && !isString(params.query_user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_user_id must be of type String, received ${getType(params.query_user_id)}`)
     }
 
-    if (params.query_file_id && !isString(params.query_file_id)) {
+    if (params.query_file_id !== undefined && params.query_file_id !== null && !isString(params.query_file_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_file_id must be of type String, received ${getType(params.query_file_id)}`)
     }
 
-    if (params.query_parent_id && !isString(params.query_parent_id)) {
+    if (params.query_parent_id !== undefined && params.query_parent_id !== null && !isString(params.query_parent_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_parent_id must be of type String, received ${getType(params.query_parent_id)}`)
     }
 
-    if (params.query_path && !isString(params.query_path)) {
+    if (params.query_path !== undefined && params.query_path !== null && !isString(params.query_path)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_path must be of type String, received ${getType(params.query_path)}`)
     }
 
-    if (params.query_folder && !isString(params.query_folder)) {
+    if (params.query_folder !== undefined && params.query_folder !== null && !isString(params.query_folder)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_folder must be of type String, received ${getType(params.query_folder)}`)
     }
 
-    if (params.query_src && !isString(params.query_src)) {
+    if (params.query_src !== undefined && params.query_src !== null && !isString(params.query_src)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_src must be of type String, received ${getType(params.query_src)}`)
     }
 
-    if (params.query_destination && !isString(params.query_destination)) {
+    if (params.query_destination !== undefined && params.query_destination !== null && !isString(params.query_destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_destination must be of type String, received ${getType(params.query_destination)}`)
     }
 
-    if (params.query_ip && !isString(params.query_ip)) {
+    if (params.query_ip !== undefined && params.query_ip !== null && !isString(params.query_ip)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_ip must be of type String, received ${getType(params.query_ip)}`)
     }
 
-    if (params.query_username && !isString(params.query_username)) {
+    if (params.query_username !== undefined && params.query_username !== null && !isString(params.query_username)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_username must be of type String, received ${getType(params.query_username)}`)
     }
 
-    if (params.query_failure_type && !isString(params.query_failure_type)) {
+    if (params.query_failure_type !== undefined && params.query_failure_type !== null && !isString(params.query_failure_type)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_failure_type must be of type String, received ${getType(params.query_failure_type)}`)
     }
 
-    if (params.query_target_id && !isString(params.query_target_id)) {
+    if (params.query_target_id !== undefined && params.query_target_id !== null && !isString(params.query_target_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_id must be of type String, received ${getType(params.query_target_id)}`)
     }
 
-    if (params.query_target_name && !isString(params.query_target_name)) {
+    if (params.query_target_name !== undefined && params.query_target_name !== null && !isString(params.query_target_name)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_name must be of type String, received ${getType(params.query_target_name)}`)
     }
 
-    if (params.query_target_permission && !isString(params.query_target_permission)) {
+    if (params.query_target_permission !== undefined && params.query_target_permission !== null && !isString(params.query_target_permission)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_permission must be of type String, received ${getType(params.query_target_permission)}`)
     }
 
-    if (params.query_target_user_id && !isString(params.query_target_user_id)) {
+    if (params.query_target_user_id !== undefined && params.query_target_user_id !== null && !isString(params.query_target_user_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_user_id must be of type String, received ${getType(params.query_target_user_id)}`)
     }
 
-    if (params.query_target_username && !isString(params.query_target_username)) {
+    if (params.query_target_username !== undefined && params.query_target_username !== null && !isString(params.query_target_username)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_username must be of type String, received ${getType(params.query_target_username)}`)
     }
 
-    if (params.query_target_platform && !isString(params.query_target_platform)) {
+    if (params.query_target_platform !== undefined && params.query_target_platform !== null && !isString(params.query_target_platform)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_platform must be of type String, received ${getType(params.query_target_platform)}`)
     }
 
-    if (params.query_target_permission_set && !isString(params.query_target_permission_set)) {
+    if (params.query_target_permission_set !== undefined && params.query_target_permission_set !== null && !isString(params.query_target_permission_set)) {
       throw new errors.InvalidParameterError(`Bad parameter: query_target_permission_set must be of type String, received ${getType(params.query_target_permission_set)}`)
     }
 
     const response = await Api.sendRequest('/history_exports', 'POST', params, options)
 
-    return new HistoryExport(response?.data, options)
+    return new HistoryExport(response?.data, retainedOptions(options))
   }
 }
 

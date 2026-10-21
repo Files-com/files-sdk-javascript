@@ -63,7 +63,7 @@
 ## List Holiday Calendars
 
 ```
-await HolidayCalendar.list
+await HolidayCalendar.list()
 ```
 
 

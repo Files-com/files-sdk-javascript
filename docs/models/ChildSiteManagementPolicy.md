@@ -44,7 +44,7 @@
 ## List Child Site Management Policies. On a Child Site, returns only the policy covering that site. Its value contains managed setting names with null values
 
 ```
-await ChildSiteManagementPolicy.list
+await ChildSiteManagementPolicy.list()
 ```
 
 

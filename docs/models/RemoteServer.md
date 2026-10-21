@@ -259,7 +259,7 @@ await RemoteServer.create({
   'azure_files_storage_share_name': "share-name",
   'backblaze_b2_bucket': "my-bucket",
   'backblaze_b2_s3_endpoint': "s3.us-west-001.backblazeb2.com",
-  'buffer_uploads': "example",
+  'buffer_uploads': "auto",
   'cloudflare_access_key': "example",
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
@@ -411,7 +411,7 @@ await RemoteServer.create({
 ```
 const remote_server = await RemoteServer.find(id)
 
-await remote_server.agent_nodes()
+await remote_server.agentNodes()
 ```
 
 ### Parameters
@@ -457,7 +457,7 @@ await remote_server.agent_nodes()
 ```
 const remote_server = await RemoteServer.find(id)
 
-await remote_server.agent_push_update()
+await remote_server.agentPushUpdate()
 ```
 
 ### Parameters
@@ -497,7 +497,7 @@ await remote_server.update({
   'azure_files_storage_share_name': "share-name",
   'backblaze_b2_bucket': "my-bucket",
   'backblaze_b2_s3_endpoint': "s3.us-west-001.backblazeb2.com",
-  'buffer_uploads': "example",
+  'buffer_uploads': "auto",
   'cloudflare_access_key': "example",
   'cloudflare_bucket': "my-bucket",
   'cloudflare_endpoint': "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",

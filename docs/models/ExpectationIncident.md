@@ -44,7 +44,7 @@
 ## List Expectation Incidents
 
 ```
-await ExpectationIncident.list
+await ExpectationIncident.list()
 ```
 
 

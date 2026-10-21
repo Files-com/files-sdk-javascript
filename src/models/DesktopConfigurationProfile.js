@@ -6,6 +6,43 @@ import {
 } from '../utils'
 /* eslint-enable no-unused-vars */
 
+// The model's attributes are its only state. Once an attribute is part of that state, whether given to the
+// constructor, set or returned by the server, it can also be read, but not assigned, as a property of the model. The
+// property always reads the current attributes, so it agrees with the getter after a set, an update or a save. A name
+// the model already uses, for one of its members or a property assigned to it, keeps that use.
+const exposeAttributes = (model, names) => {
+  names.forEach(name => {
+    if (!(name in model)) {
+      Object.defineProperty(model, name, { get: () => model.attributes[name] })
+    }
+  })
+}
+
+// Makes attributes, as given to the constructor or returned by the server, the model's whole state, with '?' dropped
+// from their names. The state is replaced only once the new attributes are complete.
+const adoptAttributes = (model, attributes = {}) => {
+  const adopted = {}
+  Object.entries(attributes).forEach(([key, value]) => {
+    adopted[key.replace('?', '')] = value
+  })
+
+  model.attributes = adopted
+  exposeAttributes(model, Object.keys(adopted))
+}
+
+// The options a model keeps when a static method returns it. A call made without a client leaves its options with the
+// model, as it always has. A call made through a client leaves the copy of its options taken when it began, client and
+// overrides included, so the model's own requests are made as the one that returned it was; only the call's signal is
+// left out, since cancelling the call that produced a model does not cancel the model's own requests.
+const retainedOptions = options => {
+  if (!options?.client) {
+    return options
+  }
+
+  const { signal, ...context } = options
+  return context
+}
+
 /**
  * Class DesktopConfigurationProfile
  */
@@ -15,14 +52,7 @@ class DesktopConfigurationProfile {
   options = {}
 
   constructor(attributes = {}, options = {}) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      const normalizedKey = key.replace('?', '')
-
-      this.attributes[normalizedKey] = value
-
-      Object.defineProperty(this, normalizedKey, { value, writable: false })
-    })
-
+    adoptAttributes(this, attributes)
     this.options = { ...options }
   }
 
@@ -33,6 +63,7 @@ class DesktopConfigurationProfile {
 
   setId = value => {
     this.attributes.id = value
+    exposeAttributes(this, ['id'])
   }
 
   // string # Profile name
@@ -40,6 +71,7 @@ class DesktopConfigurationProfile {
 
   setName = value => {
     this.attributes.name = value
+    exposeAttributes(this, ['name'])
   }
 
   // int64 # Workspace ID
@@ -47,6 +79,7 @@ class DesktopConfigurationProfile {
 
   setWorkspaceId = value => {
     this.attributes.workspace_id = value
+    exposeAttributes(this, ['workspace_id'])
   }
 
   // boolean # Whether this profile applies to all users in the Workspace by default
@@ -54,6 +87,7 @@ class DesktopConfigurationProfile {
 
   setUseForAllUsers = value => {
     this.attributes.use_for_all_users = value
+    exposeAttributes(this, ['use_for_all_users'])
   }
 
   // boolean # Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
@@ -61,6 +95,7 @@ class DesktopConfigurationProfile {
 
   setDisableDriveMounting = value => {
     this.attributes.disable_drive_mounting = value
+    exposeAttributes(this, ['disable_drive_mounting'])
   }
 
   // object # Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
@@ -68,6 +103,7 @@ class DesktopConfigurationProfile {
 
   setMountMappings = value => {
     this.attributes.mount_mappings = value
+    exposeAttributes(this, ['mount_mappings'])
   }
 
   // Parameters:
@@ -85,17 +121,27 @@ class DesktopConfigurationProfile {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
+    if (isArray(params.use_for_all_users) || isObject(params.use_for_all_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_for_all_users must be of type Boolean, received ${getType(params.use_for_all_users)}`)
+    }
+
+    if (isArray(params.disable_drive_mounting) || isObject(params.disable_drive_mounting)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_drive_mounting must be of type Boolean, received ${getType(params.disable_drive_mounting)}`)
     }
 
     if (!params.id) {
@@ -108,7 +154,8 @@ class DesktopConfigurationProfile {
 
     const response = await Api.sendRequest(`/desktop_configuration_profiles/${encodeURIComponent(params.id)}`, 'PATCH', params, this.options)
 
-    return new DesktopConfigurationProfile(response?.data, this.options)
+    adoptAttributes(this, response?.data)
+    return this
   }
 
   delete = async (params = {}) => {
@@ -120,8 +167,10 @@ class DesktopConfigurationProfile {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
     params.id = this.attributes.id
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
@@ -141,13 +190,12 @@ class DesktopConfigurationProfile {
 
   save = async () => {
     if (this.attributes.id) {
-      const newObject = await this.update(this.attributes)
-      this.attributes = { ...newObject.attributes }
+      await this.update(this.attributes)
       return true
     }
 
     const newObject = await DesktopConfigurationProfile.create(this.attributes, this.options)
-    this.attributes = { ...newObject.attributes }
+    adoptAttributes(this, newObject.attributes)
     return true
   }
 
@@ -157,21 +205,27 @@ class DesktopConfigurationProfile {
   //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
   //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
   static list = async (params = {}, options = {}) => {
-    if (params.cursor && !isString(params.cursor)) {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
-    if (params.per_page && !isInt(params.per_page)) {
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
     const response = await Api.sendRequest('/desktop_configuration_profiles', 'GET', params, options)
 
-    return response?.data?.map(obj => new DesktopConfigurationProfile(obj, options)) || []
+    return response?.data?.map(obj => new DesktopConfigurationProfile(obj, retainedOptions(options))) || []
   }
 
   static all = (params = {}, options = {}) =>
     DesktopConfigurationProfile.list(params, options)
+
+  // The items list() lists, one at a time: an async iterator that requests each page
+  // through list() only once the items before it have been taken (see Api._iterate).
+  static listIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      DesktopConfigurationProfile.list(pageParams, pageOptions))
 
   // Parameters:
   //   id (required) - int64 - Desktop Configuration Profile ID.
@@ -180,19 +234,21 @@ class DesktopConfigurationProfile {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
     }
 
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
     params.id = id
 
     if (!params.id) {
       throw new errors.MissingParameterError('Parameter missing: id')
     }
 
-    if (params.id && !isInt(params.id)) {
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
       throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
     }
 
     const response = await Api.sendRequest(`/desktop_configuration_profiles/${encodeURIComponent(params.id)}`, 'GET', params, options)
 
-    return new DesktopConfigurationProfile(response?.data, options)
+    return new DesktopConfigurationProfile(response?.data, retainedOptions(options))
   }
 
   static get = (id, params = {}, options = {}) =>
@@ -213,17 +269,25 @@ class DesktopConfigurationProfile {
       throw new errors.MissingParameterError('Parameter missing: mount_mappings')
     }
 
-    if (params.name && !isString(params.name)) {
+    if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
     }
 
-    if (params.workspace_id && !isInt(params.workspace_id)) {
+    if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
+    if (isArray(params.use_for_all_users) || isObject(params.use_for_all_users)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_for_all_users must be of type Boolean, received ${getType(params.use_for_all_users)}`)
+    }
+
+    if (isArray(params.disable_drive_mounting) || isObject(params.disable_drive_mounting)) {
+      throw new errors.InvalidParameterError(`Bad parameter: disable_drive_mounting must be of type Boolean, received ${getType(params.disable_drive_mounting)}`)
     }
 
     const response = await Api.sendRequest('/desktop_configuration_profiles', 'POST', params, options)
 
-    return new DesktopConfigurationProfile(response?.data, options)
+    return new DesktopConfigurationProfile(response?.data, retainedOptions(options))
   }
 }
 

@@ -25,7 +25,7 @@
 ## List Clickwraps
 
 ```
-await Clickwrap.list
+await Clickwrap.list()
 ```
 
 
@@ -56,9 +56,9 @@ await Clickwrap.find(id)
 await Clickwrap.create({
   'name': "Example Site NDA for Files.com Use",
   'body': "[Legal body text]",
-  'use_with_bundles': "example",
-  'use_with_inboxes': "example",
-  'use_with_users': "example",
+  'use_with_bundles': "none",
+  'use_with_inboxes': "none",
+  'use_with_users': "none",
 })
 ```
 
@@ -81,9 +81,9 @@ const clickwrap = await Clickwrap.find(id)
 await clickwrap.update({
   'name': "Example Site NDA for Files.com Use",
   'body': "[Legal body text]",
-  'use_with_bundles': "example",
-  'use_with_inboxes': "example",
-  'use_with_users': "example",
+  'use_with_bundles': "none",
+  'use_with_inboxes': "none",
+  'use_with_users': "none",
 })
 ```
 

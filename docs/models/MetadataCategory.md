@@ -32,7 +32,7 @@
 ## List Metadata Categories
 
 ```
-await MetadataCategory.list
+await MetadataCategory.list()
 ```
 
 

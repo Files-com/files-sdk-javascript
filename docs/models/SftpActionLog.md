@@ -61,7 +61,7 @@
 ## List SFTP Action Logs
 
 ```
-await SftpActionLog.list
+await SftpActionLog.list()
 ```
 
 

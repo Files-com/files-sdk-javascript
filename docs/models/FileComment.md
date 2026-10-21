@@ -57,7 +57,7 @@ await FileComment.create({
 ## Update File Comment
 
 ```
-const [file_comment] = await FileComment.list()
+const file_comment = new FileComment({ "id": id })
 
 await file_comment.update({
   'body': "What a great file!",
@@ -89,7 +89,7 @@ await file_comment.update({
 ## Delete File Comment
 
 ```
-const [file_comment] = await FileComment.list()
+const file_comment = new FileComment({ "id": id })
 
 await file_comment.delete()
 ```

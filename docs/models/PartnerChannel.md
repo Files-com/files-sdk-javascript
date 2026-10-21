@@ -53,7 +53,7 @@
 ## List Partner Channels
 
 ```
-await PartnerChannel.list
+await PartnerChannel.list()
 ```
 
 

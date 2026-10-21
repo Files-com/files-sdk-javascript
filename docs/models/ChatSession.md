@@ -36,7 +36,7 @@
 ## List Chat Sessions
 
 ```
-await ChatSession.list
+await ChatSession.list()
 ```
 
 

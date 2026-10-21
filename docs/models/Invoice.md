@@ -62,7 +62,7 @@
 ## List Invoices
 
 ```
-await Invoice.list
+await Invoice.list()
 ```
 
 

@@ -29,7 +29,7 @@
 ## List Ai Assistant Personalities
 
 ```
-await AiAssistantPersonality.list
+await AiAssistantPersonality.list()
 ```
 
 

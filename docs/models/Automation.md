@@ -174,7 +174,7 @@
 ## List Automations
 
 ```
-await Automation.list
+await Automation.list()
 ```
 
 
@@ -207,7 +207,7 @@ await Automation.find(id)
 ## Show the Automation v2 authoring schema and active node catalog
 
 ```
-await Automation.getAuthoringSchema
+await Automation.getAuthoringSchema()
 ```
 
 
@@ -223,9 +223,9 @@ await Automation.create({
   'destination_replace_to': "example",
   'interval': "year",
   'path': "example",
-  'sync_ids': [1,2],
-  'user_ids': [1,2],
-  'group_ids': [1,2],
+  'sync_ids': "1,2",
+  'user_ids': "1,2",
+  'group_ids': "1,2",
   'schedule_id': 1,
   'schedule_days_of_week': [0,1,3],
   'schedule_times_of_day': ["7:30","11:30"],
@@ -440,7 +440,7 @@ await automation.upgrade()
 ```
 const automation = await Automation.find(id)
 
-await automation.manual_run({
+await automation.manualRun({
   'items': [{"file":"incoming/report.csv"},{"data":{"customer":"Acme"}}],
 })
 ```
@@ -465,9 +465,9 @@ await automation.update({
   'destination_replace_to': "example",
   'interval': "year",
   'path': "example",
-  'sync_ids': [1,2],
-  'user_ids': [1,2],
-  'group_ids': [1,2],
+  'sync_ids': "1,2",
+  'user_ids': "1,2",
+  'group_ids': "1,2",
   'schedule_id': 1,
   'schedule_days_of_week': [0,1,3],
   'schedule_times_of_day': ["7:30","11:30"],

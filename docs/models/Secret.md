@@ -35,7 +35,7 @@
 ## List Secrets
 
 ```
-await Secret.list
+await Secret.list()
 ```
 
 

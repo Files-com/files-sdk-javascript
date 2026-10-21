@@ -59,7 +59,7 @@
 ## List Restores
 
 ```
-await Restore.list
+await Restore.list()
 ```
 
 

@@ -47,7 +47,7 @@
 ## List Event Records
 
 ```
-await EventRecord.list
+await EventRecord.list()
 ```
 
 
