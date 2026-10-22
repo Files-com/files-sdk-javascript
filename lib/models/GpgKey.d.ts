@@ -337,7 +337,8 @@ declare namespace GpgKey {
 
     /**
      * If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`,
-     * `partner_id` or `expires_at`. Valid field combinations are `[ workspace_id, expires_at ]`.
+     * `partner_id` or `expires_at`. Valid field combinations are `[ workspace_id, partner_id ]`, `[ workspace_id,
+     * expires_at ]`, `[ partner_id, expires_at ]` or `[ workspace_id, partner_id, expires_at ]`.
      */
     filter?: Files.JsonObject
 
