@@ -334,7 +334,7 @@ declare class FilesClient {
   readonly fileMigrations: Pick<typeof FileMigration, 'find' | 'get'>
 
   /** `File`'s static methods, made with this client's settings. */
-  readonly files: Pick<typeof File, 'copyToChildSite' | 'copyToRemoteServer' | 'copyToSnapshot' | 'create' | 'find' | 'get' | 'moveToChildSite' | 'moveToRemoteServer' | 'moveToSnapshot' | 'upload' | 'uploadData' | 'uploadFile' | 'uploadFileToChildSite' | 'uploadFileToRemoteServer' | 'uploadFileToSnapshot' | 'uploadFromData' | 'uploadFromStream' | 'uploadStream' | 'uploadToChildSite' | 'uploadToRemoteServer' | 'uploadToSnapshot' | 'zip'>
+  readonly files: Pick<typeof File, 'copyToChildSite' | 'copyToRemoteServer' | 'copyToSnapshot' | 'create' | 'downloadDirectory' | 'find' | 'get' | 'moveToChildSite' | 'moveToRemoteServer' | 'moveToSnapshot' | 'upload' | 'uploadData' | 'uploadDirectory' | 'uploadFile' | 'uploadFileToChildSite' | 'uploadFileToRemoteServer' | 'uploadFileToSnapshot' | 'uploadFromData' | 'uploadFromStream' | 'uploadStream' | 'uploadToChildSite' | 'uploadToRemoteServer' | 'uploadToSnapshot' | 'zip'>
 
   /** `Folder`'s static methods, made with this client's settings. */
   readonly folders: Pick<typeof Folder, 'create' | 'listFor' | 'listForIterator'>

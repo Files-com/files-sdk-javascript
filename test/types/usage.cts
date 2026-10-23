@@ -6,6 +6,7 @@ import FilesClient = require('files.com/lib/FilesClient')
 import FilesErrors = require('files.com/lib/Errors')
 import LibFiles = require('files.com/lib/Files')
 import Logger = require('files.com/lib/Logger')
+import File = require('files.com/lib/models/File')
 import User = require('files.com/lib/models/User')
 
 Files.setApiKey('YOUR_API_KEY')
@@ -48,3 +49,11 @@ export const avatars = (bytes: Uint8Array): Attachment[] => [
   new Attachment.default(bytes),
   new FilesIndex.Attachment(bytes, { type: 'image/png' }),
 ]
+
+// A folder's upload and download from the CommonJS module, whose File is also its own `default`, and through a client.
+export const folderBytes = async (): Promise<number> => {
+  const uploaded: File.DirectoryTransferResult = await File.uploadDirectory('local/reports', 'reports', requestOptions)
+  const downloaded = await File.default.downloadDirectory('reports', 'copies/reports')
+  const viaClient = await client.files.downloadDirectory('reports', 'copies/reports-client', { signal: AbortSignal.timeout(60000) })
+  return uploaded.bytes + downloaded.bytes + viaClient.files.length
+}

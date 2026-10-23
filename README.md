@@ -20,8 +20,8 @@ If your application runs on an earlier Node.js version, keep your existing 1.x v
 The SDK writes its log messages to the console by default. To send them to your application's logger instead, pass any object with `error`, `warn`, `info` and `debug` methods to `Files.setLogger`. Each message goes to the method for its level, with the SDK's original values and no `[level]:` prefix. The SDK log level still decides which messages are sent, so debug messages are only sent after you select `LogLevel.DEBUG`.
 
 ```javascript
-import Files from 'files.com/lib/Files';
-import { LogLevel } from 'files.com/lib/Logger';
+import Files from 'files.com/lib/Files.js';
+import { LogLevel } from 'files.com/lib/Logger.js';
 
 Files.setLogger(applicationLogger);
 Files.setLogLevel(LogLevel.DEBUG);
@@ -179,6 +179,24 @@ A `Files.TransferControl` pauses and resumes every transfer given it as `options
   - **Retries.** What the SDK staged from a response is written, or given up, before that response's permits are given back, and so before a retry's request can take them; nothing of it waits for the retry. What the destination already has stays: bytes written to a file or stream, and a string's chunks, which a restart from the first byte empties.
   - **A string download** holds the whole file, which is what it returns: a copy of each chunk as it comes, then, at the end, one buffer of them all and the string decoded from it, together about twice the file's size beside the string.
 
+## Folder uploads and downloads
+
+`File.uploadDirectory()` uploads a local folder, with everything in it, to a new Files.com folder, and `File.downloadDirectory()` downloads a Files.com folder, with everything in it, into a new local folder. Both take the source first, and a client offers them too:
+
+```javascript
+const uploaded = await File.uploadDirectory('local/reports', 'reports/2026');
+// { directories: ['empty', 'q1'], files: ['q1/jan.csv', 'summary.csv'], bytes: 4096 }
+const downloaded = await client.files.downloadDirectory('reports/2026', 'copies/2026', { signal });
+```
+
+- **The destination is new.** An upload creates its destination folder, and fails, sending nothing more, when the API refuses it as one that already exists (`processing-failure/destination-exists`); a download makes its local folder without `recursive`, and fails with `EEXIST` when anything is there, or `ENOENT` when its parent is not. Nothing is merged into what is already there, and nothing either one made is deleted after a failure: the folder it made is the call's.
+- **The SDK walks the tree.** An upload reads the whole local tree first, follows no symbolic link and refuses, before sending anything, a symbolic link, a socket, a device or anything else that is neither a folder nor a regular file. It then creates each folder, the empty ones included, and uploads each file with `uploadFile()`. A download describes its folder, lists each folder whole, makes each local folder, the empty ones included, and downloads each file into a new file it opens exclusively (`'wx'`), so that nothing already there, a symbolic link included, is replaced or followed; an entry whose name could not be a local name as it is (empty, `.`, `..`, or with a slash, backslash or NUL) fails it before anything is written for it. Names are kept exactly, `#`, `%`, spaces and other letters included.
+- **One file at a time.** Every file of a call shares `options.job`, or else a `Files.TransferJob` of the call's own, so that what one file teaches its controller carries over to the next, within one set of budgets. An upload's parts still go in parallel as `uploadFile()` sends them. A download's files come through `downloadToStream()`, one response at a time, never in ranges at once as `downloadToFile()` may.
+- **Options.** Request options apply to every API request; the transfer options to each file's own transfer, its `onProgress` reporting that file's progress from its start. `size`, which a folder's files each have of their own, is refused. The first failure ends the call with that failure, and `signal` cancels it with its reason, unchanged.
+- **Limits.** The API has no create-if-absent for files, so a file another writer creates at one of an upload's paths first is replaced; a site that creates missing parent folders creates the destination's parents too; and nothing guards a download's local folders against another process replacing them meanwhile.
+
+The result lists every folder made inside the folder, the empty ones included, and every file transferred, in the order transferred, each by its path relative to the folder, with `/` between its names, and the bytes of those files. An upload takes a folder's files and folders by name, in the order of their UTF-16 code units, each folder's contents before the names after it, and counts each file's bytes as the API reports the file it completed, so that a file changed after the tree was read counts as it was uploaded. A download takes each folder's entries in the order the API lists them, each folder's contents before the entries listed after it, and counts the bytes it wrote. A `signal` already aborted, or aborted while an upload reads its tree, ends the call with its reason before anything more is read or sent. Node.js only.
+
 ## Lists, one item at a time
 
 A list method such as `User.list()` requests every page and resolves to all of their items, unless `autoPaginate` is off. A list that pages with a cursor also has an iterator, such as `User.listIterator()` or `Folder.listForIterator()`. It takes the same arguments, gives the items one at a time, and requests a page only when its items are needed:
@@ -259,8 +277,8 @@ Some API parameters take a file, such as `attachment_file` when creating a behav
 
 ```javascript
 import { readFile } from 'node:fs/promises';
-import Attachment from 'files.com/lib/Attachment';
-import Behavior from 'files.com/lib/models/Behavior';
+import Attachment from 'files.com/lib/Attachment.js';
+import Behavior from 'files.com/lib/models/Behavior.js';
 
 const behavior = await Behavior.create({
   path: 'invoices',
@@ -358,9 +376,9 @@ SDK](https://developers.files.com/javascript/resources/developers/api-keys).
 A user key follows its account's permissions, narrowed by the key's permission scope, Workspace, and any path restriction on file operations. It can perform administrative operations only when both the account and key permit them. [API Keys](https://www.files.com/docs/security/authentication-and-credentials/api-keys) explains credential scope and lifecycle; [Workspaces](https://developers.files.com/javascript/overview/workspaces) explains request context and delegated administration.
 
 ```javascript title="Example Request"
-import Files from 'files.com/lib/Files';
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Files from 'files.com/lib/Files.js';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 Files.setApiKey('YOUR_API_KEY');
 
@@ -400,8 +418,8 @@ password.
 This returns a session object that can be used to authenticate SDK method calls.
 
 ```javascript title="Example Request"
-import Session from 'files.com/lib/models/Session';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Session from 'files.com/lib/models/Session.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   const session = await Session.create({ username: 'motor', password: 'vroom' });
@@ -421,9 +439,9 @@ try {
 Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
 ```javascript title="Example Request"
-import Files from 'files.com/lib/Files';
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Files from 'files.com/lib/Files.js';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 // You may set the returned session ID to be used by default for subsequent requests.
 Files.setSessionId(session.id);
@@ -454,8 +472,8 @@ precedence over the globally configured API key.
 User sessions can be ended calling the `destroy` method on the `session` object.
 
 ```javascript title="Example Request"
-import Session from 'files.com/lib/models/Session';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Session from 'files.com/lib/models/Session.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   await Session.destroy();
@@ -484,7 +502,7 @@ This is always required if your site is configured to disable global acceleratio
 This can also be set to use a mock server in development or CI.
 
 ```javascript title="Example setting"
-import Files from 'files.com/lib/Files';
+import Files from 'files.com/lib/Files.js';
 
 Files.setBaseUrl("https://MY-SUBDOMAIN.files.com");
 ```
@@ -500,8 +518,8 @@ Supported values:
 * LogLevel.DEBUG
 
 ```javascript title="Example setting"
-import Files from 'files.com/lib/Files';
-import { LogLevel } from 'files.com/lib/Logger';
+import Files from 'files.com/lib/Files.js';
+import { LogLevel } from 'files.com/lib/Logger.js';
 
 Files.setLogLevel(LogLevel.INFO);
 ```
@@ -511,7 +529,7 @@ Files.setLogLevel(LogLevel.INFO);
 Enable debug logging of API requests and/or response headers. Both settings default to `false`.
 
 ```javascript title="Example setting"
-import Files from 'files.com/lib/Files';
+import Files from 'files.com/lib/Files.js';
 
 Files.configureDebugging({
   debugRequest: true,
@@ -536,7 +554,7 @@ budget runs out, or the signal is aborted, before then, the call has already res
 fails with an error instead.
 
 ```javascript title="Example setting"
-import Files from 'files.com/lib/Files';
+import Files from 'files.com/lib/Files.js';
 
 Files.configureNetwork({
   // max retries (default: 3)
@@ -579,8 +597,8 @@ when listing a Folder.  This applies regardless of the sorting parameters you pr
 used, after the initial sort application of Folders before Files.
 
 ```javascript title="Sort Example"
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   // Users, sorted by username in ascending order.
@@ -626,8 +644,8 @@ to filter on and a passed in value to use in the filter comparison.
 | `filter_lteq` | Range | Find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE). |
 
 ```javascript title="Exact Filter Example"
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   // Users who are not site admins.
@@ -650,8 +668,8 @@ try {
 ```
 
 ```javascript title="Range Filter Example"
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   // Users who have logged in on or after 2024-01-01.
@@ -674,8 +692,8 @@ try {
 ```
 
 ```javascript title="Pattern Filter Example"
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   // Users whose usernames start with 'test'.
@@ -698,8 +716,8 @@ try {
 ```
 
 ```javascript title="Combination Filter with Sort Example"
-import User from 'files.com/lib/models/User';
-import * as FilesErrors from 'files.com/lib/Errors';
+import User from 'files.com/lib/models/User.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   // Users whose usernames start with 'test' and are not site admins, sorted by last login date.
@@ -753,7 +771,7 @@ when handling errors related to duplicate file names and when developing tools f
 synchronization.
 
 ```javascript title="Compare Case-Insensitive Files and Paths"
-import { pathNormalizer } from 'files.com/lib/utils';
+import { pathNormalizer } from 'files.com/lib/utils.js';
 
 if (pathNormalizer.same('Fïłèńämê.Txt', 'filename.txt')) {
   // the paths are the same
@@ -887,7 +905,7 @@ and error descriptions.
 If the specified language is not supported or the value is omitted, the API defaults to English.
 
 ```javascript title="Example Request"
-import Files from 'files.com/lib/Files';
+import Files from 'files.com/lib/Files.js';
 
 Files.setLanguage('es');
 ```
@@ -910,8 +928,8 @@ Use standard Javascript exception handling to detect and deal with errors.  It i
 catch the general `FilesError` exception as a catch-all.
 
 ```javascript title="Example Error Handling"
-import Session from 'files.com/lib/models/Session';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Session from 'files.com/lib/models/Session.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 try {
   const session = await Session.create({ username: 'USERNAME', password: 'BADPASSWORD' });
@@ -934,7 +952,7 @@ SDK errors are general errors that occur within the SDK code.  These errors gene
 exception classes inherit from a standard `FilesError` base class.
 
 ```javascript title="Example SDK Exception Class Inheritance Structure"
-import * as FilesErrors from 'files.com/lib/Errors'
+import * as FilesErrors from 'files.com/lib/Errors.js'
 
 FilesErrors.ConfigurationError ->
 FilesErrors.FilesError ->
@@ -956,7 +974,7 @@ API errors are errors returned by the Files.com API.  Each exception class inher
 The error group base class indicates a particular type of error.
 
 ```javascript title="Example API Exception Class Inheritance Structure"
-import * as FilesErrors from 'files.com/lib/Errors'
+import * as FilesErrors from 'files.com/lib/Errors.js'
 
 FilesErrors.NotAuthorized_FolderAdminPermissionRequiredError ->
 FilesErrors.NotAuthorizedError ->
@@ -1187,8 +1205,9 @@ the API will paginate the results.
 The Files.com JavaScript SDK automatically paginates through lists of objects by default.
 
 ```javascript title="Example Request" hasDataFormatSelector
-import File from 'files.com/lib/models/File';
-import * as FilesErrors from 'files.com/lib/Errors';
+import Files from 'files.com';
+import Folder from 'files.com/lib/models/Folder.js';
+import * as FilesErrors from 'files.com/lib/Errors.js';
 
 Files.configureNetwork({
   // true by default

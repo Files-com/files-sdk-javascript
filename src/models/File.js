@@ -439,6 +439,208 @@ class File {
     }, params, options)
   }
 
+  // The options of a folder upload or download that are its files' own transfers', never those of the API requests it
+  // makes itself (creating, describing and listing folders, and describing each file), which take every other option.
+  static _directoryTransferOptions = ['concurrency', 'control', 'determinePartUploadUri', 'job', 'maxConcurrency', 'onProgress', 'size', 'startup']
+
+  static _directoryRequestOptions = options => Object.fromEntries(Object.entries(options ?? {})
+    .filter(([name]) => !File._directoryTransferOptions.includes(name)))
+
+  // What each file's download of a folder download takes: the call's signal and transfer options, and job.
+  static _directoryDownloadOptions = (options, job) => ({
+    ...Object.fromEntries(['control', 'maxConcurrency', 'onProgress', 'signal']
+      .filter(name => options?.[name] !== undefined)
+      .map(name => [name, options[name]])),
+    job,
+  })
+
+  // The Files.com folder of a folder upload or download, as given, but for slashes at either end; a path that is not a
+  // string, or names the site's root folder, is refused.
+  static _directoryPath = (value, name) => {
+    const directoryPath = isString(value) ? value.replace(/^\/+|\/+$/g, '') : ''
+
+    if (directoryPath === '') {
+      throw new errors.InvalidParameterError(`Bad parameter: ${name} must name a Files.com folder other than the root, received ${isString(value) ? JSON.stringify(value) : getType(value)}`)
+    }
+
+    return directoryPath
+  }
+
+  // The local folder of a folder upload or download, as given: a path that is not a string, or is empty, is refused.
+  static _localDirectoryPath = (value, name) => {
+    if (!isString(value) || value === '') {
+      throw new errors.InvalidParameterError(`Bad parameter: ${name} must be the path of a local folder, received ${isString(value) ? '""' : getType(value)}`)
+    }
+
+    return value
+  }
+
+  // Ends a folder upload or download, between its steps, once its signal has aborted: with the signal's reason itself,
+  // whatever it is, as a cancelled call rejects, or, when the runtime gives the signal none, an AbortError.
+  static _stopIfAborted = signal => {
+    if (signal?.aborted) {
+      throw signal.reason === undefined ? Object.assign(new Error('This operation was aborted'), { name: 'AbortError' }) : signal.reason
+    }
+  }
+
+  /**
+   * Uploads the local folder at sourceDirectoryPath, with everything in it, to a new folder at destinationPath: the
+   * source first. Its local tree is read first (see Directory.node.js), then the folder is created, then each folder
+   * in it, then each file, one at a time, by File.uploadFile(), all sharing options.job or a TransferJob of the call's
+   * own. Node.js only. See models/File.d.ts for what it guarantees.
+   */
+  static uploadDirectory = async (sourceDirectoryPath, destinationPath, options = {}) => {
+    if (isBrowser()) {
+      throw new errors.NotImplementedError('Folder uploads are only available in a NodeJS environment')
+    }
+
+    const source = File._localDirectoryPath(sourceDirectoryPath, 'sourceDirectoryPath')
+    const root = File._directoryPath(destinationPath, 'destinationPath')
+
+    if (options?.size !== undefined) {
+      throw new errors.InvalidParameterError('Bad parameter: size cannot be given to a folder upload, whose files each have their own')
+    }
+
+    // The signal is checked before the tree is read, and between each step of reading it, so that a cancelled upload
+    // reads no further and rejects with its reason, unchanged, whatever the tree holds or lacks.
+    const signal = options?.signal
+    const stopIfAborted = () => File._stopIfAborted(signal)
+    const { planUpload } = require('../isomorphic/Directory.node.js')
+    const plan = await planUpload(source, stopIfAborted)
+    stopIfAborted()
+
+    const { TransferJob } = require('../Transfer.js')
+    const Folder = require('./Folder.js').default
+    const requestOptions = File._directoryRequestOptions(options)
+    const fileOptions = { ...options, job: options?.job ?? new TransferJob() }
+    const result = { bytes: 0, directories: [], files: [] }
+
+    await Folder.create(root, { mkdir_parents: false }, requestOptions)
+
+    await plan.directories.reduce((previous, relativePath) => previous.then(async () => {
+      File._stopIfAborted(signal)
+      await Folder.create(`${root}/${relativePath}`, { mkdir_parents: false }, requestOptions)
+      result.directories.push(relativePath)
+    }), Promise.resolve())
+
+    // A file's bytes are those of its completed upload, as the API reports the file it published: what was uploaded,
+    // even when the file changed size after the tree was read. A completed upload whose file reports no size fails the
+    // call rather than being counted as some other size.
+    await plan.files.reduce((previous, file) => previous.then(async () => {
+      File._stopIfAborted(signal)
+      const uploaded = await File.uploadFile(`${root}/${file.relativePath}`, file.localPath, {}, fileOptions)
+      const size = uploaded?.attributes?.size
+
+      if (!Number.isSafeInteger(size) || size < 0) {
+        throw new errors.FilesError(`The upload of ${file.relativePath} completed, but the file it published reports no size, so its bytes cannot be counted`)
+      }
+
+      result.files.push(file.relativePath)
+      result.bytes += size
+    }), Promise.resolve())
+
+    return result
+  }
+
+  /**
+   * Downloads the Files.com folder at path, with everything in it, into a new local folder at destinationDirectoryPath:
+   * the source first. The folder is described first, and must be one; then the local folder is made, and each folder's
+   * listing is taken whole and its entries made in the order listed, a folder before what is inside it, each file
+   * described again for its download URL and downloaded by downloadToStream() into a new file opened exclusively (see
+   * Directory.node.js), one at a time, all sharing options.job or a TransferJob of the call's own. Node.js only. See
+   * models/File.d.ts for what it guarantees.
+   */
+  static downloadDirectory = async (path, destinationDirectoryPath, options = {}) => {
+    if (isBrowser()) {
+      throw new errors.NotImplementedError('Folder downloads are only available in a NodeJS environment')
+    }
+
+    const root = File._directoryPath(path, 'path')
+    const destination = File._localDirectoryPath(destinationDirectoryPath, 'destinationDirectoryPath')
+    const signal = options?.signal
+    const { TransferJob } = require('../Transfer.js')
+    const Folder = require('./Folder.js').default
+    const { localPathOf, makeFolder, openNewFile } = require('../isomorphic/Directory.node.js')
+    const requestOptions = File._directoryRequestOptions(options)
+    const downloadOptions = File._directoryDownloadOptions(options, options?.job ?? new TransferJob())
+    const result = { bytes: 0, directories: [], files: [] }
+
+    File._stopIfAborted(signal)
+    const described = await File.find(root, {}, requestOptions)
+
+    if (described?.attributes?.type !== 'directory') {
+      throw new errors.FilesError(`${root} is not a folder, so it cannot be downloaded as one`)
+    }
+
+    File._stopIfAborted(signal)
+    await makeFolder(destination)
+
+    // Downloads entry, a listed file, into a new local file at localPath. The file is opened only once its download URL
+    // has been given, and is closed, its descriptor with it, before this settles, whether the download completed or
+    // failed, even before any byte was written, as when the download fails before it is given the file. The download's
+    // own failure, or its cancellation, is kept as it came, a falsy signal reason included; only without one does a
+    // failure of the file itself, such as one to close it, fail it, which then counts nothing of the file.
+    const downloadFile = async (entry, localPath, relativePath) => {
+      const downloadable = await new File({ path: entry.attributes.path }, requestOptions).download()
+      const { closed, stream } = await openNewFile(localPath)
+      let failure = null
+
+      try {
+        await downloadable.downloadToStream(stream, downloadOptions)
+      } catch (error) {
+        failure = { error }
+      }
+
+      if (failure && !stream.destroyed) {
+        stream.destroy()
+      }
+
+      const fileFailure = await closed
+
+      if (failure) {
+        throw failure.error
+      }
+
+      if (fileFailure) {
+        throw fileFailure.error
+      }
+
+      result.files.push(relativePath)
+      result.bytes += stream.bytesWritten
+    }
+
+    // Makes the local folder of each folder listed in folderPath, and downloads each file listed there, in turn. Each
+    // entry must be directly inside folderPath, as the API names it, with a name that can be written as it is.
+    const visit = async (folderPath, localFolder, segments) => {
+      const entries = await Folder.listFor(folderPath, {}, { ...requestOptions, autoPaginate: true })
+
+      await entries.reduce((previous, entry) => previous.then(async () => {
+        File._stopIfAborted(signal)
+        const entryPath = `${entry?.attributes?.path ?? ''}`
+        const parent = entryPath.slice(0, Math.max(entryPath.lastIndexOf('/'), 0))
+
+        if (entryPath.lastIndexOf('/') < 0 || !pathNormalizer.same(parent, folderPath)) {
+          throw new errors.FilesError(`The API listed ${JSON.stringify(entryPath)} in ${folderPath}, which it is not directly inside`)
+        }
+
+        const name = entryPath.slice(entryPath.lastIndexOf('/') + 1)
+        const localPath = localPathOf(destination, localFolder, name)
+        const relativePath = [...segments, name].join('/')
+
+        if (entry.attributes.type === 'directory') {
+          await makeFolder(localPath)
+          result.directories.push(relativePath)
+          await visit(entryPath, localPath, [...segments, name])
+        } else {
+          await downloadFile(entry, localPath, relativePath)
+        }
+      }), Promise.resolve())
+    }
+
+    await visit(root, destination, [])
+    return result
+  }
+
   downloadToStream = async (writableStream, options) => {
     if (isBrowser()) {
       throw new errors.NotImplementedError('Stream downloads are only available in a NodeJS environment')

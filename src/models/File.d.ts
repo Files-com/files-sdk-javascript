@@ -1259,6 +1259,66 @@ declare namespace File {
   function uploadStream(destinationPath: string, readableStream: NodeJS.ReadableStream, params?: UploadParams, options?: UploadOptions): Promise<File>
 
   /**
+   * Uploads the local folder at `sourceDirectoryPath`, with everything in it, to a new Files.com folder at
+   * `destinationPath`: the source first. Resolves with what it uploaded (see `DirectoryTransferResult`).
+   *
+   * - **Before anything is sent**, the whole local tree is read, without following any symbolic link: a symbolic link,
+   *   the source itself included, a socket, a device or any other entry that is neither a folder nor a regular file
+   *   refuses the upload with an `InvalidParameterError` naming it, and so do a `destinationPath` that names the root
+   *   and a `size`, which a folder's files each have of their own. `signal` is checked before the tree is read and
+   *   between each step of reading it: an upload cancelled before or meanwhile reads no further, and rejects with its
+   *   reason, unchanged, whatever the tree holds or lacks.
+   * - **Then** it creates `destinationPath` (`POST /folders/{path}` with `mkdir_parents: false`), each folder of the tree,
+   *   each before those inside it, the empty ones included, and then uploads each file with `uploadFile()`, one at a
+   *   time, a folder's names taken in the order of their UTF-16 code units. Its folders and files keep their names
+   *   exactly, `#`, `%`, spaces and other letters included.
+   * - **An existing destination is refused, not merged into**: creating `destinationPath` fails as the API refuses a
+   *   folder that already exists (`processing-failure/destination-exists`), and nothing more is sent. A site that
+   *   creates missing parent folders by itself may create `destinationPath`'s parents. Nothing makes the upload
+   *   exclusive against another writer meanwhile: the API has no create-if-absent for files, so a file another creates
+   *   at one of its paths first is replaced by its upload.
+   * - **Options**: request options, such as `client`, `headers` or `workspaceId`, apply to every API request; each
+   *   file's upload takes the transfer options as `uploadFile()` does, its `onProgress` reporting that file's own
+   *   progress, from its start, and `determinePartUploadUri` choosing its parts' URLs. Every file shares `job`, or else a
+   *   `Files.TransferJob` of the call's own, with its learning and budgets.
+   * - **The first failure ends it**, with that failure, nothing more being started; `signal` cancels it, rejecting with
+   *   its reason, unchanged. Nothing it created is deleted: a folder it created is the call's, and may be removed as a
+   *   whole.
+   *
+   * Node.js only: in a browser, rejects with a `NotImplementedError`.
+   */
+  function uploadDirectory(sourceDirectoryPath: string, destinationPath: string, options?: DirectoryUploadOptions): Promise<DirectoryTransferResult>
+
+  /**
+   * Downloads the Files.com folder at `path`, with everything in it, into a new local folder at
+   * `destinationDirectoryPath`: the source first. Resolves with what it downloaded (see `DirectoryTransferResult`).
+   *
+   * - `path` is described first (`GET /file_actions/metadata/{path}`), and must be a folder, or the download fails with a
+   *   `FilesError`; a `path` that names the root is refused with an `InvalidParameterError`.
+   * - **The local folder must not exist**, and its parent must: it is made as Node.js's `mkdir()` without `recursive`
+   *   makes one, failing with `EEXIST` or `ENOENT` before anything is downloaded. Each folder it lists is made the same
+   *   way, empty ones included, and each file is a new file opened exclusively (`'wx'`), so that nothing already there,
+   *   a symbolic link included, is replaced or followed: two entries of one local name, such as on a disk that ignores
+   *   case, fail with `EEXIST`. Nothing guards against another process replacing one of its local folders meanwhile.
+   * - **Each folder's listing** (`GET /folders/{path}`, every page) is taken whole, and its entries made in the order
+   *   listed, a folder before what is inside it. An entry not directly inside its folder, or whose name could not be a
+   *   local entry as it is (empty, `.`, `..`, or holding a slash, backslash or NUL), fails the download with a
+   *   `FilesError` before anything is written for it.
+   * - **Each file** is described again for its download URL (its `download()`), then downloaded by `downloadToStream()`
+   *   into its new file's stream, one file at a time: in one response, resumed only from a response of the same
+   *   version, never in ranges at once as `downloadToFile()` may. Its file is closed before the next begins, or before
+   *   the download settles, whether it completed or failed.
+   * - **Options**: request options, such as `client` or `workspaceId`, apply to every API request; each file's download
+   *   takes `signal`, `onProgress`, `control` and `maxConcurrency` as `downloadToStream()` does, its `onProgress`
+   *   reporting that file's own progress. Every file shares `job`, or else a `Files.TransferJob` of the call's own.
+   * - **The first failure ends it**, with that failure, nothing more being started; `signal` cancels it, rejecting with
+   *   its reason, unchanged. Nothing it made is deleted: the local folder it made is the call's.
+   *
+   * Node.js only: in a browser, rejects with a `NotImplementedError`.
+   */
+  function downloadDirectory(path: string, destinationDirectoryPath: string, options?: DirectoryDownloadOptions): Promise<DirectoryTransferResult>
+
+  /**
    * Uploads the file at `sourceFilePath` on disk to `destinationPath` in a Remote Server: `_/RemoteServers/{remoteServerId}/{destinationPath}`.
    * The source first; `uploadToRemoteServer()` keeps its own order. With `destinationPath` left out,
    * or `undefined`, the file goes to the destination's root under its own name, the last segment of `sourceFilePath`.
@@ -1391,6 +1451,34 @@ declare namespace File {
      * they have all closed.
      */
     signal?: AbortSignal | undefined
+  }
+
+  /**
+   * The options of `uploadDirectory()`: an upload's options, but `size`, which a folder's files each have of their own.
+   * Each file's upload takes the transfer options, its callbacks called for that file alone.
+   */
+  type DirectoryUploadOptions = Omit<UploadOptions, 'size'>
+
+  /**
+   * The options of `downloadDirectory()`: a call's options, for its API requests, and a download's, for each file's
+   * download, its callbacks called for that file alone.
+   */
+  interface DirectoryDownloadOptions extends Files.RequestOptions, DownloadOptions {}
+
+  /** What `uploadDirectory()` or `downloadDirectory()` transferred, each path relative to the folder, joined by `/`. */
+  interface DirectoryTransferResult {
+    /** Every folder it made inside the folder, each before those inside it, the empty ones included; not the folder itself. */
+    directories: string[]
+
+    /** Every file it transferred, in the order transferred. */
+    files: string[]
+
+    /**
+     * The bytes of those files: for an upload, each completed file's size as the API reports the file it published,
+     * so that a file that changed after the tree was read counts as uploaded, and a completion reporting no size fails
+     * the call; for a download, the bytes each completed download wrote.
+     */
+    bytes: number
   }
 
   /** What uploads and downloads take besides their requests' options. */

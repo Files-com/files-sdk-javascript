@@ -94,31 +94,119 @@ describe('API client', () => {
     })
   })
 
+  // An attempt's budget covers its response's body too: a body that stops arriving before it is complete is stopped as
+  // the budget runs out, with the budget's own error, and is not sent again. The server answers with the headers and
+  // the first bytes of a JSON body of 100 bytes and then closes its connection; the body neither ends nor fails, and
+  // only the budget ends its read. The budget's 50 ms runs on Jest's fake clock, which fakes setTimeout and clearTimeout
+  // alone and is advanced only once the SDK is seen reading that body, so that the request's dispatch over loopback,
+  // however long a busy runner takes, can never spend the budget first. The request, its HTTP client, the answer and
+  // the body's read all stay real, on the real clock, as do the test's own waits for what it must see, each bounded by
+  // WITNESS_MS: a bound that only turns a missing witness into a failure, well within the test's own timeout.
   it('times out a response whose body stops arriving before it is complete', async () => {
+    const { clearTimeout: realClearTimeout, setTimeout: realSetTimeout } = globalThis
+    const realFetch = jest.requireActual('cross-fetch')
+    const BUDGET_SECONDS = 0.05
+    const PARTIAL = '[{"id":1'
+    const WITNESS_MS = 2000
+
+    // witnessed, or a failure naming what did not happen within WITNESS_MS of real time.
+    const within = (witnessed, what) => new Promise((resolve, reject) => {
+      const bound = realSetTimeout(() => reject(new Error(`${what} did not happen within ${WITNESS_MS} ms`)), WITNESS_MS)
+      witnessed.then(value => {
+        realClearTimeout(bound)
+        resolve(value)
+      }, error => {
+        realClearTimeout(bound)
+        reject(error)
+      })
+    })
+
     let requests = 0
+    let partialWritten
+    const written = new Promise(resolve => { partialWritten = resolve })
     const sockets = new Set()
     const server = http.createServer((incoming, response) => {
       requests += 1
       response.writeHead(200, { 'Content-Length': '100', 'Content-Type': 'application/json' })
-      response.write('[{"id":1', () => response.socket.destroy())
+      response.write(PARTIAL, () => {
+        partialWritten()
+        response.socket.destroy()
+      })
     })
+
+    // The SDK's HTTP client: the real cross-fetch, given each request as the SDK makes it. Once the SDK begins its own
+    // read of the response's body, the test sees, alongside that read, the bytes it takes, without taking any itself.
+    let sends = 0
+    let partialRead
+    const read = new Promise((resolve, reject) => { partialRead = { reject, resolve } })
+    const observedFetch = (url, init) => {
+      sends += 1
+
+      return realFetch(url, init).then(response => {
+        const { json } = response
+
+        response.json = () => {
+          const reading = json.call(response)
+          const chunks = []
+
+          if (typeof response.body?.on === 'function') {
+            response.body.on('data', chunk => {
+              chunks.push(Buffer.from(chunk))
+
+              if (Buffer.concat(chunks).toString() === PARTIAL) {
+                partialRead.resolve()
+              }
+            })
+          } else {
+            partialRead.reject(new Error('The response\'s body is not a Node.js stream whose read the test can see'))
+          }
+
+          return reading
+        }
+
+        return response
+      })
+    }
 
     server.on('connection', socket => sockets.add(socket))
     await new Promise(resolve => { server.listen(0, '127.0.0.1', resolve) })
     const previousNetwork = { maxNetworkRetries: Files.getMaxNetworkRetries(), networkTimeout: Files.getNetworkTimeout() }
+    let faked = false
 
     try {
       Files.setBaseUrl(`http://127.0.0.1:${server.address().port}`)
-      Files.configureNetwork({ maxNetworkRetries: 0, networkTimeout: 0.05 })
+      Files.configureNetwork({ fetch: observedFetch, maxNetworkRetries: 0, networkTimeout: BUDGET_SECONDS })
+      jest.useFakeTimers({
+        doNotFake: ['Date', 'hrtime', 'nextTick', 'performance', 'queueMicrotask', 'setImmediate', 'clearImmediate', 'setInterval', 'clearInterval'],
+      })
+      faked = true
 
       const listing = ApiKey.list()
+      let settled = false
+      listing.then(() => { settled = true }, () => { settled = true })
+
+      // The server has sent the headers and the first bytes of the body, and the SDK's own read of the body has taken
+      // them, while the call is still under way: its budget has not run out, nor has anything else ended it.
+      await within(Promise.all([written, read]), 'The server\'s partial answer and the SDK\'s read of it')
+      expect([requests, sends, settled]).toEqual([1, 1, false])
+
+      // Only now does the budget run out, as the read waits for the rest of a body that never comes.
+      jest.advanceTimersByTime(BUDGET_SECONDS * 1000)
 
       await expect(listing).rejects.toBeInstanceOf(FilesError)
       await expect(listing).rejects.toHaveProperty('message', 'Request timed out')
       expect(requests).toBe(1)
+      expect(sends).toBe(1)
     } finally {
+      // Should the test fail before the budget ran out, it runs out now, on the fake clock, stopping the call's read and
+      // request, before the real clock is restored.
+      if (faked) {
+        jest.runOnlyPendingTimers()
+        jest.useRealTimers()
+      }
+
       Files.setBaseUrl(API_URL)
-      Files.configureNetwork(previousNetwork)
+      Files.configureNetwork({ ...previousNetwork, fetch: null })
       sockets.forEach(socket => socket.destroy())
       await new Promise(resolve => { server.close(resolve) })
     }

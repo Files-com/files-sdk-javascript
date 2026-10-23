@@ -4,7 +4,7 @@ There are many custom `Error` classes defined by this SDK that you can test agai
 
 The library of errors can be imported as follows:
 
-`import * as errors from 'files.com/lib/Errors'`
+`import * as errors from 'files.com/lib/Errors.js'`
 
 If using `require()` you can import using the following (note the lack of `.default`):
 

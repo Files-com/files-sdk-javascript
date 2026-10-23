@@ -203,6 +203,23 @@ export const transferWithJob = async (path: string): Promise<Files.TransferJobSn
   return snapshot
 }
 
+// A local folder uploaded to a new Files.com folder, and a Files.com folder downloaded into a new local one, the source
+// first, each file's transfer with the call's transfer options and job, and the same through a client.
+export const transferFolders = async (path: string): Promise<string> => {
+  const job = new Files.TransferJob({ maxConcurrency: 16 })
+  const onProgress = (progress: Files.TransferProgress): void => { Logger.debug(progress.bytesTransferred) }
+  const uploadOptions: File.DirectoryUploadOptions = { concurrency: 4, job, onProgress, workspaceId: null }
+  const uploaded: File.DirectoryTransferResult = await File.uploadDirectory('local/reports', path, uploadOptions)
+
+  const downloadOptions: File.DirectoryDownloadOptions = { control: new Files.TransferControl(), job, signal: AbortSignal.timeout(60000) }
+  const downloaded = await File.downloadDirectory(path, 'copies/reports', downloadOptions)
+  const viaClient: File.DirectoryTransferResult = await client.files.uploadDirectory('local/reports', `${path}-copy`, { startup: 'aggressive' })
+  await client.files.downloadDirectory(`${path}-copy`, 'copies/reports-copy', { maxConcurrency: 2 })
+
+  const directories: string[] = downloaded.directories
+  return `${uploaded.files.join(',')} ${directories.length} ${downloaded.bytes + viaClient.bytes}`
+}
+
 // A client's filesystem has Node.js's fs/promises conventions over Files.com paths: file handles that read and write
 // the remote file, each change published before it resolves, and directories listed a page at a time.
 export const portedFileCode = async (path: string): Promise<string> => {

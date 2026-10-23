@@ -2900,6 +2900,337 @@ describe('File downloads', () => {
     })
   })
 
+  describe('downloadDirectory', () => {
+    const API = 'https://api.example.test'
+
+    // A response of the API, JSON data with status, as a client's fetch gives it.
+    const apiAnswer = (data, status = 200) => ({
+      body: null,
+      headers: {
+        entries: () => [['content-type', 'application/json']][Symbol.iterator](),
+        get: name => (name.toLowerCase() === 'content-type' ? 'application/json' : null),
+      },
+      json: async () => data,
+      ok: status >= 200 && status < 300,
+      redirected: false,
+      status,
+      statusText: status === 200 ? 'OK' : 'Status',
+      text: async () => JSON.stringify(data),
+    })
+
+    // A client whose fetch answers the API itself for tree, whose keys are paths, a folder's value 'directory' and a
+    // file's the path on this file's server its download URL leads to, or 'none' for a file described without one, as
+    // the Files.com Mock answers: a path's metadata, a folder's listing, its children in path order or else those
+    // listings gives it, in one page, and a file's description with its download URL, if it has one. Every other
+    // request, a file's download from storage, goes through cross-fetch to this file's server. Records each request's
+    // method, path and whether it carried the client's API key.
+    const treeClient = (tree, requests, listings = {}) => new FilesClient({
+      apiKey: 'client-key',
+      baseUrl: API,
+      fetch: async (url, init) => {
+        const { pathname } = new URL(url)
+        const keyed = Object.keys(init.headers ?? {}).some(name => name.toLowerCase() === 'x-filesapi-key')
+        requests.push(`${init.method} ${decodeURIComponent(pathname)} ${keyed ? 'key' : 'no key'}`)
+
+        if (!url.startsWith(API)) {
+          return crossFetch(url, init)
+        }
+
+        const route = decodeURIComponent(pathname).replace('/api/rest/v1/', '')
+        const pathOf = prefix => (route.startsWith(prefix) ? route.slice(prefix.length) : null)
+        const notFound = apiAnswer({ 'http-code': 404, title: 'Not Found', type: 'not-found' }, 404)
+        const entryOf = entryPath => ({ path: entryPath, type: (tree[entryPath] ?? 'file') === 'directory' ? 'directory' : 'file' })
+        const [metadata, listed, file] = ['file_actions/metadata/', 'folders/', 'files/'].map(pathOf)
+
+        if (metadata !== null) {
+          return tree[metadata] ? apiAnswer(entryOf(metadata)) : notFound
+        }
+
+        if (listed !== null) {
+          const children = listings[listed] ?? Object.keys(tree).filter(entryPath => entryPath.slice(0, entryPath.lastIndexOf('/')) === listed).sort()
+          return tree[listed] === 'directory' ? apiAnswer(children.map(entryOf)) : notFound
+        }
+
+        const downloadUri = tree[file] === 'none' ? {} : { download_uri: `${baseUrl}${tree[file]}?X-Amz-Signature=${SIGNATURE}` }
+        return tree[file] ? apiAnswer({ ...entryOf(file), ...downloadUri }) : notFound
+      },
+      maxNetworkRetries: 0,
+    })
+
+    it('downloads a folder into a new local folder through its client, its empty folder included, each file exact in a new file it closed, the client\'s key sent only to the API', async () => {
+      const requests = []
+      const opened = trackOpenedFiles()
+      const destination = path.join(directory, 'tree-download')
+      const client = treeClient({
+        'reports/tree': 'directory',
+        'reports/tree/a.bin': '/complete',
+        'reports/tree/empty': 'directory',
+        'reports/tree/sub': 'directory',
+        'reports/tree/sub/b.bin': '/complete',
+      }, requests)
+
+      const result = await withinDeadline(client.files.downloadDirectory('reports/tree', destination), 'the download')
+
+      expect(result).toEqual({ bytes: 2 * PAYLOAD.length, directories: ['empty', 'sub'], files: ['a.bin', 'sub/b.bin'] })
+      expect(fs.readFileSync(path.join(destination, 'a.bin')).equals(PAYLOAD)).toBe(true)
+      expect(fs.readFileSync(path.join(destination, 'sub', 'b.bin')).equals(PAYLOAD)).toBe(true)
+      expect(fs.readdirSync(path.join(destination, 'empty'))).toEqual([])
+      expect(opened).toEqual([{ closed: true }, { closed: true }])
+      expect(requests).toEqual([
+        'GET /api/rest/v1/file_actions/metadata/reports/tree key',
+        'GET /api/rest/v1/folders/reports/tree key',
+        'GET /api/rest/v1/files/reports/tree/a.bin key',
+        'GET /complete no key',
+        'GET /api/rest/v1/folders/reports/tree/empty key',
+        'GET /api/rest/v1/folders/reports/tree/sub key',
+        'GET /api/rest/v1/files/reports/tree/sub/b.bin key',
+        'GET /complete no key',
+      ])
+    })
+
+    it('fails with EEXIST, listing nothing, when its local folder already exists, leaving what is in it as it was', async () => {
+      const requests = []
+      const destination = path.join(directory, 'tree-existing')
+      fs.mkdirSync(destination)
+      fs.writeFileSync(path.join(destination, 'a.bin'), 'sentinel')
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/a.bin': '/complete' }, requests)
+
+      const { error } = await withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download')
+
+      expect(error.code).toBe('EEXIST')
+      expect(fs.readFileSync(path.join(destination, 'a.bin'), 'utf8')).toBe('sentinel')
+      expect(requests).toEqual(['GET /api/rest/v1/file_actions/metadata/reports/tree key'])
+    })
+
+    // The listing gives one file twice, as two entries of one local name would be on a disk that ignores case: the
+    // second is refused as its new file is opened, before its download, and the first stays exactly as it was written.
+    it('opens each file exclusively, failing with EEXIST, the first file kept exact and closed, when a second entry would write it again', async () => {
+      const requests = []
+      const opened = trackOpenedFiles()
+      const destination = path.join(directory, 'tree-twice')
+      const tree = { 'reports/tree': 'directory', 'reports/tree/a.bin': '/complete' }
+      const client = treeClient(tree, requests, { 'reports/tree': ['reports/tree/a.bin', 'reports/tree/a.bin'] })
+
+      const { error } = await withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download')
+
+      expect(error.code).toBe('EEXIST')
+      expect(fs.readFileSync(path.join(destination, 'a.bin')).equals(PAYLOAD)).toBe(true)
+      expect(opened).toEqual([{ closed: true }])
+      expect(requests.filter(request => request.startsWith('GET /complete'))).toHaveLength(1)
+    })
+
+    it.each([
+      ['a name that leads out of its folder', 'parent', ['reports/tree/..']],
+      ['a name holding a backslash', 'backslash', ['reports/tree/a\\b.bin']],
+      ['an entry of another folder', 'elsewhere', ['reports/other/a.bin']],
+    ])('fails with a FilesError for %s in a listing, describing and writing nothing for it', async (_, name, listed) => {
+      const requests = []
+      const destination = path.join(directory, `tree-unsafe-${name}`)
+      const client = treeClient({ 'reports/tree': 'directory' }, requests, { 'reports/tree': listed })
+
+      const { error } = await withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download')
+
+      expect(error).toBeInstanceOf(FilesError)
+      expect(fs.readdirSync(destination)).toEqual([])
+      expect(requests.filter(request => request.startsWith('GET /api/rest/v1/files/'))).toEqual([])
+    })
+
+    // A name that only begins with two dots is a name like any other: it is written inside its own folder, exactly,
+    // while '..' itself, above, is still refused.
+    it('downloads an entry whose name begins with two dots into its own folder, as a name like any other', async () => {
+      const requests = []
+      const destination = path.join(directory, 'tree-dots')
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/..report': '/complete' }, requests)
+
+      const result = await withinDeadline(client.files.downloadDirectory('reports/tree', destination), 'the download')
+
+      expect(result).toEqual({ bytes: PAYLOAD.length, directories: [], files: ['..report'] })
+      expect(fs.readdirSync(destination)).toEqual(['..report'])
+      expect(fs.readFileSync(path.join(destination, '..report')).equals(PAYLOAD)).toBe(true)
+      expect(fs.existsSync(path.join(directory, 'report'))).toBe(false)
+    })
+
+    // Runs act with the platform taken to be platform, as process.platform gives it to the SDK, and then as it was. It
+    // chooses which platform's rules for names the SDK keeps; the test still runs on the system running it.
+    const onPlatform = async (platform, act) => {
+      const actual = Object.getOwnPropertyDescriptor(process, 'platform')
+      Object.defineProperty(process, 'platform', { configurable: true, enumerable: true, value: platform })
+
+      try {
+        return await act()
+      } finally {
+        Object.defineProperty(process, 'platform', actual)
+      }
+    }
+
+    // Windows gives some names a meaning of their own: a colon names an NTFS alternate data stream of another file, a
+    // trailing dot or space is dropped, a device's name, such as CON, is that device whatever its extension, and some
+    // characters it does not allow at all. With the platform taken to be Windows, such a listed name is refused before
+    // any file is opened for it, or it is described or downloaded.
+    it.each([
+      ['a colon, naming an alternate data stream', 'stream', 'a.bin:hidden'],
+      ['a trailing dot', 'dot', 'report.'],
+      ['a trailing space', 'space', 'report '],
+      ['a device\'s name and an extension', 'device', 'CON.txt'],
+      ['a character Windows does not allow', 'character', 'a?.bin'],
+    ])('fails with a FilesError for a name with %s when the platform is Windows, opening and describing nothing for it', async (_, label, name) => {
+      const requests = []
+      const opened = trackOpenedFiles()
+      const destination = path.join(directory, `tree-windows-${label}`)
+      const client = treeClient({ 'reports/tree': 'directory', [`reports/tree/${name}`]: '/complete' }, requests)
+
+      const { error } = await onPlatform('win32', () => withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download'))
+
+      expect(error).toBeInstanceOf(FilesError)
+      expect(error.message).toContain(JSON.stringify(name))
+      expect(opened).toEqual([])
+      expect(fs.readdirSync(destination)).toEqual([])
+      expect(requests).toEqual([
+        'GET /api/rest/v1/file_actions/metadata/reports/tree key',
+        'GET /api/rest/v1/folders/reports/tree key',
+      ])
+    })
+
+    // With the platform taken to be Windows, a name it allows is downloaded as it is listed, exactly, in its own folder:
+    // one that only begins with two dots, or holds a space and dots within it.
+    it('downloads names Windows allows as they are listed when the platform is Windows', async () => {
+      const names = ['..report', 'a b.c.bin']
+      const requests = []
+      const destination = path.join(directory, 'tree-windows-allowed')
+      const client = treeClient({ 'reports/tree': 'directory', ...Object.fromEntries(names.map(name => [`reports/tree/${name}`, '/complete'])) }, requests)
+
+      const result = await onPlatform('win32', () => withinDeadline(client.files.downloadDirectory('reports/tree', destination), 'the download'))
+
+      expect(result).toEqual({ bytes: names.length * PAYLOAD.length, directories: [], files: names })
+      expect(fs.readdirSync(destination).sort()).toEqual(names)
+      expect(names.every(name => fs.readFileSync(path.join(destination, name)).equals(PAYLOAD))).toBe(true)
+    })
+
+    // Elsewhere, the names Windows refuses are names like any other: each is downloaded as it is listed, exactly, in its
+    // own folder. The platform is taken to be Linux; on Windows itself, where writing such a name would give it the
+    // meaning Windows gives it, this does not run.
+    const notOnWindows = process.platform === 'win32' ? it.skip : it
+
+    notOnWindows('downloads names Windows refuses as they are listed when the platform is not Windows', async () => {
+      const names = ['a.bin:hidden', 'con.txt', 'report.']
+      const requests = []
+      const destination = path.join(directory, 'tree-posix-names')
+      const client = treeClient({ 'reports/tree': 'directory', ...Object.fromEntries(names.map(name => [`reports/tree/${name}`, '/complete'])) }, requests)
+
+      const result = await onPlatform('linux', () => withinDeadline(client.files.downloadDirectory('reports/tree', destination), 'the download'))
+
+      expect(result).toEqual({ bytes: names.length * PAYLOAD.length, directories: [], files: names })
+      expect(fs.readdirSync(destination).sort()).toEqual(names)
+      expect(names.every(name => fs.readFileSync(path.join(destination, name)).equals(PAYLOAD))).toBe(true)
+    })
+
+    // The first file's response stalls after its first bytes when the signal aborts: its download stops its request,
+    // and the folder's rejects with the signal's reason itself, once that file is closed, with no later entry begun.
+    it('rejects with its signal\'s reason, unchanged, once that aborts while a file downloads, having closed that file and begun no later entry', async () => {
+      const requests = []
+      const controller = new AbortController()
+      const reason = { cause: 'no longer downloading the folder' }
+      const opened = trackOpenedFiles()
+      const destination = path.join(directory, 'tree-cancelled')
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/a.bin': '/stalled', 'reports/tree/b.bin': '/complete' }, requests)
+
+      const download = downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination, { signal: controller.signal }))
+      await waitUntil(() => served.some(request => request.startsWith('GET /stalled')), 'the first file\'s download')
+      controller.abort(reason)
+      const { error } = await withinDeadline(download, 'the download')
+      await withinDeadline(stalledResponseClosed, 'the response to close')
+
+      expect(error).toBe(reason)
+      expect(opened).toEqual([{ closed: true }])
+      expect(fs.readdirSync(destination)).toEqual(['a.bin'])
+      expect(requests.filter(request => request.includes('b.bin'))).toEqual([])
+    })
+
+    // Each file the SDK opens is closed, its descriptor with it, but closing it then fails with closeError, as closing a
+    // file on a lost disk may; onOpened() is called as each is opened. Records each file, and whether it has closed.
+    const failingClose = (closeError, onOpened = () => {}) => {
+      const opened = []
+      const open = fs.promises.open.bind(fs.promises)
+
+      jest.spyOn(fs.promises, 'open').mockImplementation(async (...args) => {
+        const handle = await open(...args)
+        const close = handle.close.bind(handle)
+        const file = { closed: false }
+
+        handle.close = async () => {
+          await close()
+          file.closed = true
+          throw closeError
+        }
+
+        opened.push(file)
+        onOpened()
+        return handle
+      })
+
+      return opened
+    }
+
+    // Every byte of the first file has been written when closing it fails: the folder's download rejects with that
+    // failure, the file it could not close not counted as downloaded, and begins no later entry.
+    it('rejects with the failure to close a file it wrote completely, beginning no later entry', async () => {
+      const requests = []
+      const closeError = new Error('closing the file failed')
+      const opened = failingClose(closeError)
+      const destination = path.join(directory, 'tree-close-fails')
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/a.bin': '/complete', 'reports/tree/b.bin': '/complete' }, requests)
+
+      const { error } = await withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download')
+
+      expect(error).toBe(closeError)
+      expect(opened).toEqual([{ closed: true }])
+      expect(fs.readFileSync(path.join(destination, 'a.bin')).equals(PAYLOAD)).toBe(true)
+      expect(requests.filter(request => request.includes('b.bin'))).toEqual([])
+    })
+
+    // The signal aborts, with a falsy reason, as the first file is opened, and closing that file then fails: the
+    // folder's download rejects with that very reason, not the failure to close the file, and begins no later entry.
+    it.each([['null', null], ['false', false], ['0', 0]])('rejects with its signal\'s reason, %s, unchanged, not the failure to close the file it opened as that aborted', async (label, reason) => {
+      const requests = []
+      const controller = new AbortController()
+      const opened = failingClose(new Error('closing the file failed'), () => controller.abort(reason))
+      const destination = path.join(directory, `tree-cancelled-close-fails-${label}`)
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/a.bin': '/complete', 'reports/tree/b.bin': '/complete' }, requests)
+
+      const outcome = await withinDeadline(
+        client.files.downloadDirectory('reports/tree', destination, { signal: controller.signal }).then(() => ({ resolved: true }), error => ({ error })),
+        'the download',
+      )
+
+      expect(outcome).toEqual({ error: reason })
+      expect(Object.is(outcome.error, reason)).toBe(true)
+      expect(opened).toEqual([{ closed: true }])
+      expect(fs.readdirSync(destination)).toEqual(['a.bin'])
+      expect(requests.filter(request => request.includes('b.bin'))).toEqual([])
+    })
+
+    // The API describes the first file without a download URL, so its download fails before it is given the file opened
+    // for it, and closing that file then fails: the file is closed all the same, and the folder's download rejects with
+    // the download's own failure, not the failure to close the file, sending nothing to storage and beginning no later
+    // entry.
+    it('closes the file it opened for an entry the API gives no download URL, rejecting with that failure, not the failure to close it', async () => {
+      const requests = []
+      const closeError = new Error('closing the file failed')
+      const opened = failingClose(closeError)
+      const destination = path.join(directory, 'tree-no-url')
+      const client = treeClient({ 'reports/tree': 'directory', 'reports/tree/a.bin': 'none', 'reports/tree/b.bin': '/complete' }, requests)
+
+      const { error } = await withinDeadline(downloadOutcomeOf(client.files.downloadDirectory('reports/tree', destination)), 'the download')
+
+      expect(error).not.toBe(closeError)
+      expect(error.message).toBe('Current object has no download URI')
+      expect(opened).toEqual([{ closed: true }])
+      expect(fs.readdirSync(destination)).toEqual(['a.bin'])
+      expect(fs.statSync(path.join(destination, 'a.bin')).size).toBe(0)
+      expect(requests.filter(request => request.startsWith('GET /complete') || request.includes('b.bin'))).toEqual([])
+    })
+  })
+
   describe('at the DEBUG log level', () => {
     let entries
     let previous

@@ -80,4 +80,47 @@ if [[ "${namespace_status}" -ne 0 && -f "${namespace_out}/server.log" ]]; then
   tail -n 200 "${namespace_out}/server.log"
 fi
 
-exit "${namespace_status}"
+# A failed namespace case ends this script with its status, before the file cases run.
+if [[ "${namespace_status}" -ne 0 ]]; then
+  exit "${namespace_status}"
+fi
+
+# The canonical file cases, test/scenarios/file-scenarios.cjs, rendered from the same shared API scenarios, run its
+# three scenarios of files and folders (files.owned-binary-roundtrip, files.owned-namespace-extended and
+# files.owned-directory-helpers) one at a time. Each case gets a new server of the same Mock, with the same preset and
+# launcher in Bundler's original environment, and is given the Mock's directory and its scenario's id. Each keeps its
+# evidence in a directory of its own under test-results/, with its receipt, javascript-<scenario>-case.json. Each has
+# the namespace case's budgets: 30 s for the server to be ready, 210 s for the case (180 s of work and 30 s more to
+# remove what it created after a failure), and 5 s each time a process group is stopped. Their larger uploads send parts
+# bigger than the 1 MiB request body a Mock server takes by default, so each server runs with FILES_MOCK_MAX_BODY_BYTES
+# of 16 MiB unless another is set. The first case to fail ends this script with its status.
+file_max_body_bytes="${FILES_MOCK_MAX_BODY_BYTES:-16777216}"
+for file_scenario in files.owned-binary-roundtrip files.owned-namespace-extended files.owned-directory-helpers; do
+  # A run ID with-scenario.rb accepts is at most 64 letters, digits, dots, hyphens and underscores: the scenario's own
+  # part of its ID keeps it within that whatever the process ID.
+  file_run_id="javascript-${file_scenario#files.owned-}-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+  file_out="test-results/mock-${file_run_id}"
+  FILES_MOCK_MAX_BODY_BYTES="${file_max_body_bytes}" ruby -rbundler -e 'Bundler.with_original_env { exec(RbConfig.ruby, *ARGV) }' -- \
+    "${mock_server}/with-scenario.rb" --scenario api-scenarios-canonical --out "${file_out}" \
+    --run-id "${file_run_id}" --schema-sha256 "${schema_sha256}" --startup-timeout 30 --consumer-timeout 210 \
+    --settle-timeout 5 -- "$(command -v node)" "${PWD}/test/scenarios/file-scenarios.cjs" "${mock_server_dir}" "${file_scenario}"
+  file_status=$?
+
+  echo "The canonical file case ${file_scenario} ended with status ${file_status}; its evidence is in ${PWD}/${file_out}"
+  if [[ -f "${file_out}/run.json" ]]; then
+    cat "${file_out}/run.json"
+  fi
+  if [[ -f "${file_out}/javascript-${file_scenario}-case.json" ]]; then
+    cat "${file_out}/javascript-${file_scenario}-case.json"
+  fi
+  if [[ "${file_status}" -ne 0 && -f "${file_out}/server.log" ]]; then
+    echo "The last 200 lines of the Mock server's log, ${PWD}/${file_out}/server.log:"
+    tail -n 200 "${file_out}/server.log"
+  fi
+
+  if [[ "${file_status}" -ne 0 ]]; then
+    exit "${file_status}"
+  fi
+done
+
+exit 0

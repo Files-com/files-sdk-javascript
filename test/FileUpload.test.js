@@ -1846,3 +1846,293 @@ describe('File uploads', () => {
     })
   })
 })
+
+describe('File folder uploads', () => {
+  const FOLDERS_PATH = '/api/rest/v1/folders/'
+  let directory
+
+  beforeEach(() => {
+    nock.disableNetConnect()
+    Files.setBaseUrl(API_URL)
+    Files.setApiKey('api-key')
+    Files.configureNetwork({ maxNetworkRetries: 0 })
+    directory = fs.mkdtempSync(path.join(os.tmpdir(), 'files-folder-upload-'))
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
+    Files.setApiKey(null)
+    Files.configureNetwork({ maxNetworkRetries: 3, maxNetworkRetryDelay: 1.5, minNetworkRetryDelay: 0.1 })
+    fs.rmSync(directory, { force: true, recursive: true })
+  })
+
+  // A local tree to upload: a.csv, an empty folder, and sub/b.csv.
+  const localTree = () => {
+    const source = path.join(directory, 'tree')
+    fs.mkdirSync(path.join(source, 'empty'), { recursive: true })
+    fs.mkdirSync(path.join(source, 'sub'))
+    fs.writeFileSync(path.join(source, 'a.csv'), 'a001')
+    fs.writeFileSync(path.join(source, 'sub', 'b.csv'), 'b001b002')
+    return source
+  }
+
+  // Stands in for the API's folder creation as the Files.com Mock answers it: a folder is made once, and a path already
+  // made, or given as existing, is refused with processing-failure/destination-exists. Records each folder asked for,
+  // with the API key it was asked with, and calls onAsked(path) as each is asked for, before it is answered.
+  const serveFolders = (existing = [], onAsked = () => {}) => {
+    const made = new Set(existing)
+    const asked = []
+
+    nock(API_URL)
+      .persist()
+      .post(uri => uri.startsWith(FOLDERS_PATH))
+      .reply(function answerFolder(uri) {
+        const folderPath = decodeURIComponent(uri.split('?')[0].replace(FOLDERS_PATH, ''))
+        asked.push({ key: headerValue(this.req.headers['x-filesapi-key']), path: folderPath })
+        onAsked(folderPath)
+
+        if (made.has(folderPath)) {
+          return [422, { 'http-code': 422, title: 'Destination Exists', type: 'processing-failure/destination-exists' }]
+        }
+
+        made.add(folderPath)
+        return [201, { path: folderPath, type: 'directory' }]
+      })
+
+    return asked
+  }
+
+  it('creates the new folder, then each folder in it, the empty one included, then uploads each file, every API request with the call\'s client, and resolves with what it made', async () => {
+    const source = localTree()
+    const asked = serveFolders()
+    const storage = serveTransfers({ partsize: 1024 })
+    const client = new FilesClient({ apiKey: 'client-key', baseUrl: API_URL, maxNetworkRetries: 0 })
+
+    const result = await client.files.uploadDirectory(source, 'reports/tree')
+
+    expect(result).toEqual({ bytes: 12, directories: ['empty', 'sub'], files: ['a.csv', 'sub/b.csv'] })
+    expect(asked).toEqual([
+      { key: 'client-key', path: 'reports/tree' },
+      { key: 'client-key', path: 'reports/tree/empty' },
+      { key: 'client-key', path: 'reports/tree/sub' },
+    ])
+    expect(storage.apiRequests.map(({ key, kind, path: uploadPath }) => `${kind} ${uploadPath} ${key}`)).toEqual([
+      'begin reports/tree/a.csv client-key',
+      'end reports/tree/a.csv client-key',
+      'begin reports/tree/sub/b.csv client-key',
+      'end reports/tree/sub/b.csv client-key',
+    ])
+    expect(storage.stored['reports/tree/a.csv']).toEqual({ 1: 'a001' })
+    expect(storage.stored['reports/tree/sub/b.csv']).toEqual({ 1: 'b001b002' })
+  })
+
+  it('fails with the API\'s refusal of a destination that already exists, sending nothing more', async () => {
+    const source = localTree()
+    const asked = serveFolders(['reports/tree'])
+    const storage = serveTransfers()
+
+    const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree'))
+
+    expect(outcome.error?.type).toBe('processing-failure/destination-exists')
+    expect(asked.map(({ path: folderPath }) => folderPath)).toEqual(['reports/tree'])
+    expect(storage.apiRequests).toEqual([])
+  })
+
+  it.each([
+    ['a symbolic link inside it', source => {
+      fs.symlinkSync(path.join(source, 'a.csv'), path.join(source, 'sub', 'link.csv'))
+      return source
+    }],
+    ['itself a symbolic link to a folder', source => {
+      const link = path.join(directory, 'link')
+      fs.symlinkSync(source, link)
+      return link
+    }],
+  ])('refuses a folder that is or holds %s before sending anything, following no link', async (_, shape) => {
+    const source = shape(localTree())
+    const asked = serveFolders()
+    const storage = serveTransfers()
+
+    const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree'))
+
+    expect(outcome.error).toBeInstanceOf(InvalidParameterError)
+    expect(outcome.error.message).toMatch(/symbolic link/)
+    expect(asked).toEqual([])
+    expect(storage.apiRequests).toEqual([])
+  })
+
+  // The source does not exist: a refusal, rather than its failure to be read, shows that nothing was read first.
+  it.each([
+    ['a size, which its files each have of their own', 'reports/tree', { size: 12 }],
+    ['the root as its destination', '/', {}],
+  ])('refuses %s before reading or sending anything', async (_, destination, options) => {
+    const asked = serveFolders()
+
+    const outcome = await outcomeOf(File.uploadDirectory(path.join(directory, 'missing'), destination, options))
+
+    expect(outcome.error).toBeInstanceOf(InvalidParameterError)
+    expect(asked).toEqual([])
+  })
+
+  // The first file's only part is held by storage when the signal aborts: that file's upload, and so the folder's,
+  // rejects with the signal's reason itself, and no later file is begun.
+  it('rejects with its signal\'s reason, unchanged, once that aborts while a file uploads, beginning no later file', async () => {
+    const source = localTree()
+    const controller = new AbortController()
+    const reason = { cause: 'no longer uploading the folder' }
+    serveFolders()
+    const storage = serveTransfers({ answerStore: () => controller.abort(reason), partsize: 1024 })
+
+    const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree', { signal: controller.signal }))
+
+    expect(outcome.error).toBe(reason)
+    expect(storage.apiRequests.map(({ kind, path: uploadPath }) => `${kind} ${uploadPath}`)).toEqual(['begin reports/tree/a.csv'])
+    expect(storage.events).not.toContain('end')
+  })
+
+  // The signal has aborted before the call, with a falsy reason, and the source does not exist: the upload rejects with
+  // that very reason, not with its failure to find the source, which it never looked at, and sends nothing.
+  it.each([['null', null], ['false', false], ['0', 0]])('rejects with its signal\'s reason, %s, unchanged, when that aborted before the call, reading and sending nothing', async (_, reason) => {
+    const controller = new AbortController()
+    controller.abort(reason)
+    const asked = serveFolders()
+    const storage = serveTransfers()
+
+    const outcome = await outcomeOf(File.uploadDirectory(path.join(directory, 'missing'), 'reports/tree', { signal: controller.signal }))
+
+    expect(Object.keys(outcome)).toEqual(['error'])
+    expect(Object.is(outcome.error, reason)).toBe(true)
+    expect(asked).toEqual([])
+    expect(storage.apiRequests).toEqual([])
+  })
+
+  // The tree holds sub/link.csv, a symbolic link, and the signal aborts as that entry's own lstat completes: the upload
+  // rejects with the signal's reason itself, not the refusal of the link it would otherwise make, having sent nothing.
+  it.each([['an object', { cause: 'no longer reading the tree' }], ['null', null], ['0', 0]])('rejects with its signal\'s reason, %s, unchanged, when that aborts as an entry has been looked at, before what it is decides anything', async (_, reason) => {
+    const source = localTree()
+    const controller = new AbortController()
+    const lstat = fs.promises.lstat.bind(fs.promises)
+    fs.symlinkSync(path.join(source, 'a.csv'), path.join(source, 'sub', 'link.csv'))
+
+    jest.spyOn(fs.promises, 'lstat').mockImplementation(async (...args) => {
+      const stats = await lstat(...args)
+
+      if (path.basename(`${args[0]}`) === 'link.csv') {
+        controller.abort(reason)
+      }
+
+      return stats
+    })
+
+    try {
+      const asked = serveFolders()
+      const storage = serveTransfers()
+
+      const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree', { signal: controller.signal }))
+
+      expect(Object.keys(outcome)).toEqual(['error'])
+      expect(Object.is(outcome.error, reason)).toBe(true)
+      expect(asked).toEqual([])
+      expect(storage.apiRequests).toEqual([])
+    } finally {
+      jest.restoreAllMocks()
+    }
+  })
+
+  // a.csv is removed just as it is to be looked at, and the signal aborts then: looking at it fails, as the file system
+  // says, and the upload rejects with that very failure, which came first, not the signal's reason, having sent nothing.
+  it('rejects with the failure to look at an entry of its tree, not the signal\'s reason, when that aborts as looking at it fails', async () => {
+    const source = localTree()
+    const controller = new AbortController()
+    const removed = path.join(source, 'a.csv')
+    const failures = []
+    const lstat = fs.promises.lstat.bind(fs.promises)
+
+    jest.spyOn(fs.promises, 'lstat').mockImplementation(async (...args) => {
+      if (`${args[0]}` !== removed) {
+        return lstat(...args)
+      }
+
+      fs.rmSync(removed)
+      controller.abort({ cause: 'no longer reading the tree' })
+
+      return lstat(...args).catch(error => {
+        failures.push(error)
+        throw error
+      })
+    })
+
+    try {
+      const asked = serveFolders()
+      const storage = serveTransfers()
+
+      const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree', { signal: controller.signal }))
+
+      expect(failures.map(({ code }) => code)).toEqual(['ENOENT'])
+      expect(outcome.error).toBe(failures[0])
+      expect(asked).toEqual([])
+      expect(storage.apiRequests).toEqual([])
+    } finally {
+      jest.restoreAllMocks()
+    }
+  })
+
+  // The signal aborts as the tree's first folder is read: no entry of it is looked at after that, and the upload rejects
+  // with the signal's reason, having sent nothing.
+  it('reads no more of its tree once its signal aborts while the tree is read, rejecting with the signal\'s reason and sending nothing', async () => {
+    const source = localTree()
+    const controller = new AbortController()
+    const reason = { cause: 'no longer reading the tree' }
+    const looked = []
+    const readdir = fs.promises.readdir.bind(fs.promises)
+    const lstat = fs.promises.lstat.bind(fs.promises)
+
+    jest.spyOn(fs.promises, 'readdir').mockImplementation(async (...args) => {
+      const names = await readdir(...args)
+      controller.abort(reason)
+      return names
+    })
+
+    jest.spyOn(fs.promises, 'lstat').mockImplementation(async (...args) => {
+      looked.push(path.relative(source, `${args[0]}`))
+      return lstat(...args)
+    })
+
+    try {
+      const asked = serveFolders()
+      const storage = serveTransfers()
+
+      const outcome = await outcomeOf(File.uploadDirectory(source, 'reports/tree', { signal: controller.signal }))
+
+      expect(outcome.error).toBe(reason)
+      expect(looked).toEqual([''])
+      expect(asked).toEqual([])
+      expect(storage.apiRequests).toEqual([])
+    } finally {
+      jest.restoreAllMocks()
+    }
+  })
+
+  // The tree has been read when sub/b.csv grows, as the folder is created: its upload sends what the file holds then,
+  // and the result counts the bytes of the file that upload published, as the API reports it, not the size the tree was
+  // read with.
+  it('counts each file\'s bytes as its completed upload published them, a file changed after the tree was read included', async () => {
+    const source = localTree()
+    const grown = 'b001b002b003'
+
+    serveFolders([], folderPath => {
+      if (folderPath === 'reports/tree') {
+        fs.writeFileSync(path.join(source, 'sub', 'b.csv'), grown)
+      }
+    })
+
+    const storage = serveTransfers({ partsize: 1024 })
+
+    const result = await File.uploadDirectory(source, 'reports/tree')
+
+    expect(result).toEqual({ bytes: 4 + grown.length, directories: ['empty', 'sub'], files: ['a.csv', 'sub/b.csv'] })
+    expect(storage.stored['reports/tree/sub/b.csv']).toEqual({ 1: grown })
+    expect(storage.apiRequests.filter(({ kind }) => kind === 'end').map(({ body }) => body.size)).toEqual([4, grown.length])
+  })
+})

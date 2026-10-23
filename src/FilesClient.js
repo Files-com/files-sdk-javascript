@@ -933,6 +933,8 @@ class FilesClient {
           File.copyToSnapshot(path, snapshotId, destinationPath, params, withClient(this, options)),
         create: (path, params = {}, options = {}) =>
           File.create(path, params, withClient(this, options)),
+        downloadDirectory: (path, destinationDirectoryPath, options = {}) =>
+          File.downloadDirectory(path, destinationDirectoryPath, withClient(this, options)),
         find: (path, params = {}, options = {}) =>
           File.find(path, params, withClient(this, options)),
         get: (path, params = {}, options = {}) =>
@@ -947,6 +949,8 @@ class FilesClient {
           File.upload(sourceFilePath, destinationPath, params, withClient(this, options)),
         uploadData: (destinationPath, data, params = {}, options = {}) =>
           File.uploadData(destinationPath, data, params, withClient(this, options)),
+        uploadDirectory: (sourceDirectoryPath, destinationPath, options = {}) =>
+          File.uploadDirectory(sourceDirectoryPath, destinationPath, withClient(this, options)),
         uploadFile: (destinationPath, sourceFilePath, params = {}, options = {}) =>
           File.uploadFile(destinationPath, sourceFilePath, params, withClient(this, options)),
         uploadFileToChildSite: (sourceFilePath, siteId, destinationPath, params = {}, options = {}) =>
