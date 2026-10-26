@@ -5,7 +5,7 @@ import { TransferControl, TransferJob } from './Transfer'
 import { isObject } from './utils'
 
 const endpointPrefix = '/api/rest/v1'
-const version = '2.0.4'
+const version = '2.0.5'
 
 // The SDK's declared defaults for the settings of a request, its logging included. The global settings start from them,
 // and so does every client, from new FilesClient() or Files.createClient(), whatever the global settings have become
