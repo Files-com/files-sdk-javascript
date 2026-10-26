@@ -21,8 +21,14 @@ declare class As2IncomingMessage {
   /** Whether this object has its `id`. */
   isLoaded(): boolean
 
-  /** Id of the AS2 Partner. */
+  /** ID of this AS2 incoming message record. */
   readonly id?: number | null
+
+  /**
+   * ID of the incoming message record this message was replayed from. Empty for messages received directly from a
+   * trading partner.
+   */
+  readonly replayed_from_message_id?: number | null
 
   /** ID of the Workspace associated with this AS2 Incoming Message. */
   readonly workspace_id?: number | null
@@ -126,8 +132,14 @@ declare class As2IncomingMessage {
   /** URL to download the http response body */
   readonly mdn_response_uri?: string | null
 
-  /** Id of the AS2 Partner. */
+  /** ID of this AS2 incoming message record. */
   getId(): number | null | undefined
+
+  /**
+   * ID of the incoming message record this message was replayed from. Empty for messages received directly from a
+   * trading partner.
+   */
+  getReplayedFromMessageId(): number | null | undefined
 
   /** ID of the Workspace associated with this AS2 Incoming Message. */
   getWorkspaceId(): number | null | undefined
@@ -231,6 +243,9 @@ declare class As2IncomingMessage {
   /** URL to download the http response body */
   getMdnResponseUri(): string | null | undefined
 
+  /** Replay AS2 Incoming Message */
+  replay(params?: Files.NoParams): Promise<As2IncomingMessage>
+
   /** List AS2 Incoming Messages */
   static list(params?: As2IncomingMessage.ListParams, options?: Files.RequestOptions): Promise<As2IncomingMessage[]>
 
@@ -252,8 +267,14 @@ declare class As2IncomingMessage {
 declare namespace As2IncomingMessage {
   /** The fields of `As2IncomingMessage` objects. Any of them can be missing, and those the API returns can be null. */
   interface Attributes {
-    /** Id of the AS2 Partner. */
+    /** ID of this AS2 incoming message record. */
     id?: number | null
+
+    /**
+     * ID of the incoming message record this message was replayed from. Empty for messages received directly from a
+     * trading partner.
+     */
+    replayed_from_message_id?: number | null
 
     /** ID of the Workspace associated with this AS2 Incoming Message. */
     workspace_id?: number | null

@@ -58,8 +58,11 @@ class As2IncomingMessage {
 
   isLoaded = () => !!this.attributes.id
 
-  // int64 # Id of the AS2 Partner.
+  // int64 # ID of this AS2 incoming message record.
   getId = () => this.attributes.id
+
+  // int64 # ID of the incoming message record this message was replayed from. Empty for messages received directly from a trading partner.
+  getReplayedFromMessageId = () => this.attributes.replayed_from_message_id
 
   // int64 # ID of the Workspace associated with this AS2 Incoming Message.
   getWorkspaceId = () => this.attributes.workspace_id
@@ -162,6 +165,36 @@ class As2IncomingMessage {
 
   // string # URL to download the http response body
   getMdnResponseUri = () => this.attributes.mdn_response_uri
+
+  // Replay AS2 Incoming Message
+  replay = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
+    params.id = this.attributes.id
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/as2_incoming_messages/${encodeURIComponent(params.id)}/replay`, 'POST', params, this.options)
+
+    return new As2IncomingMessage(response?.data, this.options)
+  }
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
