@@ -250,6 +250,10 @@ class FilesClient {
       return {
         all: (params = {}, options = {}) =>
           As2IncomingMessage.all(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          As2IncomingMessage.find(id, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          As2IncomingMessage.get(id, params, withClient(this, options)),
         list: (params = {}, options = {}) =>
           As2IncomingMessage.list(params, withClient(this, options)),
         listIterator: (params = {}, options = {}) =>

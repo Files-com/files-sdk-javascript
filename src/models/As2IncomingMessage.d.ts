@@ -260,6 +260,15 @@ declare class As2IncomingMessage {
    * retried.
    */
   static listIterator(params?: As2IncomingMessage.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<As2IncomingMessage>
+
+  /**
+   * Show AS2 Incoming Message
+   * @param id - As2 Incoming Message ID.
+   */
+  static find(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<As2IncomingMessage>
+
+  /** Alias of `find()`. */
+  static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<As2IncomingMessage>
 }
 
 declare namespace As2IncomingMessage {
@@ -397,10 +406,11 @@ declare namespace As2IncomingMessage {
 
     /**
      * If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`,
-     * `as2_station_id`, `workspace_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at
-     * ]`, `[ workspace_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[
-     * workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]` or `[ workspace_id,
-     * as2_partner_id, created_at ]`.
+     * `as2_station_id`, `workspace_id`, `replayed_from_message_id` or `as2_partner_id`. Valid field combinations are `[
+     * as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ replayed_from_message_id, created_at ]`, `[
+     * as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, replayed_from_message_id ]`,
+     * `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]`, `[ workspace_id,
+     * replayed_from_message_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
      */
     filter?: Files.JsonObject
 

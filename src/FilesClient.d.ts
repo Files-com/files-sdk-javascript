@@ -223,7 +223,7 @@ declare class FilesClient {
   readonly apps: Pick<typeof App, 'all' | 'list' | 'listIterator'>
 
   /** `As2IncomingMessage`'s static methods, made with this client's settings. */
-  readonly as2IncomingMessages: Pick<typeof As2IncomingMessage, 'all' | 'list' | 'listIterator'>
+  readonly as2IncomingMessages: Pick<typeof As2IncomingMessage, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `As2OutgoingMessage`'s static methods, made with this client's settings. */
   readonly as2OutgoingMessages: Pick<typeof As2OutgoingMessage, 'all' | 'list' | 'listIterator'>
