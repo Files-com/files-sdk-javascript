@@ -6,6 +6,9 @@ import { ConfigurationError, FilesApiError } from '../lib/Errors'
 import Files from '../lib/Files'
 import FilesClient from '../lib/FilesClient'
 import { LogLevel } from '../lib/Logger'
+import { userAgentWithMetadata } from '../lib/UserAgent'
+import * as browserProvider from '../lib/isomorphic/UserAgent.browser'
+import * as nodeProvider from '../lib/isomorphic/UserAgent.node'
 import Automation from '../lib/models/Automation'
 import User from '../lib/models/User'
 
@@ -459,5 +462,183 @@ describe('API authentication', () => {
       agents.forEach(agent => agent.destroy())
       await new Promise(resolve => { server.close(resolve) })
     }
+  })
+
+  describe('identifying the SDK', () => {
+    const NODE_DEFAULT = /^(Files\.com JavaScript SDK v[^\s()]+) \(files-sdk-meta\/1; os=([^;]+); runtime=node\/([^)]+)\)$/
+    const IDENTITY = 'Files.com JavaScript SDK v1.2.3'
+
+    // The SDK as a browser bundle has it: loaded apart from the one this file uses, with the browser provider in the
+    // Node.js one's place, as the package's browser mapping puts it. It runs in Node.js here, so it shows the headers the
+    // SDK gives its HTTP client, not what a browser sends.
+    const browserBundle = () => {
+      let bundle
+
+      jest.isolateModules(() => {
+        jest.doMock('../lib/isomorphic/UserAgent.node', () => jest.requireActual('../lib/isomorphic/UserAgent.browser'))
+        bundle = { Api: jest.requireActual('../lib/Api').default, Files: jest.requireActual('../lib/Files').default }
+      })
+
+      jest.dontMock('../lib/isomorphic/UserAgent.node')
+      return bundle
+    }
+
+    it('sends, in Node.js, its identity with the platform\'s metadata as its default User-Agent, and one set globally or for a client exactly as given', async () => {
+      const defaultUserAgent = Files.getUserAgent()
+      const custom = 'MyApp/1.2 (custom; build 7)'
+
+      // The platform's family, as the provider gives it, and Node.js's own version.
+      expect(defaultUserAgent).toMatch(NODE_DEFAULT)
+      expect(defaultUserAgent.match(NODE_DEFAULT).slice(2)).toEqual([nodeProvider.sdkMetadata().os, process.versions.node])
+
+      const requests = nock(API_URL)
+        .get('/api/rest/v1/users/1')
+        .query({ id: 1 })
+        .matchHeader('User-Agent', defaultUserAgent)
+        .reply(200, { id: 1 })
+        .get('/api/rest/v1/users/2')
+        .query({ id: 2 })
+        .matchHeader('User-Agent', custom)
+        .reply(200, { id: 2 })
+        .get('/api/rest/v1/users/3')
+        .query({ id: 3 })
+        .matchHeader('User-Agent', defaultUserAgent)
+        .reply(200, { id: 3 })
+        .get('/api/rest/v1/users/4')
+        .query({ id: 4 })
+        .matchHeader('User-Agent', 'ClientApp/3')
+        .reply(200, { id: 4 })
+
+      try {
+        await User.find(1)
+        Files.setUserAgent(custom)
+        await User.find(2)
+
+        // A client starts from the declared default, whatever the global one has become, or has its own.
+        await Files.createClient({ apiKey: 'own-key', baseUrl: API_URL }).users.find(3)
+        await Files.createClient({ apiKey: 'own-key', baseUrl: API_URL, userAgent: 'ClientApp/3' }).users.find(4)
+
+        expect(requests.isDone()).toBe(true)
+      } finally {
+        Files.setUserAgent(defaultUserAgent)
+      }
+    })
+
+    it('formats the platform\'s metadata as one comment the API reads, leaving out what is not within its bounds, and never shortens the identity', () => {
+      const node = { os: 'windows', runtime: 'node', runtimeVersion: '22.11.0' }
+      const withOs = os => userAgentWithMetadata(IDENTITY, { ...node, os })
+      const withRuntime = runtime => userAgentWithMetadata(IDENTITY, { ...node, runtime })
+      const withVersion = runtimeVersion => userAgentWithMetadata(IDENTITY, { ...node, runtimeVersion })
+
+      // The runtime's version follows its name after a slash, or the name stands alone.
+      expect([userAgentWithMetadata(IDENTITY, node), withVersion(undefined)]).toEqual([
+        'Files.com JavaScript SDK v1.2.3 (files-sdk-meta/1; os=windows; runtime=node/22.11.0)',
+        'Files.com JavaScript SDK v1.2.3 (files-sdk-meta/1; os=windows; runtime=node)',
+      ])
+
+      // An OS is a lower-case letter, then up to 15 lower-case letters, digits and hyphens; any other is unknown.
+      expect([withOs('a'.repeat(16)), withOs('a1-b'), withOs('a'.repeat(17)), withOs('Linux'), withOs('9front'), withOs('linux; os=x'), withOs(''), withOs(undefined)])
+        .toEqual([
+          `${IDENTITY} (files-sdk-meta/1; os=${'a'.repeat(16)}; runtime=node/22.11.0)`,
+          `${IDENTITY} (files-sdk-meta/1; os=a1-b; runtime=node/22.11.0)`,
+          ...Array(6).fill(`${IDENTITY} (files-sdk-meta/1; os=unknown; runtime=node/22.11.0)`),
+        ])
+
+      // A runtime name is a lower-case letter, then up to 23 lower-case letters, digits and hyphens; any other is left
+      // out, its version with it.
+      expect([withRuntime('r'.repeat(24)), withRuntime('r'.repeat(25)), withRuntime('Node'), withRuntime('node/22'), withRuntime(undefined)]).toEqual([
+        `${IDENTITY} (files-sdk-meta/1; os=windows; runtime=${'r'.repeat(24)}/22.11.0)`,
+        ...Array(4).fill(`${IDENTITY} (files-sdk-meta/1; os=windows)`),
+      ])
+
+      // A runtime version is a digit, then up to 47 letters, digits, dots, plus signs, underscores and hyphens; any other
+      // is left out.
+      expect([withVersion('9'.repeat(48)), withVersion('22.11.0-rc.1+build_7'), withVersion('9'.repeat(49)), withVersion('v22.11.0'), withVersion('22 (beta)'), withVersion('')])
+        .toEqual([
+          `${IDENTITY} (files-sdk-meta/1; os=windows; runtime=node/${'9'.repeat(48)})`,
+          `${IDENTITY} (files-sdk-meta/1; os=windows; runtime=node/22.11.0-rc.1+build_7)`,
+          ...Array(4).fill(`${IDENTITY} (files-sdk-meta/1; os=windows; runtime=node)`),
+        ])
+
+      // Every part at its longest still makes a comment of at most 128 bytes, its leading space included.
+      const longest = userAgentWithMetadata(IDENTITY, { os: 'o'.repeat(16), runtime: 'r'.repeat(24), runtimeVersion: '9'.repeat(48) })
+
+      expect(longest).toBe(`${IDENTITY} (files-sdk-meta/1; os=${'o'.repeat(16)}; runtime=${'r'.repeat(24)}/${'9'.repeat(48)})`)
+      expect(longest.length - IDENTITY.length).toBeLessThanOrEqual(128)
+
+      // The whole User-Agent is at most 190 bytes: a runtime version that would make it longer is left out, and the
+      // identity is kept alone, never shortened, when even the comment without one would.
+      const ofLength = length => userAgentWithMetadata('a'.repeat(length), node)
+
+      expect([ofLength(137), ofLength(138), ofLength(145), ofLength(146)]).toEqual([
+        `${'a'.repeat(137)} (files-sdk-meta/1; os=windows; runtime=node/22.11.0)`,
+        `${'a'.repeat(138)} (files-sdk-meta/1; os=windows; runtime=node)`,
+        `${'a'.repeat(145)} (files-sdk-meta/1; os=windows; runtime=node)`,
+        'a'.repeat(146),
+      ])
+
+      expect([ofLength(137).length, ofLength(145).length]).toEqual([190, 190])
+    })
+
+    it('takes, in Node.js, only the platform\'s family and Node.js\'s version from its process, and in a browser bundle nothing at all', () => {
+      const processOf = (platform, node) => ({ process: { platform, versions: { node } } })
+      const nodeOn = os => ({ os, runtime: 'node', runtimeVersion: '22.11.0' })
+
+      // Node.js's win32 is windows and its darwin macos; any other platform is named as Node.js names it.
+      expect(['win32', 'darwin', 'linux', 'freebsd'].map(platform => nodeProvider.sdkMetadata(processOf(platform, '22.11.0'))))
+        .toEqual([nodeOn('windows'), nodeOn('macos'), nodeOn('linux'), nodeOn('freebsd')])
+
+      // By default, the process is Node.js's own.
+      expect(nodeProvider.sdkMetadata()).toEqual(nodeProvider.sdkMetadata({ process }))
+      expect(nodeProvider.sdkMetadata().runtimeVersion).toBe(process.versions.node)
+
+      // As the API reads them: with Node.js's version, or, of a process without a platform or version, such as a shim's,
+      // an unknown OS and no version.
+      expect([processOf('win32', '22.11.0'), {}, { process: {} }].map(scope => userAgentWithMetadata(IDENTITY, nodeProvider.sdkMetadata(scope))))
+        .toEqual([
+          'Files.com JavaScript SDK v1.2.3 (files-sdk-meta/1; os=windows; runtime=node/22.11.0)',
+          ...Array(2).fill('Files.com JavaScript SDK v1.2.3 (files-sdk-meta/1; os=unknown; runtime=node)'),
+        ])
+
+      // A browser bundle's provider has no metadata.
+      expect(browserProvider.sdkMetadata()).toBeNull()
+    })
+
+    it('keeps, in a browser bundle, its identity alone as its default User-Agent, and one set globally or for a client exactly as given', async () => {
+      const { Api: BrowserApi, Files: BrowserFiles } = browserBundle()
+      const identity = BrowserFiles.getUserAgent()
+      const custom = 'MyApp/1.2 (custom; build 7)'
+
+      // The same identity as in Node.js, whose default User-Agent has the platform's metadata after it.
+      expect(identity).toMatch(/^Files\.com JavaScript SDK v[^\s()]+$/)
+      expect(Files.getUserAgent().startsWith(`${identity} (files-sdk-meta/1; `)).toBe(true)
+
+      BrowserFiles.setBaseUrl(API_URL)
+      BrowserFiles.setApiKey('browser-key')
+      BrowserFiles.configureNetwork({ maxNetworkRetries: 0 })
+
+      const requests = nock(API_URL)
+        .get('/api/rest/v1/users/1')
+        .matchHeader('User-Agent', identity)
+        .matchHeader('X-FilesAPI-Key', 'browser-key')
+        .reply(200, { id: 1 })
+        .get('/api/rest/v1/users/2')
+        .matchHeader('User-Agent', custom)
+        .matchHeader('X-FilesAPI-Key', 'browser-key')
+        .reply(200, { id: 2 })
+        .get('/api/rest/v1/users/3')
+        .matchHeader('User-Agent', 'ClientApp/3')
+        .matchHeader('X-FilesAPI-Key', 'client-key')
+        .reply(200, { id: 3 })
+
+      const client = BrowserFiles.createClient({ apiKey: 'client-key', baseUrl: API_URL, maxNetworkRetries: 0, userAgent: 'ClientApp/3' })
+
+      await BrowserApi.sendRequest('/users/1', 'GET')
+      BrowserFiles.setUserAgent(custom)
+      await BrowserApi.sendRequest('/users/2', 'GET')
+      await BrowserApi.sendRequest('/users/3', 'GET', null, { client })
+
+      expect([requests.isDone(), BrowserFiles.getUserAgent()]).toEqual([true, custom])
+    })
   })
 })

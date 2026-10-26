@@ -2,10 +2,11 @@ import { ConfigurationError } from './Errors'
 import FilesClient from './FilesClient'
 import { LogLevel } from './Logger'
 import { TransferControl, TransferJob } from './Transfer'
+import { defaultUserAgentOf } from './UserAgent'
 import { isObject } from './utils'
 
 const endpointPrefix = '/api/rest/v1'
-const version = '2.0.5'
+const version = '2.0.6'
 
 // The SDK's declared defaults for the settings of a request, its logging included. The global settings start from them,
 // and so does every client, from new FilesClient() or Files.createClient(), whatever the global settings have become
@@ -32,7 +33,7 @@ const defaults = Object.freeze({
   networkTimeout: 110.0,
   sessionId: null,
   trustRegionHost: undefined,
-  userAgent: `Files.com JavaScript SDK v${version}`,
+  userAgent: defaultUserAgentOf(`Files.com JavaScript SDK v${version}`),
   workspaceId: null,
 })
 

@@ -19,8 +19,14 @@ declare class Files {
    */
   static createClient(config?: Files.ClientConfig): FilesClient
 
+  /**
+   * Sets the `User-Agent` of the requests made without a client, sent exactly as given. Its default is the SDK's
+   * identity, such as `Files.com JavaScript SDK v1.2.3`, which in Node.js one comment of advisory metadata of the
+   * platform follows: `Files.com JavaScript SDK v1.2.3 (files-sdk-meta/1; os=windows; runtime=node/22.11.0)`.
+   */
   static setUserAgent(value: string): void
 
+  /** The `User-Agent` of the requests made without a client: the one set, or else the default (see `setUserAgent`). */
   static getUserAgent(): string
 
   /** Sets the API key. `null` removes it. */
@@ -216,7 +222,10 @@ declare namespace Files {
     /** The language, sent as `Accept-Language`, of the API's messages. `null`, the default, sends none. */
     language?: string | null | undefined
 
-    /** The `User-Agent` of the client's requests. */
+    /**
+     * The `User-Agent` of the client's requests, sent exactly as given; by default, the SDK's own (see
+     * `Files.setUserAgent`).
+     */
     userAgent?: string | undefined
 
     /** Headers to send with every request of the client, under a call's own headers. */
