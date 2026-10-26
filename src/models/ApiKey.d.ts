@@ -102,10 +102,9 @@ declare class ApiKey {
   /**
    * Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions
    * endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET
-   * /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the
-   * path restriction; use the `files_only` permission set to confine a key to file operations and their supporting
-   * lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys,
-   * which require a path the owning user can read.
+   * /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the
+   * owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need a
+   * path the owning user can read. Keys with any other permission set cannot have a path.
    */
   readonly path?: string
 
@@ -190,10 +189,9 @@ declare class ApiKey {
   /**
    * Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions
    * endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET
-   * /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the
-   * path restriction; use the `files_only` permission set to confine a key to file operations and their supporting
-   * lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys,
-   * which require a path the owning user can read.
+   * /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the
+   * owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need a
+   * path the owning user can read. Keys with any other permission set cannot have a path.
    */
   getPath(): string | undefined
 
@@ -275,10 +273,9 @@ declare class ApiKey {
   /**
    * Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions
    * endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET
-   * /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the
-   * path restriction; use the `files_only` permission set to confine a key to file operations and their supporting
-   * lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration` keys,
-   * which require a path the owning user can read.
+   * /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the
+   * owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need a
+   * path the owning user can read. Keys with any other permission set cannot have a path.
    */
   setPath(value: string): void
 
@@ -419,10 +416,9 @@ declare namespace ApiKey {
     /**
      * Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions
      * endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET
-     * /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the
-     * path restriction; use the `files_only` permission set to confine a key to file operations and their supporting
-     * lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration`
-     * keys, which require a path the owning user can read.
+     * /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the
+     * owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need
+     * a path the owning user can read. Keys with any other permission set cannot have a path.
      */
     path?: string
   }
@@ -499,10 +495,9 @@ declare namespace ApiKey {
     /**
      * Restricts the file and folder operations made with this key, meaning the files, folders, and file_actions
      * endpoints, to the specified folder and its descendants, including copy and move destinations. For `GET
-     * /file_migrations/{id}`, a key with a path can read only migrations it started. Other endpoints do not apply the
-     * path restriction; use the `files_only` permission set to confine a key to file operations and their supporting
-     * lookups. Does not grant access beyond the owning user's permissions. Optional except for `office_integration`
-     * keys, which require a path the owning user can read.
+     * /file_migrations/{id}`, a key with a path can read only migrations it started. Does not grant access beyond the
+     * owning user's permissions. Optional for `files_only` keys and required for `office_integration` keys, which need
+     * a path the owning user can read. Keys with any other permission set cannot have a path.
      */
     path?: string
 

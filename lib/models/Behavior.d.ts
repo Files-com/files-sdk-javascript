@@ -998,6 +998,18 @@ declare namespace Behavior {
       capture_email_body_filename?: string
 
       /**
+       * If set, the HTML body of email submissions will be saved with this name when the message contains HTML. Can be
+       * enabled alongside body and raw email capture.
+       */
+      capture_email_body_html_filename?: string
+
+      /**
+       * If set, the complete received email, including headers, body, and attachments, will be saved with this name
+       * alongside extracted attachments.
+       */
+      capture_email_raw_filename?: string
+
+      /**
        * Upload slots requested on the public Inbox page. Each slot name is used as its label and destination subfolder
        * name. Names must be valid single folder names without trailing whitespace, and unique regardless of letter case
        * or accents.

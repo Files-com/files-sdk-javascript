@@ -1464,6 +1464,12 @@ declare namespace Automation {
         /** @defaultValue false */
         save_body?: boolean
 
+        /** @defaultValue false */
+        save_html_body?: boolean
+
+        /** @defaultValue false */
+        save_raw_message?: boolean
+
         source?: string
 
         limit?: number

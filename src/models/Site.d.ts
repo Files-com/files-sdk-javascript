@@ -91,6 +91,12 @@ declare class Site {
   readonly allowed_ips?: string | null
 
   /**
+   * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing
+   * IP restrictions. Applies to all Workspaces. Defaults to false.
+   */
+  readonly enforce_parent_site_user_ip_restrictions?: boolean | null
+
+  /**
    * Create parent directories if they do not exist during uploads? This is primarily used to work around broken upload
    * clients that assume servers will perform this step.
    */
@@ -790,6 +796,12 @@ declare class Site {
 
   /** List of allowed IP addresses */
   getAllowedIps(): string | null | undefined
+
+  /**
+   * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing
+   * IP restrictions. Applies to all Workspaces. Defaults to false.
+   */
+  getEnforceParentSiteUserIpRestrictions(): boolean | null | undefined
 
   /**
    * Create parent directories if they do not exist during uploads? This is primarily used to work around broken upload
@@ -1504,6 +1516,12 @@ declare namespace Site {
 
     /** List of allowed IP addresses */
     allowed_ips?: string | null
+
+    /**
+     * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their
+     * existing IP restrictions. Applies to all Workspaces. Defaults to false.
+     */
+    enforce_parent_site_user_ip_restrictions?: boolean | null
 
     /**
      * Create parent directories if they do not exist during uploads? This is primarily used to work around broken
@@ -2372,6 +2390,12 @@ declare namespace Site {
 
     /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
     allow_user_level_ssl_override?: boolean
+
+    /**
+     * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their
+     * existing IP restrictions. Applies to all Workspaces. Defaults to false.
+     */
+    enforce_parent_site_user_ip_restrictions?: boolean
 
     /** Comma separated list of disallowed Country codes */
     disallowed_countries?: string
