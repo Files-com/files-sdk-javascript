@@ -685,14 +685,6 @@ class User {
     exposeAttributes(this, ['sso_strategy_id'])
   }
 
-  // boolean # Is the user subscribed to the newsletter?
-  getSubscribeToNewsletter = () => this.attributes.subscribe_to_newsletter
-
-  setSubscribeToNewsletter = value => {
-    this.attributes.subscribe_to_newsletter = value
-    exposeAttributes(this, ['subscribe_to_newsletter'])
-  }
-
   // boolean # Is this user managed by a SsoStrategy?
   getExternallyManaged = () => this.attributes.externally_managed
 
@@ -1006,7 +998,6 @@ class User {
   //   skip_welcome_screen - boolean - Skip Welcome page in the UI?
   //   ssl_required - string - SSL required setting
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-  //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
   //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   time_zone - string - User time zone
@@ -1269,10 +1260,6 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(params.sso_strategy_id)}`)
     }
 
-    if (isArray(params.subscribe_to_newsletter) || isObject(params.subscribe_to_newsletter)) {
-      throw new errors.InvalidParameterError(`Bad parameter: subscribe_to_newsletter must be of type Boolean, received ${getType(params.subscribe_to_newsletter)}`)
-    }
-
     if (params.require_2fa !== undefined && params.require_2fa !== null && !isString(params.require_2fa)) {
       throw new errors.InvalidParameterError(`Bad parameter: require_2fa must be of type String, received ${getType(params.require_2fa)}`)
     }
@@ -1515,7 +1502,6 @@ class User {
   //   skip_welcome_screen - boolean - Skip Welcome page in the UI?
   //   ssl_required - string - SSL required setting
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-  //   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
   //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
   //   time_zone - string - User time zone
@@ -1763,10 +1749,6 @@ class User {
 
     if (params.sso_strategy_id !== undefined && params.sso_strategy_id !== null && !isInt(params.sso_strategy_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(params.sso_strategy_id)}`)
-    }
-
-    if (isArray(params.subscribe_to_newsletter) || isObject(params.subscribe_to_newsletter)) {
-      throw new errors.InvalidParameterError(`Bad parameter: subscribe_to_newsletter must be of type Boolean, received ${getType(params.subscribe_to_newsletter)}`)
     }
 
     if (params.require_2fa !== undefined && params.require_2fa !== null && !isString(params.require_2fa)) {

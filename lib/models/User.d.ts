@@ -277,9 +277,6 @@ declare class User {
   /** SSO (Single Sign On) strategy ID for the user, if applicable. */
   readonly sso_strategy_id?: number | null
 
-  /** Is the user subscribed to the newsletter? */
-  readonly subscribe_to_newsletter?: boolean | null
-
   /** Is this user managed by a SsoStrategy? */
   readonly externally_managed?: boolean | null
 
@@ -628,9 +625,6 @@ declare class User {
   /** SSO (Single Sign On) strategy ID for the user, if applicable. */
   getSsoStrategyId(): number | null | undefined
 
-  /** Is the user subscribed to the newsletter? */
-  getSubscribeToNewsletter(): boolean | null | undefined
-
   /** Is this user managed by a SsoStrategy? */
   getExternallyManaged(): boolean | null | undefined
 
@@ -975,9 +969,6 @@ declare class User {
 
   /** SSO (Single Sign On) strategy ID for the user, if applicable. */
   setSsoStrategyId(value: number): void
-
-  /** Is the user subscribed to the newsletter? */
-  setSubscribeToNewsletter(value: boolean): void
 
   /** Is this user managed by a SsoStrategy? */
   setExternallyManaged(value: boolean): void
@@ -1384,9 +1375,6 @@ declare namespace User {
     /** SSO (Single Sign On) strategy ID for the user, if applicable. */
     sso_strategy_id?: number | null
 
-    /** Is the user subscribed to the newsletter? */
-    subscribe_to_newsletter?: boolean | null
-
     /** Is this user managed by a SsoStrategy? */
     externally_managed?: boolean | null
 
@@ -1759,9 +1747,6 @@ declare namespace User {
     /** SSO (Single Sign On) strategy ID for the user, if applicable. */
     sso_strategy_id?: number
 
-    /** Is the user subscribed to the newsletter? */
-    subscribe_to_newsletter?: boolean
-
     /**
      * 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require`
      * and `never_require` override the site-wide setting when user-level overrides are allowed.
@@ -2000,9 +1985,6 @@ declare namespace User {
 
     /** SSO (Single Sign On) strategy ID for the user, if applicable. */
     sso_strategy_id?: number
-
-    /** Is the user subscribed to the newsletter? */
-    subscribe_to_newsletter?: boolean
 
     /**
      * 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require`

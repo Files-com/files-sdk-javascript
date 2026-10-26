@@ -29,7 +29,7 @@ const SCENARIO = 'files.owned-folder-namespace'
 const DEFINITION_SHA256 = '5d9b8eff0ef0724a68a458db77dc85784bb7d24436f104b98c2a2fe67086bbe0'
 const DEFINITION_FORMAT = 'files-api-scenarios'
 const DEFINITION_FORMAT_VERSION = 1
-const SWAGGER_SHA256 = '469907133146a11b6b62c584c7bd4fce36f5d5fd0e94680181a1f20f0a9e72b9'
+const SWAGGER_SHA256 = '04f322c686a819d1188f49d7534efc2d3aba368d308f720871495c7962843848'
 
 // The backend the Mock is: positions bound to another are omitted.
 const BACKEND = 'simulator'
