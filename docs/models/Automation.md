@@ -45,8 +45,8 @@
   "import_urls": [
     {
       "name": "users.json",
-      "url": "http://example.com/users",
-      "method": "POST",
+      "url": "https://example.com/users",
+      "method": "post",
       "headers": {
         "Content-Type": "application/json"
       },
@@ -237,7 +237,7 @@ await Automation.create({
   'definition': {"schema_version":1,"nodes":[{"id":"trigger","type":"trigger_manual"},{"id":"create_reports","type":"create_folder","config":{"destinations":["reports/"]}}],"edges":[{"from":"trigger","to":"create_reports"}]},
   'disabled': true,
   'exclude_pattern': "path/to/exclude/*",
-  'import_urls': [{"name":"users.json","url":"http://example.com/users","method":"POST","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}],
+  'import_urls': [{"name":"users.json","url":"https://example.com/users","method":"post","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}],
   'flatten_destination_structure': true,
   'ignore_locked_folders': true,
   'legacy_folder_matching': false,
@@ -355,8 +355,8 @@ await automation.upgrade()
   "import_urls": [
     {
       "name": "users.json",
-      "url": "http://example.com/users",
-      "method": "POST",
+      "url": "https://example.com/users",
+      "method": "post",
       "headers": {
         "Content-Type": "application/json"
       },
@@ -479,7 +479,7 @@ await automation.update({
   'definition': {"schema_version":1,"nodes":[{"id":"trigger","type":"trigger_manual"},{"id":"create_reports","type":"create_folder","config":{"destinations":["reports/"]}}],"edges":[{"from":"trigger","to":"create_reports"}]},
   'disabled': true,
   'exclude_pattern': "path/to/exclude/*",
-  'import_urls': [{"name":"users.json","url":"http://example.com/users","method":"POST","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}],
+  'import_urls': [{"name":"users.json","url":"https://example.com/users","method":"post","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}],
   'flatten_destination_structure': true,
   'ignore_locked_folders': true,
   'legacy_folder_matching': false,
@@ -581,8 +581,8 @@ await automation.update({
   "import_urls": [
     {
       "name": "users.json",
-      "url": "http://example.com/users",
-      "method": "POST",
+      "url": "https://example.com/users",
+      "method": "post",
       "headers": {
         "Content-Type": "application/json"
       },

@@ -90,7 +90,7 @@ class ScheduledExport {
     exposeAttributes(this, ['report_name'])
   }
 
-  // object # Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+  // object # Options for the report selected by export_type.
   getExportOptions = () => this.attributes.export_options
 
   setExportOptions = value => {
@@ -227,7 +227,7 @@ class ScheduledExport {
   // Parameters:
   //   name - string - Name for this scheduled export.
   //   export_type - string - Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
-  //   export_options - object - Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+  //   export_options - object - Options for the report selected by export_type.
   //   user_id - int64 - Site Admin user who receives the completed export e-mail.
   //   disabled - boolean - If true, this scheduled export will not run.
   //   trigger - string - Schedule trigger type: `daily` or `custom_schedule`.
@@ -421,7 +421,7 @@ class ScheduledExport {
   // Parameters:
   //   name (required) - string - Name for this scheduled export.
   //   export_type (required) - string - Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
-  //   export_options - object - Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+  //   export_options - object - Options for the report selected by export_type.
   //   user_id - int64 - Site Admin user who receives the completed export e-mail.
   //   disabled - boolean - If true, this scheduled export will not run.
   //   trigger - string - Schedule trigger type: `daily` or `custom_schedule`.

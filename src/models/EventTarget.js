@@ -106,7 +106,7 @@ class EventTarget {
     exposeAttributes(this, ['enabled'])
   }
 
-  // object # Event Target configuration. Folder targets accept path and format (json or csv).
+  // object # Event Target configuration. Fields depend on target_type.
   getConfig = () => this.attributes.config
 
   setConfig = value => {
@@ -133,7 +133,7 @@ class EventTarget {
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
   //   enabled - boolean - Whether this Event Target can receive events.
-  //   config - object - Event Target configuration. Folder targets accept path and format (json or csv).
+  //   config - object - Event Target configuration. Fields depend on target_type.
   //   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400. Slack and Teams support delivery_mode (immediate or subfolder_summary), summary_path (empty string means root), and summary_delay (15–300 seconds, default 60). The summary applies to matching file activity under summary_path; other matching events retain immediate delivery.
   update = async (params = {}) => {
     if (!this.attributes.id) {
@@ -282,7 +282,7 @@ class EventTarget {
   //   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
   //   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
   //   enabled - boolean - Whether this Event Target can receive events.
-  //   config (required) - object - Event Target configuration. Folder targets accept path and format (json or csv).
+  //   config (required) - object - Event Target configuration. Fields depend on target_type.
   //   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400. Slack and Teams support delivery_mode (immediate or subfolder_summary), summary_path (empty string means root), and summary_delay (15–300 seconds, default 60). The summary applies to matching file activity under summary_path; other matching events retain immediate delivery.
   //   target_type (required) - string - Event Target type.
   static create = async (params = {}, options = {}) => {

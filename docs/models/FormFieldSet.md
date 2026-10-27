@@ -15,18 +15,13 @@
   ],
   "form_fields": [
     {
-      "id": 1,
-      "label": "Sample Label",
+      "label": "Department",
+      "field_type": "dropdown",
       "required": true,
-      "help_text": "Help Text",
-      "field_type": "text",
       "options_for_select": [
-        "red",
-        "green",
-        "blue"
-      ],
-      "default_option": "red",
-      "form_field_set_id": 1
+        "Finance",
+        "Sales"
+      ]
     }
   ],
   "skip_name": true,
@@ -91,7 +86,7 @@ await FormFieldSet.create({
   'skip_email': false,
   'skip_name': false,
   'skip_company': false,
-  'form_fields': [{"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
+  'form_fields': [{"label":"Department","field_type":"dropdown","required":true,"options_for_select":["Finance","Sales"]}],
 })
 ```
 
@@ -121,7 +116,7 @@ await form_field_set.update({
   'skip_email': false,
   'skip_name': false,
   'skip_company': false,
-  'form_fields': [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}],
+  'form_fields': [{"label":"Department","field_type":"dropdown","required":true,"options_for_select":["Finance","Sales"]}],
 })
 ```
 
@@ -151,18 +146,13 @@ await form_field_set.update({
   ],
   "form_fields": [
     {
-      "id": 1,
-      "label": "Sample Label",
+      "label": "Department",
+      "field_type": "dropdown",
       "required": true,
-      "help_text": "Help Text",
-      "field_type": "text",
       "options_for_select": [
-        "red",
-        "green",
-        "blue"
-      ],
-      "default_option": "red",
-      "form_field_set_id": 1
+        "Finance",
+        "Sales"
+      ]
     }
   ],
   "skip_name": true,

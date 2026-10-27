@@ -1,5 +1,4 @@
 import Files from '../Files'
-import ShareGroupMember from './ShareGroupMember'
 
 /**
  * A ShareGroup is a way for you to store and name groups of email contacts to be used for sending share and inbox
@@ -38,7 +37,7 @@ declare class ShareGroup {
   readonly user_id?: number | null
 
   /** A list of share group members */
-  readonly members?: ShareGroupMember.Attributes[] | Files.JsonObject[] | null
+  readonly members?: ShareGroup.Members | null
 
   /** Share Group ID */
   getId(): number | null | undefined
@@ -53,7 +52,7 @@ declare class ShareGroup {
   getUserId(): number | null | undefined
 
   /** A list of share group members */
-  getMembers(): ShareGroupMember.Attributes[] | Files.JsonObject[] | null | undefined
+  getMembers(): ShareGroup.Members | null | undefined
 
   /** Share Group ID */
   setId(value: number): void
@@ -68,7 +67,7 @@ declare class ShareGroup {
   setUserId(value: number): void
 
   /** A list of share group members */
-  setMembers(value: Files.JsonObject[]): void
+  setMembers(value: ShareGroup.Members): void
 
   /** Update Share Group */
   update(params?: ShareGroup.UpdateParams): Promise<this>
@@ -129,7 +128,7 @@ declare namespace ShareGroup {
     user_id?: number | null
 
     /** A list of share group members */
-    members?: ShareGroupMember.Attributes[] | Files.JsonObject[] | null
+    members?: ShareGroup.Members | null
   }
 
   interface ListParams {
@@ -159,7 +158,7 @@ declare namespace ShareGroup {
     name: string
 
     /** A list of share group members. */
-    members: Files.JsonObject[]
+    members: ShareGroup.Members
   }
 
   interface UpdateParams {
@@ -170,8 +169,24 @@ declare namespace ShareGroup {
     name?: string
 
     /** A list of share group members. */
-    members?: Files.JsonObject[]
+    members?: ShareGroup.Members
   }
+
+  /**
+   * Contacts in this share group. Creating a share group requires at least one member. An update replaces the members
+   * with this list, and an empty list leaves them unchanged. Existing members are matched by email and keep their
+   * stored email address.
+   */
+  type Members = Array<{
+    /** Email of the share group member */
+    email: string
+
+    /** Name of the share group member */
+    name?: string | null
+
+    /** Company of the share group member */
+    company?: string | null
+  }>
 }
 
 export default ShareGroup

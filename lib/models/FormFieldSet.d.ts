@@ -1,5 +1,4 @@
 import Files = require('../Files')
-import FormField = require('./FormField')
 
 /** A Form Field Set is a custom form to be used for bundle and inbox registrations. */
 declare class FormFieldSet {
@@ -40,7 +39,7 @@ declare class FormFieldSet {
    * Associated form field definitions; authenticated form field set responses include historical definitions, while
    * form_layout identifies current fields
    */
-  readonly form_fields?: FormField.Attributes[] | Files.JsonObject[] | null
+  readonly form_fields?: FormFieldSet.FormFields | null
 
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing name */
   readonly skip_name?: boolean | null
@@ -78,7 +77,7 @@ declare class FormFieldSet {
    * Associated form field definitions; authenticated form field set responses include historical definitions, while
    * form_layout identifies current fields
    */
-  getFormFields(): FormField.Attributes[] | Files.JsonObject[] | null | undefined
+  getFormFields(): FormFieldSet.FormFields | null | undefined
 
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing name */
   getSkipName(): boolean | null | undefined
@@ -116,7 +115,7 @@ declare class FormFieldSet {
    * Associated form field definitions; authenticated form field set responses include historical definitions, while
    * form_layout identifies current fields
    */
-  setFormFields(value: Files.JsonObject[]): void
+  setFormFields(value: FormFieldSet.FormFields): void
 
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing name */
   setSkipName(value: boolean): void
@@ -203,7 +202,7 @@ declare namespace FormFieldSet {
      * Associated form field definitions; authenticated form field set responses include historical definitions, while
      * form_layout identifies current fields
      */
-    form_fields?: FormField.Attributes[] | Files.JsonObject[] | null
+    form_fields?: FormFieldSet.FormFields | null
 
     /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing name */
     skip_name?: boolean | null
@@ -275,7 +274,7 @@ declare namespace FormFieldSet {
      * - `options_for_select`: List of options for dropdown or radio
      * - `default_option`: Default option to be preselected in the dropdown or radio.
      */
-    form_fields?: Files.JsonObject[]
+    form_fields?: FormFieldSet.FormFields
   }
 
   interface UpdateParams {
@@ -310,8 +309,45 @@ declare namespace FormFieldSet {
      * - `options_for_select`: List of options for dropdown or radio
      * - `default_option`: Default option to be preselected in the dropdown or radio.
      */
-    form_fields?: Files.JsonObject[]
+    form_fields?: FormFieldSet.FormFields
   }
+
+  /**
+   * Form fields in display order. A request replaces the form's fields with this list. Authenticated responses also
+   * include historical definitions used by existing registration answers, and form_layout lists the IDs of the current
+   * fields in display order.
+   */
+  type FormFields = Array<{
+    /**
+     * Form field ID. Send the ID of a current field to keep it. Changing any other attribute of that field creates a
+     * replacement field with a new ID. Omit it for a new field.
+     */
+    id?: number
+
+    /** Label to be displayed. Required for a new field. Labels must be unique within the form. */
+    label?: string
+
+    /** Type of field. Required for a new field. */
+    field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date'
+
+    /** Help text to be displayed. */
+    help_text?: string | null
+
+    /** Is this a required field? Defaults to true for a new field. */
+    required?: boolean
+
+    /** Options to display. Required for dropdown and radio fields. Removed from text and text_area fields. */
+    options_for_select?: string[] | null
+
+    /** Option to preselect. Must be one of options_for_select. Removed from text and text_area fields. */
+    default_option?: string | null
+
+    /**
+     * Form field set ID.
+     * Returned by the API; not accepted in requests.
+     */
+    form_field_set_id?: number
+  }>
 }
 
 export = FormFieldSet

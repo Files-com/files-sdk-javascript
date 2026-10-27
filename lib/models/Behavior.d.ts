@@ -593,7 +593,7 @@ declare namespace Behavior {
 
       universe_domain?: string
 
-      [key: string]: unknown
+      quota_project_id?: string
     }
 
     /** Google Pub/Sub project and topic */
@@ -1297,7 +1297,10 @@ declare namespace Behavior {
        */
       triggers?: Behavior.Value.Triggers
 
-      /** Google Service Account credentials used to send Google Pub/Sub requests. */
+      /**
+       * Google Service Account credentials used to send Google Pub/Sub requests, as an object. The key file contents as
+       * a JSON string are also accepted. Responses omit private_key.
+       */
       google_credentials: Behavior.Value.GoogleCredentials
 
       /** Additional body parameters to include in the notification. */

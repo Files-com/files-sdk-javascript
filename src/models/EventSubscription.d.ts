@@ -78,8 +78,8 @@ declare class EventSubscription {
    */
   readonly filter?: EventSubscription.Filter | null
 
-  /** Event Subscription delivery policy. */
-  readonly delivery_policy?: Files.JsonObject | null
+  /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+  readonly delivery_policy?: EventSubscription.DeliveryPolicy | null
 
   /** Event Target IDs this subscription sends to. */
   readonly event_target_ids?: number[] | null
@@ -147,8 +147,8 @@ declare class EventSubscription {
    */
   getFilter(): EventSubscription.Filter | null | undefined
 
-  /** Event Subscription delivery policy. */
-  getDeliveryPolicy(): Files.JsonObject | null | undefined
+  /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+  getDeliveryPolicy(): EventSubscription.DeliveryPolicy | null | undefined
 
   /** Event Target IDs this subscription sends to. */
   getEventTargetIds(): number[] | null | undefined
@@ -216,8 +216,8 @@ declare class EventSubscription {
    */
   setFilter(value: EventSubscription.Filter): void
 
-  /** Event Subscription delivery policy. */
-  setDeliveryPolicy(value: Files.JsonObject): void
+  /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+  setDeliveryPolicy(value: EventSubscription.DeliveryPolicy): void
 
   /** Event Target IDs this subscription sends to. */
   setEventTargetIds(value: number[]): void
@@ -325,8 +325,8 @@ declare namespace EventSubscription {
      */
     filter?: EventSubscription.Filter | null
 
-    /** Event Subscription delivery policy. */
-    delivery_policy?: Files.JsonObject | null
+    /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+    delivery_policy?: EventSubscription.DeliveryPolicy | null
 
     /** Event Target IDs this subscription sends to. */
     event_target_ids?: number[] | null
@@ -419,8 +419,8 @@ declare namespace EventSubscription {
      */
     filter?: EventSubscription.Filter
 
-    /** Event Subscription delivery policy. */
-    delivery_policy?: Files.JsonObject
+    /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+    delivery_policy?: EventSubscription.DeliveryPolicy
 
     /** Event Target IDs this subscription sends to. */
     event_target_ids?: number[]
@@ -481,8 +481,8 @@ declare namespace EventSubscription {
      */
     filter?: EventSubscription.Filter
 
-    /** Event Subscription delivery policy. */
-    delivery_policy?: Files.JsonObject
+    /** Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy. */
+    delivery_policy?: EventSubscription.DeliveryPolicy
 
     /** Event Target IDs this subscription sends to. */
     event_target_ids?: number[]
@@ -538,6 +538,24 @@ declare namespace EventSubscription {
        */
       exists: boolean
     }
+  }
+
+  /**
+   * Retry settings for deliveries from this subscription. Each omitted key uses the value from the Event Target's
+   * delivery_policy, and then the default.
+   */
+  interface DeliveryPolicy {
+    /**
+     * Maximum delivery attempts, including the first attempt. A value below 1 uses the default of 5. Null works like an
+     * omitted key.
+     */
+    max_attempts?: number | null
+
+    /**
+     * Minutes to wait before each retry. The last value is used for any later retries, so a list with one value applies
+     * it to every retry. An empty list uses the default of [1,5,15,60,180]. Null works like an omitted key.
+     */
+    retry_delay_minutes?: number[] | null
   }
 }
 

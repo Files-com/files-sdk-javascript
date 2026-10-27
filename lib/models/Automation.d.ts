@@ -73,7 +73,7 @@ declare class Automation {
   readonly exclude_pattern?: string | null
 
   /** List of URLs to be imported and names to be used. */
-  readonly import_urls?: Files.JsonObject[] | null
+  readonly import_urls?: Automation.ImportUrls | null
 
   /** If trigger is `email`, this is the address that triggers the Automation. */
   readonly inbound_email_address?: string | null
@@ -263,7 +263,7 @@ declare class Automation {
   getExcludePattern(): string | null | undefined
 
   /** List of URLs to be imported and names to be used. */
-  getImportUrls(): Files.JsonObject[] | null | undefined
+  getImportUrls(): Automation.ImportUrls | null | undefined
 
   /** If trigger is `email`, this is the address that triggers the Automation. */
   getInboundEmailAddress(): string | null | undefined
@@ -453,7 +453,7 @@ declare class Automation {
   setExcludePattern(value: string): void
 
   /** List of URLs to be imported and names to be used. */
-  setImportUrls(value: Files.JsonObject[]): void
+  setImportUrls(value: Automation.ImportUrls): void
 
   /** If trigger is `email`, this is the address that triggers the Automation. */
   setInboundEmailAddress(value: string): void
@@ -701,7 +701,7 @@ declare namespace Automation {
     exclude_pattern?: string | null
 
     /** List of URLs to be imported and names to be used. */
-    import_urls?: Files.JsonObject[] | null
+    import_urls?: Automation.ImportUrls | null
 
     /** If trigger is `email`, this is the address that triggers the Automation. */
     inbound_email_address?: string | null
@@ -986,7 +986,7 @@ declare namespace Automation {
     exclude_pattern?: string
 
     /** List of URLs to be imported and names to be used. */
-    import_urls?: Files.JsonObject[]
+    import_urls?: Automation.ImportUrls
 
     /**
      * Normally copy and move automations that use globs will implicitly preserve the source folder structure in the
@@ -1154,7 +1154,7 @@ declare namespace Automation {
     exclude_pattern?: string
 
     /** List of URLs to be imported and names to be used. */
-    import_urls?: Files.JsonObject[]
+    import_urls?: Automation.ImportUrls
 
     /**
      * Normally copy and move automations that use globs will implicitly preserve the source folder structure in the
@@ -2157,6 +2157,38 @@ declare namespace Automation {
       return?: boolean
     }
   }
+
+  /** URLs that an Import File automation requests. Each response is saved as `name` in every destination folder. */
+  type ImportUrls = Array<{
+    /** File name used to save the response. `%` tokens are replaced as described under Formatting Parameters. */
+    name: string
+
+    /** URL to request. */
+    url: string
+
+    /** HTTP method: `get` or `post`, case-insensitive. Omitted or null uses `get`. */
+    method?: string | null
+
+    /**
+     * Request headers as an object of header names and values. `%` tokens in the values are replaced as described under
+     * Formatting Parameters. An empty array or null is also accepted, stored as is, and sends no headers.
+     */
+    headers?: {
+      [key: string]: string
+    } | Files.JsonValue[] | null
+
+    /**
+     * Body for a POST request. A string is sent with `%` tokens expanded. An object is sent as JSON with `%` tokens
+     * expanded in its top-level string values. Other JSON values are sent as is.
+     */
+    content?: Files.JsonValue
+
+    /**
+     * Stored for compatibility and not used. Send a Content-Type header instead.
+     * @deprecated
+     */
+    content_type?: string | null
+  }>
 
   /** A Hash of attributes specific to the automation type. */
   type Value = {

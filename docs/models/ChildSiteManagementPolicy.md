@@ -8,7 +8,17 @@
   "policy_type": "settings",
   "name": "example",
   "description": "example",
-  "value": "{ \"color2_left\": \"#000000\", \"folder_behaviors\": [{ \"behavior\": \"file_expiration\", \"value\": { \"days_to_retain\": 30 } }] }",
+  "value": {
+    "color2_left": "#000000",
+    "folder_behaviors": [
+      {
+        "behavior": "file_expiration",
+        "value": {
+          "days_to_retain": 30
+        }
+      }
+    ]
+  },
   "applied_child_site_ids": [
     1,
     2
@@ -72,7 +82,7 @@ await ChildSiteManagementPolicy.find(id)
 
 ```
 await ChildSiteManagementPolicy.create({
-  'value': {"color2_left":"#000000"},
+  'value': {"color2_left":"#000000","folder_behaviors":[{"behavior":"file_expiration","value":{"days_to_retain":30}}]},
   'skip_child_site_ids': [1,2],
   'child_site_ids': [1,2],
   'default_policy': true,
@@ -101,7 +111,7 @@ await ChildSiteManagementPolicy.create({
 const child_site_management_policy = await ChildSiteManagementPolicy.find(id)
 
 await child_site_management_policy.update({
-  'value': {"color2_left":"#000000"},
+  'value': {"color2_left":"#000000","folder_behaviors":[{"behavior":"file_expiration","value":{"days_to_retain":30}}]},
   'skip_child_site_ids': [1,2],
   'child_site_ids': [1,2],
   'default_policy': true,
@@ -130,7 +140,17 @@ await child_site_management_policy.update({
   "policy_type": "settings",
   "name": "example",
   "description": "example",
-  "value": "{ \"color2_left\": \"#000000\", \"folder_behaviors\": [{ \"behavior\": \"file_expiration\", \"value\": { \"days_to_retain\": 30 } }] }",
+  "value": {
+    "color2_left": "#000000",
+    "folder_behaviors": [
+      {
+        "behavior": "file_expiration",
+        "value": {
+          "days_to_retain": 30
+        }
+      }
+    ]
+  },
   "applied_child_site_ids": [
     1,
     2

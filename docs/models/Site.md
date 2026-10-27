@@ -15,11 +15,7 @@
       "workspace_admins": true,
       "folder_admins": true,
       "all_users": false,
-      "selected_group_members": true,
-      "group_ids": [
-        1,
-        2
-      ]
+      "selected_group_members": false
     }
   },
   "allowed_2fa_method_sms": true,
@@ -641,8 +637,9 @@ await Site.update({
   'motd_text': "example",
   'motd_use_for_ftp': false,
   'motd_use_for_sftp': false,
+  'left_navigation_visibility': {"sharing":{"admin":true,"all":true},"automation_flow":{"admin":false,"all":false},"integrations":{"admin":false,"all":false},"clients_protocols":{"admin":false,"all":false}},
   'disable_all_ai_features': false,
-  'ai_feature_availability': {"in_app_ai_assistant":{"site_admins":true,"workspace_admins":true,"folder_admins":true,"all_users":false,"selected_group_members":true,"group_ids":[1,2]}},
+  'ai_feature_availability': {"in_app_ai_assistant":{"site_admins":true,"workspace_admins":true,"folder_admins":true,"all_users":false,"selected_group_members":false}},
   'mcp_dcr_enabled': false,
   'additional_text_file_types': ["example"],
   'bundle_require_note': false,

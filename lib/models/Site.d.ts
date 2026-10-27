@@ -43,7 +43,7 @@ declare class Site {
    * any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other
    * options. Disabling all AI features overrides these settings.
    */
-  readonly ai_feature_availability?: Files.JsonObject | null
+  readonly ai_feature_availability?: Site.AiFeatureAvailability | null
 
   /** Is SMS two factor authentication allowed? */
   readonly allowed_2fa_method_sms?: boolean | null
@@ -750,7 +750,7 @@ declare class Site {
    * any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other
    * options. Disabling all AI features overrides these settings.
    */
-  getAiFeatureAvailability(): Files.JsonObject | null | undefined
+  getAiFeatureAvailability(): Site.AiFeatureAvailability | null | undefined
 
   /** Is SMS two factor authentication allowed? */
   getAllowed2faMethodSms(): boolean | null | undefined
@@ -1472,7 +1472,7 @@ declare namespace Site {
      * site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not
      * affect other options. Disabling all AI features overrides these settings.
      */
-    ai_feature_availability?: Files.JsonObject | null
+    ai_feature_availability?: Site.AiFeatureAvailability | null
 
     /** Is SMS two factor authentication allowed? */
     allowed_2fa_method_sms?: boolean | null
@@ -2274,7 +2274,7 @@ declare namespace Site {
     motd_use_for_sftp?: boolean
 
     /** Visibility settings for account navigation */
-    left_navigation_visibility?: Files.JsonObject
+    left_navigation_visibility?: Site.LeftNavigationVisibility
 
     /** If true, all AI features are disabled for this site. */
     disable_all_ai_features?: boolean
@@ -2287,7 +2287,7 @@ declare namespace Site {
      * site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not
      * affect other options. Disabling all AI features overrides these settings.
      */
-    ai_feature_availability?: Files.JsonObject
+    ai_feature_availability?: Site.AiFeatureAvailability
 
     /** Is OAuth DCR (dynamic client registration) for MCP enabled? */
     mcp_dcr_enabled?: boolean
@@ -2851,6 +2851,51 @@ declare namespace Site {
     smtp_password?: string
   }
 
+  /**
+   * Availability settings for each AI feature. Every feature is required. Null, which is returned until the setting is
+   * saved, gives every user type access and leaves selected_group_members off.
+   */
+  type AiFeatureAvailability = {
+    /**
+     * Options are additive: any enabled option that matches the user grants access. Disabling all AI features overrides
+     * these options.
+     */
+    in_app_ai_assistant: Site.AiFeatureAvailability.FeatureAvailability
+  } | null
+
+  namespace AiFeatureAvailability {
+    /**
+     * Options are additive: any enabled option that matches the user grants access. Disabling all AI features overrides
+     * these options.
+     */
+    interface FeatureAvailability {
+      /** If true, site admins have access. Null disables the option. */
+      site_admins: Site.AiFeatureAvailability.Enabled
+
+      /** If true, workspace admins have access. Null disables the option. */
+      workspace_admins: Site.AiFeatureAvailability.Enabled
+
+      /** If true, folder admins have access. Null disables the option. */
+      folder_admins: Site.AiFeatureAvailability.Enabled
+
+      /** If true, all users have access. Null disables the option. */
+      all_users: Site.AiFeatureAvailability.Enabled
+
+      /**
+       * If true, members of at least one group in group_ids have access. Defaults to false. Null disables the option.
+       */
+      selected_group_members?: Site.AiFeatureAvailability.Enabled
+
+      /**
+       * IDs of active groups on this site, from any workspace. Omitted or empty group_ids grants no access through
+       * selected_group_members.
+       */
+      group_ids?: number[]
+    }
+
+    type Enabled = boolean | null
+  }
+
   /** Share Link watermark settings */
   interface BundleWatermarkValue {
     /**
@@ -2868,6 +2913,38 @@ declare namespace Site {
     /** Watermark text. Use {{user}} to embed a username into the string. */
     dynamic_text?: string
   }
+
+  /** Visibility of each account navigation section. Every section and option is required. */
+  type LeftNavigationVisibility = {
+    sharing: {
+      /** If true, site admins see this section. */
+      admin: boolean
+
+      /** If true, every user sees this section. Requires `admin` to be true. */
+      all: boolean
+    }
+    automation_flow: {
+      /** If true, site admins see this section. */
+      admin: boolean
+
+      /** If true, every user sees this section. Requires `admin` to be true. */
+      all: boolean
+    }
+    integrations: {
+      /** If true, site admins see this section. */
+      admin: boolean
+
+      /** If true, every user sees this section. Requires `admin` to be true. */
+      all: boolean
+    }
+    clients_protocols: {
+      /** If true, site admins see this section. */
+      admin: boolean
+
+      /** If true, every user sees this section. Requires `admin` to be true. */
+      all: boolean
+    }
+  } | null
 }
 
 export = Site

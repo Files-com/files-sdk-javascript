@@ -36,8 +36,8 @@ declare class ScheduledExport {
   /** Human-readable report name. */
   readonly report_name?: string | null
 
-  /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-  readonly export_options?: Files.JsonObject | null
+  /** Options for the report selected by export_type. */
+  readonly export_options?: ScheduledExport.ExportOptions | null
 
   /** Site Admin user who receives the completed export e-mail. */
   readonly user_id?: number | null
@@ -108,8 +108,8 @@ declare class ScheduledExport {
   /** Human-readable report name. */
   getReportName(): string | null | undefined
 
-  /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-  getExportOptions(): Files.JsonObject | null | undefined
+  /** Options for the report selected by export_type. */
+  getExportOptions(): ScheduledExport.ExportOptions | null | undefined
 
   /** Site Admin user who receives the completed export e-mail. */
   getUserId(): number | null | undefined
@@ -180,8 +180,8 @@ declare class ScheduledExport {
   /** Human-readable report name. */
   setReportName(value: string): void
 
-  /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-  setExportOptions(value: Files.JsonObject): void
+  /** Options for the report selected by export_type. */
+  setExportOptions(value: ScheduledExport.ExportOptions): void
 
   /** Site Admin user who receives the completed export e-mail. */
   setUserId(value: number): void
@@ -294,8 +294,8 @@ declare namespace ScheduledExport {
     /** Human-readable report name. */
     report_name?: string | null
 
-    /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-    export_options?: Files.JsonObject | null
+    /** Options for the report selected by export_type. */
+    export_options?: ScheduledExport.ExportOptions | null
 
     /** Site Admin user who receives the completed export e-mail. */
     user_id?: number | null
@@ -396,8 +396,8 @@ declare namespace ScheduledExport {
      */
     export_type: string
 
-    /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-    export_options?: Files.JsonObject
+    /** Options for the report selected by export_type. */
+    export_options?: ScheduledExport.ExportOptions
 
     /** Site Admin user who receives the completed export e-mail. */
     user_id?: number
@@ -445,8 +445,8 @@ declare namespace ScheduledExport {
      */
     export_type?: string
 
-    /** Report-specific options. `permission_audit` supports `group_by` with `user` or `path`. */
-    export_options?: Files.JsonObject
+    /** Options for the report selected by export_type. */
+    export_options?: ScheduledExport.ExportOptions
 
     /** Site Admin user who receives the completed export e-mail. */
     user_id?: number
@@ -483,6 +483,36 @@ declare namespace ScheduledExport {
 
     /** Optional holiday region used by the scheduled export schedule. */
     holiday_region?: string
+  }
+
+  /**
+   * Options for the report selected by export_type. Each field names the report that uses it. share_link_audit and
+   * group_membership_audit have no options. Other keys are stored but not used.
+   */
+  interface ExportOptions {
+    /** folder_size_audit only. Folder to start from. Omitted or null uses the root folder. */
+    path?: string | null
+
+    /**
+     * folder_size_audit only. Number of folder levels below path to include. Null or a value below 1 uses 10. A numeric
+     * string such as `"50"` is also accepted and stored as sent.
+     */
+    max_depth?: number | null
+
+    /**
+     * folder_size_audit only. Minimum folder size to include, in GB. Null or a value below 1 uses 1. A numeric string
+     * such as `"50"` is also accepted and stored as sent.
+     */
+    size_threshold?: number | null
+
+    /**
+     * folder_size_audit only. If enabled, every folder up to max_depth is included regardless of size_threshold. Use
+     * `true` or `false`. Any value other than `false` or `null` enables it, including integers such as `0` and `1`.
+     */
+    all_folders?: boolean | null
+
+    /** permission_audit only. Groups rows by `user` or `path`. Null and other values use `user`. */
+    group_by?: string | null
   }
 }
 
