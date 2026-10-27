@@ -1201,8 +1201,8 @@ declare namespace Behavior {
       filename_regex_replace_to?: string
 
       /**
-       * Accepts any valid timezone value from the web interface (e.g. "Eastern Time (US & Canada)") or a UTC offset
-       * ("-05:00"). Omit parameter for UTC time.
+       * Accepts any valid timezone value from the web interface (e.g. "Eastern Time (US & Canada)"), an IANA time zone
+       * identifier (e.g. "America/Vancouver"), or a UTC offset ("-05:00"). Omit parameter for UTC time.
        */
       time_zone?: string
     }
