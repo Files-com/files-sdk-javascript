@@ -4,10 +4,11 @@ import os from 'os'
 import path from 'path'
 import { Readable } from 'stream'
 import { pipeline } from 'stream/promises'
-import { types } from 'util'
 
 import { FilesApiError, FilesError, InvalidParameterError, NotImplementedError } from '../lib/Errors'
 import FilesClient from '../lib/FilesClient'
+
+import { REFERENCE } from './support/filesystem-parity.cjs'
 
 const SITE = 'https://site.files.test'
 const STORAGE = 'https://storage.files.test'
@@ -325,188 +326,6 @@ const clientOf = (service, config = {}) => new FilesClient({
   ...config,
 })
 
-// The six cases of the native reference (native-filesystem-reference-r1, Node.js 22 and 24 alike), each one consumer
-// that the tests run unchanged against Node.js's own fs/promises, on a local directory, and against client.fs, on the
-// stand-in Files.com. A side is { fsys, at(name), seed(name, content), mkdir(name), bytesOf(name) }.
-const positionAndUtf8 = async side => {
-  side.seed('positions.bin', 'abcdef')
-  const handle = await side.fsys.open(side.at('positions.bin'), 'r+')
-  const first = Buffer.alloc(2)
-  const explicit = Buffer.alloc(2)
-  const next = Buffer.alloc(2)
-  const a = await handle.read(first, 0, 2, null)
-  const b = await handle.read(explicit, 0, 2, 4)
-  const c = await handle.read(next, 0, 2, null)
-  const write = await handle.write('é', 8, 'utf8')
-  const remaining = await handle.readFile()
-  await handle.close()
-
-  return {
-    bufferIdentity: a.buffer === first && b.buffer === explicit && c.buffer === next,
-    bytesWritten: write.bytesWritten,
-    counts: [a.bytesRead, b.bytesRead, c.bytesRead],
-    explicit: explicit.toString(),
-    first: first.toString(),
-    next: next.toString(),
-    remainingHex: remaining.toString('hex'),
-    returnedString: write.buffer,
-    wholeHex: side.bytesOf('positions.bin').toString('hex'),
-  }
-}
-
-const closedRead = async side => {
-  side.seed('closed.bin', 'abcdef')
-  const handle = await side.fsys.open(side.at('closed.bin'), 'r+')
-  await handle.close()
-
-  return {
-    error: (await errorOf(() => handle.read(Buffer.alloc(1), 0, 1, 0)))?.code,
-    repeatedCloseError: await errorOf(() => handle.close()),
-  }
-}
-
-const truncateAndVectors = async side => {
-  side.seed('truncate.bin', 'old content')
-  const handle = await side.fsys.open(side.at('truncate.bin'), 'w+')
-  const sizeAtOpen = side.bytesOf('truncate.bin').length
-  const vector = [Buffer.from('ab'), Buffer.from('cd')]
-  const written = await handle.writev(vector)
-  await handle.truncate(6)
-  const readBuffers = [Buffer.alloc(3), Buffer.alloc(3)]
-  const read = await handle.readv(readBuffers, 0)
-  const tail = await handle.readFile()
-  const stat = await handle.stat()
-  await handle.close()
-
-  return {
-    cursorReadHex: tail.toString('hex'),
-    read: read.bytesRead,
-    readVectorIdentity: read.buffers === readBuffers,
-    sizeAtOpen,
-    // Node.js's own Date brand check: native fs's Date comes from Node.js's realm, not the test environment's, so
-    // instanceof Date is false for it under Jest (native-date-realm-proof-r1), though it is a Date.
-    stat: { isDirectory: stat.isDirectory(), isFile: stat.isFile(), mtimeIsDate: types.isDate(stat.mtime), size: stat.size },
-    vectorHex: Buffer.concat(readBuffers).toString('hex'),
-    wholeHex: side.bytesOf('truncate.bin').toString('hex'),
-    writeVectorIdentity: written.buffers === vector,
-    written: written.bytesWritten,
-  }
-}
-
-const directoryReadAndClose = async side => {
-  side.mkdir('directory')
-  side.seed('directory/file.txt', 'file')
-  side.mkdir('directory/folder')
-
-  const dir = await side.fsys.opendir(side.at('directory'), { bufferSize: 1 })
-  const entry1 = await dir.read()
-  const entry2 = await new Promise((resolve, reject) => {
-    dir.read((error, entry) => (error ? reject(error) : resolve(entry)))
-  })
-
-  const eof = await dir.read()
-  await new Promise((resolve, reject) => {
-    dir.close(error => (error ? reject(error) : resolve()))
-  })
-
-  const entries = [entry1, entry2].map(entry => ({
-    isDirectory: entry.isDirectory(),
-    isFile: entry.isFile(),
-    isSymbolicLink: entry.isSymbolicLink(),
-    name: entry.name,
-    parentPathIsGiven: entry.parentPath === side.at('directory'),
-  })).sort((one, other) => one.name.localeCompare(other.name))
-
-  return {
-    closedReadError: (await errorOf(() => dir.read()))?.code,
-    entries,
-    eof,
-    pathIsGiven: dir.path === side.at('directory'),
-    repeatedCloseError: (await errorOf(() => dir.close()))?.code,
-  }
-}
-
-const directoryIteratorEarlyExit = async side => {
-  side.mkdir('early')
-  side.seed('early/file.txt', 'file')
-  side.mkdir('early/folder')
-
-  const dir = await side.fsys.opendir(side.at('early'), { bufferSize: 1 })
-  let seen = 0
-
-  // eslint-disable-next-line no-unreachable-loop
-  for await (const entry of dir) {
-    seen += entry.name ? 1 : 0
-    break
-  }
-
-  return { nextReadError: (await errorOf(() => dir.read()))?.code, seen }
-}
-
-const handleStream = async side => {
-  side.seed('stream.bin', 'abcdef')
-  const handle = await side.fsys.open(side.at('stream.bin'), 'r')
-  const parts = []
-
-  for await (const chunk of handle.createReadStream({ autoClose: false, end: 3, start: 1 })) {
-    parts.push(chunk)
-  }
-
-  const subsequent = Buffer.alloc(1)
-  const afterStream = await handle.read(subsequent, 0, 1, null)
-  const stillOpen = (await handle.read(Buffer.alloc(1), 0, 1, 0)).bytesRead === 1
-  // Node.js 22's own FileHandle has its asyncDispose under the symbol Node.js registers, nodejs.asyncDispose, while
-  // Jest's environment on Node.js 22 has no Symbol.asyncDispose (native-node22-disposal-realm-proof-r1).
-  const asyncDispose = typeof handle[Symbol.asyncDispose ?? Symbol.for('nodejs.asyncDispose')]
-  await handle.close()
-
-  return {
-    asyncDispose,
-    nextRead: subsequent.subarray(0, afterStream.bytesRead).toString(),
-    range: Buffer.concat(parts).toString(),
-    stillOpen,
-  }
-}
-
-// What Node.js 22 and 24 gave for each case (native-filesystem-reference-r1).
-const REFERENCE = [
-  ['position-and-utf8', positionAndUtf8, {
-    bufferIdentity: true,
-    bytesWritten: 2,
-    counts: [2, 2, 2],
-    explicit: 'ef',
-    first: 'ab',
-    next: 'cd',
-    remainingHex: '65660000c3a9',
-    returnedString: 'é',
-    wholeHex: '6162636465660000c3a9',
-  }],
-  ['closed-read', closedRead, { error: 'EBADF', repeatedCloseError: null }],
-  ['truncate-vectors', truncateAndVectors, {
-    cursorReadHex: '0000',
-    read: 6,
-    readVectorIdentity: true,
-    sizeAtOpen: 0,
-    stat: { isDirectory: false, isFile: true, mtimeIsDate: true, size: 6 },
-    vectorHex: '616263640000',
-    wholeHex: '616263640000',
-    writeVectorIdentity: true,
-    written: 4,
-  }],
-  ['directory-read-and-close', directoryReadAndClose, {
-    closedReadError: 'ERR_DIR_CLOSED',
-    entries: [
-      { isDirectory: false, isFile: true, isSymbolicLink: false, name: 'file.txt', parentPathIsGiven: true },
-      { isDirectory: true, isFile: false, isSymbolicLink: false, name: 'folder', parentPathIsGiven: true },
-    ],
-    eof: null,
-    pathIsGiven: true,
-    repeatedCloseError: 'ERR_DIR_CLOSED',
-  }],
-  ['directory-iterator-early-exit', directoryIteratorEarlyExit, { nextReadError: 'ERR_DIR_CLOSED', seen: 1 }],
-  ['handle-stream', handleStream, { asyncDispose: 'function', nextRead: 'a', range: 'bcd', stillOpen: true }],
-]
-
 describe('client.fs', () => {
   let localDirectory
   let stages
@@ -552,26 +371,14 @@ describe('client.fs', () => {
     }
   }
 
-  const remoteSide = (service, name) => {
-    const root = `native/${name}`
-    service.mkdir(root)
-
-    return {
-      at: entry => `${root}/${entry}`,
-      bytesOf: entry => service.bytesOf(`${root}/${entry}`),
-      fsys: clientOf(service).fs,
-      mkdir: entry => service.mkdir(`${root}/${entry}`),
-      seed: (entry, content) => service.put(`${root}/${entry}`, content),
-    }
-  }
-
-  describe.each(REFERENCE)('behaves as Node.js\'s own fs/promises: %s', (name, consumer, reference) => {
-    it('gives what Node.js gives for its own files, and what the native reference recorded', async () => {
+  // The cases of the native reference (test/support/filesystem-parity.cjs), each against Node.js's own fs/promises
+  // on a local directory. The filesystem parity case test.sh runs (test/scenarios/filesystem-parity.cjs) runs the same
+  // consumers against client.fs on the Files.com Mock API Server, including the Unicode case's metadata lookups.
+  describe.each(REFERENCE)('runs the native reference on Node.js\'s own fs/promises: %s', (name, consumer, reference) => {
+    it('gives what the native reference recorded', async () => {
       const native = await consumer(nativeSide(name))
-      const remote = await consumer(remoteSide(remoteFiles(), name))
 
       expect(native).toEqual(reference)
-      expect(remote).toEqual(native)
       expect(stages.every(stage => !fs.existsSync(stage))).toBe(true)
     })
   })
@@ -1299,20 +1106,6 @@ describe('client.fs', () => {
     await client.fs.appendFile('notes.txt', 'NEW', { flag: 'r+', mode: 0o644 })
     expect(service.bytesOf('notes.txt').toString()).toBe('NEW notes')
     expect(stages.every(stage => !fs.existsSync(stage))).toBe(true)
-  })
-
-  it('keeps paths as given: Unicode, spaces and literal percent signs, as strings or as bytes of UTF-8', async () => {
-    const service = remoteFiles()
-    const name = 'résumé/日本 100%.txt'
-    service.put(name, 'unicode')
-    const client = clientOf(service)
-
-    expect(await client.fs.readFile(name, 'utf8')).toBe('unicode')
-    expect(await client.fs.readFile(Buffer.from(name), 'utf8')).toBe('unicode')
-    expect(service.apiRequests().filter(request => request.startsWith('GET /file_actions/metadata/'))).toEqual([
-      `GET /file_actions/metadata/${name}`,
-      `GET /file_actions/metadata/${name}`,
-    ])
   })
 
   it('streams through a handle: a write stream finishes once every chunk has been published, and lines read in order', async () => {

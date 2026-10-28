@@ -123,4 +123,42 @@ for file_scenario in files.owned-binary-roundtrip files.owned-namespace-extended
   fi
 done
 
+# The filesystem parity case, test/scenarios/filesystem-parity.cjs, runs the cases of the native reference
+# (test/support/filesystem-parity.cjs), which the unit tests run against Node.js's own fs/promises, against both
+# Node.js's own fs/promises and this SDK's client.fs on a new server of the same Mock, with the same preset and launcher
+# in Bundler's original environment. client.fs reaches the Mock through Node.js's own fetch, and the cases' files and
+# folders are made, and their bytes read back, by plain requests of the API, apart from the SDK. It is given the Mock's
+# directory, checks that the Mock there was generated from this SDK's Swagger document, and keeps its evidence in a
+# directory of its own under test-results/, with its receipt, javascript-filesystem-parity.json. It has the canonical
+# cases' budgets: 30 s for the server to be ready, 210 s for the case (180 s of work and 30 s more to remove what it
+# created) and 5 s each time a process group is stopped. Its failure, or a run that leaves no run.json or no receipt,
+# ends this script with a nonzero status.
+parity_run_id="javascript-filesystem-parity-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+parity_out="test-results/mock-${parity_run_id}"
+ruby -rbundler -e 'Bundler.with_original_env { exec(RbConfig.ruby, *ARGV) }' -- \
+  "${mock_server}/with-scenario.rb" --scenario api-scenarios-canonical --out "${parity_out}" \
+  --run-id "${parity_run_id}" --schema-sha256 "${schema_sha256}" --startup-timeout 30 --consumer-timeout 210 \
+  --settle-timeout 5 -- "$(command -v node)" "${PWD}/test/scenarios/filesystem-parity.cjs" "${mock_server_dir}"
+parity_status=$?
+
+echo "The filesystem parity case ended with status ${parity_status}; its evidence is in ${PWD}/${parity_out}"
+if [[ -f "${parity_out}/run.json" ]]; then
+  cat "${parity_out}/run.json"
+fi
+if [[ -f "${parity_out}/javascript-filesystem-parity.json" ]]; then
+  cat "${parity_out}/javascript-filesystem-parity.json"
+fi
+if [[ "${parity_status}" -ne 0 && -f "${parity_out}/server.log" ]]; then
+  echo "The last 200 lines of the Mock server's log, ${PWD}/${parity_out}/server.log:"
+  tail -n 200 "${parity_out}/server.log"
+fi
+
+if [[ "${parity_status}" -eq 0 && ( ! -f "${parity_out}/run.json" || ! -f "${parity_out}/javascript-filesystem-parity.json" ) ]]; then
+  echo "The filesystem parity case left no run.json or no javascript-filesystem-parity.json in ${PWD}/${parity_out}"
+  parity_status=1
+fi
+if [[ "${parity_status}" -ne 0 ]]; then
+  exit "${parity_status}"
+fi
+
 exit 0

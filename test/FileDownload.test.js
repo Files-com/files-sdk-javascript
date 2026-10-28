@@ -678,6 +678,46 @@ describe('File downloads', () => {
       ])
     }, LARGE_DEADLINE)
 
+    // Storage at an http: URL, as a local server's may be, giving the file's size, a strong ETag and its ranges: the
+    // file comes through Node.js's own http, exactly, and none of its requests through a download thread, which sends
+    // to https: URLs alone. The threads are made ready first, so that a request given to one would show.
+    it('downloads a large file from an http: URL through Node.js\'s http, sending none of its requests through a download thread', async () => {
+      // eslint-disable-next-line global-require
+      const http = require('http')
+      await withinDeadline(downloadThreads.ready(), 'the download threads', LARGE_DEADLINE)
+      const sentBefore = downloadThreads.stats().sent
+      const opened = trackOpenedFiles()
+      const destination = path.join(directory, 'http-large.bin')
+
+      const storage = http.createServer((request, response) => {
+        const asked = /^bytes=(\d+)-(\d+)$/.exec(request.headers.range ?? '')
+        const headers = { 'Accept-Ranges': 'bytes', ETag: '"h1"' }
+
+        if (asked) {
+          const [start, end] = [Number(asked[1]), Math.min(Number(asked[2]), LARGE.length - 1)]
+          response.writeHead(206, { ...headers, 'Content-Length': end - start + 1, 'Content-Range': `bytes ${start}-${end}/${LARGE.length}` })
+          response.end(LARGE.subarray(start, end + 1))
+        } else {
+          response.writeHead(200, { ...headers, 'Content-Length': LARGE.length })
+          response.end(LARGE)
+        }
+      })
+
+      try {
+        await new Promise(resolve => { storage.listen(0, '127.0.0.1', resolve) })
+        const file = new File({ download_uri: `http://127.0.0.1:${storage.address().port}/large?X-Amz-Signature=${SIGNATURE}` })
+        await withinDeadline(file.downloadToFile(destination), 'the download', LARGE_DEADLINE)
+
+        expect(opened).toEqual([{ closed: true }])
+        expect(fs.readFileSync(destination).equals(LARGE)).toBe(true)
+        expect(downloadThreads.stats().sent).toBe(sentBefore)
+      } finally {
+        storage.closeAllConnections()
+        await new Promise(resolve => { storage.close(resolve) })
+        fs.rmSync(destination, { force: true })
+      }
+    }, 2 * LARGE_DEADLINE)
+
     it.each([
       ['a weak ETag', 'weak'],
       ['no ETag', 'no-etag'],

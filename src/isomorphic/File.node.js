@@ -328,6 +328,16 @@ const isExactRange = (opened, { end, start }, { etag, total }) => {
     && hasIdentityEncoding(opened)
 }
 
+// The protocol of url, a request's URL, such as 'https:'; or null for one that is not a URL, which https.get() then
+// refuses as it always has.
+const protocolOf = url => {
+  try {
+    return new URL(url).protocol
+  } catch {
+    return null
+  }
+}
+
 // Whether agent, or https's global agent when none is given, is Node's own https agent, scheduling requests itself
 // with no limit on its sockets. Only then is a download to disk split, its range requests never waiting behind another,
 // the ordinary response or the caller's other requests; any other agent downloads through the ordinary response alone.
@@ -361,7 +371,8 @@ const diskRequestOptions = agent => {
   return { agent }
 }
 
-// One GET of url through Node.js's https, with requestOptions, and only the headers given, its response logged to log:
+// One GET of url through Node.js's https, or, for an http: URL, its http, with requestOptions, and only the headers
+// given, its response logged to log:
 // its response, once it arrives, as { body, complete(), failure(), headers, status, statusText }, whether it is then
 // used, refused or left for another, and when its request has closed. A failure is kept for whoever reads the response,
 // so one never read cannot become uncaught; a log that throws is the request's failure. Until its response has been
@@ -405,7 +416,10 @@ const httpsExchange = (url, requestOptions, headers, log, timeoutSecs) => {
     }
   }
 
-  const request = https.get(url, { ...requestOptions, headers }, received => {
+  // https.get() is looked up as each request is made, as before; an http: URL, such as a local server's, goes through
+  // http.get() instead, with no option made for https alone (see openRequest()).
+  const transport = protocolOf(url) === 'http:' ? require('http') : https
+  const request = transport.get(url, { ...requestOptions, headers }, received => {
     try {
       logDownloadResponse(log, received)
     } catch (error) {
@@ -1077,9 +1091,11 @@ const run = async (destination, {
     return written
   }
 
-  // Whether a download whose request went through agent, the one chosen for its URL, is split (see
-  // startsHelpersAtOnce()).
-  const splitsAt = agent => openFetch === null && sink.positional && startsHelpersAtOnce(agent)
+  // Whether a download whose request went to target through agent, the one chosen for that URL, is split: only one sent
+  // to an https: URL through such an agent (see startsHelpersAtOnce()). One sent to an http: URL comes through its one
+  // response, resumed as any other is, and so never through a download thread, which sends to https: URLs alone.
+  const splitsAt = (agent, target) => openFetch === null && sink.positional && protocolOf(target) === 'https:'
+    && startsHelpersAtOnce(agent)
 
   // Stops the download, with its first failure: every request it has open, and every wait.
   const stop = error => {
@@ -1333,7 +1349,9 @@ const run = async (destination, {
         agent = agentFor(target)
 
         if (!openFetch) {
-          requestOptions = sink.positional ? diskRequestOptions(agent) : { agent }
+          // The larger socket buffer, which a range also needs to go through a download thread (see threadable()), is
+          // only for a request to an https: URL, a renewed one included.
+          requestOptions = sink.positional && protocolOf(target) === 'https:' ? diskRequestOptions(agent) : { agent }
           logDownloadRequest(log, target, headers, number)
         }
       } catch (error) {
@@ -1920,7 +1938,7 @@ const run = async (destination, {
           version = versionOf(opened)
           progress.setTotal(version ? version.total : declaredBodyLength(opened))
 
-          if (splitsAt(sent.agent) && version && version.total >= 2 * RANGE_BYTES) {
+          if (splitsAt(sent.agent, sent.url) && version && version.total >= 2 * RANGE_BYTES) {
             const probe = await probeSplit(version)
 
             if (probe) {
