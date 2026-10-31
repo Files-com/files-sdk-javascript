@@ -27,7 +27,7 @@ declare class As2Station {
   /** ID of the Workspace associated with this AS2 Station. */
   readonly workspace_id?: number | null
 
-  /** The station's formal AS2 name. */
+  /** The station's formal AS2 name, unique across all Workspaces on the Site. */
   readonly name?: string | null
 
   /** Public URI for sending AS2 message to. */
@@ -90,7 +90,7 @@ declare class As2Station {
   /** ID of the Workspace associated with this AS2 Station. */
   getWorkspaceId(): number | null | undefined
 
-  /** The station's formal AS2 name. */
+  /** The station's formal AS2 name, unique across all Workspaces on the Site. */
   getName(): string | null | undefined
 
   /** Public URI for sending AS2 message to. */
@@ -153,7 +153,7 @@ declare class As2Station {
   /** ID of the Workspace associated with this AS2 Station. */
   setWorkspaceId(value: number): void
 
-  /** The station's formal AS2 name. */
+  /** The station's formal AS2 name, unique across all Workspaces on the Site. */
   setName(value: string): void
 
   /** Public URI for sending AS2 message to. */
@@ -262,7 +262,7 @@ declare namespace As2Station {
     /** ID of the Workspace associated with this AS2 Station. */
     workspace_id?: number | null
 
-    /** The station's formal AS2 name. */
+    /** The station's formal AS2 name, unique across all Workspaces on the Site. */
     name?: string | null
 
     /** Public URI for sending AS2 message to. */
@@ -345,7 +345,7 @@ declare namespace As2Station {
   }
 
   interface CreateParams {
-    /** The station's formal AS2 name. */
+    /** The station's formal AS2 name, unique across all Workspaces on the Site. */
     name: string
 
     /** ID of the Workspace associated with this AS2 Station. */
@@ -374,7 +374,7 @@ declare namespace As2Station {
   }
 
   interface UpdateParams {
-    /** The station's formal AS2 name. */
+    /** The station's formal AS2 name, unique across all Workspaces on the Site. */
     name?: string
 
     /** Public certificate used for message security. */

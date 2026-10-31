@@ -24,7 +24,7 @@
 
 * `id` (int64): Id of the AS2 Station.
 * `workspace_id` (int64): ID of the Workspace associated with this AS2 Station.
-* `name` (string): The station's formal AS2 name.
+* `name` (string): The station's formal AS2 name, unique across all Workspaces on the Site.
 * `uri` (string): Public URI for sending AS2 message to.
 * `domain` (string): The station's AS2 domain name.
 * `hex_public_certificate_serial` (string): Serial of public certificate used for message security in hex format.
@@ -86,7 +86,7 @@ await As2Station.create({
 
 ### Parameters
 
-* `name` (string): Required - The station's formal AS2 name.
+* `name` (string): Required - The station's formal AS2 name, unique across all Workspaces on the Site.
 * `workspace_id` (int64): ID of the Workspace associated with this AS2 Station.
 * `public_certificate` (string): Public certificate used for message security.
 * `private_key` (string): PEM-encoded private key matching public_certificate.
@@ -110,7 +110,7 @@ await as2_station.update({
 ### Parameters
 
 * `id` (int64): Required - As2 Station ID.
-* `name` (string): The station's formal AS2 name.
+* `name` (string): The station's formal AS2 name, unique across all Workspaces on the Site.
 * `public_certificate` (string): Public certificate used for message security.
 * `private_key` (string): PEM-encoded private key matching public_certificate.
 * `private_key_password` (string): Password for the PEM-encoded private key.
