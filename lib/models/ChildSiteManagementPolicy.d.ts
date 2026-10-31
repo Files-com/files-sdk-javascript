@@ -480,6 +480,13 @@ declare namespace ChildSiteManagementPolicy {
      */
     username_display?: 'username_only' | 'full_name_only' | 'full_name_username' | 'full_name_company' | 'full_name_username_company' | null
 
+    /**
+     * Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible,
+     * user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice
+     * modes use the preference or their default.
+     */
+    integration_centric_remote_server_admin_access?: 'always_visible' | 'never_visible' | 'user_choice_default_visible' | 'user_choice_default_personal' | null
+
     /** Session expiry in minutes */
     session_expiry_minutes?: number | null
 

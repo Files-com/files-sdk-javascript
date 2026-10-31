@@ -365,6 +365,13 @@ declare class Site {
   /** Can files be modified? */
   readonly immutable_files_set_at?: Files.DateTimeString | null
 
+  /**
+   * Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible,
+   * user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice modes
+   * use the preference or their default.
+   */
+  readonly integration_centric_remote_server_admin_access?: 'always_visible' | 'never_visible' | 'user_choice_default_visible' | 'user_choice_default_personal' | Files.OtherString | null
+
   /** Include password in emails to new users? */
   readonly include_password_in_welcome_email?: boolean | null
 
@@ -1071,6 +1078,13 @@ declare class Site {
 
   /** Can files be modified? */
   getImmutableFilesSetAt(): Files.DateTimeString | null | undefined
+
+  /**
+   * Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible,
+   * user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice modes
+   * use the preference or their default.
+   */
+  getIntegrationCentricRemoteServerAdminAccess(): 'always_visible' | 'never_visible' | 'user_choice_default_visible' | 'user_choice_default_personal' | Files.OtherString | null | undefined
 
   /** Include password in emails to new users? */
   getIncludePasswordInWelcomeEmail(): boolean | null | undefined
@@ -1796,6 +1810,13 @@ declare namespace Site {
     /** Can files be modified? */
     immutable_files_set_at?: Files.DateTimeString | null
 
+    /**
+     * Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible,
+     * user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice
+     * modes use the preference or their default.
+     */
+    integration_centric_remote_server_admin_access?: 'always_visible' | 'never_visible' | 'user_choice_default_visible' | 'user_choice_default_personal' | Files.OtherString | null
+
     /** Include password in emails to new users? */
     include_password_in_welcome_email?: boolean | null
 
@@ -2336,6 +2357,13 @@ declare namespace Site {
      * `full_name_company`, or `full_name_username_company`.
      */
     username_display?: string
+
+    /**
+     * Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible,
+     * user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice
+     * modes use the preference or their default.
+     */
+    integration_centric_remote_server_admin_access?: string
 
     /** Session expiry in minutes */
     session_expiry_minutes?: number

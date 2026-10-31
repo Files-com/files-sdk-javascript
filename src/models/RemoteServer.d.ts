@@ -135,6 +135,18 @@ declare class RemoteServer {
   /** Remote server type. */
   readonly server_type?: 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com' | Files.OtherString | null
 
+  /**
+   * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default.
+   * Only the owner may change it when the Site policy allows user choice.
+   */
+  readonly site_admin_access?: boolean | null
+
+  /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
+  readonly effective_site_admin_access?: boolean | null
+
+  /** ID of the user who owns this Remote Server, if any. */
+  readonly user_id?: number | null
+
   /** Workspace ID (0 for default workspace) */
   readonly workspace_id?: number | null
 
@@ -330,9 +342,6 @@ declare class RemoteServer {
   /** If true, this remote server supports file versioning. This value is determined automatically by Files.com. */
   readonly supports_versioning?: boolean | null
 
-  /** User ID.  Provide a value of `0` to operate the current session's user. */
-  readonly user_id?: number
-
   /** Password, if needed. */
   readonly password?: string
 
@@ -512,6 +521,18 @@ declare class RemoteServer {
 
   /** Remote server type. */
   getServerType(): 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com' | Files.OtherString | null | undefined
+
+  /**
+   * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default.
+   * Only the owner may change it when the Site policy allows user choice.
+   */
+  getSiteAdminAccess(): boolean | null | undefined
+
+  /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
+  getEffectiveSiteAdminAccess(): boolean | null | undefined
+
+  /** ID of the user who owns this Remote Server, if any. */
+  getUserId(): number | null | undefined
 
   /** Workspace ID (0 for default workspace) */
   getWorkspaceId(): number | null | undefined
@@ -708,9 +729,6 @@ declare class RemoteServer {
   /** If true, this remote server supports file versioning. This value is determined automatically by Files.com. */
   getSupportsVersioning(): boolean | null | undefined
 
-  /** User ID.  Provide a value of `0` to operate the current session's user. */
-  getUserId(): number | undefined
-
   /** Password, if needed. */
   getPassword(): string | undefined
 
@@ -890,6 +908,18 @@ declare class RemoteServer {
 
   /** Remote server type. */
   setServerType(value: 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com'): void
+
+  /**
+   * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default.
+   * Only the owner may change it when the Site policy allows user choice.
+   */
+  setSiteAdminAccess(value: boolean): void
+
+  /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
+  setEffectiveSiteAdminAccess(value: boolean): void
+
+  /** ID of the user who owns this Remote Server, if any. */
+  setUserId(value: number): void
 
   /** Workspace ID (0 for default workspace) */
   setWorkspaceId(value: number): void
@@ -1085,9 +1115,6 @@ declare class RemoteServer {
 
   /** If true, this remote server supports file versioning. This value is determined automatically by Files.com. */
   setSupportsVersioning(value: boolean): void
-
-  /** User ID.  Provide a value of `0` to operate the current session's user. */
-  setUserId(value: number): void
 
   /** Password, if needed. */
   setPassword(value: string): void
@@ -1329,6 +1356,18 @@ declare namespace RemoteServer {
     /** Remote server type. */
     server_type?: 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com' | Files.OtherString | null
 
+    /**
+     * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's
+     * default. Only the owner may change it when the Site policy allows user choice.
+     */
+    site_admin_access?: boolean | null
+
+    /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
+    effective_site_admin_access?: boolean | null
+
+    /** ID of the user who owns this Remote Server, if any. */
+    user_id?: number | null
+
     /** Workspace ID (0 for default workspace) */
     workspace_id?: number | null
 
@@ -1524,9 +1563,6 @@ declare namespace RemoteServer {
 
     /** If true, this remote server supports file versioning. This value is determined automatically by Files.com. */
     supports_versioning?: boolean | null
-
-    /** User ID.  Provide a value of `0` to operate the current session's user. */
-    user_id?: number
 
     /** Password, if needed. */
     password?: string
@@ -1938,6 +1974,12 @@ declare namespace RemoteServer {
     /** Remote server type. */
     server_type?: 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com'
 
+    /**
+     * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's
+     * default. Only the owner may change it when the Site policy allows user choice.
+     */
+    site_admin_access?: boolean
+
     /** SharePoint: Microsoft Entra application client ID for app-only authentication. */
     sharepoint_client_id?: string
 
@@ -2254,6 +2296,12 @@ declare namespace RemoteServer {
 
     /** Remote server type. */
     server_type?: 'ftp' | 'sftp' | 's3' | 'google_cloud_storage' | 'webdav' | 'wasabi' | 'backblaze_b2' | 'one_drive' | 'box' | 'dropbox' | 'google_drive' | 'azure' | 'sharepoint' | 's3_compatible' | 'azure_files' | 'files_agent' | 'filebase' | 'cloudflare' | 'linode' | 'files_com'
+
+    /**
+     * Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's
+     * default. Only the owner may change it when the Site policy allows user choice.
+     */
+    site_admin_access?: boolean
 
     /** SharePoint: Microsoft Entra application client ID for app-only authentication. */
     sharepoint_client_id?: string
