@@ -26,7 +26,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 
 // The SHA-256 of the whole Swagger document this SDK was generated from.
-const SWAGGER_SHA256 = '9928f876df74de2a1ecb047ee907b295644085588b42b0190e2d81037f0dba3b'
+const SWAGGER_SHA256 = '8953466ec4d464e126ab8a839eb683cf53581b8f1306d4a2767343334f4c3d8e'
 
 // What the generator found that schema lacks of this test's contract, or has changed: none for a schema with all of
 // it. With any, the test refuses to run (refuseIncompleteContract), and the values below it could not find are null.

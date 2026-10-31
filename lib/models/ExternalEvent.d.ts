@@ -24,6 +24,9 @@ declare class ExternalEvent {
   /** Event ID */
   readonly id?: number | null
 
+  /** Workspace ID */
+  readonly workspace_id?: number | null
+
   /** Type of event being recorded. */
   readonly event_type?: 'ldap_sync' | 'remote_server_sync' | 'lockout' | 'ldap_login' | 'saml_login' | 'client_log' | 'pending_work' | 'siem_http_destination' | Files.OtherString | null
 
@@ -42,6 +45,9 @@ declare class ExternalEvent {
   /** Event ID */
   getId(): number | null | undefined
 
+  /** Workspace ID */
+  getWorkspaceId(): number | null | undefined
+
   /** Type of event being recorded. */
   getEventType(): 'ldap_sync' | 'remote_server_sync' | 'lockout' | 'ldap_login' | 'saml_login' | 'client_log' | 'pending_work' | 'siem_http_destination' | Files.OtherString | null | undefined
 
@@ -59,6 +65,9 @@ declare class ExternalEvent {
 
   /** Event ID */
   setId(value: number): void
+
+  /** Workspace ID */
+  setWorkspaceId(value: number): void
 
   /** Type of event being recorded. */
   setEventType(value: 'ldap_sync' | 'remote_server_sync' | 'lockout' | 'ldap_login' | 'saml_login' | 'client_log' | 'pending_work' | 'siem_http_destination' | Files.OtherString): void
@@ -114,6 +123,9 @@ declare namespace ExternalEvent {
     /** Event ID */
     id?: number | null
 
+    /** Workspace ID */
+    workspace_id?: number | null
+
     /** Type of event being recorded. */
     event_type?: 'ldap_sync' | 'remote_server_sync' | 'lockout' | 'ldap_login' | 'saml_login' | 'client_log' | 'pending_work' | 'siem_http_destination' | Files.OtherString | null
 
@@ -144,13 +156,13 @@ declare namespace ExternalEvent {
 
     /**
      * If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`,
-     * `status` or `event_type`.
+     * `status`, `event_type` or `workspace_id`.
      */
     sort_by?: Files.JsonObject
 
     /**
-     * If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`
-     * and `status`. Valid field combinations are `[ status, created_at ]`.
+     * If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`,
+     * `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`.
      */
     filter?: Files.JsonObject
 
