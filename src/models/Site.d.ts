@@ -391,63 +391,6 @@ declare class Site {
   /** Site default language */
   readonly language?: string | null
 
-  /** Base DN for looking up users in LDAP server */
-  readonly ldap_base_dn?: string | null
-
-  /** Domain name that will be appended to usernames */
-  readonly ldap_domain?: string | null
-
-  /** Main LDAP setting: is LDAP enabled? */
-  readonly ldap_enabled?: boolean | null
-
-  /** Should we sync groups from LDAP server? */
-  readonly ldap_group_action?: string | null
-
-  /** Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. */
-  readonly ldap_group_exclusion?: string | null
-
-  /** Comma or newline separated list of group names (with optional wildcards) to include when syncing. */
-  readonly ldap_group_inclusion?: string | null
-
-  /** LDAP host */
-  readonly ldap_host?: string | null
-
-  /** LDAP backup host */
-  readonly ldap_host_2?: string | null
-
-  /** LDAP backup host */
-  readonly ldap_host_3?: string | null
-
-  /** LDAP port */
-  readonly ldap_port?: number | null
-
-  /** Use secure LDAP? */
-  readonly ldap_secure?: boolean | null
-
-  /**
-   * How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname;
-   * `allow_any` disables certificate validation.
-   */
-  readonly ldap_server_certificate?: string | null
-
-  /** LDAP type */
-  readonly ldap_type?: string | null
-
-  /** Should we sync users from LDAP server? */
-  readonly ldap_user_action?: string | null
-
-  /**
-   * Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups
-   * will be added or synced.
-   */
-  readonly ldap_user_include_groups?: string | null
-
-  /** Username for signing in to LDAP server. */
-  readonly ldap_username?: string | null
-
-  /** LDAP username field */
-  readonly ldap_username_field?: string | null
-
   /** Login help text */
   readonly login_help_text?: string | null
 
@@ -1117,63 +1060,6 @@ declare class Site {
 
   /** Site default language */
   getLanguage(): string | null | undefined
-
-  /** Base DN for looking up users in LDAP server */
-  getLdapBaseDn(): string | null | undefined
-
-  /** Domain name that will be appended to usernames */
-  getLdapDomain(): string | null | undefined
-
-  /** Main LDAP setting: is LDAP enabled? */
-  getLdapEnabled(): boolean | null | undefined
-
-  /** Should we sync groups from LDAP server? */
-  getLdapGroupAction(): string | null | undefined
-
-  /** Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. */
-  getLdapGroupExclusion(): string | null | undefined
-
-  /** Comma or newline separated list of group names (with optional wildcards) to include when syncing. */
-  getLdapGroupInclusion(): string | null | undefined
-
-  /** LDAP host */
-  getLdapHost(): string | null | undefined
-
-  /** LDAP backup host */
-  getLdapHost2(): string | null | undefined
-
-  /** LDAP backup host */
-  getLdapHost3(): string | null | undefined
-
-  /** LDAP port */
-  getLdapPort(): number | null | undefined
-
-  /** Use secure LDAP? */
-  getLdapSecure(): boolean | null | undefined
-
-  /**
-   * How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname;
-   * `allow_any` disables certificate validation.
-   */
-  getLdapServerCertificate(): string | null | undefined
-
-  /** LDAP type */
-  getLdapType(): string | null | undefined
-
-  /** Should we sync users from LDAP server? */
-  getLdapUserAction(): string | null | undefined
-
-  /**
-   * Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups
-   * will be added or synced.
-   */
-  getLdapUserIncludeGroups(): string | null | undefined
-
-  /** Username for signing in to LDAP server. */
-  getLdapUsername(): string | null | undefined
-
-  /** LDAP username field */
-  getLdapUsernameField(): string | null | undefined
 
   /** Login help text */
   getLoginHelpText(): string | null | undefined
@@ -1859,63 +1745,6 @@ declare namespace Site {
 
     /** Site default language */
     language?: string | null
-
-    /** Base DN for looking up users in LDAP server */
-    ldap_base_dn?: string | null
-
-    /** Domain name that will be appended to usernames */
-    ldap_domain?: string | null
-
-    /** Main LDAP setting: is LDAP enabled? */
-    ldap_enabled?: boolean | null
-
-    /** Should we sync groups from LDAP server? */
-    ldap_group_action?: string | null
-
-    /** Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. */
-    ldap_group_exclusion?: string | null
-
-    /** Comma or newline separated list of group names (with optional wildcards) to include when syncing. */
-    ldap_group_inclusion?: string | null
-
-    /** LDAP host */
-    ldap_host?: string | null
-
-    /** LDAP backup host */
-    ldap_host_2?: string | null
-
-    /** LDAP backup host */
-    ldap_host_3?: string | null
-
-    /** LDAP port */
-    ldap_port?: number | null
-
-    /** Use secure LDAP? */
-    ldap_secure?: boolean | null
-
-    /**
-     * How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname;
-     * `allow_any` disables certificate validation.
-     */
-    ldap_server_certificate?: string | null
-
-    /** LDAP type */
-    ldap_type?: string | null
-
-    /** Should we sync users from LDAP server? */
-    ldap_user_action?: string | null
-
-    /**
-     * Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these
-     * groups will be added or synced.
-     */
-    ldap_user_include_groups?: string | null
-
-    /** Username for signing in to LDAP server. */
-    ldap_username?: string | null
-
-    /** LDAP username field */
-    ldap_username_field?: string | null
 
     /** Login help text */
     login_help_text?: string | null
@@ -2803,63 +2632,6 @@ declare namespace Site {
      */
     smtp_ssl?: string
 
-    /** Main LDAP setting: is LDAP enabled? */
-    ldap_enabled?: boolean
-
-    /** LDAP type */
-    ldap_type?: string
-
-    /** LDAP host */
-    ldap_host?: string
-
-    /** LDAP backup host */
-    ldap_host_2?: string
-
-    /** LDAP backup host */
-    ldap_host_3?: string
-
-    /** LDAP port */
-    ldap_port?: number
-
-    /** Use secure LDAP? */
-    ldap_secure?: boolean
-
-    /**
-     * How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname;
-     * `allow_any` disables certificate validation.
-     */
-    ldap_server_certificate?: string
-
-    /** Username for signing in to LDAP server. */
-    ldap_username?: string
-
-    /** LDAP username field */
-    ldap_username_field?: string
-
-    /** Domain name that will be appended to usernames */
-    ldap_domain?: string
-
-    /** Should we sync users from LDAP server? */
-    ldap_user_action?: string
-
-    /** Should we sync groups from LDAP server? */
-    ldap_group_action?: string
-
-    /**
-     * Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these
-     * groups will be added or synced.
-     */
-    ldap_user_include_groups?: string
-
-    /** Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. */
-    ldap_group_exclusion?: string
-
-    /** Comma or newline separated list of group names (with optional wildcards) to include when syncing. */
-    ldap_group_inclusion?: string
-
-    /** Base DN for looking up users in LDAP server */
-    ldap_base_dn?: string
-
     /**
      * Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email
      * Automations in every Workspace on this site?
@@ -2906,12 +2678,6 @@ declare namespace Site {
 
     /** If set to true, we will begin the process of disabling 2FA on this site. */
     disable_2fa_with_delay?: boolean
-
-    /** New LDAP password. */
-    ldap_password_change?: string
-
-    /** Confirm new LDAP password. */
-    ldap_password_change_confirmation?: string
 
     /**
      * If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the

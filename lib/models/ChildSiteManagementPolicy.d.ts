@@ -903,69 +903,6 @@ declare namespace ChildSiteManagementPolicy {
      */
     smtp_ssl?: 'if_available' | 'require' | 'require_implicit' | 'never' | null
 
-    /** Main LDAP setting: is LDAP enabled? */
-    ldap_enabled?: boolean | null
-
-    /** LDAP type */
-    ldap_type?: string | null
-
-    /** LDAP host */
-    ldap_host?: string | null
-
-    /** LDAP backup host */
-    ldap_host_2?: string | null
-
-    /** LDAP backup host */
-    ldap_host_3?: string | null
-
-    /** LDAP port */
-    ldap_port?: number | null
-
-    /** Use secure LDAP? */
-    ldap_secure?: boolean | null
-
-    /**
-     * How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname;
-     * `allow_any` disables certificate validation.
-     */
-    ldap_server_certificate?: string | null
-
-    /** Username for signing in to LDAP server. */
-    ldap_username?: string | null
-
-    /** LDAP username field */
-    ldap_username_field?: string | null
-
-    /** Domain name that will be appended to usernames */
-    ldap_domain?: string | null
-
-    /** Should we sync users from LDAP server? */
-    ldap_user_action?: string | null
-
-    /** Should we sync groups from LDAP server? */
-    ldap_group_action?: string | null
-
-    /**
-     * Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these
-     * groups will be added or synced.
-     */
-    ldap_user_include_groups?: string | null
-
-    /** Comma or newline separated list of group names (with optional wildcards) to exclude when syncing. */
-    ldap_group_exclusion?: string | null
-
-    /** Comma or newline separated list of group names (with optional wildcards) to include when syncing. */
-    ldap_group_inclusion?: string | null
-
-    /** Base DN for looking up users in LDAP server */
-    ldap_base_dn?: string | null
-
-    /** Setting: Ldap password change */
-    ldap_password_change?: string | null
-
-    /** Setting: Ldap password change confirmation */
-    ldap_password_change_confirmation?: string | null
-
     /**
      * Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email
      * Automations in every Workspace on this site?

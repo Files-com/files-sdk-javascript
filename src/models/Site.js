@@ -373,57 +373,6 @@ class Site {
   // string # Site default language
   getLanguage = () => this.attributes.language
 
-  // string # Base DN for looking up users in LDAP server
-  getLdapBaseDn = () => this.attributes.ldap_base_dn
-
-  // string # Domain name that will be appended to usernames
-  getLdapDomain = () => this.attributes.ldap_domain
-
-  // boolean # Main LDAP setting: is LDAP enabled?
-  getLdapEnabled = () => this.attributes.ldap_enabled
-
-  // string # Should we sync groups from LDAP server?
-  getLdapGroupAction = () => this.attributes.ldap_group_action
-
-  // string # Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
-  getLdapGroupExclusion = () => this.attributes.ldap_group_exclusion
-
-  // string # Comma or newline separated list of group names (with optional wildcards) to include when syncing.
-  getLdapGroupInclusion = () => this.attributes.ldap_group_inclusion
-
-  // string # LDAP host
-  getLdapHost = () => this.attributes.ldap_host
-
-  // string # LDAP backup host
-  getLdapHost2 = () => this.attributes.ldap_host_2
-
-  // string # LDAP backup host
-  getLdapHost3 = () => this.attributes.ldap_host_3
-
-  // int64 # LDAP port
-  getLdapPort = () => this.attributes.ldap_port
-
-  // boolean # Use secure LDAP?
-  getLdapSecure = () => this.attributes.ldap_secure
-
-  // string # How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
-  getLdapServerCertificate = () => this.attributes.ldap_server_certificate
-
-  // string # LDAP type
-  getLdapType = () => this.attributes.ldap_type
-
-  // string # Should we sync users from LDAP server?
-  getLdapUserAction = () => this.attributes.ldap_user_action
-
-  // string # Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
-  getLdapUserIncludeGroups = () => this.attributes.ldap_user_include_groups
-
-  // string # Username for signing in to LDAP server.
-  getLdapUsername = () => this.attributes.ldap_username
-
-  // string # LDAP username field
-  getLdapUsernameField = () => this.attributes.ldap_username_field
-
   // string # Login help text
   getLoginHelpText = () => this.attributes.login_help_text
 
@@ -851,23 +800,6 @@ class Site {
   //   smtp_username - string - SMTP server username
   //   smtp_port - int64 - SMTP server port
   //   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
-  //   ldap_enabled - boolean - Main LDAP setting: is LDAP enabled?
-  //   ldap_type - string - LDAP type
-  //   ldap_host - string - LDAP host
-  //   ldap_host_2 - string - LDAP backup host
-  //   ldap_host_3 - string - LDAP backup host
-  //   ldap_port - int64 - LDAP port
-  //   ldap_secure - boolean - Use secure LDAP?
-  //   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
-  //   ldap_username - string - Username for signing in to LDAP server.
-  //   ldap_username_field - string - LDAP username field
-  //   ldap_domain - string - Domain name that will be appended to usernames
-  //   ldap_user_action - string - Should we sync users from LDAP server?
-  //   ldap_group_action - string - Should we sync groups from LDAP server?
-  //   ldap_user_include_groups - string - Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
-  //   ldap_group_exclusion - string - Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
-  //   ldap_group_inclusion - string - Comma or newline separated list of group names (with optional wildcards) to include when syncing.
-  //   ldap_base_dn - string - Base DN for looking up users in LDAP server
   //   uploads_via_email_authentication - boolean - Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
   //   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
   //   icon16_file - file
@@ -885,8 +817,6 @@ class Site {
   //   login_page_background_image_file - file
   //   login_page_background_image_delete - boolean - If true, will delete the file stored in login_page_background_image
   //   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
-  //   ldap_password_change - string - New LDAP password.
-  //   ldap_password_change_confirmation - string - Confirm new LDAP password.
   //   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
   //   smtp_password - string - Password for SMTP server.
   static update = async (params = {}, options = {}) => {
@@ -1526,74 +1456,6 @@ class Site {
       throw new errors.InvalidParameterError(`Bad parameter: smtp_ssl must be of type String, received ${getType(params.smtp_ssl)}`)
     }
 
-    if (isArray(params.ldap_enabled) || isObject(params.ldap_enabled)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_enabled must be of type Boolean, received ${getType(params.ldap_enabled)}`)
-    }
-
-    if (params.ldap_type !== undefined && params.ldap_type !== null && !isString(params.ldap_type)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_type must be of type String, received ${getType(params.ldap_type)}`)
-    }
-
-    if (params.ldap_host !== undefined && params.ldap_host !== null && !isString(params.ldap_host)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_host must be of type String, received ${getType(params.ldap_host)}`)
-    }
-
-    if (params.ldap_host_2 !== undefined && params.ldap_host_2 !== null && !isString(params.ldap_host_2)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_host_2 must be of type String, received ${getType(params.ldap_host_2)}`)
-    }
-
-    if (params.ldap_host_3 !== undefined && params.ldap_host_3 !== null && !isString(params.ldap_host_3)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_host_3 must be of type String, received ${getType(params.ldap_host_3)}`)
-    }
-
-    if (params.ldap_port !== undefined && params.ldap_port !== null && !isInt(params.ldap_port)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_port must be of type Int, received ${getType(params.ldap_port)}`)
-    }
-
-    if (isArray(params.ldap_secure) || isObject(params.ldap_secure)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_secure must be of type Boolean, received ${getType(params.ldap_secure)}`)
-    }
-
-    if (params.ldap_server_certificate !== undefined && params.ldap_server_certificate !== null && !isString(params.ldap_server_certificate)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_server_certificate must be of type String, received ${getType(params.ldap_server_certificate)}`)
-    }
-
-    if (params.ldap_username !== undefined && params.ldap_username !== null && !isString(params.ldap_username)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_username must be of type String, received ${getType(params.ldap_username)}`)
-    }
-
-    if (params.ldap_username_field !== undefined && params.ldap_username_field !== null && !isString(params.ldap_username_field)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_username_field must be of type String, received ${getType(params.ldap_username_field)}`)
-    }
-
-    if (params.ldap_domain !== undefined && params.ldap_domain !== null && !isString(params.ldap_domain)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_domain must be of type String, received ${getType(params.ldap_domain)}`)
-    }
-
-    if (params.ldap_user_action !== undefined && params.ldap_user_action !== null && !isString(params.ldap_user_action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_user_action must be of type String, received ${getType(params.ldap_user_action)}`)
-    }
-
-    if (params.ldap_group_action !== undefined && params.ldap_group_action !== null && !isString(params.ldap_group_action)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_action must be of type String, received ${getType(params.ldap_group_action)}`)
-    }
-
-    if (params.ldap_user_include_groups !== undefined && params.ldap_user_include_groups !== null && !isString(params.ldap_user_include_groups)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_user_include_groups must be of type String, received ${getType(params.ldap_user_include_groups)}`)
-    }
-
-    if (params.ldap_group_exclusion !== undefined && params.ldap_group_exclusion !== null && !isString(params.ldap_group_exclusion)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_exclusion must be of type String, received ${getType(params.ldap_group_exclusion)}`)
-    }
-
-    if (params.ldap_group_inclusion !== undefined && params.ldap_group_inclusion !== null && !isString(params.ldap_group_inclusion)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_group_inclusion must be of type String, received ${getType(params.ldap_group_inclusion)}`)
-    }
-
-    if (params.ldap_base_dn !== undefined && params.ldap_base_dn !== null && !isString(params.ldap_base_dn)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_base_dn must be of type String, received ${getType(params.ldap_base_dn)}`)
-    }
-
     if (isArray(params.uploads_via_email_authentication) || isObject(params.uploads_via_email_authentication)) {
       throw new errors.InvalidParameterError(`Bad parameter: uploads_via_email_authentication must be of type Boolean, received ${getType(params.uploads_via_email_authentication)}`)
     }
@@ -1628,14 +1490,6 @@ class Site {
 
     if (isArray(params.disable_2fa_with_delay) || isObject(params.disable_2fa_with_delay)) {
       throw new errors.InvalidParameterError(`Bad parameter: disable_2fa_with_delay must be of type Boolean, received ${getType(params.disable_2fa_with_delay)}`)
-    }
-
-    if (params.ldap_password_change !== undefined && params.ldap_password_change !== null && !isString(params.ldap_password_change)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change must be of type String, received ${getType(params.ldap_password_change)}`)
-    }
-
-    if (params.ldap_password_change_confirmation !== undefined && params.ldap_password_change_confirmation !== null && !isString(params.ldap_password_change_confirmation)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ldap_password_change_confirmation must be of type String, received ${getType(params.ldap_password_change_confirmation)}`)
     }
 
     if (isArray(params.redirect_old_subdomain) || isObject(params.redirect_old_subdomain)) {
