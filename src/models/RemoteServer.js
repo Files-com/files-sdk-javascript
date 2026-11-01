@@ -274,7 +274,7 @@ class RemoteServer {
     exposeAttributes(this, ['effective_site_admin_access'])
   }
 
-  // int64 # ID of the user who owns this Remote Server, if any.
+  // int64 # ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and Workspace Administrators have no owner.
   getUserId = () => this.attributes.user_id
 
   setUserId = value => {

@@ -35,7 +35,7 @@ const { inspect, isDeepStrictEqual } = require('util')
 const DEFINITION_SHA256 = '5d9b8eff0ef0724a68a458db77dc85784bb7d24436f104b98c2a2fe67086bbe0'
 const DEFINITION_FORMAT = 'files-api-scenarios'
 const DEFINITION_FORMAT_VERSION = 1
-const SWAGGER_SHA256 = '0dc4a6e353ea3edf6cac65c1a2b9c87d0e2ec79cbf2f983b0e91a1c0f0afd22a'
+const SWAGGER_SHA256 = '94948428b7255f3ff8e97a7c88d8177dcc8e6057dcc2870dc4a7148658e89108'
 
 // The cases of the native reference, by id and in its order: the run fails unless the reference holds exactly these.
 const CASE_IDS = [

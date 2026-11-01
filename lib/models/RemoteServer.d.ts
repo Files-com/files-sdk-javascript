@@ -144,7 +144,10 @@ declare class RemoteServer {
   /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
   readonly effective_site_admin_access?: boolean | null
 
-  /** ID of the user who owns this Remote Server, if any. */
+  /**
+   * ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and
+   * Workspace Administrators have no owner.
+   */
   readonly user_id?: number | null
 
   /** Workspace ID (0 for default workspace) */
@@ -531,7 +534,10 @@ declare class RemoteServer {
   /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
   getEffectiveSiteAdminAccess(): boolean | null | undefined
 
-  /** ID of the user who owns this Remote Server, if any. */
+  /**
+   * ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and
+   * Workspace Administrators have no owner.
+   */
   getUserId(): number | null | undefined
 
   /** Workspace ID (0 for default workspace) */
@@ -918,7 +924,10 @@ declare class RemoteServer {
   /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
   setEffectiveSiteAdminAccess(value: boolean): void
 
-  /** ID of the user who owns this Remote Server, if any. */
+  /**
+   * ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and
+   * Workspace Administrators have no owner.
+   */
   setUserId(value: number): void
 
   /** Workspace ID (0 for default workspace) */
@@ -1367,7 +1376,10 @@ declare namespace RemoteServer {
     /** Whether Site and Workspace Administrators can access this Remote Server under the current Site policy. */
     effective_site_admin_access?: boolean | null
 
-    /** ID of the user who owns this Remote Server, if any. */
+    /**
+     * ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and
+     * Workspace Administrators have no owner.
+     */
     user_id?: number | null
 
     /** Workspace ID (0 for default workspace) */
