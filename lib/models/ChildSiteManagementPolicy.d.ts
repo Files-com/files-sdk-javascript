@@ -490,6 +490,13 @@ declare namespace ChildSiteManagementPolicy {
     /** Session expiry in minutes */
     session_expiry_minutes?: number | null
 
+    /**
+     * Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed.
+     * Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site
+     * administrators can re-enable it.
+     */
+    legacy_pairing_enabled?: boolean | null
+
     /** Is SSL required?  Disabling this is insecure. */
     ssl_required?: boolean | null
 

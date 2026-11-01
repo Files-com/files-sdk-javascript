@@ -243,6 +243,19 @@ declare class Site {
   /** Use legacy checksums mode? */
   readonly legacy_checksums_mode?: boolean | null
 
+  /**
+   * Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed.
+   * Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site
+   * administrators can re-enable it.
+   */
+  readonly legacy_pairing_enabled?: boolean | null
+
+  /**
+   * Time of the last completed legacy app pairing across all workspaces. Failed or incomplete attempts do not count.
+   * Read-only; empty until a pairing completes after tracking begins.
+   */
+  readonly last_pairing_at?: Files.DateTimeString | null
+
   /** If true, we will migrate all remote server syncs to the new Sync model. */
   readonly migrate_remote_server_sync_to_sync?: boolean | null
 
@@ -956,6 +969,19 @@ declare class Site {
 
   /** Use legacy checksums mode? */
   getLegacyChecksumsMode(): boolean | null | undefined
+
+  /**
+   * Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed.
+   * Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site
+   * administrators can re-enable it.
+   */
+  getLegacyPairingEnabled(): boolean | null | undefined
+
+  /**
+   * Time of the last completed legacy app pairing across all workspaces. Failed or incomplete attempts do not count.
+   * Read-only; empty until a pairing completes after tracking begins.
+   */
+  getLastPairingAt(): Files.DateTimeString | null | undefined
 
   /** If true, we will migrate all remote server syncs to the new Sync model. */
   getMigrateRemoteServerSyncToSync(): boolean | null | undefined
@@ -1686,6 +1712,19 @@ declare namespace Site {
     /** Use legacy checksums mode? */
     legacy_checksums_mode?: boolean | null
 
+    /**
+     * Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed.
+     * Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site
+     * administrators can re-enable it.
+     */
+    legacy_pairing_enabled?: boolean | null
+
+    /**
+     * Time of the last completed legacy app pairing across all workspaces. Failed or incomplete attempts do not count.
+     * Read-only; empty until a pairing completes after tracking begins.
+     */
+    last_pairing_at?: Files.DateTimeString | null
+
     /** If true, we will migrate all remote server syncs to the new Sync model. */
     migrate_remote_server_sync_to_sync?: boolean | null
 
@@ -2365,6 +2404,13 @@ declare namespace Site {
 
     /** Session expiry in minutes */
     session_expiry_minutes?: number
+
+    /**
+     * Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed.
+     * Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site
+     * administrators can re-enable it.
+     */
+    legacy_pairing_enabled?: boolean
 
     /** Is SSL required?  Disabling this is insecure. */
     ssl_required?: boolean
