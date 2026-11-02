@@ -572,6 +572,21 @@ await Site.getUsage()
 
 ---
 
+## Extend the Automations conversion window by up to six weeks beyond its originally announced end date
+
+```
+await Site.extendAutomationMigrationWindow({
+  'end_date': "end_date",
+})
+```
+
+
+### Parameters
+
+* `end_date` (string): Required - New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+
+---
+
 ## Update Site Settings
 
 ```

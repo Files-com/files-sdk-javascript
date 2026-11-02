@@ -639,6 +639,20 @@ class Site {
   }
 
   // Parameters:
+  //   end_date (required) - string - New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+  static extendAutomationMigrationWindow = async (params = {}, options = {}) => {
+    if (!params.end_date) {
+      throw new errors.MissingParameterError('Parameter missing: end_date')
+    }
+
+    if (params.end_date !== undefined && params.end_date !== null && !isString(params.end_date)) {
+      throw new errors.InvalidParameterError(`Bad parameter: end_date must be of type String, received ${getType(params.end_date)}`)
+    }
+
+    await Api.sendRequest('/site/extend_automation_migration_window', 'POST', params, options)
+  }
+
+  // Parameters:
   //   name - string - Site name
   //   subdomain - string - Site subdomain
   //   domain - string - Custom domain

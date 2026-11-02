@@ -1372,6 +1372,9 @@ declare class Site {
   /** Get the most recent usage snapshot (usage data for billing purposes) for a Site */
   static getUsage(options?: Files.RequestOptions): Promise<UsageSnapshot>
 
+  /** Extend the Automations conversion window by up to six weeks beyond its originally announced end date */
+  static extendAutomationMigrationWindow(params: Site.ExtendAutomationMigrationWindowParams, options?: Files.RequestOptions): Promise<void>
+
   /** Update Site Settings */
   static update(params?: Site.UpdateParams, options?: Files.RequestOptions): Promise<Site>
 
@@ -2052,6 +2055,14 @@ declare namespace Site {
 
     /** Does FTP user Windows emulation mode? */
     windows_mode_ftp?: boolean | null
+  }
+
+  interface ExtendAutomationMigrationWindowParams {
+    /**
+     * New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or
+     * Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+     */
+    end_date: string
   }
 
   interface UpdateParams {

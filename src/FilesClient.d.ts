@@ -487,7 +487,7 @@ declare class FilesClient {
   readonly siteSubdomainRedirects: Pick<typeof SiteSubdomainRedirect, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `Site`'s static methods, made with this client's settings. */
-  readonly sites: Pick<typeof Site, 'get' | 'getUsage' | 'update'>
+  readonly sites: Pick<typeof Site, 'extendAutomationMigrationWindow' | 'get' | 'getUsage' | 'update'>
 
   /** `Snapshot`'s static methods, made with this client's settings. */
   readonly snapshots: Pick<typeof Snapshot, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>

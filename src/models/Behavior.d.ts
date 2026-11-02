@@ -939,7 +939,8 @@ declare namespace Behavior {
 
       /**
        * Template for creating submission subfolders. Can use the uploader's name, email address, ip, company,
-       * `strftime` directives, and any custom form data.
+       * `strftime` directives, and any custom form data. Email submissions also support {{subject}} for the email
+       * subject.
        */
       path_template?: string
 

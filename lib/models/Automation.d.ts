@@ -45,6 +45,9 @@ declare class Automation {
   /** Automation type */
   readonly automation?: 'create_folder' | 'delete_file' | 'copy_file' | 'move_file' | 'as2_send' | 'run_sync' | 'import_file' | 'v2' | Files.OtherString | null
 
+  /** ID of this v1 Automation's converted v2 copy, when present. */
+  readonly converted_automation_id?: number | null
+
   /** Indicates if the automation has been deleted. */
   readonly deleted?: boolean | null
 
@@ -108,6 +111,12 @@ declare class Automation {
 
   /** Name for this automation. */
   readonly name?: string | null
+
+  /**
+   * ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and
+   * revert the conversion.
+   */
+  readonly original_automation_id?: number | null
 
   /**
    * If true, existing files will be overwritten with new files on Move/Copy automations. Note: by default files will
@@ -235,6 +244,9 @@ declare class Automation {
   /** Automation type */
   getAutomation(): 'create_folder' | 'delete_file' | 'copy_file' | 'move_file' | 'as2_send' | 'run_sync' | 'import_file' | 'v2' | Files.OtherString | null | undefined
 
+  /** ID of this v1 Automation's converted v2 copy, when present. */
+  getConvertedAutomationId(): number | null | undefined
+
   /** Indicates if the automation has been deleted. */
   getDeleted(): boolean | null | undefined
 
@@ -298,6 +310,12 @@ declare class Automation {
 
   /** Name for this automation. */
   getName(): string | null | undefined
+
+  /**
+   * ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and
+   * revert the conversion.
+   */
+  getOriginalAutomationId(): number | null | undefined
 
   /**
    * If true, existing files will be overwritten with new files on Move/Copy automations. Note: by default files will
@@ -425,6 +443,9 @@ declare class Automation {
   /** Automation type */
   setAutomation(value: 'create_folder' | 'delete_file' | 'copy_file' | 'move_file' | 'as2_send' | 'run_sync' | 'import_file' | 'v2'): void
 
+  /** ID of this v1 Automation's converted v2 copy, when present. */
+  setConvertedAutomationId(value: number): void
+
   /** Indicates if the automation has been deleted. */
   setDeleted(value: boolean): void
 
@@ -488,6 +509,12 @@ declare class Automation {
 
   /** Name for this automation. */
   setName(value: string): void
+
+  /**
+   * ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and
+   * revert the conversion.
+   */
+  setOriginalAutomationId(value: number): void
 
   /**
    * If true, existing files will be overwritten with new files on Move/Copy automations. Note: by default files will
@@ -673,6 +700,9 @@ declare namespace Automation {
     /** Automation type */
     automation?: 'create_folder' | 'delete_file' | 'copy_file' | 'move_file' | 'as2_send' | 'run_sync' | 'import_file' | 'v2' | Files.OtherString | null
 
+    /** ID of this v1 Automation's converted v2 copy, when present. */
+    converted_automation_id?: number | null
+
     /** Indicates if the automation has been deleted. */
     deleted?: boolean | null
 
@@ -736,6 +766,12 @@ declare namespace Automation {
 
     /** Name for this automation. */
     name?: string | null
+
+    /**
+     * ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and
+     * revert the conversion.
+     */
+    original_automation_id?: number | null
 
     /**
      * If true, existing files will be overwritten with new files on Move/Copy automations. Note: by default files will

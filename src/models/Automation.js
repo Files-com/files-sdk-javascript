@@ -98,6 +98,14 @@ class Automation {
     exposeAttributes(this, ['automation'])
   }
 
+  // int64 # ID of this v1 Automation's converted v2 copy, when present.
+  getConvertedAutomationId = () => this.attributes.converted_automation_id
+
+  setConvertedAutomationId = value => {
+    this.attributes.converted_automation_id = value
+    exposeAttributes(this, ['converted_automation_id'])
+  }
+
   // boolean # Indicates if the automation has been deleted.
   getDeleted = () => this.attributes.deleted
 
@@ -232,6 +240,14 @@ class Automation {
   setName = value => {
     this.attributes.name = value
     exposeAttributes(this, ['name'])
+  }
+
+  // int64 # ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and revert the conversion.
+  getOriginalAutomationId = () => this.attributes.original_automation_id
+
+  setOriginalAutomationId = value => {
+    this.attributes.original_automation_id = value
+    exposeAttributes(this, ['original_automation_id'])
   }
 
   // boolean # If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten on Copy automations if they appear to be the same file size as the newly incoming file.  Use the `always_overwrite_size_matching_files` option in conjunction with `overwrite_files` to override this behavior and overwrite files no matter what.

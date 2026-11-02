@@ -1942,6 +1942,8 @@ class FilesClient {
       const Site = require('./models/Site.js').default
 
       return {
+        extendAutomationMigrationWindow: (params = {}, options = {}) =>
+          Site.extendAutomationMigrationWindow(params, withClient(this, options)),
         get: (options = {}) =>
           Site.get(withClient(this, options)),
         getUsage: (options = {}) =>
