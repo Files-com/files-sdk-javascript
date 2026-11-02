@@ -723,12 +723,6 @@ declare namespace ChildSiteManagementPolicy {
     /** Sftp Host Key Type */
     sftp_host_key_type?: 'default' | 'exavault' | 'custom' | 'smartfile' | null
 
-    /** Id of the currently selected custom SFTP Host Key */
-    active_sftp_host_key_id?: number | null
-
-    /** Ids of the selected custom SFTP Host Keys */
-    active_sftp_host_key_ids?: number[] | null
-
     /**
      * If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups
      * will be honored. Make sure that your current user is a member of a group with API permission when changing this
