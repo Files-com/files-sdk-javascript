@@ -187,6 +187,7 @@ await File.zip({
 
 * `paths` (array(string)): Required - Paths to include in the ZIP.
 * `destination` (string): Required - Destination file path for the ZIP.
+* `archive_format` (string): Archive format to create.
 * `overwrite` (boolean): Overwrite existing file in the destination?
 
 ---

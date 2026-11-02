@@ -995,18 +995,23 @@ declare namespace Behavior {
        */
       disable_web_upload?: boolean
 
-      /** If set, the plain-text body of email submissions will be saved with this name. */
+      /**
+       * If set, the plain-text body of email submissions will be saved with this filename template. Supports the same
+       * placeholders and strftime directives as path_template.
+       */
       capture_email_body_filename?: string
 
       /**
-       * If set, the HTML body of email submissions will be saved with this name when the message contains HTML. Can be
-       * enabled alongside body and raw email capture.
+       * If set, the HTML body of email submissions will be saved with this filename template when the message contains
+       * HTML. Supports the same placeholders and strftime directives as path_template. Can be enabled alongside body
+       * and raw email capture.
        */
       capture_email_body_html_filename?: string
 
       /**
-       * If set, the complete received email, including headers, body, and attachments, will be saved with this name
-       * alongside extracted attachments.
+       * If set, the complete received email, including headers, body, and attachments, will be saved with this filename
+       * template alongside extracted attachments. Supports the same placeholders and strftime directives as
+       * path_template.
        */
       capture_email_raw_filename?: string
 

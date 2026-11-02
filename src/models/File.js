@@ -1925,6 +1925,7 @@ class File {
   // Parameters:
   //   paths (required) - array(string) - Paths to include in the ZIP.
   //   destination (required) - string - Destination file path for the ZIP.
+  //   archive_format - string - Archive format to create.
   //   overwrite - boolean - Overwrite existing file in the destination?
   static zip = async (params = {}, options = {}) => {
     if (!params.paths) {
@@ -1941,6 +1942,10 @@ class File {
 
     if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.archive_format !== undefined && params.archive_format !== null && !isString(params.archive_format)) {
+      throw new errors.InvalidParameterError(`Bad parameter: archive_format must be of type String, received ${getType(params.archive_format)}`)
     }
 
     if (isArray(params.overwrite) || isObject(params.overwrite)) {

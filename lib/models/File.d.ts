@@ -982,6 +982,9 @@ declare namespace File {
     /** Destination file path for the ZIP. */
     destination: string
 
+    /** Archive format to create. */
+    archive_format?: 'zip' | 'tar' | 'tar.gz' | 'tgz'
+
     /** Overwrite existing file in the destination? */
     overwrite?: boolean
   }
