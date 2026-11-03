@@ -1914,6 +1914,9 @@ declare namespace Automation {
         /** @defaultValue false */
         overwrite_files?: boolean
 
+        /** @defaultValue 'zip' */
+        archive_format?: 'zip' | 'tar' | 'tar.gz' | 'tgz'
+
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError
       }
