@@ -669,6 +669,14 @@ class User {
     exposeAttributes(this, ['skip_welcome_screen'])
   }
 
+  // string # FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
+  getFtpTlsSessionReuseRequired = () => this.attributes.ftp_tls_session_reuse_required
+
+  setFtpTlsSessionReuseRequired = value => {
+    this.attributes.ftp_tls_session_reuse_required = value
+    exposeAttributes(this, ['ftp_tls_session_reuse_required'])
+  }
+
   // string # SSL required setting
   getSslRequired = () => this.attributes.ssl_required
 
@@ -997,6 +1005,7 @@ class User {
   //   site_admin - boolean - Is the user an administrator for this site?
   //   skip_welcome_screen - boolean - Skip Welcome page in the UI?
   //   ssl_required - string - SSL required setting
+  //   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
   //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -1256,6 +1265,10 @@ class User {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(params.ssl_required)}`)
     }
 
+    if (params.ftp_tls_session_reuse_required !== undefined && params.ftp_tls_session_reuse_required !== null && !isString(params.ftp_tls_session_reuse_required)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ftp_tls_session_reuse_required must be of type String, received ${getType(params.ftp_tls_session_reuse_required)}`)
+    }
+
     if (params.sso_strategy_id !== undefined && params.sso_strategy_id !== null && !isInt(params.sso_strategy_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: sso_strategy_id must be of type Int, received ${getType(params.sso_strategy_id)}`)
     }
@@ -1501,6 +1514,7 @@ class User {
   //   site_admin - boolean - Is the user an administrator for this site?
   //   skip_welcome_screen - boolean - Skip Welcome page in the UI?
   //   ssl_required - string - SSL required setting
+  //   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
   //   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
   //   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
   //   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -1745,6 +1759,10 @@ class User {
 
     if (params.ssl_required !== undefined && params.ssl_required !== null && !isString(params.ssl_required)) {
       throw new errors.InvalidParameterError(`Bad parameter: ssl_required must be of type String, received ${getType(params.ssl_required)}`)
+    }
+
+    if (params.ftp_tls_session_reuse_required !== undefined && params.ftp_tls_session_reuse_required !== null && !isString(params.ftp_tls_session_reuse_required)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ftp_tls_session_reuse_required must be of type String, received ${getType(params.ftp_tls_session_reuse_required)}`)
     }
 
     if (params.sso_strategy_id !== undefined && params.sso_strategy_id !== null && !isInt(params.sso_strategy_id)) {

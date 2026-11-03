@@ -81,6 +81,9 @@ declare class Site {
   /** Allow the site-wide allowed IP restriction to be overriden on a per-user-basis? */
   readonly allow_user_level_allowed_ip_override?: boolean | null
 
+  /** Allow per-user overrides of the FTP TLS session reuse requirement? */
+  readonly allow_user_level_ftp_tls_session_reuse_override?: boolean | null
+
   /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
   readonly allow_user_level_ssl_override?: boolean | null
 
@@ -618,6 +621,11 @@ declare class Site {
   /** Allow snapshot share links creation */
   readonly snapshot_sharing_enabled?: boolean | null
 
+  /**
+   * Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
+   */
+  readonly ftp_tls_session_reuse_required?: boolean | null
+
   /** Is SSL required?  Disabling this is insecure. */
   readonly ssl_required?: boolean | null
 
@@ -750,6 +758,9 @@ declare class Site {
 
   /** Allow the site-wide allowed IP restriction to be overriden on a per-user-basis? */
   getAllowUserLevelAllowedIpOverride(): boolean | null | undefined
+
+  /** Allow per-user overrides of the FTP TLS session reuse requirement? */
+  getAllowUserLevelFtpTlsSessionReuseOverride(): boolean | null | undefined
 
   /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
   getAllowUserLevelSslOverride(): boolean | null | undefined
@@ -1288,6 +1299,11 @@ declare class Site {
   /** Allow snapshot share links creation */
   getSnapshotSharingEnabled(): boolean | null | undefined
 
+  /**
+   * Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
+   */
+  getFtpTlsSessionReuseRequired(): boolean | null | undefined
+
   /** Is SSL required?  Disabling this is insecure. */
   getSslRequired(): boolean | null | undefined
 
@@ -1438,6 +1454,9 @@ declare namespace Site {
 
     /** Allow the site-wide allowed IP restriction to be overriden on a per-user-basis? */
     allow_user_level_allowed_ip_override?: boolean | null
+
+    /** Allow per-user overrides of the FTP TLS session reuse requirement? */
+    allow_user_level_ftp_tls_session_reuse_override?: boolean | null
 
     /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
     allow_user_level_ssl_override?: boolean | null
@@ -1978,6 +1997,12 @@ declare namespace Site {
     /** Allow snapshot share links creation */
     snapshot_sharing_enabled?: boolean | null
 
+    /**
+     * Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all
+     * workspaces.
+     */
+    ftp_tls_session_reuse_required?: boolean | null
+
     /** Is SSL required?  Disabling this is insecure. */
     ssl_required?: boolean | null
 
@@ -2258,6 +2283,12 @@ declare namespace Site {
     ssl_required?: boolean
 
     /**
+     * Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all
+     * workspaces.
+     */
+    ftp_tls_session_reuse_required?: boolean
+
+    /**
      * If true, we will allow weak and known insecure ciphers to be used for SFTP connections. Enabling this setting
      * severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
      */
@@ -2306,6 +2337,9 @@ declare namespace Site {
 
     /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
     allow_user_level_ssl_override?: boolean
+
+    /** Allow per-user overrides of the FTP TLS session reuse requirement? */
+    allow_user_level_ftp_tls_session_reuse_override?: boolean
 
     /**
      * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their

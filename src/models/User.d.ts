@@ -271,6 +271,9 @@ declare class User {
   /** Skip Welcome page in the UI? */
   readonly skip_welcome_screen?: boolean | null
 
+  /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+  readonly ftp_tls_session_reuse_required?: 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null
+
   /** SSL required setting */
   readonly ssl_required?: 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null
 
@@ -619,6 +622,9 @@ declare class User {
   /** Skip Welcome page in the UI? */
   getSkipWelcomeScreen(): boolean | null | undefined
 
+  /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+  getFtpTlsSessionReuseRequired(): 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null | undefined
+
   /** SSL required setting */
   getSslRequired(): 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null | undefined
 
@@ -963,6 +969,9 @@ declare class User {
 
   /** Skip Welcome page in the UI? */
   setSkipWelcomeScreen(value: boolean): void
+
+  /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+  setFtpTlsSessionReuseRequired(value: 'use_system_setting' | 'always_require' | 'never_require'): void
 
   /** SSL required setting */
   setSslRequired(value: 'use_system_setting' | 'always_require' | 'never_require'): void
@@ -1367,6 +1376,9 @@ declare namespace User {
     /** Skip Welcome page in the UI? */
     skip_welcome_screen?: boolean | null
 
+    /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+    ftp_tls_session_reuse_required?: 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null
+
     /** SSL required setting */
     ssl_required?: 'use_system_setting' | 'always_require' | 'never_require' | Files.OtherString | null
 
@@ -1742,6 +1754,9 @@ declare namespace User {
     /** SSL required setting */
     ssl_required?: 'use_system_setting' | 'always_require' | 'never_require'
 
+    /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+    ftp_tls_session_reuse_required?: 'use_system_setting' | 'always_require' | 'never_require'
+
     /** SSO (Single Sign On) strategy ID for the user, if applicable. */
     sso_strategy_id?: number
 
@@ -1980,6 +1995,9 @@ declare namespace User {
 
     /** SSL required setting */
     ssl_required?: 'use_system_setting' | 'always_require' | 'never_require'
+
+    /** FTP TLS session reuse requirement: use_system_setting, always_require, or never_require */
+    ftp_tls_session_reuse_required?: 'use_system_setting' | 'always_require' | 'never_require'
 
     /** SSO (Single Sign On) strategy ID for the user, if applicable. */
     sso_strategy_id?: number

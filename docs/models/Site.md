@@ -30,6 +30,7 @@
   "allow_bundle_names": true,
   "allow_user_level_2fa_override": true,
   "allow_user_level_allowed_ip_override": true,
+  "allow_user_level_ftp_tls_session_reuse_override": true,
   "allow_user_level_ssl_override": true,
   "allowed_countries": "US,DE",
   "allowed_ips": "example",
@@ -197,6 +198,7 @@
     "home_path": "example",
     "sftp_insecure_ciphers": false,
     "site_id": 1,
+    "ftp_tls_session_reuse_required": true,
     "ssl_required": true,
     "timeout_at": "2000-01-01T01:00:00Z",
     "trusted": true,
@@ -242,6 +244,7 @@
   "smtp_username": "mail",
   "session_expiry_minutes": 360,
   "snapshot_sharing_enabled": true,
+  "ftp_tls_session_reuse_required": true,
   "ssl_required": true,
   "subdomain": "mysite",
   "switch_to_plan_date": "2000-01-01T01:00:00Z",
@@ -329,6 +332,7 @@
     "workspace_id": 1,
     "default_workspace_id": 1,
     "skip_welcome_screen": true,
+    "ftp_tls_session_reuse_required": "use_system_setting",
     "ssl_required": "always_require",
     "sso_strategy_id": 1,
     "externally_managed": true,
@@ -378,6 +382,7 @@
 * `allow_bundle_names` (boolean): Are manual Bundle names allowed?
 * `allow_user_level_2fa_override` (boolean): Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
 * `allow_user_level_allowed_ip_override` (boolean): Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
+* `allow_user_level_ftp_tls_session_reuse_override` (boolean): Allow per-user overrides of the FTP TLS session reuse requirement?
 * `allow_user_level_ssl_override` (boolean): Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
 * `allowed_countries` (string): Comma separated list of allowed Country codes
 * `allowed_ips` (string): List of allowed IP addresses
@@ -527,6 +532,7 @@
 * `smtp_username` (string): SMTP server username
 * `session_expiry_minutes` (int64): Session expiry in minutes
 * `snapshot_sharing_enabled` (boolean): Allow snapshot share links creation
+* `ftp_tls_session_reuse_required` (boolean): Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
 * `subdomain` (string): Site subdomain
 * `switch_to_plan_date` (date-time): If switching plans, when does the new plan take effect?
@@ -645,6 +651,7 @@ await Site.update({
   'session_expiry_minutes': 1,
   'legacy_pairing_enabled': false,
   'ssl_required': false,
+  'ftp_tls_session_reuse_required': false,
   'sftp_insecure_ciphers': false,
   'sftp_insecure_diffie_hellman': false,
   'disable_files_certificate_generation': false,
@@ -659,6 +666,7 @@ await Site.update({
   'allow_user_level_2fa_override': false,
   'allow_user_level_allowed_ip_override': false,
   'allow_user_level_ssl_override': false,
+  'allow_user_level_ftp_tls_session_reuse_override': false,
   'enforce_parent_site_user_ip_restrictions': false,
   'disallowed_countries': "US,DE",
   'days_to_retain_backups': 1,
@@ -823,6 +831,7 @@ await Site.update({
 * `session_expiry_minutes` (int64): Session expiry in minutes
 * `legacy_pairing_enabled` (boolean): Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed. Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site administrators can re-enable it.
 * `ssl_required` (boolean): Is SSL required?  Disabling this is insecure.
+* `ftp_tls_session_reuse_required` (boolean): Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
 * `sftp_insecure_ciphers` (boolean): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` (boolean): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `disable_files_certificate_generation` (boolean): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
@@ -837,6 +846,7 @@ await Site.update({
 * `allow_user_level_2fa_override` (boolean): Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
 * `allow_user_level_allowed_ip_override` (boolean): Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
 * `allow_user_level_ssl_override` (boolean): Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
+* `allow_user_level_ftp_tls_session_reuse_override` (boolean): Allow per-user overrides of the FTP TLS session reuse requirement?
 * `enforce_parent_site_user_ip_restrictions` (boolean): Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing IP restrictions. Applies to all Workspaces. Defaults to false.
 * `disallowed_countries` (string): Comma separated list of disallowed Country codes
 * `days_to_retain_backups` (int64): Number of days to keep deleted files

@@ -499,6 +499,12 @@ declare namespace ChildSiteManagementPolicy {
     ssl_required?: boolean | null
 
     /**
+     * Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all
+     * workspaces.
+     */
+    ftp_tls_session_reuse_required?: boolean | null
+
+    /**
      * If true, we will allow weak and known insecure ciphers to be used for SFTP connections. Enabling this setting
      * severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
      */
@@ -544,6 +550,9 @@ declare namespace ChildSiteManagementPolicy {
 
     /** Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis? */
     allow_user_level_ssl_override?: boolean | null
+
+    /** Allow per-user overrides of the FTP TLS session reuse requirement? */
+    allow_user_level_ftp_tls_session_reuse_override?: boolean | null
 
     /**
      * Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their
