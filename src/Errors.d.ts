@@ -715,6 +715,9 @@ export declare class ProcessingFailure_UpdatesNotAllowedForRemotesError extends 
 /** Duplicate Share Recipient */
 export declare class RateLimited_DuplicateShareRecipientError extends RateLimitedError {}
 
+/** Files Native Storage Overloaded */
+export declare class RateLimited_FilesNativeStorageOverloadedError extends RateLimitedError {}
+
 /** Reauthentication Rate Limited */
 export declare class RateLimited_ReauthenticationRateLimitedError extends RateLimitedError {}
 

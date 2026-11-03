@@ -238,6 +238,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_TwoFactorAuthenticationUnsubscribedRecipientError
 ### ProcessingFailure_UpdatesNotAllowedForRemotesError
 ### RateLimited_DuplicateShareRecipientError
+### RateLimited_FilesNativeStorageOverloadedError
 ### RateLimited_ReauthenticationRateLimitedError
 ### RateLimited_TooManyConcurrentLoginsError
 ### RateLimited_TooManyConcurrentRequestsError

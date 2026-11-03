@@ -1177,6 +1177,7 @@ Error
 |     `ProcessingFailure_TwoFactorAuthenticationUnsubscribedRecipientError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_UpdatesNotAllowedForRemotesError`|  `ProcessingFailureError` |
 |     `RateLimited_DuplicateShareRecipientError`|  `RateLimitedError` |
+|     `RateLimited_FilesNativeStorageOverloadedError`|  `RateLimitedError` |
 |     `RateLimited_ReauthenticationRateLimitedError`|  `RateLimitedError` |
 |     `RateLimited_TooManyConcurrentLoginsError`|  `RateLimitedError` |
 |     `RateLimited_TooManyConcurrentRequestsError`|  `RateLimitedError` |
