@@ -2166,6 +2166,9 @@ declare namespace Automation {
          */
         destination?: Automation.Definition.TemplateString
 
+        /** @defaultValue false */
+        overwrite_files?: boolean
+
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError
       }

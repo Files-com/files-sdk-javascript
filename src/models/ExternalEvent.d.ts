@@ -154,13 +154,14 @@ declare namespace ExternalEvent {
 
     /**
      * If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`,
-     * `status`, `event_type` or `workspace_id`.
+     * `status` or `event_type`.
      */
     sort_by?: Files.JsonObject
 
     /**
      * If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`,
-     * `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`.
+     * `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`, `[ workspace_id, created_at
+     * ]`, `[ workspace_id, status ]` or `[ workspace_id, status, created_at ]`.
      */
     filter?: Files.JsonObject
 
