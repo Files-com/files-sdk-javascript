@@ -387,12 +387,12 @@ await User.create({
 
 ---
 
-## Unlock user who has been locked out due to failed logins
+## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
 const user = await User.find(id)
 
-await user.unlock()
+await user.user2faReset()
 ```
 
 ### Parameters
@@ -417,12 +417,12 @@ await user.resendWelcomeEmail()
 
 ---
 
-## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+## Unlock user who has been locked out due to failed logins
 
 ```
 const user = await User.find(id)
 
-await user.user2faReset()
+await user.unlock()
 ```
 
 ### Parameters

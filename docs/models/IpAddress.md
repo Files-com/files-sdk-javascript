@@ -34,10 +34,10 @@ await IpAddress.list()
 
 ---
 
-## List all possible public SmartFile IP addresses
+## List all possible public IP addresses
 
 ```
-await IpAddress.getSmartfileReserved()
+await IpAddress.getReserved()
 ```
 
 
@@ -62,10 +62,10 @@ await IpAddress.getExavaultReserved()
 
 ---
 
-## List all possible public IP addresses
+## List all possible public SmartFile IP addresses
 
 ```
-await IpAddress.getReserved()
+await IpAddress.getSmartfileReserved()
 ```
 
 

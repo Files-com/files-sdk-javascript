@@ -111,14 +111,14 @@ declare class ExpectationIncident {
   /** Last update time. */
   getUpdatedAt(): Files.DateTimeString | null | undefined
 
-  /** Resolve an expectation incident */
-  resolve(params?: Files.NoParams): Promise<ExpectationIncident>
+  /** Acknowledge an expectation incident */
+  acknowledge(params?: Files.NoParams): Promise<ExpectationIncident>
 
   /** Snooze an expectation incident until a specified time */
   snooze(params?: ExpectationIncident.SnoozeParams): Promise<ExpectationIncident>
 
-  /** Acknowledge an expectation incident */
-  acknowledge(params?: Files.NoParams): Promise<ExpectationIncident>
+  /** Resolve an expectation incident */
+  resolve(params?: Files.NoParams): Promise<ExpectationIncident>
 
   /** List Expectation Incidents */
   static list(params?: ExpectationIncident.ListParams, options?: Files.RequestOptions): Promise<ExpectationIncident[]>

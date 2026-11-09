@@ -45,7 +45,7 @@ const { Readable, Writable } = require('stream')
 const DEFINITION_SHA256 = '5d9b8eff0ef0724a68a458db77dc85784bb7d24436f104b98c2a2fe67086bbe0'
 const DEFINITION_FORMAT = 'files-api-scenarios'
 const DEFINITION_FORMAT_VERSION = 1
-const SWAGGER_SHA256 = 'f040333f9327973a6b3cbb054a8b647fce135783563f2445dcf46bfdeac9e344'
+const SWAGGER_SHA256 = 'abd072f3f58f4c65b3e2d640ff27fdb8a9fa8d561159e2b86fd5058ca0415b72'
 
 // The backend the Mock is: positions bound to another are omitted.
 const BACKEND = 'simulator'

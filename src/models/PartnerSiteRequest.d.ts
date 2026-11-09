@@ -123,11 +123,11 @@ declare class PartnerSiteRequest {
   /** Create Partner Site Request */
   static create(params: PartnerSiteRequest.CreateParams, options?: Files.RequestOptions): Promise<PartnerSiteRequest>
 
-  /** Reject partner site request */
-  static reject(params: PartnerSiteRequest.RejectParams, options?: Files.RequestOptions): Promise<void>
-
   /** Approve partner site request */
   static approve(params: PartnerSiteRequest.ApproveParams, options?: Files.RequestOptions): Promise<void>
+
+  /** Reject partner site request */
+  static reject(params: PartnerSiteRequest.RejectParams, options?: Files.RequestOptions): Promise<void>
 }
 
 declare namespace PartnerSiteRequest {
@@ -196,11 +196,6 @@ declare namespace PartnerSiteRequest {
     guest_site_url: string
   }
 
-  interface RejectParams {
-    /** Pairing key for the partner site request */
-    pairing_key: string
-  }
-
   interface ApproveParams {
     /** Pairing key for the partner site request */
     pairing_key: string
@@ -211,6 +206,11 @@ declare namespace PartnerSiteRequest {
      * site is created.
      */
     partner_id?: number
+  }
+
+  interface RejectParams {
+    /** Pairing key for the partner site request */
+    pairing_key: string
   }
 }
 

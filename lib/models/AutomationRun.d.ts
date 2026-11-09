@@ -184,11 +184,11 @@ declare class AutomationRun {
   /** Link to status messages log file. */
   getStatusMessagesUrl(): string | null | undefined
 
-  /** Cancel Automation Run */
-  cancel(params?: Files.NoParams): Promise<AutomationRun>
-
   /** Re-run Automation from Node */
   rerun(params?: AutomationRun.RerunParams): Promise<AutomationRun>
+
+  /** Cancel Automation Run */
+  cancel(params?: Files.NoParams): Promise<AutomationRun>
 
   /** List Automation Runs */
   static list(params: AutomationRun.ListParams, options?: Files.RequestOptions): Promise<AutomationRun[]>

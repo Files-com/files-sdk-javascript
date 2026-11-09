@@ -201,14 +201,14 @@ declare class CustomDomain {
   /** Alias of `find()`. */
   static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<CustomDomain>
 
+  /** Create Custom Domain */
+  static create(params: CustomDomain.CreateParams, options?: Files.RequestOptions): Promise<CustomDomain>
+
   /**
    * Allocate dedicated IP addresses to this Custom Domain
    * @param id - Custom Domain ID.
    */
   static createAllocateIp(id: number, params: CustomDomain.CreateAllocateIpParams, options?: Files.RequestOptions): Promise<CustomDomain>
-
-  /** Create Custom Domain */
-  static create(params: CustomDomain.CreateParams, options?: Files.RequestOptions): Promise<CustomDomain>
 }
 
 declare namespace CustomDomain {
@@ -288,11 +288,6 @@ declare namespace CustomDomain {
     filter?: Files.JsonObject
   }
 
-  interface CreateAllocateIpParams {
-    /** Number of dedicated IP addresses to allocate. */
-    count: 1 | 2
-  }
-
   interface CreateParams {
     /** Allow all workspaces to use this default-workspace Custom Domain. */
     available_to_all_workspaces?: boolean
@@ -318,6 +313,11 @@ declare namespace CustomDomain {
 
     /** Customer-owned domain name. */
     domain: string
+  }
+
+  interface CreateAllocateIpParams {
+    /** Number of dedicated IP addresses to allocate. */
+    count: 1 | 2
   }
 
   interface UpdateParams {

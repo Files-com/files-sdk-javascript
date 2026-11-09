@@ -382,11 +382,11 @@ declare class Sync {
   /** The latest run of this sync */
   setLatestSyncRun(value: SyncRun.Attributes): void
 
-  /** Dry Run Sync */
-  dryRun(params?: Files.NoParams): Promise<void>
-
   /** Manually Run Sync */
   manualRun(params?: Files.NoParams): Promise<void>
+
+  /** Dry Run Sync */
+  dryRun(params?: Files.NoParams): Promise<void>
 
   /** Update Sync */
   update(params?: Sync.UpdateParams): Promise<this>

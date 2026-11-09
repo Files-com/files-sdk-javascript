@@ -530,29 +530,29 @@ declare class File {
   /** List the contents of a ZIP file */
   zipListContents(params?: Files.NoParams): Promise<ZipListEntry[]>
 
+  /** Extract a ZIP file to a destination folder */
+  unzip(params?: File.UnzipParams): Promise<FileAction>
+
+  /** Encrypt a file with GPG and save it to a destination path */
+  gpgEncrypt(params?: File.GpgEncryptParams): Promise<FileAction>
+
+  /** Decrypt a GPG-encrypted file and save it to a destination path */
+  gpgDecrypt(params?: File.GpgDecryptParams): Promise<FileAction>
+
+  /** Transform a file and save the output to a destination path */
+  transform(params?: File.TransformParams): Promise<FileAction>
+
+  /** Move File/Folder */
+  move(params?: File.MoveParams): Promise<FileAction>
+
+  /** Copy File/Folder */
+  copy(params?: File.CopyParams): Promise<FileAction>
+
   /**
    * Delete File/Folder and return its File Action. A pending or processing deletion continues in the background after
    * this returns; check its File Migration for completion. Waiting for the File Migration does not cancel the deletion
    */
   beginDelete(params?: File.BeginDeleteParams): Promise<FileAction>
-
-  /** Copy File/Folder */
-  copy(params?: File.CopyParams): Promise<FileAction>
-
-  /** Move File/Folder */
-  move(params?: File.MoveParams): Promise<FileAction>
-
-  /** Transform a file and save the output to a destination path */
-  transform(params?: File.TransformParams): Promise<FileAction>
-
-  /** Decrypt a GPG-encrypted file and save it to a destination path */
-  gpgDecrypt(params?: File.GpgDecryptParams): Promise<FileAction>
-
-  /** Encrypt a file with GPG and save it to a destination path */
-  gpgEncrypt(params?: File.GpgEncryptParams): Promise<FileAction>
-
-  /** Extract a ZIP file to a destination folder */
-  unzip(params?: File.UnzipParams): Promise<FileAction>
 
   /** Begin File Upload */
   beginUpload(params?: File.BeginUploadParams): Promise<FileUploadPart[]>
@@ -866,33 +866,68 @@ declare namespace File {
     with_priority_color?: boolean
   }
 
-  interface BeginDeleteParams {
-    /** If true, will recursively delete folders.  Otherwise, will error on non-empty folders. */
-    recursive?: boolean
-  }
+  interface ZipParams {
+    /** Paths to include in the ZIP. */
+    paths: string[]
 
-  interface CopyParams {
-    /** Required: when not given, this object's `destination` is used. Copy destination path. */
-    destination?: string
+    /** Destination file path for the ZIP. */
+    destination: string
 
-    /**
-     * If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to
-     * the destination folder tree?
-     */
-    copy_behaviors?: boolean
+    /** Archive format to create. */
+    archive_format?: 'zip' | 'tar' | 'tar.gz' | 'tgz'
 
-    /** Copy structure only? */
-    structure?: boolean
-
-    /** Overwrite existing file(s) in the destination? */
+    /** Overwrite existing file in the destination? */
     overwrite?: boolean
   }
 
-  interface MoveParams {
-    /** Required: when not given, this object's `destination` is used. Move destination path. */
+  interface UnzipParams {
+    /** Required: when not given, this object's `destination` is used. Destination folder path for extracted files. */
     destination?: string
 
-    /** Overwrite existing file(s) in the destination? */
+    /** Optional single entry filename to extract. */
+    filename?: string
+
+    /** Overwrite existing files in the destination? */
+    overwrite?: boolean
+  }
+
+  interface GpgEncryptParams {
+    /** Required: when not given, this object's `destination` is used. Destination file path for the encrypted file. */
+    destination?: string
+
+    /** GPG Key IDs to encrypt with. */
+    gpg_key_ids?: number[]
+
+    /** Partner ID whose GPG keys should be used for encryption. */
+    gpg_key_partner_id?: number
+
+    /** Optional GPG Key ID to sign with. */
+    signing_key_id?: number
+
+    /** Output ASCII-armored encrypted data. */
+    armor?: boolean
+
+    /** Overwrite existing file in the destination? */
+    overwrite?: boolean
+  }
+
+  interface GpgDecryptParams {
+    /** Required: when not given, this object's `destination` is used. Destination file path for the decrypted file. */
+    destination?: string
+
+    /** GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used. */
+    gpg_key_ids?: number[]
+
+    /** Partner ID whose GPG keys should be used for decryption. */
+    gpg_key_partner_id?: number
+
+    /** Use every accessible private GPG key in the source workspace for decryption. */
+    use_all_private_keys?: boolean
+
+    /** Ignore errors from the MDC (modification detection code) check. */
+    ignore_mdc_error?: boolean
+
+    /** Overwrite existing file in the destination? */
     overwrite?: boolean
   }
 
@@ -924,69 +959,34 @@ declare namespace File {
     overwrite?: boolean
   }
 
-  interface GpgDecryptParams {
-    /** Required: when not given, this object's `destination` is used. Destination file path for the decrypted file. */
+  interface MoveParams {
+    /** Required: when not given, this object's `destination` is used. Move destination path. */
     destination?: string
 
-    /** GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used. */
-    gpg_key_ids?: number[]
-
-    /** Partner ID whose GPG keys should be used for decryption. */
-    gpg_key_partner_id?: number
-
-    /** Use every accessible private GPG key in the source workspace for decryption. */
-    use_all_private_keys?: boolean
-
-    /** Ignore errors from the MDC (modification detection code) check. */
-    ignore_mdc_error?: boolean
-
-    /** Overwrite existing file in the destination? */
+    /** Overwrite existing file(s) in the destination? */
     overwrite?: boolean
   }
 
-  interface GpgEncryptParams {
-    /** Required: when not given, this object's `destination` is used. Destination file path for the encrypted file. */
+  interface CopyParams {
+    /** Required: when not given, this object's `destination` is used. Copy destination path. */
     destination?: string
 
-    /** GPG Key IDs to encrypt with. */
-    gpg_key_ids?: number[]
+    /**
+     * If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to
+     * the destination folder tree?
+     */
+    copy_behaviors?: boolean
 
-    /** Partner ID whose GPG keys should be used for encryption. */
-    gpg_key_partner_id?: number
+    /** Copy structure only? */
+    structure?: boolean
 
-    /** Optional GPG Key ID to sign with. */
-    signing_key_id?: number
-
-    /** Output ASCII-armored encrypted data. */
-    armor?: boolean
-
-    /** Overwrite existing file in the destination? */
+    /** Overwrite existing file(s) in the destination? */
     overwrite?: boolean
   }
 
-  interface UnzipParams {
-    /** Required: when not given, this object's `destination` is used. Destination folder path for extracted files. */
-    destination?: string
-
-    /** Optional single entry filename to extract. */
-    filename?: string
-
-    /** Overwrite existing files in the destination? */
-    overwrite?: boolean
-  }
-
-  interface ZipParams {
-    /** Paths to include in the ZIP. */
-    paths: string[]
-
-    /** Destination file path for the ZIP. */
-    destination: string
-
-    /** Archive format to create. */
-    archive_format?: 'zip' | 'tar' | 'tar.gz' | 'tgz'
-
-    /** Overwrite existing file in the destination? */
-    overwrite?: boolean
+  interface BeginDeleteParams {
+    /** If true, will recursively delete folders.  Otherwise, will error on non-empty folders. */
+    recursive?: boolean
   }
 
   interface BeginUploadParams {

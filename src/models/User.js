@@ -861,8 +861,8 @@ class User {
     exposeAttributes(this, ['convert_to_partner_user'])
   }
 
-  // Unlock user who has been locked out due to failed logins
-  unlock = async (params = {}) => {
+  // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+  user2faReset = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
     }
@@ -886,7 +886,7 @@ class User {
       }
     }
 
-    await Api.sendRequest(`/users/${encodeURIComponent(params.id)}/unlock`, 'POST', params, this.options)
+    await Api.sendRequest(`/users/${encodeURIComponent(params.id)}/2fa/reset`, 'POST', params, this.options)
   }
 
   // Resend user welcome email
@@ -917,8 +917,8 @@ class User {
     await Api.sendRequest(`/users/${encodeURIComponent(params.id)}/resend_welcome_email`, 'POST', params, this.options)
   }
 
-  // Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
-  user2faReset = async (params = {}) => {
+  // Unlock user who has been locked out due to failed logins
+  unlock = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
     }
@@ -942,7 +942,7 @@ class User {
       }
     }
 
-    await Api.sendRequest(`/users/${encodeURIComponent(params.id)}/2fa/reset`, 'POST', params, this.options)
+    await Api.sendRequest(`/users/${encodeURIComponent(params.id)}/unlock`, 'POST', params, this.options)
   }
 
   // Parameters:

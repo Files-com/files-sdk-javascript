@@ -127,36 +127,6 @@ class AutomationRun {
   // string # Link to status messages log file.
   getStatusMessagesUrl = () => this.attributes.status_messages_url
 
-  // Cancel Automation Run
-  cancel = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new errors.EmptyPropertyError('Current object has no id')
-    }
-
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
-    params = { ...params }
-    params.id = this.attributes.id
-    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (!params.id) {
-      if (this.attributes.id) {
-        params.id = this.id
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/cancel`, 'POST', params, this.options)
-
-    return new AutomationRun(response?.data, this.options)
-  }
-
   // Re-run Automation from Node
   //
   // Parameters:
@@ -198,6 +168,36 @@ class AutomationRun {
     }
 
     const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/rerun`, 'POST', params, this.options)
+
+    return new AutomationRun(response?.data, this.options)
+  }
+
+  // Cancel Automation Run
+  cancel = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
+    params.id = this.attributes.id
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    const response = await Api.sendRequest(`/automation_runs/${encodeURIComponent(params.id)}/cancel`, 'POST', params, this.options)
 
     return new AutomationRun(response?.data, this.options)
   }

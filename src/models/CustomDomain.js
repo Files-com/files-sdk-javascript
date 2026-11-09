@@ -310,39 +310,6 @@ class CustomDomain {
     CustomDomain.find(id, params, options)
 
   // Parameters:
-  //   id (required) - int64 - Custom Domain ID.
-  //   count (required) - int64 - Number of dedicated IP addresses to allocate.
-  static createAllocateIp = async (id, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params stay as they were.
-    params = { ...params }
-    params.id = id
-
-    if (!params.id) {
-      throw new errors.MissingParameterError('Parameter missing: id')
-    }
-
-    if (!params.count) {
-      throw new errors.MissingParameterError('Parameter missing: count')
-    }
-
-    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (params.count !== undefined && params.count !== null && !isInt(params.count)) {
-      throw new errors.InvalidParameterError(`Bad parameter: count must be of type Int, received ${getType(params.count)}`)
-    }
-
-    const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}/allocate_ips`, 'POST', params, options)
-
-    return new CustomDomain(response?.data, retainedOptions(options))
-  }
-
-  // Parameters:
   //   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
   //   workspace_id - int64 - Workspace ID (0 for the default workspace).
   //   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
@@ -379,6 +346,39 @@ class CustomDomain {
     }
 
     const response = await Api.sendRequest('/custom_domains', 'POST', params, options)
+
+    return new CustomDomain(response?.data, retainedOptions(options))
+  }
+
+  // Parameters:
+  //   id (required) - int64 - Custom Domain ID.
+  //   count (required) - int64 - Number of dedicated IP addresses to allocate.
+  static createAllocateIp = async (id, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
+    params.id = id
+
+    if (!params.id) {
+      throw new errors.MissingParameterError('Parameter missing: id')
+    }
+
+    if (!params.count) {
+      throw new errors.MissingParameterError('Parameter missing: count')
+    }
+
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.count !== undefined && params.count !== null && !isInt(params.count)) {
+      throw new errors.InvalidParameterError(`Bad parameter: count must be of type Int, received ${getType(params.count)}`)
+    }
+
+    const response = await Api.sendRequest(`/custom_domains/${encodeURIComponent(params.id)}/allocate_ips`, 'POST', params, options)
 
     return new CustomDomain(response?.data, retainedOptions(options))
   }

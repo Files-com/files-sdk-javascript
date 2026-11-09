@@ -176,9 +176,9 @@ class FileComment {
   }
 
   // Parameters:
+  //   path (required) - string - Path to operate on.
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  //   path (required) - string - Path to operate on.
   static listFor = async (path, params = {}, options = {}) => {
     if (!isObject(params)) {
       throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
@@ -192,16 +192,16 @@ class FileComment {
       throw new errors.MissingParameterError('Parameter missing: path')
     }
 
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
     if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
 
     if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
-    }
-
-    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
     const response = await Api.sendRequest(`/file_comments/files/${encodeURIComponent(params.path)}`, 'GET', params, options)

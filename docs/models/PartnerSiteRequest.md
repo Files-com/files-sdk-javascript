@@ -74,21 +74,6 @@ await PartnerSiteRequest.create({
 
 ---
 
-## Reject partner site request
-
-```
-await PartnerSiteRequest.reject({
-  'pairing_key': "pairing_key",
-})
-```
-
-
-### Parameters
-
-* `pairing_key` (string): Required - Pairing key for the partner site request
-
----
-
 ## Approve partner site request
 
 ```
@@ -103,6 +88,21 @@ await PartnerSiteRequest.approve({
 
 * `pairing_key` (string): Required - Pairing key for the partner site request
 * `partner_id` (int64): ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
+
+---
+
+## Reject partner site request
+
+```
+await PartnerSiteRequest.reject({
+  'pairing_key': "pairing_key",
+})
+```
+
+
+### Parameters
+
+* `pairing_key` (string): Required - Pairing key for the partner site request
 
 ---
 

@@ -306,6 +306,53 @@ class Behavior {
       Behavior.list(pageParams, pageOptions))
 
   // Parameters:
+  //   path (required) - string - Path to operate on.
+  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
+  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
+  //   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
+  static listFor = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
+    params.path = path
+
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
+    }
+
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
+    }
+
+    if (isArray(params.ancestor_behaviors) || isObject(params.ancestor_behaviors)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ancestor_behaviors must be of type Boolean, received ${getType(params.ancestor_behaviors)}`)
+    }
+
+    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
+
+    return response?.data?.map(obj => new Behavior(obj, retainedOptions(options))) || []
+  }
+
+  // The items listFor() lists, one at a time: an async iterator that requests each page
+  // through listFor() only once the items before it have been taken (see Api._iterate).
+  static listForIterator = (path, params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      Behavior.listFor(path, pageParams, pageOptions))
+
+  // Parameters:
   //   id (required) - int64 - Behavior ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -331,53 +378,6 @@ class Behavior {
 
   static get = (id, params = {}, options = {}) =>
     Behavior.find(id, params, options)
-
-  // Parameters:
-  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  //   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
-  //   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
-  //   path (required) - string - Path to operate on.
-  //   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
-  static listFor = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params stay as they were.
-    params = { ...params }
-    params.path = path
-
-    if (!params.path) {
-      throw new errors.MissingParameterError('Parameter missing: path')
-    }
-
-    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
-    }
-
-    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
-    }
-
-    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    if (isArray(params.ancestor_behaviors) || isObject(params.ancestor_behaviors)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ancestor_behaviors must be of type Boolean, received ${getType(params.ancestor_behaviors)}`)
-    }
-
-    const response = await Api.sendRequest(`/behaviors/folders/${encodeURIComponent(params.path)}`, 'GET', params, options)
-
-    return response?.data?.map(obj => new Behavior(obj, retainedOptions(options))) || []
-  }
-
-  // The items listFor() lists, one at a time: an async iterator that requests each page
-  // through listFor() only once the items before it have been taken (see Api._iterate).
-  static listForIterator = (path, params = {}, options = {}) =>
-    Api._iterate(params, options, (pageParams, pageOptions) =>
-      Behavior.listFor(path, pageParams, pageOptions))
 
   // Parameters:
   //   value - object - This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.

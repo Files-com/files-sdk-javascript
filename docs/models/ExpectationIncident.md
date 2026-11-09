@@ -70,12 +70,12 @@ await ExpectationIncident.find(id)
 
 ---
 
-## Resolve an expectation incident
+## Acknowledge an expectation incident
 
 ```
 const expectation_incident = await ExpectationIncident.find(id)
 
-await expectation_incident.resolve()
+await expectation_incident.acknowledge()
 ```
 
 ### Parameters
@@ -147,12 +147,12 @@ await expectation_incident.snooze({
 
 ---
 
-## Acknowledge an expectation incident
+## Resolve an expectation incident
 
 ```
 const expectation_incident = await ExpectationIncident.find(id)
 
-await expectation_incident.acknowledge()
+await expectation_incident.resolve()
 ```
 
 ### Parameters

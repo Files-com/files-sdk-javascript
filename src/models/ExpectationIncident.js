@@ -103,8 +103,8 @@ class ExpectationIncident {
   // date-time # Last update time.
   getUpdatedAt = () => this.attributes.updated_at
 
-  // Resolve an expectation incident
-  resolve = async (params = {}) => {
+  // Acknowledge an expectation incident
+  acknowledge = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
     }
@@ -128,7 +128,7 @@ class ExpectationIncident {
       }
     }
 
-    const response = await Api.sendRequest(`/expectation_incidents/${encodeURIComponent(params.id)}/resolve`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/expectation_incidents/${encodeURIComponent(params.id)}/acknowledge`, 'POST', params, this.options)
 
     return new ExpectationIncident(response?.data, this.options)
   }
@@ -178,8 +178,8 @@ class ExpectationIncident {
     return new ExpectationIncident(response?.data, this.options)
   }
 
-  // Acknowledge an expectation incident
-  acknowledge = async (params = {}) => {
+  // Resolve an expectation incident
+  resolve = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
     }
@@ -203,7 +203,7 @@ class ExpectationIncident {
       }
     }
 
-    const response = await Api.sendRequest(`/expectation_incidents/${encodeURIComponent(params.id)}/acknowledge`, 'POST', params, this.options)
+    const response = await Api.sendRequest(`/expectation_incidents/${encodeURIComponent(params.id)}/resolve`, 'POST', params, this.options)
 
     return new ExpectationIncident(response?.data, this.options)
   }

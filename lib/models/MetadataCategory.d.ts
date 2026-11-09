@@ -91,15 +91,6 @@ declare class MetadataCategory {
   static listIterator(params?: MetadataCategory.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<MetadataCategory>
 
   /**
-   * Show Metadata Category
-   * @param id - Metadata Category ID.
-   */
-  static find(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<MetadataCategory>
-
-  /** Alias of `find()`. */
-  static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<MetadataCategory>
-
-  /**
    * List Metadata Categories by Path
    * @param path - Path to operate on.
    */
@@ -113,6 +104,15 @@ declare class MetadataCategory {
    * retried.
    */
   static listForIterator(path: string, params?: MetadataCategory.ListForParams, options?: Files.RequestOptions): AsyncIterableIterator<MetadataCategory>
+
+  /**
+   * Show Metadata Category
+   * @param id - Metadata Category ID.
+   */
+  static find(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<MetadataCategory>
+
+  /** Alias of `find()`. */
+  static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<MetadataCategory>
 
   /** Create Metadata Category */
   static create(params: MetadataCategory.CreateParams, options?: Files.RequestOptions): Promise<MetadataCategory>

@@ -263,15 +263,6 @@ declare class Behavior {
   static listIterator(params?: Behavior.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<Behavior>
 
   /**
-   * Show Behavior
-   * @param id - Behavior ID.
-   */
-  static find(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<Behavior>
-
-  /** Alias of `find()`. */
-  static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<Behavior>
-
-  /**
    * List Behaviors by Path
    * @param path - Path to operate on.
    */
@@ -285,6 +276,15 @@ declare class Behavior {
    * retried.
    */
   static listForIterator(path: string, params?: Behavior.ListForParams, options?: Files.RequestOptions): AsyncIterableIterator<Behavior>
+
+  /**
+   * Show Behavior
+   * @param id - Behavior ID.
+   */
+  static find(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<Behavior>
+
+  /** Alias of `find()`. */
+  static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<Behavior>
 
   /** Create Behavior */
   static create(params: Behavior.CreateParams, options?: Files.RequestOptions): Promise<Behavior>

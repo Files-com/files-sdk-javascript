@@ -106,20 +106,47 @@ declare class History {
   /** Interface on which this action occurred. */
   getInterface(): 'web' | 'ftp' | 'robot' | 'jsapi' | 'webdesktopapi' | 'sftp' | 'dav' | 'desktop' | 'restapi' | 'scim' | 'office' | 'mobile' | 'as2' | 'inbound_email' | 'remote' | 'inbound_s3' | Files.OtherString | null | undefined
 
-  /**
-   * List history for specific file
-   * @param path - Path to operate on.
-   */
-  static listForFile(path: string, params?: History.ListForFileParams, options?: Files.RequestOptions): Promise<Action[]>
+  /** List site full action history */
+  static list(params?: History.ListParams, options?: Files.RequestOptions): Promise<Action[]>
+
+  /** Alias of `list()`. */
+  static all(params?: History.ListParams, options?: Files.RequestOptions): Promise<Action[]>
 
   /**
-   * The models `listForFile()` lists, one at a time: nothing is requested before the first `next()`, and each page only
+   * The models `list()` lists, one at a time: nothing is requested before the first `next()`, and each page only once
+   * the models before it have been taken. The params, options and settings are taken when the iterator is made, the
+   * global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving a
+   * `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
+   * retried.
+   */
+  static listIterator(params?: History.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
+
+  /** List site login history */
+  static listLogins(params?: History.ListLoginsParams, options?: Files.RequestOptions): Promise<Action[]>
+
+  /**
+   * The models `listLogins()` lists, one at a time: nothing is requested before the first `next()`, and each page only
    * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
    * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
    * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
    * retried.
    */
-  static listForFileIterator(path: string, params?: History.ListForFileParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
+  static listLoginsIterator(params?: History.ListLoginsParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
+
+  /**
+   * List history for specific user
+   * @param userId - User ID.
+   */
+  static listForUser(userId: number, params?: History.ListForUserParams, options?: Files.RequestOptions): Promise<Action[]>
+
+  /**
+   * The models `listForUser()` lists, one at a time: nothing is requested before the first `next()`, and each page only
+   * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
+   * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
+   * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
+   * retried.
+   */
+  static listForUserIterator(userId: number, params?: History.ListForUserParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
 
   /**
    * List history for specific folder
@@ -137,46 +164,19 @@ declare class History {
   static listForFolderIterator(path: string, params?: History.ListForFolderParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
 
   /**
-   * List history for specific user
-   * @param userId - User ID.
+   * List history for specific file
+   * @param path - Path to operate on.
    */
-  static listForUser(userId: number, params?: History.ListForUserParams, options?: Files.RequestOptions): Promise<Action[]>
+  static listForFile(path: string, params?: History.ListForFileParams, options?: Files.RequestOptions): Promise<Action[]>
 
   /**
-   * The models `listForUser()` lists, one at a time: nothing is requested before the first `next()`, and each page only
+   * The models `listForFile()` lists, one at a time: nothing is requested before the first `next()`, and each page only
    * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
    * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
    * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
    * retried.
    */
-  static listForUserIterator(userId: number, params?: History.ListForUserParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
-
-  /** List site login history */
-  static listLogins(params?: History.ListLoginsParams, options?: Files.RequestOptions): Promise<Action[]>
-
-  /**
-   * The models `listLogins()` lists, one at a time: nothing is requested before the first `next()`, and each page only
-   * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
-   * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
-   * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
-   * retried.
-   */
-  static listLoginsIterator(params?: History.ListLoginsParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
-
-  /** List site full action history */
-  static list(params?: History.ListParams, options?: Files.RequestOptions): Promise<Action[]>
-
-  /** Alias of `list()`. */
-  static all(params?: History.ListParams, options?: Files.RequestOptions): Promise<Action[]>
-
-  /**
-   * The models `list()` lists, one at a time: nothing is requested before the first `next()`, and each page only once
-   * the models before it have been taken. The params, options and settings are taken when the iterator is made, the
-   * global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving a
-   * `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
-   * retried.
-   */
-  static listIterator(params?: History.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
+  static listForFileIterator(path: string, params?: History.ListForFileParams, options?: Files.RequestOptions): AsyncIterableIterator<Action>
 
   static default: typeof History
 }
@@ -229,7 +229,7 @@ declare namespace History {
     interface?: 'web' | 'ftp' | 'robot' | 'jsapi' | 'webdesktopapi' | 'sftp' | 'dav' | 'desktop' | 'restapi' | 'scim' | 'office' | 'mobile' | 'as2' | 'inbound_email' | 'remote' | 'inbound_s3' | Files.OtherString | null
   }
 
-  interface ListForFileParams {
+  interface ListParams {
     /** Leave blank or set to a date/time to filter earlier entries. */
     start_at?: Files.DateTimeString
 
@@ -254,9 +254,18 @@ declare namespace History {
      * If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
      */
     sort_by?: Files.JsonObject
+
+    /**
+     * If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`,
+     * `folder` or `path`. Valid field combinations are `[ ]`, `[ path ]`, `[ path ]` or `[ path ]`.
+     */
+    filter?: Files.JsonObject
+
+    /** If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`. */
+    filter_prefix?: Files.JsonObject
   }
 
-  interface ListForFolderParams {
+  interface ListLoginsParams {
     /** Leave blank or set to a date/time to filter earlier entries. */
     start_at?: Files.DateTimeString
 
@@ -310,7 +319,7 @@ declare namespace History {
     sort_by?: Files.JsonObject
   }
 
-  interface ListLoginsParams {
+  interface ListForFolderParams {
     /** Leave blank or set to a date/time to filter earlier entries. */
     start_at?: Files.DateTimeString
 
@@ -337,7 +346,7 @@ declare namespace History {
     sort_by?: Files.JsonObject
   }
 
-  interface ListParams {
+  interface ListForFileParams {
     /** Leave blank or set to a date/time to filter earlier entries. */
     start_at?: Files.DateTimeString
 
@@ -362,15 +371,6 @@ declare namespace History {
      * If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
      */
     sort_by?: Files.JsonObject
-
-    /**
-     * If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`,
-     * `folder` or `path`. Valid field combinations are `[ ]`, `[ path ]`, `[ path ]` or `[ path ]`.
-     */
-    filter?: Files.JsonObject
-
-    /** If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`. */
-    filter_prefix?: Files.JsonObject
   }
 }
 

@@ -200,6 +200,46 @@ class MetadataCategory {
       MetadataCategory.list(pageParams, pageOptions))
 
   // Parameters:
+  //   path (required) - string - Path to operate on.
+  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+  static listFor = async (path, params = {}, options = {}) => {
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params stay as they were.
+    params = { ...params }
+    params.path = path
+
+    if (!params.path) {
+      throw new errors.MissingParameterError('Parameter missing: path')
+    }
+
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
+    }
+
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
+    }
+
+    const response = await Api.sendRequest(`/metadata_categories/list_by_path/${encodeURIComponent(params.path)}`, 'GET', params, options)
+
+    return response?.data?.map(obj => new MetadataCategory(obj, retainedOptions(options))) || []
+  }
+
+  // The items listFor() lists, one at a time: an async iterator that requests each page
+  // through listFor() only once the items before it have been taken (see Api._iterate).
+  static listForIterator = (path, params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      MetadataCategory.listFor(path, pageParams, pageOptions))
+
+  // Parameters:
   //   id (required) - int64 - Metadata Category ID.
   static find = async (id, params = {}, options = {}) => {
     if (!isObject(params)) {
@@ -225,46 +265,6 @@ class MetadataCategory {
 
   static get = (id, params = {}, options = {}) =>
     MetadataCategory.find(id, params, options)
-
-  // Parameters:
-  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  //   path (required) - string - Path to operate on.
-  static listFor = async (path, params = {}, options = {}) => {
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params stay as they were.
-    params = { ...params }
-    params.path = path
-
-    if (!params.path) {
-      throw new errors.MissingParameterError('Parameter missing: path')
-    }
-
-    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
-      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
-    }
-
-    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
-      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
-    }
-
-    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    const response = await Api.sendRequest(`/metadata_categories/list_by_path/${encodeURIComponent(params.path)}`, 'GET', params, options)
-
-    return response?.data?.map(obj => new MetadataCategory(obj, retainedOptions(options))) || []
-  }
-
-  // The items listFor() lists, one at a time: an async iterator that requests each page
-  // through listFor() only once the items before it have been taken (see Api._iterate).
-  static listForIterator = (path, params = {}, options = {}) =>
-    Api._iterate(params, options, (pageParams, pageOptions) =>
-      MetadataCategory.listFor(path, pageParams, pageOptions))
 
   // Parameters:
   //   name (required) - string - Name of the metadata category.

@@ -64,17 +64,17 @@ declare class IpAddress {
    */
   static listIterator(params?: IpAddress.ListParams, options?: Files.RequestOptions): AsyncIterableIterator<IpAddress>
 
-  /** List all possible public SmartFile IP addresses */
-  static getSmartfileReserved(params?: IpAddress.GetSmartfileReservedParams, options?: Files.RequestOptions): Promise<PublicIpAddress[]>
+  /** List all possible public IP addresses */
+  static getReserved(params?: IpAddress.GetReservedParams, options?: Files.RequestOptions): Promise<PublicIpAddress[]>
 
   /**
-   * The models `getSmartfileReserved()` lists, one at a time: nothing is requested before the first `next()`, and each
-   * page only once the models before it have been taken. The params, options and settings are taken when the iterator
-   * is made, the global settings as they are then unless `options.client` is given, and every page and model uses them.
-   * Leaving a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is
-   * not retried.
+   * The models `getReserved()` lists, one at a time: nothing is requested before the first `next()`, and each page only
+   * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
+   * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
+   * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
+   * retried.
    */
-  static getSmartfileReservedIterator(params?: IpAddress.GetSmartfileReservedParams, options?: Files.RequestOptions): AsyncIterableIterator<PublicIpAddress>
+  static getReservedIterator(params?: IpAddress.GetReservedParams, options?: Files.RequestOptions): AsyncIterableIterator<PublicIpAddress>
 
   /** List all possible public ExaVault IP addresses */
   static getExavaultReserved(params?: IpAddress.GetExavaultReservedParams, options?: Files.RequestOptions): Promise<PublicIpAddress[]>
@@ -88,17 +88,17 @@ declare class IpAddress {
    */
   static getExavaultReservedIterator(params?: IpAddress.GetExavaultReservedParams, options?: Files.RequestOptions): AsyncIterableIterator<PublicIpAddress>
 
-  /** List all possible public IP addresses */
-  static getReserved(params?: IpAddress.GetReservedParams, options?: Files.RequestOptions): Promise<PublicIpAddress[]>
+  /** List all possible public SmartFile IP addresses */
+  static getSmartfileReserved(params?: IpAddress.GetSmartfileReservedParams, options?: Files.RequestOptions): Promise<PublicIpAddress[]>
 
   /**
-   * The models `getReserved()` lists, one at a time: nothing is requested before the first `next()`, and each page only
-   * once the models before it have been taken. The params, options and settings are taken when the iterator is made,
-   * the global settings as they are then unless `options.client` is given, and every page and model uses them. Leaving
-   * a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is not
-   * retried.
+   * The models `getSmartfileReserved()` lists, one at a time: nothing is requested before the first `next()`, and each
+   * page only once the models before it have been taken. The params, options and settings are taken when the iterator
+   * is made, the global settings as they are then unless `options.client` is given, and every page and model uses them.
+   * Leaving a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is
+   * not retried.
    */
-  static getReservedIterator(params?: IpAddress.GetReservedParams, options?: Files.RequestOptions): AsyncIterableIterator<PublicIpAddress>
+  static getSmartfileReservedIterator(params?: IpAddress.GetSmartfileReservedParams, options?: Files.RequestOptions): AsyncIterableIterator<PublicIpAddress>
 
   static default: typeof IpAddress
 }
@@ -132,7 +132,7 @@ declare namespace IpAddress {
     per_page?: number
   }
 
-  interface GetSmartfileReservedParams {
+  interface GetReservedParams {
     /**
      * Used for pagination. When a list request has more records available, cursors are provided in the response headers
      * `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`. Send one of those cursor value here to resume an existing list
@@ -158,7 +158,7 @@ declare namespace IpAddress {
     per_page?: number
   }
 
-  interface GetReservedParams {
+  interface GetSmartfileReservedParams {
     /**
      * Used for pagination. When a list request has more records available, cursors are provided in the response headers
      * `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`. Send one of those cursor value here to resume an existing list

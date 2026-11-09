@@ -1075,14 +1075,14 @@ declare class User {
    */
   setConvertToPartnerUser(value: boolean): void
 
-  /** Unlock user who has been locked out due to failed logins */
-  unlock(params?: Files.NoParams): Promise<void>
+  /** Trigger 2FA Reset process for user who has lost access to their existing 2FA methods */
+  user2faReset(params?: Files.NoParams): Promise<void>
 
   /** Resend user welcome email */
   resendWelcomeEmail(params?: Files.NoParams): Promise<void>
 
-  /** Trigger 2FA Reset process for user who has lost access to their existing 2FA methods */
-  user2faReset(params?: Files.NoParams): Promise<void>
+  /** Unlock user who has been locked out due to failed logins */
+  unlock(params?: Files.NoParams): Promise<void>
 
   /** Update User */
   update(params?: User.UpdateParams): Promise<this>

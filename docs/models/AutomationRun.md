@@ -125,17 +125,20 @@ await AutomationRun.findNode(id, {
 
 ---
 
-## Cancel Automation Run
+## Re-run Automation from Node
 
 ```
 const automation_run = await AutomationRun.find(id)
 
-await automation_run.cancel()
+await automation_run.rerun({
+  'node_id': "node_id",
+})
 ```
 
 ### Parameters
 
 * `id` (int64): Required - Automation Run ID.
+* `node_id` (string): Required - Node ID at which execution should resume.
 
 ### Example Response
 
@@ -188,20 +191,17 @@ await automation_run.cancel()
 
 ---
 
-## Re-run Automation from Node
+## Cancel Automation Run
 
 ```
 const automation_run = await AutomationRun.find(id)
 
-await automation_run.rerun({
-  'node_id': "node_id",
-})
+await automation_run.cancel()
 ```
 
 ### Parameters
 
 * `id` (int64): Required - Automation Run ID.
-* `node_id` (string): Required - Node ID at which execution should resume.
 
 ### Example Response
 

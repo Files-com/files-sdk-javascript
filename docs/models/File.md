@@ -397,20 +397,23 @@ await file.zipListContents()
 
 ---
 
-## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+## Extract a ZIP file to a destination folder
 
 ```
 const file = await File.find(path)
 
-await file.beginDelete({
-  'recursive': false,
+await file.unzip({
+  'destination': "destination",
+  'overwrite': false,
 })
 ```
 
 ### Parameters
 
-* `path` (string): Required - Path to operate on.
-* `recursive` (boolean): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (boolean): Overwrite existing files in the destination?
 
 ### Example Response
 
@@ -423,15 +426,16 @@ await file.beginDelete({
 
 ---
 
-## Copy File/Folder
+## Encrypt a file with GPG and save it to a destination path
 
 ```
 const file = await File.find(path)
 
-await file.copy({
+await file.gpgEncrypt({
   'destination': "destination",
-  'copy_behaviors': false,
-  'structure': false,
+  'gpg_key_partner_id': 1,
+  'signing_key_id': 1,
+  'armor': false,
   'overwrite': false,
 })
 ```
@@ -439,10 +443,12 @@ await file.copy({
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Copy destination path.
-* `copy_behaviors` (boolean): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-* `structure` (boolean): Copy structure only?
-* `overwrite` (boolean): Overwrite existing file(s) in the destination?
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (array(int64)): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (int64): Optional GPG Key ID to sign with.
+* `armor` (boolean): Output ASCII-armored encrypted data.
+* `overwrite` (boolean): Overwrite existing file in the destination?
 
 ### Example Response
 
@@ -455,13 +461,16 @@ await file.copy({
 
 ---
 
-## Move File/Folder
+## Decrypt a GPG-encrypted file and save it to a destination path
 
 ```
 const file = await File.find(path)
 
-await file.move({
+await file.gpgDecrypt({
   'destination': "destination",
+  'gpg_key_partner_id': 1,
+  'use_all_private_keys': false,
+  'ignore_mdc_error': false,
   'overwrite': false,
 })
 ```
@@ -469,8 +478,12 @@ await file.move({
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Move destination path.
-* `overwrite` (boolean): Overwrite existing file(s) in the destination?
+* `destination` (string): Required - Destination file path for the decrypted file.
+* `gpg_key_ids` (array(int64)): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for decryption.
+* `use_all_private_keys` (boolean): Use every accessible private GPG key in the source workspace for decryption.
+* `ignore_mdc_error` (boolean): Ignore errors from the MDC (modification detection code) check.
+* `overwrite` (boolean): Overwrite existing file in the destination?
 
 ### Example Response
 
@@ -520,16 +533,13 @@ await file.transform({
 
 ---
 
-## Decrypt a GPG-encrypted file and save it to a destination path
+## Move File/Folder
 
 ```
 const file = await File.find(path)
 
-await file.gpgDecrypt({
+await file.move({
   'destination': "destination",
-  'gpg_key_partner_id': 1,
-  'use_all_private_keys': false,
-  'ignore_mdc_error': false,
   'overwrite': false,
 })
 ```
@@ -537,12 +547,8 @@ await file.gpgDecrypt({
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the decrypted file.
-* `gpg_key_ids` (array(int64)): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for decryption.
-* `use_all_private_keys` (boolean): Use every accessible private GPG key in the source workspace for decryption.
-* `ignore_mdc_error` (boolean): Ignore errors from the MDC (modification detection code) check.
-* `overwrite` (boolean): Overwrite existing file in the destination?
+* `destination` (string): Required - Move destination path.
+* `overwrite` (boolean): Overwrite existing file(s) in the destination?
 
 ### Example Response
 
@@ -555,16 +561,15 @@ await file.gpgDecrypt({
 
 ---
 
-## Encrypt a file with GPG and save it to a destination path
+## Copy File/Folder
 
 ```
 const file = await File.find(path)
 
-await file.gpgEncrypt({
+await file.copy({
   'destination': "destination",
-  'gpg_key_partner_id': 1,
-  'signing_key_id': 1,
-  'armor': false,
+  'copy_behaviors': false,
+  'structure': false,
   'overwrite': false,
 })
 ```
@@ -572,12 +577,10 @@ await file.gpgEncrypt({
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the encrypted file.
-* `gpg_key_ids` (array(int64)): GPG Key IDs to encrypt with.
-* `gpg_key_partner_id` (int64): Partner ID whose GPG keys should be used for encryption.
-* `signing_key_id` (int64): Optional GPG Key ID to sign with.
-* `armor` (boolean): Output ASCII-armored encrypted data.
-* `overwrite` (boolean): Overwrite existing file in the destination?
+* `destination` (string): Required - Copy destination path.
+* `copy_behaviors` (boolean): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+* `structure` (boolean): Copy structure only?
+* `overwrite` (boolean): Overwrite existing file(s) in the destination?
 
 ### Example Response
 
@@ -590,23 +593,20 @@ await file.gpgEncrypt({
 
 ---
 
-## Extract a ZIP file to a destination folder
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
 
 ```
 const file = await File.find(path)
 
-await file.unzip({
-  'destination': "destination",
-  'overwrite': false,
+await file.beginDelete({
+  'recursive': false,
 })
 ```
 
 ### Parameters
 
-* `path` (string): Required - ZIP file path to extract.
-* `destination` (string): Required - Destination folder path for extracted files.
-* `filename` (string): Optional single entry filename to extract.
-* `overwrite` (boolean): Overwrite existing files in the destination?
+* `path` (string): Required - Path to operate on.
+* `recursive` (boolean): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 ### Example Response
 

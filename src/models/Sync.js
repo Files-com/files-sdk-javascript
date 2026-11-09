@@ -312,34 +312,6 @@ class Sync {
     exposeAttributes(this, ['latest_sync_run'])
   }
 
-  // Dry Run Sync
-  dryRun = async (params = {}) => {
-    if (!this.attributes.id) {
-      throw new errors.EmptyPropertyError('Current object has no id')
-    }
-
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
-    params = { ...params }
-    params.id = this.attributes.id
-    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
-    }
-
-    if (!params.id) {
-      if (this.attributes.id) {
-        params.id = this.id
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: id')
-      }
-    }
-
-    await Api.sendRequest(`/syncs/${encodeURIComponent(params.id)}/dry_run`, 'POST', params, this.options)
-  }
-
   // Manually Run Sync
   manualRun = async (params = {}) => {
     if (!this.attributes.id) {
@@ -366,6 +338,34 @@ class Sync {
     }
 
     await Api.sendRequest(`/syncs/${encodeURIComponent(params.id)}/manual_run`, 'POST', params, this.options)
+  }
+
+  // Dry Run Sync
+  dryRun = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
+    params.id = this.attributes.id
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    await Api.sendRequest(`/syncs/${encodeURIComponent(params.id)}/dry_run`, 'POST', params, this.options)
   }
 
   // Parameters:

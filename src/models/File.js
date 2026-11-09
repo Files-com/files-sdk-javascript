@@ -1259,52 +1259,13 @@ class File {
     return response?.data?.map(obj => new ZipListEntry(obj, this.options)) || []
   }
 
-  // Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+  // Extract a ZIP file to a destination folder
   //
   // Parameters:
-  //   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
-  beginDelete = async (params = {}) => {
-    if (!this.attributes.path) {
-      throw new errors.EmptyPropertyError('Current object has no path')
-    }
-
-    if (!isObject(params)) {
-      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
-    }
-
-    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
-    params = { ...params }
-    params.path = this.attributes.path
-    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
-      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
-    }
-
-    if (isArray(params.recursive) || isObject(params.recursive)) {
-      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type Boolean, received ${getType(params.recursive)}`)
-    }
-
-    if (!params.path) {
-      if (this.attributes.path) {
-        params.path = this.path
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: path')
-      }
-    }
-
-    const { action: sentAction, response } = await Api._sendAction(`/file_actions/delete/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
-
-    const FileAction = require('./FileAction.js').default
-    return FileAction._accepted(response?.data, this.options, sentAction)
-  }
-
-  // Copy File/Folder
-  //
-  // Parameters:
-  //   destination (required) - string - Copy destination path.
-  //   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-  //   structure - boolean - Copy structure only?
-  //   overwrite - boolean - Overwrite existing file(s) in the destination?
-  copy = async (params = {}) => {
+  //   destination (required) - string - Destination folder path for extracted files.
+  //   filename - string - Optional single entry filename to extract.
+  //   overwrite - boolean - Overwrite existing files in the destination?
+  unzip = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
     }
@@ -1324,12 +1285,8 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (isArray(params.copy_behaviors) || isObject(params.copy_behaviors)) {
-      throw new errors.InvalidParameterError(`Bad parameter: copy_behaviors must be of type Boolean, received ${getType(params.copy_behaviors)}`)
-    }
-
-    if (isArray(params.structure) || isObject(params.structure)) {
-      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type Boolean, received ${getType(params.structure)}`)
+    if (params.filename !== undefined && params.filename !== null && !isString(params.filename)) {
+      throw new errors.InvalidParameterError(`Bad parameter: filename must be of type String, received ${getType(params.filename)}`)
     }
 
     if (isArray(params.overwrite) || isObject(params.overwrite)) {
@@ -1352,18 +1309,22 @@ class File {
       }
     }
 
-    const { action: sentAction, response } = await Api._sendAction(`/file_actions/copy/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+    const { action: sentAction, response } = await Api._sendAction('/file_actions/unzip', 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return FileAction._accepted(response?.data, this.options, sentAction)
   }
 
-  // Move File/Folder
+  // Encrypt a file with GPG and save it to a destination path
   //
   // Parameters:
-  //   destination (required) - string - Move destination path.
-  //   overwrite - boolean - Overwrite existing file(s) in the destination?
-  move = async (params = {}) => {
+  //   destination (required) - string - Destination file path for the encrypted file.
+  //   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+  //   signing_key_id - int64 - Optional GPG Key ID to sign with.
+  //   armor - boolean - Output ASCII-armored encrypted data.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  gpgEncrypt = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
     }
@@ -1381,6 +1342,22 @@ class File {
 
     if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.gpg_key_ids !== undefined && params.gpg_key_ids !== null && !isArray(params.gpg_key_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
+    }
+
+    if (params.gpg_key_partner_id !== undefined && params.gpg_key_partner_id !== null && !isInt(params.gpg_key_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
+    }
+
+    if (params.signing_key_id !== undefined && params.signing_key_id !== null && !isInt(params.signing_key_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: signing_key_id must be of type Int, received ${getType(params.signing_key_id)}`)
+    }
+
+    if (isArray(params.armor) || isObject(params.armor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: armor must be of type Boolean, received ${getType(params.armor)}`)
     }
 
     if (isArray(params.overwrite) || isObject(params.overwrite)) {
@@ -1403,7 +1380,78 @@ class File {
       }
     }
 
-    const { action: sentAction, response } = await Api._sendAction(`/file_actions/move/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+    const { action: sentAction, response } = await Api._sendAction(`/file_actions/gpg_encrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+
+    const FileAction = require('./FileAction.js').default
+    return FileAction._accepted(response?.data, this.options, sentAction)
+  }
+
+  // Decrypt a GPG-encrypted file and save it to a destination path
+  //
+  // Parameters:
+  //   destination (required) - string - Destination file path for the decrypted file.
+  //   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+  //   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+  //   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+  //   overwrite - boolean - Overwrite existing file in the destination?
+  gpgDecrypt = async (params = {}) => {
+    if (!this.attributes.path) {
+      throw new errors.EmptyPropertyError('Current object has no path')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
+    params.path = this.attributes.path
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
+      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
+    }
+
+    if (params.gpg_key_ids !== undefined && params.gpg_key_ids !== null && !isArray(params.gpg_key_ids)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
+    }
+
+    if (params.gpg_key_partner_id !== undefined && params.gpg_key_partner_id !== null && !isInt(params.gpg_key_partner_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
+    }
+
+    if (isArray(params.use_all_private_keys) || isObject(params.use_all_private_keys)) {
+      throw new errors.InvalidParameterError(`Bad parameter: use_all_private_keys must be of type Boolean, received ${getType(params.use_all_private_keys)}`)
+    }
+
+    if (isArray(params.ignore_mdc_error) || isObject(params.ignore_mdc_error)) {
+      throw new errors.InvalidParameterError(`Bad parameter: ignore_mdc_error must be of type Boolean, received ${getType(params.ignore_mdc_error)}`)
+    }
+
+    if (isArray(params.overwrite) || isObject(params.overwrite)) {
+      throw new errors.InvalidParameterError(`Bad parameter: overwrite must be of type Boolean, received ${getType(params.overwrite)}`)
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.destination) {
+      if (this.attributes.destination) {
+        params.destination = this.destination
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: destination')
+      }
+    }
+
+    const { action: sentAction, response } = await Api._sendAction(`/file_actions/gpg_decrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return FileAction._accepted(response?.data, this.options, sentAction)
@@ -1501,16 +1549,12 @@ class File {
     return FileAction._accepted(response?.data, this.options, sentAction)
   }
 
-  // Decrypt a GPG-encrypted file and save it to a destination path
+  // Move File/Folder
   //
   // Parameters:
-  //   destination (required) - string - Destination file path for the decrypted file.
-  //   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
-  //   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
-  //   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
-  //   overwrite - boolean - Overwrite existing file in the destination?
-  gpgDecrypt = async (params = {}) => {
+  //   destination (required) - string - Move destination path.
+  //   overwrite - boolean - Overwrite existing file(s) in the destination?
+  move = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
     }
@@ -1528,22 +1572,6 @@ class File {
 
     if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
-    }
-
-    if (params.gpg_key_ids !== undefined && params.gpg_key_ids !== null && !isArray(params.gpg_key_ids)) {
-      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
-    }
-
-    if (params.gpg_key_partner_id !== undefined && params.gpg_key_partner_id !== null && !isInt(params.gpg_key_partner_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
-    }
-
-    if (isArray(params.use_all_private_keys) || isObject(params.use_all_private_keys)) {
-      throw new errors.InvalidParameterError(`Bad parameter: use_all_private_keys must be of type Boolean, received ${getType(params.use_all_private_keys)}`)
-    }
-
-    if (isArray(params.ignore_mdc_error) || isObject(params.ignore_mdc_error)) {
-      throw new errors.InvalidParameterError(`Bad parameter: ignore_mdc_error must be of type Boolean, received ${getType(params.ignore_mdc_error)}`)
     }
 
     if (isArray(params.overwrite) || isObject(params.overwrite)) {
@@ -1566,22 +1594,20 @@ class File {
       }
     }
 
-    const { action: sentAction, response } = await Api._sendAction(`/file_actions/gpg_decrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+    const { action: sentAction, response } = await Api._sendAction(`/file_actions/move/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return FileAction._accepted(response?.data, this.options, sentAction)
   }
 
-  // Encrypt a file with GPG and save it to a destination path
+  // Copy File/Folder
   //
   // Parameters:
-  //   destination (required) - string - Destination file path for the encrypted file.
-  //   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
-  //   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
-  //   signing_key_id - int64 - Optional GPG Key ID to sign with.
-  //   armor - boolean - Output ASCII-armored encrypted data.
-  //   overwrite - boolean - Overwrite existing file in the destination?
-  gpgEncrypt = async (params = {}) => {
+  //   destination (required) - string - Copy destination path.
+  //   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+  //   structure - boolean - Copy structure only?
+  //   overwrite - boolean - Overwrite existing file(s) in the destination?
+  copy = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
     }
@@ -1601,20 +1627,12 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
     }
 
-    if (params.gpg_key_ids !== undefined && params.gpg_key_ids !== null && !isArray(params.gpg_key_ids)) {
-      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_ids must be of type Array, received ${getType(params.gpg_key_ids)}`)
+    if (isArray(params.copy_behaviors) || isObject(params.copy_behaviors)) {
+      throw new errors.InvalidParameterError(`Bad parameter: copy_behaviors must be of type Boolean, received ${getType(params.copy_behaviors)}`)
     }
 
-    if (params.gpg_key_partner_id !== undefined && params.gpg_key_partner_id !== null && !isInt(params.gpg_key_partner_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: gpg_key_partner_id must be of type Int, received ${getType(params.gpg_key_partner_id)}`)
-    }
-
-    if (params.signing_key_id !== undefined && params.signing_key_id !== null && !isInt(params.signing_key_id)) {
-      throw new errors.InvalidParameterError(`Bad parameter: signing_key_id must be of type Int, received ${getType(params.signing_key_id)}`)
-    }
-
-    if (isArray(params.armor) || isObject(params.armor)) {
-      throw new errors.InvalidParameterError(`Bad parameter: armor must be of type Boolean, received ${getType(params.armor)}`)
+    if (isArray(params.structure) || isObject(params.structure)) {
+      throw new errors.InvalidParameterError(`Bad parameter: structure must be of type Boolean, received ${getType(params.structure)}`)
     }
 
     if (isArray(params.overwrite) || isObject(params.overwrite)) {
@@ -1637,19 +1655,17 @@ class File {
       }
     }
 
-    const { action: sentAction, response } = await Api._sendAction(`/file_actions/gpg_encrypt/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
+    const { action: sentAction, response } = await Api._sendAction(`/file_actions/copy/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return FileAction._accepted(response?.data, this.options, sentAction)
   }
 
-  // Extract a ZIP file to a destination folder
+  // Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
   //
   // Parameters:
-  //   destination (required) - string - Destination folder path for extracted files.
-  //   filename - string - Optional single entry filename to extract.
-  //   overwrite - boolean - Overwrite existing files in the destination?
-  unzip = async (params = {}) => {
+  //   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+  beginDelete = async (params = {}) => {
     if (!this.attributes.path) {
       throw new errors.EmptyPropertyError('Current object has no path')
     }
@@ -1665,16 +1681,8 @@ class File {
       throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
     }
 
-    if (params.destination !== undefined && params.destination !== null && !isString(params.destination)) {
-      throw new errors.InvalidParameterError(`Bad parameter: destination must be of type String, received ${getType(params.destination)}`)
-    }
-
-    if (params.filename !== undefined && params.filename !== null && !isString(params.filename)) {
-      throw new errors.InvalidParameterError(`Bad parameter: filename must be of type String, received ${getType(params.filename)}`)
-    }
-
-    if (isArray(params.overwrite) || isObject(params.overwrite)) {
-      throw new errors.InvalidParameterError(`Bad parameter: overwrite must be of type Boolean, received ${getType(params.overwrite)}`)
+    if (isArray(params.recursive) || isObject(params.recursive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type Boolean, received ${getType(params.recursive)}`)
     }
 
     if (!params.path) {
@@ -1685,15 +1693,7 @@ class File {
       }
     }
 
-    if (!params.destination) {
-      if (this.attributes.destination) {
-        params.destination = this.destination
-      } else {
-        throw new errors.MissingParameterError('Parameter missing: destination')
-      }
-    }
-
-    const { action: sentAction, response } = await Api._sendAction('/file_actions/unzip', 'POST', params, this.options)
+    const { action: sentAction, response } = await Api._sendAction(`/file_actions/delete/${encodeURIComponent(params.path)}`, 'POST', params, this.options)
 
     const FileAction = require('./FileAction.js').default
     return FileAction._accepted(response?.data, this.options, sentAction)

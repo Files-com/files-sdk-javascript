@@ -215,12 +215,12 @@ await Sync.create({
 
 ---
 
-## Dry Run Sync
+## Manually Run Sync
 
 ```
 const sync = await Sync.find(id)
 
-await sync.dryRun()
+await sync.manualRun()
 ```
 
 ### Parameters
@@ -230,12 +230,12 @@ await sync.dryRun()
 
 ---
 
-## Manually Run Sync
+## Dry Run Sync
 
 ```
 const sync = await Sync.find(id)
 
-await sync.manualRun()
+await sync.dryRun()
 ```
 
 ### Parameters

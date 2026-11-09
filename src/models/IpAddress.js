@@ -99,7 +99,7 @@ class IpAddress {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  static getSmartfileReserved = async (params = {}, options = {}) => {
+  static getReserved = async (params = {}, options = {}) => {
     if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
@@ -108,17 +108,17 @@ class IpAddress {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest('/ip_addresses/smartfile-reserved', 'GET', params, options)
+    const response = await Api.sendRequest('/ip_addresses/reserved', 'GET', params, options)
 
     const PublicIpAddress = require('./PublicIpAddress.js').default
     return response?.data?.map(obj => new PublicIpAddress(obj, retainedOptions(options))) || []
   }
 
-  // The items getSmartfileReserved() lists, one at a time: an async iterator that requests each page
-  // through getSmartfileReserved() only once the items before it have been taken (see Api._iterate).
-  static getSmartfileReservedIterator = (params = {}, options = {}) =>
+  // The items getReserved() lists, one at a time: an async iterator that requests each page
+  // through getReserved() only once the items before it have been taken (see Api._iterate).
+  static getReservedIterator = (params = {}, options = {}) =>
     Api._iterate(params, options, (pageParams, pageOptions) =>
-      IpAddress.getSmartfileReserved(pageParams, pageOptions))
+      IpAddress.getReserved(pageParams, pageOptions))
 
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -147,7 +147,7 @@ class IpAddress {
   // Parameters:
   //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
   //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-  static getReserved = async (params = {}, options = {}) => {
+  static getSmartfileReserved = async (params = {}, options = {}) => {
     if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
       throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
     }
@@ -156,17 +156,17 @@ class IpAddress {
       throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
     }
 
-    const response = await Api.sendRequest('/ip_addresses/reserved', 'GET', params, options)
+    const response = await Api.sendRequest('/ip_addresses/smartfile-reserved', 'GET', params, options)
 
     const PublicIpAddress = require('./PublicIpAddress.js').default
     return response?.data?.map(obj => new PublicIpAddress(obj, retainedOptions(options))) || []
   }
 
-  // The items getReserved() lists, one at a time: an async iterator that requests each page
-  // through getReserved() only once the items before it have been taken (see Api._iterate).
-  static getReservedIterator = (params = {}, options = {}) =>
+  // The items getSmartfileReserved() lists, one at a time: an async iterator that requests each page
+  // through getSmartfileReserved() only once the items before it have been taken (see Api._iterate).
+  static getSmartfileReservedIterator = (params = {}, options = {}) =>
     Api._iterate(params, options, (pageParams, pageOptions) =>
-      IpAddress.getReserved(pageParams, pageOptions))
+      IpAddress.getSmartfileReserved(pageParams, pageOptions))
 }
 
 export default IpAddress

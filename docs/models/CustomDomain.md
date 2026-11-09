@@ -71,22 +71,6 @@ await CustomDomain.find(id)
 
 ---
 
-## Allocate dedicated IP addresses to this Custom Domain
-
-```
-await CustomDomain.createAllocateIp(id, {
-  'count': 1,
-})
-```
-
-
-### Parameters
-
-* `id` (int64): Required - Custom Domain ID.
-* `count` (int64): Required - Number of dedicated IP addresses to allocate.
-
----
-
 ## Create Custom Domain
 
 ```
@@ -109,6 +93,22 @@ await CustomDomain.create({
 * `folder_behavior_id` (int64): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `ssl_certificate_id` (int64): Current SSL certificate ID.
 * `domain` (string): Required - Customer-owned domain name.
+
+---
+
+## Allocate dedicated IP addresses to this Custom Domain
+
+```
+await CustomDomain.createAllocateIp(id, {
+  'count': 1,
+})
+```
+
+
+### Parameters
+
+* `id` (int64): Required - Custom Domain ID.
+* `count` (int64): Required - Number of dedicated IP addresses to allocate.
 
 ---
 
