@@ -161,4 +161,34 @@ if [[ "${parity_status}" -ne 0 ]]; then
   exit "${parity_status}"
 fi
 
+# The shared failure-case matrix, test/failure-cases.cjs, makes each case's calls of the Mock's failure-cases scenario
+# (enum and date-time validation errors, a dropped connection retried, retries spent on dropped connections, and a
+# seeded random sequence of HTTP 422 faults, which no SDK retries) through this SDK's User.find and User#update, on a
+# new server of the same Mock, through the same
+# launcher in Bundler's original environment. The launcher resets the server to the scenario's users, adds its fault
+# rules, and passes only when the case's receipt, failure-cases.json, reports every case passed, once and in order,
+# and the journal and the fault rules' decisions show exactly each case's expected attempts. Its evidence goes to a
+# directory of its own under test-results/. It has 30 s for the server to be ready, 120 s for the cases and 5 s each
+# time a process group is stopped.
+failure_run_id="javascript-failure-cases-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+failure_out="test-results/mock-${failure_run_id}"
+ruby -rbundler -e 'Bundler.with_original_env { exec(RbConfig.ruby, *ARGV) }' -- \
+  "${mock_server}/with-scenario.rb" --scenario failure-cases --out "${failure_out}" \
+  --run-id "${failure_run_id}" --schema-sha256 "${schema_sha256}" --startup-timeout 30 --consumer-timeout 120 \
+  --settle-timeout 5 --failure-variant sdk-network-retries -- "$(command -v node)" "${PWD}/test/failure-cases.cjs"
+failure_status=$?
+echo "The failure cases ended with status ${failure_status}; their evidence is in ${PWD}/${failure_out}"
+for record in run.json failure-cases.json; do
+  if [[ -f "${failure_out}/${record}" ]]; then
+    cat "${failure_out}/${record}"
+  fi
+done
+if [[ "${failure_status}" -ne 0 && -f "${failure_out}/server.log" ]]; then
+  echo "The last 200 lines of the Mock server's log, ${PWD}/${failure_out}/server.log:"
+  tail -n 200 "${failure_out}/server.log"
+fi
+if [[ "${failure_status}" -ne 0 ]]; then
+  exit "${failure_status}"
+fi
+
 exit 0
