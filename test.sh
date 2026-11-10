@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 
 # Install dependencies, then lint, build and run the unit and type tests. The first failure ends this script with its
 # status, before the contract test runs.
-npm install --min-release-age=14 && \
+npm install --min-release-age=5 && \
 npm run lint && \
 npm run build && \
 npm run test || exit
