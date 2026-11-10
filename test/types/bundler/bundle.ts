@@ -2,6 +2,7 @@
 // root and src/ paths as ES modules (package.json's `module` field), and lib/ paths as the CommonJS build.
 import Files from 'files.com'
 import LibUser from 'files.com/lib/models/User'
+import { getUrlExpiration, isUrlExpired } from 'files.com/lib/utils/urlExpiration'
 import FilesClient from 'files.com/src/FilesClient'
 import { Logger } from 'files.com/src/index'
 import { LogLevel } from 'files.com/src/Logger'
@@ -31,3 +32,8 @@ export const esModuleDefault = User.default
 export const rootDefault = Files.default
 
 export { list }
+
+const videoExpiration: number | null = getUrlExpiration('https://storage.example/video', '2026-11-10T20:00:00Z')
+const videoExpired: boolean = isUrlExpired('https://storage.example/video')
+void videoExpiration
+void videoExpired

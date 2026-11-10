@@ -4,6 +4,7 @@ import Files from './Files'
 import * as errors from './Errors'
 import Logger, { LogLevel } from './Logger'
 import { isEmpty, isObject } from './utils'
+import { getUrlExpiration, isUrlExpired } from './utils/urlExpiration'
 import { AttachmentBody, jsonBody } from './utils/attachmentBody'
 
 const abortError = () => {
@@ -903,67 +904,8 @@ const retryAfterMs = value => {
   return Number.isFinite(time) ? Math.max(0, time - Date.now()) : null
 }
 
-// The query parameters of a signed storage URL that give when it was signed and for how many seconds it is valid: S3's,
-// Files.com's and Google Cloud Storage's.
-const SIGNED_URL_VALIDITIES = [
-  ['x-amz-date', 'x-amz-expires'],
-  ['x-files-date', 'x-files-expires'],
-  ['x-goog-date', 'x-goog-expires'],
-]
-
-// A time a signature gives, in milliseconds: in the basic ISO 8601 form signatures use, such as 20261019T120000Z, or in
-// any form Date.parse() reads; or null.
-const signedTimeOf = value => {
-  const basic = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(value ?? '')
-
-  if (basic) {
-    const [year, month, day, hours, minutes, seconds] = basic.slice(1).map(Number)
-    return Date.UTC(year, month - 1, day, hours, minutes, seconds)
-  }
-
-  const time = Date.parse(value ?? '')
-  return Number.isFinite(time) ? time : null
-}
-
-// When a signed URL expires, in milliseconds, by its own query: its signing time plus its seconds, or, for an Azure
-// shared access signature, its se; the earliest, when it gives several; or null when it gives none.
-const signedUrlExpiryOf = url => {
-  let query
-  try {
-    query = [...new URL(url).searchParams.entries()]
-  } catch {
-    return null
-  }
-
-  const parameter = name => query.find(([key]) => key.toLowerCase() === name)?.[1] ?? null
-  const expiries = SIGNED_URL_VALIDITIES.map(([dateName, secondsName]) => {
-    const signedAt = signedTimeOf(parameter(dateName))
-    const seconds = parameter(secondsName) ?? ''
-
-    return signedAt !== null && /^\d+$/.test(seconds) ? signedAt + Number(seconds) * 1000 : null
-  })
-
-  if (parameter('sig') !== null) {
-    expiries.push(signedTimeOf(parameter('se')))
-  }
-
-  const known = expiries.filter(expiry => expiry !== null)
-  return known.length > 0 ? Math.min(...known) : null
-}
-
-// When a storage target expires, in milliseconds: the earlier of the expires the API gave for it, if any, and its URL's
-// own; or null when neither is known.
-const expiryOf = target => {
-  const given = typeof target.expires === 'string' ? Date.parse(target.expires) : NaN
-  const known = [Number.isFinite(given) ? given : null, signedUrlExpiryOf(target.url)].filter(expiry => expiry !== null)
-
-  return known.length > 0 ? Math.min(...known) : null
-}
-
-const hasExpired = target => {
-  const expiry = expiryOf(target)
-  return expiry !== null && expiry <= Date.now()
-}
+// Transfers retain their target-shaped internal API while sharing the public browser-safe helpers.
+const hasExpired = target => isUrlExpired(target.url, target.expires)
 
 // The headers of a request to storage: those given, never the API's credentials or workspace.
 const storageHeadersOf = headers => withoutHeaders(headers, FILES_AUTH_HEADERS)
@@ -1947,7 +1889,7 @@ class Api {
 
   static _storageExpired = target => hasExpired(target)
 
-  static _urlExpiresAt = url => signedUrlExpiryOf(url)
+  static _urlExpiresAt = url => getUrlExpiration(url)
 
   static _retryAfterMs = value => retryAfterMs(value)
 

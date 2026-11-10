@@ -163,6 +163,33 @@ await upload;
 
 A `Files.TransferControl` pauses and resumes every transfer given it as `options.control`. Paused, a transfer sends no new request and reads no further; a request waiting for admission gives back its permit and waits, and one whose URL was being given again, or whose callbacks were running, is not sent once they find it paused. A download's request through a configured `fetch`, and each redirect of it, is checked again as it is handed to the `fetch`, once its callbacks, such as its logging and the agent's choice for its URL, have run: paused then, it waits until resumed, within its attempt's `timeoutSecs` budget, and stopped, it is not sent. A download delivers nothing more while paused, not even a chunk that arrived as it was paused: that chunk waits, and is delivered once resumed. It keeps every part stored, byte written and its upload's `ref`. Pausing is not cancelling: only the transfer's `signal` cancels it. A paused download's responses are left unread, so a long pause can make storage or a `timeoutSecs` budget end them; the download then asks again for the bytes it has not had.
 
+## Signed URL expiration in browsers
+
+The standalone helpers read Files.com, Amazon S3, Google Cloud Storage and Azure signed URL expiration without importing the SDK client or Node download code:
+
+```javascript
+import { getUrlExpiration, isUrlExpired } from 'files.com/lib/utils/urlExpiration'
+
+const expiresAt = getUrlExpiration(downloadUri) // epoch milliseconds, or null if unknown
+if (isUrlExpired(downloadUri)) {
+  // Request a fresh URL through the API and the current viewing context.
+}
+```
+
+Both helpers accept an optional second argument: an ISO date-time expiration supplied by the API. They use the earlier known expiration. Expiration at the current time counts as expired. They use the local clock, do not modify the signed URL, and do not validate its signature or renew it. Unknown or malformed expiration information returns `null` from `getUrlExpiration` and `false` from `isUrlExpired`; that does not prove a URL is valid or never expires.
+
+An application can keep SDK 1.x and install 2.x under an npm alias, then import just this module:
+
+```sh
+npm install files-sdk-v2@npm:files.com@^2
+```
+
+```javascript
+import { getUrlExpiration, isUrlExpired } from 'files-sdk-v2/lib/utils/urlExpiration'
+```
+
+A native video element makes its own requests, so the player still owns obtaining replacement URLs, preserving playback position and bounding renewal attempts. These helpers do not turn on the SDK's Node download renewal for a video element.
+
 ## Downloads
 
 `file.downloadToFile(path, options)`, `file.downloadToStream(writable, options)` and `file.downloadToString(options)` take `{ signal, onProgress, control, job, maxConcurrency }`. A download's `maxConcurrency` (32 by default) bounds all its storage requests at once, its first response included; the job's, or the process's, request limit bounds them too.
