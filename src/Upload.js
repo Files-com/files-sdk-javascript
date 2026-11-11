@@ -14,6 +14,7 @@ import {
   scopeOf,
 } from './Transfer'
 import { pathNormalizer } from './utils'
+import { isUrlExpiredResponse } from './utils/urlExpiration'
 
 // An upload's one owner, from its first begin_upload to its completion, following the public REST upload guide
 // (https://developers.files.com/rest/files/files/#upload-file-optimized): the grants begin_upload gives for its parts,
@@ -1265,7 +1266,8 @@ const checkedUploadOptions = (given, params) => {
 //
 // Only a part whose grant allows parallel parts and retrying (retry_parts) is sent again after a transient failure,
 // with the same number and bytes, after storage's wait, whether the upload's parts go in parallel or not; a part whose
-// URL has expired is given a new grant first, which, once the part may have been sent, must still allow retrying it.
+// URL has expired, or that storage answered by saying so (see isUrlExpiredResponse()), is given a new grant first,
+// which, once the part may have been sent, must still allow retrying it.
 // Paused, the upload sends and reads nothing new, a look ahead for the source's end included, holding no request permit
 // or new buffer room meanwhile. The first failure, or the caller's signal, stops everything, any wait for the source
 // included, without closing it, and its parts' requests under way, without a deadline of its own; the upload rejects
@@ -1931,7 +1933,14 @@ const uploadSource = async ({
         } else {
           failure = uploadError(`Storage answered part ${number} with HTTP status ${result.status}`, result.status)
 
-          if (result.status === 429 || result.status === 503) {
+          if (isUrlExpiredResponse(result.status, result.data)) {
+            // Sent, as a part redirected to an expired URL was: sent again only as a retry its grant allows, to a
+            // renewed grant that must still allow it; otherwise the upload fails with this answer.
+            attempt.abandon()
+            url = null
+            grant = { ...grant, expires: new Date(0).toISOString() }
+            waitMs = 0
+          } else if (result.status === 429 || result.status === 503) {
             waitMs = Api._retryAfterMs(result.headers['retry-after']) ?? 0
 
             // A wait no timer can be set for is refused before it reaches the controller.

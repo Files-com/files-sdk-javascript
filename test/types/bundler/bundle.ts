@@ -2,7 +2,9 @@
 // root and src/ paths as ES modules (package.json's `module` field), and lib/ paths as the CommonJS build.
 import Files from 'files.com'
 import LibUser from 'files.com/lib/models/User'
-import { getUrlExpiration, isUrlExpired } from 'files.com/lib/utils/urlExpiration'
+import {
+  URL_EXPIRED_RESPONSE_BYTES, getUrlExpiration, isUrlExpired, isUrlExpiredResponse,
+} from 'files.com/lib/utils/urlExpiration'
 import FilesClient from 'files.com/src/FilesClient'
 import { Logger } from 'files.com/src/index'
 import { LogLevel } from 'files.com/src/Logger'
@@ -37,3 +39,10 @@ const videoExpiration: number | null = getUrlExpiration('https://storage.example
 const videoExpired: boolean = isUrlExpired('https://storage.example/video')
 void videoExpiration
 void videoExpired
+
+// A failed response's body, once read, as fetch() gives it.
+export const responseExpired = async (response: Response): Promise<boolean> =>
+  isUrlExpiredResponse(response.status, new Uint8Array(await response.arrayBuffer()).subarray(0, URL_EXPIRED_RESPONSE_BYTES))
+
+// @ts-expect-error A body still to be read is not given.
+export const unreadExpired = (response: Response): boolean => isUrlExpiredResponse(response.status, response.body)

@@ -456,10 +456,11 @@ const prepare = () => {
 //   sending it failed with; or with { crashed } when the thread stopped before telling.
 // - response: its response, { headers, status, statusText }, logged to log as one on the download's thread is, once the
 //   thread has it; or it rejects with its failure, which failed() then gives as unanswered() judged it on the thread.
-// - readInto({ control, expected, signal, writer }): reads its body, expected bytes, into writer on the download's
-//   thread, a batch at a time, writing each before its thread may take more, and resolves with what pump() would have,
-//   once every batch of it being written has been. signal, the download's split's, stops the request whenever it
-//   aborts, the request closed or not.
+// - readInto({ control, expected, limit, signal, writer }): reads its body, expected bytes, into writer on the
+//   download's thread, a batch at a time, writing each before its thread may take more, and resolves with what pump()
+//   would have, once every batch of it being written has been; or, given limit, only its first limit bytes, however
+//   long it is, the rest left unread and the request stopped, those bytes not counted as received. signal, the
+//   download's split's, stops the request whenever it aborts, the request closed or not.
 // - received(): the bytes of its body its thread has taken.
 // Or returns null when the thread could not be given the request at all, which has then gone nowhere. Its budget runs
 // on its thread, as httpsExchange() keeps it: through the wait for the download's verdict on its response and every
@@ -829,7 +830,7 @@ const open = (thread, {
   }
 
   const readInto = ({
-    control, expected, signal, writer,
+    control, expected, limit = null, signal, writer,
   }) => new Promise(resolve => {
     if (crashed) {
       resolve({
@@ -872,8 +873,10 @@ const open = (thread, {
     reading = current
 
     // The request's one buffer, made only now that its body is to be read, while it holds its permits.
-    const buffer = new ArrayBuffer(Math.max(1, Math.min(WRITE_BATCH_BYTES, expected)))
-    post({ buffer, expected, type: 'read' }, [buffer])
+    const buffer = new ArrayBuffer(Math.max(1, Math.min(WRITE_BATCH_BYTES, limit ?? expected)))
+    post({
+      buffer, expected, limit, type: 'read',
+    }, [buffer])
   })
 
   if (thread.tasks.size === 0) {

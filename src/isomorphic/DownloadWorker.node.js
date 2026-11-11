@@ -320,9 +320,13 @@ const send = ({
 // Reads a request's body, expected bytes, as readRangeBytes() in File.node.js reads one, into buffer, the request's one
 // buffer, and gives the rest of it to the download's thread once read to its end or broken; ends the request's budget
 // once the body has been read and written, or stops the request otherwise; and tells the download's thread the outcome.
+// Given limit, it reads only the body's first limit bytes, as pump() limits a read, uncounted as received, whatever its
+// length, and then stops the request, the rest unread.
 // Once the request has broken, as its pause shows pump(), no chunk of it is taken, and the pause's wait ends as the
 // body's failure; one that broke with a failure has that failure, its budget's first, as its outcome.
-const read = async ({ buffer, expected, task }) => {
+const read = async ({
+  buffer, expected, limit = null, task,
+}) => {
   const request = requests.get(task)
 
   if (request === undefined) {
@@ -340,7 +344,7 @@ const read = async ({ buffer, expected, task }) => {
   }
 
   request.buffer = buffer
-  request.expected = expected
+  request.expected = limit ?? expected
   request.filled = 0
 
   if (isStopped(request) || request.opened === null) {
@@ -367,13 +371,16 @@ const read = async ({ buffer, expected, task }) => {
         return request.broken !== null || isPaused(request)
       },
     },
-    expected,
+    expected: limit === null ? expected : null,
+    limit,
     log: silentLog,
     offset: 0,
     opened: request.opened,
     progress: {
       sent: bytes => {
-        Atomics.add(request.counts, RECEIVED, bytes)
+        if (limit === null) {
+          Atomics.add(request.counts, RECEIVED, bytes)
+        }
       },
     },
     signal: {
@@ -409,7 +416,7 @@ const read = async ({ buffer, expected, task }) => {
     }
   }
 
-  if (outcome.ok) {
+  if (outcome.ok && limit === null) {
     request.exchange.finish()
   } else {
     request.exchange.stop()

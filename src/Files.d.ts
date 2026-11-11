@@ -287,7 +287,10 @@ declare namespace Files {
      * signature or the API's `expires`, is never sent: neither at first, nor again, nor once its callbacks, such as the
      * agent's choice, have run, nor to a redirect's expired `Location`. A part whose request was answered with such a
      * redirect was sent, and is sent again only as a retry its grant allows, to a renewed grant; otherwise its upload
-     * fails with the expired-URL `FilesError`.
+     * fails with the expired-URL `FilesError`. So is a part, or a range of a File's download that can get its URL again,
+     * that storage answered with a 400 or 403 saying its URL has expired (see `isUrlExpiredResponse` in
+     * `files.com/lib/utils/urlExpiration`), whatever the URL's own expiry says; once its retries are spent, it fails
+     * with that status.
      */
     maxNetworkRetries?: number | undefined
 

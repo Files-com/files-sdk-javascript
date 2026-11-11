@@ -11,6 +11,7 @@ import {
   scopeOf,
   systemClock,
 } from '../Transfer'
+import { URL_EXPIRED_RESPONSE_BYTES, isUrlExpiredResponse } from '../utils/urlExpiration'
 
 // An upload reads its file from disk 5 MiB at a time.
 const openDiskFileReadStream = sourceFilePath => {
@@ -303,6 +304,35 @@ const unanswered = (error, target) => {
   }
 
   return { error, terminal: isPermanent(error, target) }
+}
+
+// The first bytes of the body of opened, a refused response exchange gave, however long the body is, only to tell
+// whether storage says the URL has expired: never written, logged, or counted as received or delivered. That is
+// URL_EXPIRED_RESPONSE_BYTES and one byte more, which tells isUrlExpiredResponse() whether it has the whole body. On the
+// download's own thread they are read as the API reads a refused storage response (see Api._boundedBytes); on a
+// download thread, by that thread's own limited read (see DownloadWorkers.node.js). Either stops the body once it has
+// them, or once it ends, fails or signal aborts, and never rejects; the exchange is still the caller's to stop.
+const refusedLeadOf = async (exchange, opened, signal) => {
+  const limit = URL_EXPIRED_RESPONSE_BYTES + 1
+
+  if (!exchange.readInto) {
+    return require('../Api.js').default._boundedBytes(opened, signal, limit)
+  }
+
+  const chunks = []
+
+  await exchange.readInto({
+    control: null,
+    limit,
+    signal,
+    writer: {
+      // A copy: the batch's buffer goes back to its thread once added.
+      add: chunk => { chunks.push(Buffer.from(chunk)) },
+      flush: () => {},
+    },
+  })
+
+  return Buffer.concat(chunks)
 }
 
 // The version of the file a whole response gives, { etag, total }, which a later request can ask for again from any
@@ -970,7 +1000,8 @@ const answerWithin = (exchange, signal) => new Promise(resolve => {
 // download's only when nothing else failed.
 //
 // The download asks for the whole file first. A response other than 200 fails it, unread, with its status, unless a
-// retry may answer it: a 429 or 503 after its Retry-After, or another server error after STORAGE_RETRY_MS. One from
+// retry may answer it: a 429 or 503 after its Retry-After, another server error after STORAGE_RETRY_MS, or, with
+// renew(), a 400 or 403 whose first bytes say its URL has expired, at once to a URL given again (see judge()). One from
 // the Files.com web app is refused, whatever its status, before any of its body is used, and so is any response for a
 // range. When the response gives the file's version (see versionOf()), a download that breaks asks for the rest of that
 // version from the first byte not yet written, and its destination never gets a byte twice; without one, only a
@@ -1014,7 +1045,9 @@ const run = async (destination, {
   const progress = createProgress({ control, direction: 'download', onProgress })
   let sink = null
   let failure = null
-  let url = givenUrl
+  // The download's URL as it was last given, its source: refused once storage answered a request sent to it by saying
+  // it has expired (see judge()), which concerns that source alone, not one given after it, even of the same URL.
+  let source = { refused: false, url: givenUrl }
   let renewal = null
   let renewalsWithoutProgress = 0
   let filesHeld = false
@@ -1127,16 +1160,17 @@ const run = async (destination, {
     progress.accepted(bytes)
   }
 
-  // The download's URL, given again by renew() first when it is known to have expired, by its own signature: requests
-  // that find it so at once share one renewal. Without renew(), with a renewal that gives no URL, or one expired
+  // The download's source, given again by renew() first when its URL is known to have expired, by its own signature,
+  // or storage refused it so: requests that find it so at once share one renewal, which gives a new source, even of the
+  // same URL, unless that has expired by its own signature. Without renew(), with a renewal that gives no URL, or one expired
   // already, or a third renewal without a byte delivered since, the download fails, unsent, with the expired-URL error.
   // A request for what owning stands for, such as a split, stops waiting once owning aborts, rejecting with its reason;
   // and a renewal no request waits for any more, all of theirs having so stopped, is stopped itself, its request to the
   // API included, as it is once the download stops, and kept until it has settled (stoppedRenewals), so that another
   // starts only once it has. One a request still waits for goes on.
   const freshUrl = async (owning = null) => {
-    if (!isExpired(url)) {
-      return url
+    if (!source.refused && !isExpired(source.url)) {
+      return source
     }
 
     if (!renew) {
@@ -1162,7 +1196,7 @@ const run = async (destination, {
           throw expiredUrlError()
         }
 
-        url = renewed
+        source = { refused: false, url: renewed }
       }).finally(() => {
         if (renewal === current) {
           renewal = null
@@ -1210,7 +1244,7 @@ const run = async (destination, {
       }
     }
 
-    return url
+    return source
   }
 
   // Decides, as the request path is about to hand a request through a configured HTTP client, or a redirect of it, to
@@ -1303,8 +1337,9 @@ const run = async (destination, {
   // The last check of a request to target whose permits are held, with nothing left to call or wait for before it is
   // sent, for what owning stands for (see openRequest()): why it is not to be sent now, { error, terminal } once the
   // download has stopped, with its first failure, { stopped } once owning has aborted, { paused } while the download is
-  // paused, or { expired } once target has expired (see isExpired()), for its URL to be given again; or null.
-  const lastCheck = (target, owning) => {
+  // paused, or { expired } once target has expired (see isExpired()), or from, its source, has been refused, for its URL
+  // to be given again; or null.
+  const lastCheck = (target, owning, from) => {
     if (failure) {
       return { error: failure.error, terminal: true }
     }
@@ -1317,13 +1352,14 @@ const run = async (destination, {
       return { paused: true }
     }
 
-    return isExpired(target) ? { expired: true } : null
+    return from.refused || isExpired(target) ? { expired: true } : null
   }
 
   // Sends a request for the download with headers, as the number'th for its bytes, whose permits are already held, for
   // what owning, a signal, stands for besides the download itself, such as a split or its probe, when given: it
-  // resolves with { agent, exchange, url } once sent, the permits given back once its request has closed and what was
-  // read from it has been written (see staging()); with { paused } when the download was paused by the time it could be
+  // resolves with { agent, exchange, source, url } once sent, source the one url came from (see freshUrl()), the
+  // permits given back once its request has closed and what was read from it has been written (see staging()); with
+  // { paused } when the download was paused by the time it could be
   // sent; with { stopped } when owning had aborted by then, even while its URL was being given again; or with
   // { error, terminal } when it could not be, the permits given back at once, terminal telling whether no retry could
   // send it. Its URL is given again first when it is known to have expired (see freshUrl()); then every callback the
@@ -1335,6 +1371,7 @@ const run = async (destination, {
   // once that has been told, is checked so once more, just before it is sent here.
   const openRequest = async (headers, number, owning = null, forRange = false) => {
     for (;;) {
+      let from
       let target
       let agent
       let requestOptions = null
@@ -1345,7 +1382,8 @@ const run = async (destination, {
         }
 
         // eslint-disable-next-line no-await-in-loop
-        target = await freshUrl(owning)
+        from = await freshUrl(owning)
+        target = from.url
         agent = agentFor(target)
 
         if (!openFetch) {
@@ -1364,7 +1402,7 @@ const run = async (destination, {
         return owning?.aborted ? { stopped: true } : { error, terminal: true }
       }
 
-      let held = lastCheck(target, owning)
+      let held = lastCheck(target, owning, from)
 
       if (held === null) {
         const lane = forRange && threadable(agent, requestOptions)
@@ -1386,13 +1424,13 @@ const run = async (destination, {
           const sent = await sendThrough(remote, target, owning)
 
           if (!sent.expired) {
-            return sent
+            return { ...sent, source: from }
           }
         } else {
           // Telling whether a download thread could send it, and giving it to one, takes time of its own, this
           // thread's setup described and its agent's CA certificates copied, in which the download can have stopped or
           // been paused, or the URL expired: it is checked once more, as nothing is left now but to send it.
-          held = lastCheck(target, owning)
+          held = lastCheck(target, owning, from)
 
           if (held === null) {
             let exchange
@@ -1417,7 +1455,9 @@ const run = async (destination, {
               exchange.stop()
             }
 
-            return { agent, exchange, url: target }
+            return {
+              agent, exchange, source: from, url: target,
+            }
           }
         }
       }
@@ -1461,6 +1501,26 @@ const run = async (destination, {
     }
 
     return { error: statusError(status), terminal: true }
+  }
+
+  // verdictOf(), for sent, a request openRequest() sent, but, for a download that can get its URL again, a final 400 or
+  // 403 from storage has its body's first bytes read (see refusedLeadOf()), stopped by stopSignal; when they say the URL
+  // has expired, it is answered as a URL that expired once its request was sent: a retry at once, the source it was sent
+  // from refused, so that, unless it has been given again since, it is given again first, within freshUrl()'s limit, or
+  // the download fails with the status error.
+  const judge = async (sent, opened, range, stopSignal) => {
+    const verdict = verdictOf(opened, sent.url, range)
+
+    if (!verdict.terminal || !renew || isFrontendAnswer(opened) || (opened.status !== 400 && opened.status !== 403)) {
+      return verdict
+    }
+
+    if (!isUrlExpiredResponse(opened.status, await refusedLeadOf(sent.exchange, opened, stopSignal))) {
+      return verdict
+    }
+
+    sent.source.refused = true
+    return { error: verdict.error, expired: true, waitMs: 0 }
   }
 
   // Whether the download, whose ordinary response has just arrived with version, is split: it asks for the second
@@ -1735,7 +1795,7 @@ const run = async (destination, {
         return
       }
 
-      const verdict = verdictOf(opened, sent.url, asked)
+      const verdict = await judge(sent, opened, asked, splitting.signal)
 
       if (verdict.ok) {
         await readRange(index, sent.exchange, opened, attempt, false)
@@ -1922,7 +1982,7 @@ const run = async (destination, {
         return { error: failed.error, waitMs: failed.expired ? 0 : STORAGE_RETRY_MS }
       }
 
-      const verdict = verdictOf(opened, sent.url, range)
+      const verdict = await judge(sent, opened, range, stopping.signal)
 
       if (!verdict.ok) {
         exchange.stop()

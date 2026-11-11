@@ -628,10 +628,10 @@ const drainResponse = async (response, signal, observe = null) => {
   }
 }
 
-// Reads at most limit bytes of a response's body as text, then stops the body, and resolves once its outcome has been
-// observed, as drainResponse does, with that text: so that a refused response is settled within a bounded read, which
-// signal, its attempt's, can still stop. A body that fails gives what was read before. It never rejects.
-const boundedText = async (response, signal, limit) => {
+// Reads at most limit bytes of a response's body, then stops the body, and resolves once its outcome has been observed,
+// as drainResponse does, with those bytes: so that a refused response is settled within a bounded read, which signal,
+// its attempt's, can still stop. A body that fails gives what was read before. It never rejects.
+const boundedBytes = async (response, signal, limit) => {
   const { body } = response
   const chunks = []
   let length = 0
@@ -702,8 +702,13 @@ const boundedText = async (response, signal, limit) => {
     offset += chunk.length
   })
 
-  return new globalThis.TextDecoder().decode(bytes)
+  return bytes
 }
+
+// The same, as text.
+const boundedText = async (response, signal, limit) => new globalThis.TextDecoder().decode(
+  await boundedBytes(response, signal, limit),
+)
 
 // The logger for a call's messages: Logger itself, with the global log settings, for a call made without a client, or
 // one with the log level and application logger of the call's client.
@@ -1900,6 +1905,10 @@ class Api {
   static _isExpiredUrlError = error => expiredUrlErrors.has(error)
 
   static _isUnsentExpiry = error => unsentExpiries.has(error)
+
+  // Not public: at most limit bytes of a refused response's body, read as a refused storage response's is (see
+  // boundedBytes), for a download that judges its own responses (see isomorphic/File.node.js).
+  static _boundedBytes = (response, signal, limit) => boundedBytes(response, signal, limit)
 
   // Not public: the options by which a storage download chooses its requests' agents itself (see downloadAgents), and
   // lets each of them go (see downloadGate).

@@ -44,6 +44,21 @@ const OTHER_VERSION = positionedBytes(1)
 // DownloadWorkers.node.js), the ordinary response and the probe giving the other two.
 const THIRD_RANGE = 16 * MIB
 
+// S3's answer to a request whose signed URL has expired.
+const S3_EXPIRED = '<?xml version="1.0" encoding="UTF-8"?>\n<Error><Code>AccessDenied</Code><Message>Request has expired</Message></Error>'
+
+// Storage's refusals of a download, by their kind in /refusal/<kind>: two that say its URL has expired, whatever the URL
+// says, and one that does not.
+const REFUSALS = {
+  denied: [403, 'application/xml', '<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>'],
+  'files-expired': [403, 'application/json', '{"error":"expired","type":"download_request_expired"}'],
+  'json-full': [403, 'application/json', '{"type":"download_request_expired"}'.padEnd(4096)],
+  'json-long': [403, 'application/json', `${'{"type":"download_request_expired"}'.padEnd(4096)}<html>trailing</html>`],
+  'json-marker': [403, 'application/json', '{"error":"Request has expired","type":"not_authorized"}'],
+  'once-expired': [400, 'application/json', '{"type":"download_request_expired"}'],
+  's3-expired': [403, 'application/xml', S3_EXPIRED],
+}
+
 // /large/uneven serves UNEVEN, LARGE but for its last 4 KiB, so that its third range ends in a batch smaller than the
 // others, its last, given once the range's response has ended.
 const UNEVEN = LARGE.subarray(0, LARGE.length - 4096)
@@ -218,6 +233,7 @@ describe('File downloads', () => {
   let heldThreadRange = null
   let resetRanges = 0
   let renewedDownloadUri = null
+  let expiredRangeClosed = null
 
   // Answers an ordinary request for LARGE, or the behavior's shorter file (SHORTER_FILES), as storage would, but with a
   // weak ETag, none, or no declared size when the behavior says so.
@@ -391,6 +407,12 @@ describe('File downloads', () => {
     if (behavior === 'forbidden') {
       response.writeHead(403, { 'Content-Type': 'application/xml' })
       response.end(`<Error><Code>AccessDenied</Code><Message>${SIGNATURE}</Message></Error>`)
+    } else if (behavior === 'expired-range' && Number(asked?.[1]) === THIRD_RANGE
+      && (file === 'stale' || (file === 'same' && rangesByFile.same === 2))) {
+      // The expiry, then a body far longer than the bytes examined that never ends, all of it written at once.
+      expiredRangeClosed = new Promise(resolve => { response.once('close', resolve) })
+      response.writeHead(403, { 'Content-Type': 'application/xml' })
+      response.write(Buffer.concat([Buffer.from(S3_EXPIRED), Buffer.alloc(256 * 1024, 0x20)]))
     } else if (behavior === 'held') {
       heldDownloads.push(response)
       downloadsHeld?.(heldDownloads.length)
@@ -488,7 +510,8 @@ describe('File downloads', () => {
         const answerRenewal = () => {
           if (!gone) {
             response.writeHead(200, { 'Content-Type': 'application/json' })
-            response.end(JSON.stringify({ download_uri: renewedDownloadUri ?? `${baseUrl}/complete?X-Amz-Signature=${SIGNATURE}`, path: 'reports/renewed.bin', type: 'file' }))
+            const renewed = typeof renewedDownloadUri === 'function' ? renewedDownloadUri() : renewedDownloadUri
+            response.end(JSON.stringify({ download_uri: renewed ?? `${baseUrl}/complete?X-Amz-Signature=${SIGNATURE}`, path: 'reports/renewed.bin', type: 'file' }))
           }
         }
 
@@ -498,6 +521,22 @@ describe('File downloads', () => {
           answerRenewal()
         }
 
+        return
+      }
+
+      if (request.url.startsWith('/refusal/')) {
+        const kind = request.url.split('?')[0].split('/')[2]
+
+        // Storage takes the same URL once the File has got it again.
+        if (kind === 'once-expired' && served.filter(sent => sent.startsWith('GET /refusal/once-expired')).length > 1) {
+          response.writeHead(200, { 'Content-Length': PAYLOAD.length })
+          response.end(PAYLOAD)
+          return
+        }
+
+        const [status, contentType, body] = REFUSALS[kind]
+        response.writeHead(status, { 'Content-Type': contentType })
+        response.end(body)
         return
       }
 
@@ -1860,6 +1899,35 @@ describe('File downloads', () => {
         expect(downloadThreads.stats().sent).toBe(sentBefore + 1)
       }, LARGE_DEADLINE)
 
+      // Storage answers the third range, read on a download thread, saying its URL has expired, though the URL gives no
+      // expiry of its own, in a body far longer than the bytes examined that never ends: only its first bytes are read,
+      // and its request stopped, the File's own client gives the URL again, once, and the range is asked for there, as
+      // a retry, through a download thread again, none of that answer written to the file. The URL given again may be the
+      // same one, which storage then takes (/large/expired-range/same).
+      it.each([
+        ['another URL', 'stale', 'renewed'],
+        ['the same URL', 'same', 'same'],
+      ])('gets a URL again, %s, when storage answers a range read on a download thread saying it has expired, reading only the first bytes of that answer', async (_, given, renewedName) => {
+        renewedDownloadUri = `${baseUrl}/large/expired-range/${renewedName}?X-Amz-Signature=${SIGNATURE}`
+        const client = new FilesClient({ apiKey: 'issuer-key', baseUrl, maxNetworkRetries: 1 })
+        const file = new File(
+          { download_uri: `${baseUrl}/large/expired-range/${given}?X-Amz-Signature=${SIGNATURE}`, path: 'reports/renewed.bin' },
+          { client },
+        )
+
+        const sentBefore = downloadThreads.stats().sent
+        const destination = path.join(directory, 'expired-range.bin')
+        await withinDeadline(file.downloadToFile(destination), 'the download', LARGE_DEADLINE)
+
+        const thirdRangeAt = name => served.filter(request => request.startsWith(`GET /large/expired-range/${name} bytes=${THIRD_RANGE}-`))
+
+        expect(fs.readFileSync(destination).equals(LARGE)).toBe(true)
+        expect(renewals).toEqual([{ key: 'issuer-key', path: 'reports/renewed.bin' }])
+        expect([thirdRangeAt(given).length, thirdRangeAt(renewedName).length]).toEqual(given === renewedName ? [2, 2] : [1, 1])
+        expect(downloadThreads.stats().sent).toBe(sentBefore + 2)
+        await withinDeadline(expiredRangeClosed, 'the refused range\'s response to close')
+      }, LARGE_DEADLINE)
+
       // This thread's clock is set two hours back, so that the URL, signed two hours ago for one, has not expired here,
       // until the download tells whether a download thread could send the third range: as it reads this thread's DNS
       // order, the clock is put right, as though telling had taken that long, and the order is found to be another than
@@ -2530,6 +2598,55 @@ describe('File downloads', () => {
       expect(text).toBe(PAYLOAD.toString('utf8'))
       expect(renewals).toEqual([{ key: 'issuer-key', path: 'reports/renewed.bin' }])
       expect(served.some(request => request.startsWith('GET /expired'))).toBe(false)
+    })
+
+    // Storage refuses the download of a File with a path, its URL giving no expiry of its own: an answer that says the
+    // URL has expired gets it again through the File's own client, as a retry, and the download goes on there; any other
+    // refusal fails the download with its status, the URL not given again.
+    it.each([
+      ['S3\'s XML through Node.js\'s https', 's3-expired', {}, true],
+      ['Files.com\'s JSON through a configured fetch', 'files-expired', { fetch: crossFetch }, true],
+      ['a plain AccessDenied', 'denied', {}, false],
+      ['a JSON error of another type that mentions an expiry', 'json-marker', {}, false],
+      ['a typed JSON error of exactly 4096 bytes through a configured fetch', 'json-full', { fetch: crossFetch }, true],
+      ['a typed JSON error whose body goes on past 4096 bytes', 'json-long', {}, false],
+      ['Files.com\'s JSON for an opaque URL its File gives again unchanged', 'once-expired', {}, true],
+    ])('gets the URL again only once storage says it has expired: %s', async (_, kind, options, renewed) => {
+      const uri = `${baseUrl}/refusal/${kind}?X-Amz-Signature=${SIGNATURE}`
+      renewedDownloadUri = kind === 'once-expired' ? uri : null
+      const file = new File(
+        { download_uri: uri, path: 'reports/renewed.bin' },
+        { client: new FilesClient({ apiKey: 'issuer-key', baseUrl, maxNetworkRetries: 1 }), ...options },
+      )
+
+      const { error, value } = await withinDeadline(downloadOutcomeOf(file.downloadToString()), 'the download')
+
+      expect({ status: error?.status, text: value }).toEqual(renewed ? { text: PAYLOAD.toString('utf8') } : { status: 403 })
+      expect(renewals).toEqual(renewed ? [{ key: 'issuer-key', path: 'reports/renewed.bin' }] : [])
+      expect(served.filter(request => request.startsWith('GET /refusal/'))).toHaveLength(kind === 'once-expired' ? 2 : 1)
+    })
+
+    // Storage says every URL has expired, those given again too, new or the same: each answer was sent, and so counts as
+    // a retry, and
+    // the URL is given again at most twice without a byte delivered, the third time failing the download unsent.
+    it.each([
+      ['new URLs', 0, 1, 0, 'Download failed with HTTP status 403'],
+      ['new URLs', 1, 2, 1, 'Download failed with HTTP status 403'],
+      ['new URLs', 5, 3, 2, 'The signed URL had expired before the request could be sent'],
+      ['the same URL', 5, 3, 2, 'The signed URL had expired before the request could be sent'],
+    ])('given %s, with maxNetworkRetries %i, sends %i requests to URLs storage says have expired, getting the URL again %i times', async (given, maxNetworkRetries, requests, renewed, message) => {
+      const uri = `${baseUrl}/refusal/s3-expired?X-Amz-Signature=${SIGNATURE}`
+      renewedDownloadUri = given === 'the same URL' ? uri : () => `${baseUrl}/refusal/s3-expired?renewal=${renewals.length}&X-Amz-Signature=${SIGNATURE}`
+      const file = new File(
+        { download_uri: uri, path: 'reports/renewed.bin' },
+        { client: new FilesClient({ apiKey: 'issuer-key', baseUrl, maxNetworkRetries }) },
+      )
+
+      const error = await failureOf(file.downloadToString())
+
+      expect(error.message).toBe(message)
+      expect(served.filter(request => request.startsWith('GET /refusal/'))).toHaveLength(requests)
+      expect(renewals).toHaveLength(renewed)
     })
 
     it('fails, unsent, a download whose URL has expired when the File cannot get it again', async () => {

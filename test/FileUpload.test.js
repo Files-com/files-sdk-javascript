@@ -61,7 +61,8 @@ const recordingCallback = events => fileUploadPart => {
 // body by path and part; each part's grants and sends by path and part; and how many storage requests were under way
 // at once, at most. answerGrants(request, answer) answers a request for grants, at once by default: answer(fields,
 // status, only) with fields over every grant's, and only the grants of the parts only lists, when given. answerStore(
-// store, answer) answers a part's storage, at once by default: answer(status, headers).
+// store, answer) answers a part's storage, at once by default: answer(status, headers, body), body 'refused' by default
+// for a refusal.
 const serveTransfers = ({
   answerGrants = (request, answer) => answer(),
   answerStore = (store, answer) => answer(),
@@ -170,7 +171,7 @@ const serveTransfers = ({
         send: sends[key],
       }
 
-      answerStore(store, (status = 200, headers = {}) => {
+      answerStore(store, (status = 200, headers = {}, refusal = 'refused') => {
         counts.inFlight -= 1
 
         if (status === 200) {
@@ -178,7 +179,7 @@ const serveTransfers = ({
           events.push(`store ${part}`)
         }
 
-        callback(null, [status, status === 200 ? '' : 'refused', { ETag: `"etag-${part}"`, ...headers }])
+        callback(null, [status, status === 200 ? '' : refusal, { ETag: `"etag-${part}"`, ...headers }])
       })
     })
 
@@ -767,6 +768,56 @@ describe('File uploads', () => {
     expect(storage.grants).toEqual({ 'reports/unsent.csv 1': 2, 'reports/withdrawn.csv 1': 2 })
     expect(storage.sends).toEqual({ 'reports/unsent.csv 1': 1, 'reports/withdrawn.csv 1': 1 })
     expect(storage.events.filter(event => event === 'end')).toHaveLength(1)
+  })
+
+  // Storage refuses part 1's first send, its URL's expiry an hour away: only an answer that says the URL has expired
+  // asks for the part's grant again, as a retry its grant allows, and sends the same bytes there; the renewed grant must
+  // still allow it, and a URL storage says has expired every time is renewed no more than the retries allow. Any other
+  // refusal, and an expiry its grant allows no retry for, fails the upload with storage's answer, nothing renewed.
+  it('asks for a part\'s grant again only when storage says its URL has expired, and only as a retry its grants allow', async () => {
+    Files.configureNetwork({ maxNetworkRetries: 1 })
+
+    const S3_EXPIRED = '<?xml version="1.0" encoding="UTF-8"?>\n<Error><Code>AccessDenied</Code><Message>Request has expired</Message></Error>'
+    const FILES_EXPIRED = '{"error":"expired","type":"upload_request_expired"}'
+    const DENIED = '<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>'
+
+    // By path: the refusal of part 1's first send, the part's first and renewed grants' own fields, whether every send
+    // is refused so, and what the upload then comes to, with how many grants part 1 had and how often it was sent.
+    const cases = {
+      'reports/always.csv': { always: true, outcome: [false, 2, 2], refusal: [403, S3_EXPIRED] },
+      'reports/denied.csv': { outcome: [false, 1, 1], refusal: [403, DENIED] },
+      'reports/files.csv': { outcome: [true, 2, 2], refusal: [400, FILES_EXPIRED] },
+      'reports/no-retry.csv': { first: { retry_parts: false }, outcome: [false, 1, 1], refusal: [403, S3_EXPIRED] },
+      'reports/s3.csv': { outcome: [true, 2, 2], refusal: [403, S3_EXPIRED] },
+      'reports/withdrawn.csv': { outcome: [false, 2, 1], refusal: [403, S3_EXPIRED], renewed: { retry_parts: false } },
+    }
+
+    const storage = serveTransfers({
+      answerStore: ({ path: uploadPath, send }, answer) => (send === 1 || cases[uploadPath].always
+        ? answer(cases[uploadPath].refusal[0], {}, cases[uploadPath].refusal[1])
+        : answer()),
+      grant: ({ attempt, path: uploadPath }) => ({
+        expires: new Date(Date.now() + 3600000).toISOString(),
+        ...(attempt === 1 ? cases[uploadPath].first : cases[uploadPath].renewed),
+      }),
+      partsize: 1024,
+    })
+
+    const uploadPaths = Object.keys(cases)
+    const outcomes = await Promise.all(uploadPaths.map(uploadPath => outcomeOf(File.uploadData(uploadPath, DATA))))
+
+    expect(outcomes.map(({ error, value }, index) => [
+      value instanceof File,
+      storage.grants[`${uploadPaths[index]} 1`],
+      storage.sends[`${uploadPaths[index]} 1`],
+      error?.code,
+    ])).toEqual(uploadPaths.map(uploadPath => {
+      const [stored, grants, sends] = cases[uploadPath].outcome
+      return [stored, grants, sends, stored || uploadPath === 'reports/withdrawn.csv' ? undefined : cases[uploadPath].refusal[0]]
+    }))
+
+    expect(storage.stored['reports/s3.csv']).toEqual({ 1: DATA })
+    expect(storage.stored['reports/files.csv']).toEqual({ 1: DATA })
   })
 
   // Part 1's PUT is answered with a redirect to a URL that has expired by its own signature: that URL is never sent to,
