@@ -210,6 +210,14 @@ class Expectation {
     exposeAttributes(this, ['lookback_interval'])
   }
 
+  // array(object) # Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
+  getScheduleTimeExceptions = () => this.attributes.schedule_time_exceptions
+
+  setScheduleTimeExceptions = value => {
+    this.attributes.schedule_time_exceptions = value
+    exposeAttributes(this, ['schedule_time_exceptions'])
+  }
+
   // int64 # How many seconds a schedule-driven window may remain eligible to close as late.
   getLateAcceptanceInterval = () => this.attributes.late_acceptance_interval
 
@@ -327,6 +335,7 @@ class Expectation {
   //   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
   //   schedule_time_zone - string - Time zone used by the Expectation schedule.
   //   holiday_region - string - Optional holiday region used by the Expectation schedule.
+  //   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
   //   lookback_interval - int64 - How many seconds before the due boundary the window starts.
   //   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
   //   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -407,6 +416,10 @@ class Expectation {
 
     if (params.holiday_region !== undefined && params.holiday_region !== null && !isString(params.holiday_region)) {
       throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
+    }
+
+    if (params.schedule_time_exceptions !== undefined && params.schedule_time_exceptions !== null && !isArray(params.schedule_time_exceptions)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_exceptions must be of type Array, received ${getType(params.schedule_time_exceptions)}`)
     }
 
     if (params.lookback_interval !== undefined && params.lookback_interval !== null && !isInt(params.lookback_interval)) {
@@ -555,6 +568,7 @@ class Expectation {
   //   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
   //   schedule_time_zone - string - Time zone used by the Expectation schedule.
   //   holiday_region - string - Optional holiday region used by the Expectation schedule.
+  //   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
   //   lookback_interval - int64 - How many seconds before the due boundary the window starts.
   //   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
   //   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -620,6 +634,10 @@ class Expectation {
 
     if (params.holiday_region !== undefined && params.holiday_region !== null && !isString(params.holiday_region)) {
       throw new errors.InvalidParameterError(`Bad parameter: holiday_region must be of type String, received ${getType(params.holiday_region)}`)
+    }
+
+    if (params.schedule_time_exceptions !== undefined && params.schedule_time_exceptions !== null && !isArray(params.schedule_time_exceptions)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_time_exceptions must be of type Array, received ${getType(params.schedule_time_exceptions)}`)
     }
 
     if (params.lookback_interval !== undefined && params.lookback_interval !== null && !isInt(params.lookback_interval)) {

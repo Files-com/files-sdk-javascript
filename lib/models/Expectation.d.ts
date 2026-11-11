@@ -88,6 +88,12 @@ declare class Expectation {
   /** How many seconds before the due boundary the window starts. */
   readonly lookback_interval?: number | null
 
+  /**
+   * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+   * Calendars specifying different times on the same date conflict.
+   */
+  readonly schedule_time_exceptions?: Expectation.ScheduleTimeExceptions | null
+
   /** How many seconds a schedule-driven window may remain eligible to close as late. */
   readonly late_acceptance_interval?: number | null
 
@@ -181,6 +187,12 @@ declare class Expectation {
   /** How many seconds before the due boundary the window starts. */
   getLookbackInterval(): number | null | undefined
 
+  /**
+   * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+   * Calendars specifying different times on the same date conflict.
+   */
+  getScheduleTimeExceptions(): Expectation.ScheduleTimeExceptions | null | undefined
+
   /** How many seconds a schedule-driven window may remain eligible to close as late. */
   getLateAcceptanceInterval(): number | null | undefined
 
@@ -273,6 +285,12 @@ declare class Expectation {
 
   /** How many seconds before the due boundary the window starts. */
   setLookbackInterval(value: number): void
+
+  /**
+   * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+   * Calendars specifying different times on the same date conflict.
+   */
+  setScheduleTimeExceptions(value: Expectation.ScheduleTimeExceptions): void
 
   /** How many seconds a schedule-driven window may remain eligible to close as late. */
   setLateAcceptanceInterval(value: number): void
@@ -412,6 +430,12 @@ declare namespace Expectation {
     /** How many seconds before the due boundary the window starts. */
     lookback_interval?: number | null
 
+    /**
+     * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+     * Calendars specifying different times on the same date conflict.
+     */
+    schedule_time_exceptions?: Expectation.ScheduleTimeExceptions | null
+
     /** How many seconds a schedule-driven window may remain eligible to close as late. */
     late_acceptance_interval?: number | null
 
@@ -519,6 +543,12 @@ declare namespace Expectation {
     /** Optional holiday region used by the Expectation schedule. */
     holiday_region?: string
 
+    /**
+     * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+     * Calendars specifying different times on the same date conflict.
+     */
+    schedule_time_exceptions?: Expectation.ScheduleTimeExceptions
+
     /** How many seconds before the due boundary the window starts. */
     lookback_interval?: number
 
@@ -590,6 +620,12 @@ declare namespace Expectation {
     /** Optional holiday region used by the Expectation schedule. */
     holiday_region?: string
 
+    /**
+     * Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply.
+     * Calendars specifying different times on the same date conflict.
+     */
+    schedule_time_exceptions?: Expectation.ScheduleTimeExceptions
+
     /** How many seconds before the due boundary the window starts. */
     lookback_interval?: number
 
@@ -611,6 +647,14 @@ declare namespace Expectation {
     /** Workspace ID. `0` means the default workspace. */
     workspace_id?: number
   }
+
+  type ScheduleTimeExceptions = Array<{
+    /** Built-in holiday region or custom Holiday Calendar code identifying exception dates. */
+    holiday_region: string
+
+    /** Replacement schedule times in HH:MM or H-H:MM format, in the effective schedule time zone. */
+    times_of_day: string[]
+  }>
 
   /** Expectation criteria */
   interface Criteria {

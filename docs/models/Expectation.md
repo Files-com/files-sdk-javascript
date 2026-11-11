@@ -32,6 +32,14 @@
   "schedule_time_zone": "UTC",
   "holiday_region": "us",
   "lookback_interval": 3600,
+  "schedule_time_exceptions": [
+    {
+      "holiday_region": "nyse_early_close",
+      "times_of_day": [
+        "13:00"
+      ]
+    }
+  ],
   "late_acceptance_interval": 900,
   "inactivity_interval": 300,
   "max_open_interval": 43200,
@@ -71,6 +79,7 @@
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` (int64): How many seconds before the due boundary the window starts.
+* `schedule_time_exceptions` (array(object)): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `late_acceptance_interval` (int64): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (int64): How many quiet seconds are required before final closure.
 * `max_open_interval` (int64): Hard-stop duration in seconds for unscheduled expectations.
@@ -132,6 +141,7 @@ await Expectation.create({
   'schedule_times_of_day': ["06:00"],
   'schedule_time_zone': "UTC",
   'holiday_region': "us",
+  'schedule_time_exceptions': [{"holiday_region":"nyse_early_close","times_of_day":["13:00"]}],
   'lookback_interval': 3600,
   'late_acceptance_interval': 900,
   'inactivity_interval': 300,
@@ -159,6 +169,7 @@ await Expectation.create({
 * `schedule_times_of_day` (array(string)): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
+* `schedule_time_exceptions` (array(object)): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `lookback_interval` (int64): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (int64): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (int64): How many quiet seconds are required before final closure.
@@ -235,6 +246,7 @@ await expectation.update({
   'schedule_times_of_day': ["06:00"],
   'schedule_time_zone': "UTC",
   'holiday_region': "us",
+  'schedule_time_exceptions': [{"holiday_region":"nyse_early_close","times_of_day":["13:00"]}],
   'lookback_interval': 3600,
   'late_acceptance_interval': 900,
   'inactivity_interval': 300,
@@ -262,6 +274,7 @@ await expectation.update({
 * `schedule_times_of_day` (array(string)): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
+* `schedule_time_exceptions` (array(object)): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `lookback_interval` (int64): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (int64): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (int64): How many quiet seconds are required before final closure.
@@ -301,6 +314,14 @@ await expectation.update({
   "schedule_time_zone": "UTC",
   "holiday_region": "us",
   "lookback_interval": 3600,
+  "schedule_time_exceptions": [
+    {
+      "holiday_region": "nyse_early_close",
+      "times_of_day": [
+        "13:00"
+      ]
+    }
+  ],
   "late_acceptance_interval": 900,
   "inactivity_interval": 300,
   "max_open_interval": 43200,

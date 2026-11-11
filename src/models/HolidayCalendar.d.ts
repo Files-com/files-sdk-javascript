@@ -203,6 +203,13 @@ declare namespace HolidayCalendar {
 
       /** Day of the week, where 0 is Sunday and 6 is Saturday. */
       wday: number
+
+      /**
+       * Days to add to the selected weekday before applying observed. For example, week 4, wday 4, day_offset 1 selects
+       * the day after Thanksgiving.
+       * @defaultValue 0
+       */
+      day_offset?: number
     }
 
     /** Calculated-date rule */
