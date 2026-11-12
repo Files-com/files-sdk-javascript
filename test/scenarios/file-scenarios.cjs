@@ -4,7 +4,10 @@
 // run through this SDK's public models and helpers against the Files.com Mock API Server, one scenario per launch.
 // Rendered from targets/javascript/test/scenarios/__file_scenarios.cjs. test.sh runs it under the Mock's
 // with-scenario.rb, loaded with the api-scenarios-canonical preset, which gives it the FILES_MOCK_* variables, with the
-// Mock's directory and the scenario's id as its arguments.
+// Mock's directory and the scenario's id as its arguments; and files.owned-binary-roundtrip once more with the
+// api-scenarios-remote-finalize preset, whose Mock answers each upload's finalize as pending, more than once, before it
+// completes the upload, as Files.com does for a remote server mount or a Files Agent. An upload's finalizes answered
+// pending come before its one completion, which is its evidence as for any other upload.
 //
 // Each position is a step of the scenario as the shared binder bound it to this API. An operation step is the call of
 // its operation's model, static or through an instance, named and argued as the SDK's own methods are, checked against
@@ -2680,9 +2683,11 @@ const isId = value => Number.isSafeInteger(value) && value > 0
 
 // What a journal entry shows, kept with the request it joined: its operation and status, the value its path gives its
 // route's parameter (target, null for storage's), the type it found, and the upload, part and version it used, with the
-// byte count and SHA-256 of the bytes it stored, published or sent. A field the entry lacks is null.
+// byte count and SHA-256 of the bytes it stored, published or sent; and, for a finalize answered as a background
+// finalization, whether it was pending or completed (finalization). A field the entry lacks is null.
 const journalOf = (entry, target) => ({
   bytes: entry.bytes ?? null,
+  finalization: entry.finalization ?? null,
   operation: entry.operation ?? null,
   part: entry.part ?? null,
   seq: entry.seq,
@@ -3044,10 +3049,27 @@ const uploadsOf = records => {
   return uploads
 }
 
+// Whether a finalize's journal entry is the Mock's answer that it is still finalizing the upload in the background, a
+// 202 pending, as it answers a finalize that asks for that (async_finalize) under a remote upload_finalization profile,
+// such as the api-scenarios-remote-finalize preset's.
+const isPendingFinalize = journal => journal.status === 202 && journal.finalization === 'pending'
+
+// The finalize requests of an upload answered pending, in the order sent, before the first that was not; and that one
+// with every finalize after it.
+const finalizesOf = upload => {
+  const answered = upload.finalized.findIndex(journal => !isPendingFinalize(journal))
+  const pending = answered === -1 ? upload.finalized.length : answered
+  return { finals: upload.finalized.slice(pending), pending }
+}
+
+// The finalize that completed an upload, the first that was not answered pending, or undefined.
+const completionOf = upload => finalizesOf(upload).finals[0]
+
 // What is wrong with an upload's evidence for data: it was begun; storage accepted its parts, distinct by number from 1
 // with no gap, every acceptance of one number of the same bytes, each part the bytes at its place in data; and it was
-// finalized once, publishing exactly data, or, cancelled, it has a part and no finalize. Gives the problems, and how
-// many distinct parts storage accepted, which parts sent again never add to.
+// finalized once, publishing exactly data, after any number of answers that it was still being finalized, or,
+// cancelled, it has a part and no finalize. Gives the problems, how many distinct parts storage accepted, which parts
+// sent again never add to, and how many finalizes were answered pending.
 const uploadProblems = (id, upload, data, cancelled) => {
   const problems = []
   const byNumber = new Map()
@@ -3094,23 +3116,24 @@ const uploadProblems = (id, upload, data, cancelled) => {
       problems.push(`upload ${id} was finalized though it was cancelled`)
     }
 
-    return { distinct: numbers.length, problems }
+    return { distinct: numbers.length, pending: 0, problems }
   }
 
-  const [finalize, ...others] = upload.finalized
+  const { finals, pending } = finalizesOf(upload)
+  const [finalize, ...others] = finals
 
   if (offset !== data.length) {
     problems.push(`its accepted parts hold ${offset} bytes, not ${data.length}`)
   }
 
   if (!finalize || others.length > 0) {
-    problems.push(`upload ${id} was finalized ${upload.finalized.length} times, not once`)
+    problems.push(`upload ${id} was finalized ${finals.length} times after ${pending} pending answers, not once`)
   } else if (!(finalize.status === 200 || finalize.status === 201) || !isId(finalize.version) ||
       finalize.bytes !== data.length || finalize.sha256 !== sha256(data)) {
     problems.push(`its finalize answered ${finalize.status}, publishing version ${JSON.stringify(finalize.version)} of ${JSON.stringify(finalize.bytes)} bytes of SHA-256 ${JSON.stringify(finalize.sha256)}, not ${data.length} bytes of ${sha256(data)}`)
   }
 
-  return { distinct: numbers.length, problems }
+  return { distinct: numbers.length, pending, problems }
 }
 
 // What is wrong with a step's downloads, against expected, the recipe of each file it downloads by path: each file
@@ -3207,15 +3230,15 @@ const TRANSFER_EVIDENCE = {
 
     const [[id, upload]] = uploads
     const cancelled = Boolean(step.details.cancel)
-    const { distinct, problems } = uploadProblems(id, upload, recipeBytes(scenario.fixtures[step.fixture].recipe), cancelled)
-    const finalize = upload.finalized[0]
+    const { distinct, pending, problems } = uploadProblems(id, upload, recipeBytes(scenario.fixtures[step.fixture].recipe), cancelled)
+    const finalize = completionOf(upload)
     const boundary = cancelled ? position.intent.cancel?.started_through_seq : null
     const started = Number.isSafeInteger(boundary) ? {
       started_after_cancellation: records.filter(({ seq }) => seq > boundary).map(({ seq }) => seq),
       started_before_cancellation: records.filter(({ seq }) => seq <= boundary).map(({ seq }) => seq),
     } : {}
     // eslint-disable-next-line no-param-reassign
-    position.intent = { ...position.intent, ...started, distinct_parts: distinct, upload: id }
+    position.intent = { ...position.intent, ...started, distinct_parts: distinct, pending_finalizes: pending, upload: id }
 
     if (cancelled) {
       const accepted = records.find(({ seq }) => seq === position.intent.cancel?.accepted_seq)?.journal
@@ -3258,7 +3281,7 @@ const TRANSFER_EVIDENCE = {
     }
 
     uploadsOf(records).forEach((upload, id) => {
-      const target = upload.finalized[0]?.target ?? null
+      const target = completionOf(upload)?.target ?? null
       const recipe = target === null ? undefined : expected.get(target)
 
       if (recipe === undefined || published.has(target)) {
@@ -3267,7 +3290,7 @@ const TRANSFER_EVIDENCE = {
       }
 
       published.add(target)
-      bytes += upload.finalized[0].bytes ?? 0
+      bytes += completionOf(upload).bytes ?? 0
       problems.push(...uploadProblems(id, upload, recipeBytes(recipe), false).problems.map(problem => `${target}: ${problem}`))
     })
 

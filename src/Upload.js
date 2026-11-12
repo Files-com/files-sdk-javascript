@@ -53,7 +53,14 @@ const STORAGE_RETRY_MS = 100
 // takes too; and those that belong to the upload itself, which a caller's params cannot set.
 const BEGIN_PARAMETERS = ['buffered_upload', 'mkdir_parents', 'restart', 'with_rename']
 const SHARED_PARAMETERS = ['buffered_upload', 'mkdir_parents', 'with_rename']
-const OWN_PARAMETERS = ['action', 'etags', 'part', 'parts', 'ref', 'size', 'with_direct_connection_info']
+const OWN_PARAMETERS = ['action', 'async_finalize', 'etags', 'part', 'parts', 'ref', 'size', 'with_direct_connection_info']
+
+// The wait between Files.com's answer that it is still finalizing an upload, a 202 pending for the upload's ref, and the
+// same completion sent again for the outcome: a second after the first such answer, two after the second and three
+// after each later one, counted for each upload's completion. The completion asks for that answer (async_finalize)
+// where Files.com finalizes the upload in the background, as for a remote server integration or a Files Agent;
+// anywhere else, and from a Files.com that does not know the parameter, the completion's answer is the File, as before.
+const finalizationPollMs = pendingAnswers => Math.min(pendingAnswers, 3) * 1000
 
 // Headers that the request's transport sets from its body itself, never from a grant.
 const TRANSPORT_HEADERS = ['connection', 'content-length', 'host', 'transfer-encoding']
@@ -1243,6 +1250,87 @@ const checkedUploadOptions = (given, params) => {
   }
 }
 
+// error, the failure of a request of an upload's completion, as the upload rejects with it: unless the API refused the
+// completion outright, with a 4xx other than 429, it leaves unknown whether the upload completed (completionUnknown).
+// A cancellation by the caller's signal rejects with its reason, unchanged, as every cancelled upload does.
+const completionFailure = (error, signal) => {
+  if (!(signal?.aborted && Object.is(error, abortReason(signal))) && typeof error === 'object' && error !== null) {
+    const status = error.code
+    error.completionUnknown = !(status >= 400 && status < 500 && status !== 429)
+  }
+
+  return error
+}
+
+// An error the SDK makes once Files.com has accepted an upload's completion, which leaves unknown whether the upload
+// completed: Files.com may still complete it.
+const unknownCompletion = (message, code) => {
+  const error = uploadError(message, code)
+  error.completionUnknown = true
+  return error
+}
+
+// The percentage of a finalization that Files.com's pending answer (202) to an upload's completion gives: a whole
+// number from 0 to 100, or null for none or any other value. An answer that is not a JSON object with status 'pending'
+// and the upload's own ref is no pending answer for this upload: Files.com has accepted the completion, and whether the
+// upload completed is unknown.
+const pendingProgressOf = (data, ref) => {
+  if (!isPlainObject(data) || data.status !== 'pending' || typeof data.ref !== 'string' || data.ref !== ref) {
+    throw unknownCompletion('Files.com answered the upload\'s completion with HTTP 202, but not as the pending finalization of this upload, so it is unknown whether the upload completed: check the destination before uploading again', 202)
+  }
+
+  const { progress } = data
+  return Number.isInteger(progress) && progress >= 0 && progress <= 100 ? progress : null
+}
+
+// Completes an upload: sends its completion, POST path with params, and resolves with the response that has the File.
+// The first request is retried only after a failure that shows it was not carried out (see Api._withUnambiguousRetries),
+// as the outcome of any other must be known.
+//
+// While Files.com answers it 202 pending, for the upload's ref, it is finalizing the upload: progress reports that, with
+// the answer's percentage, if any, and finalizationPollMs later the same request, params, ref and all, is sent again,
+// in the first request's own context, its site, credential, workspace and other headers (see Api._sendInContext), with
+// the same options, until Files.com answers with the File or an error. Files.com answers such a request from the
+// upload's finalization, never finalizing it again, so it is retried as the API's other requests are. An error answer
+// of the API is the upload's outcome; any other failure, a 5xx or 429 that its retries did not get past included,
+// leaves the outcome unknown. The caller's signal stops the wait and any request under way, rejecting with its reason,
+// unchanged; an error onProgress throws stops them too. Either way Files.com may still complete the upload.
+const completeUpload = async ({
+  options, params, path, progress, ref, signal,
+}) => {
+  let sent
+
+  try {
+    sent = await Api._sendInContext(null, path, 'POST', params, Api._withUnambiguousRetries(options))
+  } catch (error) {
+    throw completionFailure(error, signal)
+  }
+
+  for (let pendingAnswers = 1; sent.response.status === 202; pendingAnswers += 1) {
+    const percent = pendingProgressOf(sent.response.data, ref)
+
+    try {
+      progress.pendingFinalization(percent)
+    } catch (error) {
+      const stopped = unknownCompletion(`onProgress threw while Files.com was finalizing the upload, so it stopped being waited for, and Files.com may still complete it: ${String(error?.message ?? error)}`)
+      stopped.cause = error
+      throw stopped
+    }
+
+    // eslint-disable-next-line no-await-in-loop
+    await delay(finalizationPollMs(pendingAnswers), signal)
+
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      sent = await Api._sendInContext(sent.operation, path, 'POST', params, options)
+    } catch (error) {
+      throw completionFailure(error, signal)
+    }
+  }
+
+  return sent.response
+}
+
 // Uploads the source open(admission) gives (see streamSource and dataSourceOf), to destinationPath, with params and
 // options as the File model's upload methods take them. hooks are the File model's own: agentFor(url, options), the
 // agent of a part's request; makeFile(data, options), the File the upload resolves with; makeUploadPart(data), the
@@ -1273,7 +1361,8 @@ const checkedUploadOptions = (given, params) => {
 // included, without closing it, and its parts' requests under way, without a deadline of its own; the upload rejects
 // with that failure, or the signal's reason, never with the stop, once every part under way has settled, without
 // completing. Its completion sends the exact size, and every part's ETag when storage gave them; a part without one,
-// when others have one, refuses it.
+// when others have one, refuses it. It asks Files.com to finalize the upload in the background where it can, and waits
+// for the outcome while Files.com answers that it is still finalizing (see completeUpload()).
 //
 // Every byte the SDK holds for the upload is counted against its scope's one buffer budget before it is allocated (see
 // byteBudget): its copy of data in memory, made as its upload is called only once its file has been admitted (see
@@ -2278,26 +2367,22 @@ const uploadSource = async ({
       ...Object.fromEntries(Object.entries(params).filter(([name]) => !OWN_PARAMETERS.includes(name)
         && (!BEGIN_PARAMETERS.includes(name) || SHARED_PARAMETERS.includes(name)))),
       action: 'end',
+      async_finalize: true,
       ...(withEtags.length > 0 ? { etags: parts.map(part => ({ etag: part.etag, part: part.number })) } : {}),
       ref,
       size: readState.offset,
     }
 
-    let completed
-
-    try {
-      completed = await Api.sendRequest(`/files/${encodeURIComponent(destinationPath)}`, 'POST', completionParams, Api._withUnambiguousRetries(options))
-    } catch (error) {
-      // A completion that failed without a definite refusal may have completed the upload: it is not sent again, and
-      // the error says so.
-      if (!(signal?.aborted && Object.is(error, abortReason(signal))) && typeof error === 'object' && error !== null) {
-        const status = error.code
-        error.completionUnknown = !(status >= 400 && status < 500 && status !== 429)
-      }
-
-      progress.finish('failed')
-      throw error
-    }
+    // A completion that failed without a definite refusal may have completed the upload: it is not sent again, and the
+    // error says so (see completeUpload()).
+    const completed = await completeUpload({
+      options,
+      params: completionParams,
+      path: `/files/${encodeURIComponent(destinationPath)}`,
+      progress,
+      ref,
+      signal,
+    })
 
     progress.finish('completed')
     return hooks.makeFile(completed.data, options)

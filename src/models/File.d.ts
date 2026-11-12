@@ -1257,6 +1257,16 @@ declare namespace File {
    * again, and the upload rejects with that error, whose `completionUnknown` is `true`. Check the destination before
    * uploading again.
    *
+   * **Finalization.** The completion asks Files.com to finalize the upload in the background (`async_finalize`), which
+   * it does for a remote server integration or a Files Agent: it may then answer that it is still finalizing the
+   * upload. While it does, the upload reports `finalizing` progress for each such answer and, one second after the first,
+   * two after the second and three after each later one, sends the same completion again, with the same `ref`, parameters, credentials, workspace, headers and site, until Files.com
+   * answers with the File, which the upload resolves with, or an error. An API error answer is the upload's outcome; a
+   * network failure, 5xx or 429 is retried as other requests are, and once retries run out leaves the outcome unknown
+   * (`completionUnknown: true`), as does an answer that is no pending answer for this upload. `signal` stops the wait,
+   * rejecting with its reason, and an error `onProgress` throws stops it with `completionUnknown: true`: Files.com may
+   * still complete the upload either way.
+   *
    * The File it resolves with keeps the upload's options for its own methods, as a static method's model does: through a
    * client, without its `signal`.
    */
@@ -1405,10 +1415,11 @@ declare namespace File {
   type UploadChunk = string | Uint8Array
 
   /**
-   * The parameters of an upload, besides those the upload sets itself: `mkdir_parents`, which creates missing parent
-   * folders, `with_rename`, `buffered_upload` and `restart` go to `begin_upload`, the others to its completion.
+   * The parameters of an upload, besides those the upload sets itself, `async_finalize` included: `mkdir_parents`,
+   * which creates missing parent folders, `with_rename`, `buffered_upload` and `restart` go to `begin_upload`, the
+   * others to its completion.
    */
-  type UploadParams = Omit<CreateParams, 'action' | 'etags' | 'part' | 'ref'>
+  type UploadParams = Omit<CreateParams, 'action' | 'async_finalize' | 'etags' | 'part' | 'ref'>
 
   /**
    * The options of an upload. Its API requests use them as a call's options. Each part is sent with the agent chosen

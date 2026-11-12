@@ -924,9 +924,11 @@ const createController = ({
 // A transfer's progress: bytesTransferred counts each accepted upload part, or each byte delivered to a download's
 // destination, once; bytesSent also counts upload bytes sent again, or download bytes received but then discarded.
 // elapsedMs and bytesPerSecond use the monotonic clock and leave out the time control was paused. onProgress, if
-// given, receives a snapshot as the transfer starts, at most every PROGRESS_INTERVAL_MS as bytes count, and once as it
-// ends; an error it throws while the transfer runs fails the transfer, while one thrown by that last report, once the
-// transfer's outcome is settled, is ignored.
+// given, receives a snapshot as the transfer starts, at most every PROGRESS_INTERVAL_MS as bytes count, once for each
+// pending answer Files.com gives an upload's completion, and once as it ends; an error it throws while the transfer
+// runs fails the transfer, while one thrown by that last report, once the transfer's outcome is settled, is ignored.
+// finalizing is true, and finalizationProgress the percentage the latest pending answer reported, or null, from an
+// upload's first pending answer until its outcome; the last report has false and null again.
 const createProgress = ({
   clock = systemClock,
   control,
@@ -941,6 +943,8 @@ const createProgress = ({
   let state = 'running'
   let lastReport = -Infinity
   let total = totalBytes
+  let finalizing = false
+  let finalizationProgress = null
 
   const snapshot = () => {
     const at = clock.now()
@@ -953,6 +957,8 @@ const createProgress = ({
       bytesTransferred,
       direction,
       elapsedMs,
+      finalizationProgress,
+      finalizing,
       state: state === 'running' && control?.paused ? 'paused' : state,
       totalBytes: total,
     }
@@ -988,12 +994,22 @@ const createProgress = ({
       }
 
       state = outcome
+      finalizing = false
+      finalizationProgress = null
 
       try {
         report(true)
       } catch {
         // The transfer has its outcome already.
       }
+    },
+
+    // Reports that Files.com answered an upload's completion as pending, with the percentage that answer gave, or null,
+    // once for each such answer, its bytes as they were. An error onProgress throws here is thrown to the upload.
+    pendingFinalization: percent => {
+      finalizing = true
+      finalizationProgress = percent
+      report(true)
     },
 
     // Discards what a whole download delivered, when it starts again from its first byte (see File.node.js).

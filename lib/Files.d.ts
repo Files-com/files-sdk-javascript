@@ -593,9 +593,10 @@ declare namespace Files {
   }
 
   /**
-   * A transfer's progress, as `onProgress` receives it: once as it starts, at most every 100 ms as bytes count, and once
-   * as it ends, completed or failed. An error `onProgress` throws while the transfer runs fails it; one thrown by the
-   * last report, once its outcome is settled, is ignored.
+   * A transfer's progress, as `onProgress` receives it: once as it starts, at most every 100 ms as bytes count, once for
+   * each answer of Files.com that it is still finalizing an upload, and once as it ends, completed or failed. An error
+   * `onProgress` throws while the transfer runs fails it; one thrown by the last report, once its outcome is settled, is
+   * ignored.
    */
   interface TransferProgress {
     direction: 'download' | 'upload'
@@ -620,6 +621,21 @@ declare namespace Files {
 
     /** Milliseconds since the transfer started, by a monotonic clock, leaving out the time it was paused. */
     elapsedMs: number
+
+    /**
+     * `true` in the reports made while Files.com finishes an upload in the background, as for a remote server
+     * integration or a Files Agent: from its first answer that the upload is still being finalized until the upload's
+     * outcome, each such answer making one report, its bytes unchanged. `false` otherwise, in the last report and for
+     * a download included.
+     */
+    finalizing: boolean
+
+    /**
+     * While `finalizing`, the percentage, 0 to 100, Files.com's latest answer gave for the finalization, or `null` when
+     * it gave none. 100 is not completion: the upload completes only once Files.com answers with the File. `null` when
+     * not finalizing.
+     */
+    finalizationProgress: number | null
 
     state: 'completed' | 'failed' | 'paused' | 'running'
   }

@@ -199,7 +199,9 @@ export const transferWithJob = async (path: string): Promise<Files.TransferJobSn
 
   const snapshot = job.snapshot()
   const targets: number[] = snapshot.controllers.map(each => each.target)
-  Logger.debug(paused, text.length, targets, seen.map(each => `${each.state} ${each.bytesTransferred}/${each.totalBytes ?? '?'}`))
+  // While Files.com finalizes an upload in the background, its reports say so, with a percentage or null.
+  const finalizing: Array<number | null> = seen.filter(each => each.finalizing).map(each => each.finalizationProgress)
+  Logger.debug(paused, text.length, targets, finalizing, seen.map(each => `${each.state} ${each.bytesTransferred}/${each.totalBytes ?? '?'}`))
   return snapshot
 }
 

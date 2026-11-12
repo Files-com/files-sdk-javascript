@@ -7,7 +7,7 @@ import crossFetch from 'cross-fetch'
 import nock from 'nock'
 
 import Api from '../lib/Api'
-import { FilesError, InvalidParameterError } from '../lib/Errors'
+import { FilesApiError, FilesError, InvalidParameterError } from '../lib/Errors'
 import Files from '../lib/Files'
 import FilesClient from '../lib/FilesClient'
 import File from '../lib/models/File'
@@ -62,8 +62,10 @@ const recordingCallback = events => fileUploadPart => {
 // at once, at most. answerGrants(request, answer) answers a request for grants, at once by default: answer(fields,
 // status, only) with fields over every grant's, and only the grants of the parts only lists, when given. answerStore(
 // store, answer) answers a part's storage, at once by default: answer(status, headers, body), body 'refused' by default
-// for a refusal.
+// for a refusal. answerEnd({ body, end, headers, path }) answers the end request number end of the upload to path,
+// with its request headers: [status, body], or an Error for a network failure; by default, the File, 201.
 const serveTransfers = ({
+  answerEnd = ({ body, path: uploadPath }) => [201, { path: uploadPath, size: body.size, type: 'file' }],
   answerGrants = (request, answer) => answer(),
   answerStore = (store, answer) => answer(),
   fixLength = true,
@@ -133,7 +135,7 @@ const serveTransfers = ({
   nock(API_URL)
     .persist()
     .post(uri => uri.startsWith(FILES_PATH))
-    .reply(function answerEnd(uri, body) {
+    .reply(function answerEndRequest(uri, body, callback) {
       const uploadPath = decodeURIComponent(uri.replace(FILES_PATH, ''))
 
       apiRequests.push({
@@ -145,7 +147,15 @@ const serveTransfers = ({
       })
 
       events.push('end')
-      return [201, { path: uploadPath, size: body.size, type: 'file' }]
+
+      const end = apiRequests.filter(request => request.kind === 'end' && request.path === uploadPath).length
+      const answer = answerEnd({ body, end, headers: this.req.headers, path: uploadPath })
+
+      if (answer instanceof Error) {
+        callback(answer)
+      } else {
+        callback(null, answer)
+      }
     })
 
   nock(STORAGE_URL)
@@ -287,8 +297,9 @@ describe('File uploads', () => {
   })
 
   // With an API key that belongs to a workspace, no workspace is configured, and the API can report a grant's path as
-  // the site path of the workspace's file.
-  it('begins an upload with its size, and ends it at the path it was started at with its size and ETags, not at the path its grant reports', async () => {
+  // the site path of the workspace's file. The end asks Files.com to finalize in the background where it can, and the
+  // File it answers with at once is the upload's.
+  it('begins an upload with its size, and ends it at the path it was started at with its size, ETags and async_finalize, not at the path its grant reports', async () => {
     const { apiRequests, events, stored } = serveTransfers({
       grant: () => ({ path: `_/Workspaces/311/${DESTINATION}` }),
       partsize: 1024,
@@ -304,7 +315,7 @@ describe('File uploads', () => {
         path: DESTINATION,
       },
       {
-        body: { action: 'end', etags: [{ etag: '"etag-1"', part: 1 }], ref: 'upload-ref', size: DATA.length },
+        body: { action: 'end', async_finalize: true, etags: [{ etag: '"etag-1"', part: 1 }], ref: 'upload-ref', size: DATA.length },
         key: 'api-key',
         kind: 'end',
         path: DESTINATION,
@@ -327,11 +338,12 @@ describe('File uploads', () => {
       partsize: 1024,
     })
 
-    await File.uploadData(DESTINATION, DATA, { mkdir_parents: true, provided_mtime: '2026-10-12T00:00:00Z' }, { workspaceId: 311 })
+    // async_finalize is the upload's own: a caller's value is never sent.
+    await File.uploadData(DESTINATION, DATA, { async_finalize: false, mkdir_parents: true, provided_mtime: '2026-10-12T00:00:00Z' }, { workspaceId: 311 })
 
     expect(apiRequests.map(({ kind, workspace }) => `${kind} ${workspace}`)).toEqual(['begin 311', 'end 311'])
     expect(apiRequests[0].body).toEqual({ mkdir_parents: true, size: DATA.length, with_direct_connection_info: true })
-    expect(apiRequests[1].body).toMatchObject({ action: 'end', mkdir_parents: true, provided_mtime: '2026-10-12T00:00:00Z' })
+    expect(apiRequests[1].body).toMatchObject({ action: 'end', async_finalize: true, mkdir_parents: true, provided_mtime: '2026-10-12T00:00:00Z' })
     expect(filesHeaders).toEqual([[]])
   })
 
@@ -975,6 +987,213 @@ describe('File uploads', () => {
     expect(outcomes.slice(2).every(({ error }) => error instanceof FilesError && error.completionUnknown === true)).toBe(true)
     expect(uploadPaths.map(uploadPath => ends[uploadPath])).toEqual([2, 2, 1, 1, 1])
     expect([movedRequests, limitedAfterRedirect]).toEqual([1, 1])
+  })
+
+  // Files.com finalizes an upload to a remote server integration or a Files Agent in the background: it answers the end
+  // 202 pending, for the upload's ref, until the File, or an error, is the answer to the same end sent again.
+  describe('finalized by Files.com in the background', () => {
+    const pending = (fields = {}) => [202, { ref: 'upload-ref', status: 'pending', ...fields }]
+    const ends = apiRequests => apiRequests.filter(({ kind }) => kind === 'end')
+
+    it('sends the same end again one, two, then three seconds after each pending answer, reporting each without changing its bytes, and resolves with the File it is answered with', async () => {
+      const again = 'reports/again.csv'
+      const sentAt = { [again]: [], [DESTINATION]: [] }
+      const answers = { [again]: [pending()], [DESTINATION]: [pending(), pending({ progress: 42 }), pending({ progress: 100 }), pending({ progress: 100 })] }
+      const storage = serveTransfers({
+        answerEnd: ({ body, path: uploadPath }) => {
+          sentAt[uploadPath].push(Date.now())
+          return answers[uploadPath].shift() ?? [201, { path: uploadPath, size: body.size, type: 'file' }]
+        },
+        partsize: 1024,
+      })
+      const gaps = times => times.slice(1).map((at, index) => at - times[index])
+      // Each gap is at least its wait and well short of the next one.
+      const waited = (gap, seconds) => gap >= (seconds * 1000) - 10 && gap < (seconds * 1000) + 900
+
+      const reports = []
+      const file = await File.uploadData(DESTINATION, DATA, {}, { onProgress: progress => reports.push(progress) })
+
+      expect(file).toBeInstanceOf(File)
+      expect(file.attributes).toMatchObject({ path: DESTINATION, size: DATA.length })
+
+      const sent = ends(storage.apiRequests)
+      expect(sent).toHaveLength(5)
+      expect(sent.every(({ body }) => JSON.stringify(body) === JSON.stringify(sent[0].body))).toBe(true)
+      expect(sent[0].body).toEqual({ action: 'end', async_finalize: true, etags: [{ etag: '"etag-1"', part: 1 }], ref: 'upload-ref', size: DATA.length })
+      // A pending 100 is still pending, and the waits keep growing to three seconds.
+      expect(gaps(sentAt[DESTINATION]).map((gap, index) => waited(gap, [1, 2, 3, 3][index]))).toEqual([true, true, true, true])
+
+      // Every byte was sent once and accepted before the first pending answer, and the bytes stay as they were.
+      const finalizing = reports.filter(report => report.finalizing)
+      expect(finalizing.map(({ finalizationProgress, state }) => [finalizationProgress, state])).toEqual([[null, 'running'], [42, 'running'], [100, 'running'], [100, 'running']])
+      expect(finalizing.every(({ bytesSent, bytesTransferred, totalBytes }) => [bytesSent, bytesTransferred, totalBytes].every(bytes => bytes === DATA.length))).toBe(true)
+      expect(reports[reports.length - 1]).toMatchObject({ bytesTransferred: DATA.length, finalizationProgress: null, finalizing: false, state: 'completed' })
+      expect(reports.filter(({ state }) => state === 'completed')).toHaveLength(1)
+
+      // Another upload's completion starts again from one second.
+      await File.uploadData(again, DATA)
+      expect(gaps(sentAt[again]).map(gap => waited(gap, 1))).toEqual([true])
+    }, 20000)
+
+    it('sends each end again with the credential, workspace and headers the first was sent with, whatever the settings have become', async () => {
+      Files.setWorkspaceId(311)
+      const callHeaders = []
+
+      const storage = serveTransfers({
+        answerEnd: ({ body, end, headers, path: uploadPath }) => {
+          callHeaders.push(headerValue(headers['x-call']))
+
+          if (end === 1) {
+            Files.setApiKey('changed-key')
+            Files.setWorkspaceId(312)
+            return pending()
+          }
+
+          return [201, { path: uploadPath, size: body.size, type: 'file' }]
+        },
+        partsize: 1024,
+      })
+
+      try {
+        await File.uploadData(DESTINATION, DATA, {}, { headers: { 'X-Call': 'upload' } })
+      } finally {
+        Files.setWorkspaceId(null)
+      }
+
+      expect(ends(storage.apiRequests).map(({ key, workspace }) => `${key} ${workspace}`)).toEqual(['api-key 311', 'api-key 311'])
+      expect(callHeaders).toEqual(['upload', 'upload'])
+    })
+
+    it('reports no finalization progress for a pending answer whose progress is not a whole number from 0 to 100, and goes on waiting', async () => {
+      const invalid = { 'reports/fraction.csv': 42.5, 'reports/negative.csv': -1, 'reports/over.csv': 101, 'reports/text.csv': '42', 'reports/true.csv': true }
+      const reports = {}
+
+      serveTransfers({
+        answerEnd: ({ body, end, path: uploadPath }) => (end === 1
+          ? pending({ progress: invalid[uploadPath] })
+          : [201, { path: uploadPath, size: body.size, type: 'file' }]),
+        partsize: 1024,
+      })
+
+      const files = await Promise.all(Object.keys(invalid).map(uploadPath => {
+        reports[uploadPath] = []
+        return File.uploadData(uploadPath, DATA, {}, { onProgress: progress => reports[uploadPath].push(progress) })
+      }))
+
+      expect(files.every(file => file instanceof File)).toBe(true)
+      expect(Object.values(reports).map(each => each.filter(({ finalizing }) => finalizing).map(({ finalizationProgress }) => finalizationProgress)))
+        .toEqual(Object.keys(invalid).map(() => [null]))
+    })
+
+    it.each([
+      ['another status', { ref: 'upload-ref', status: 'completed' }],
+      ['no ref', { status: 'pending' }],
+      ['another ref', { ref: 'another-ref', status: 'pending' }],
+      ['not an object', ['pending']],
+    ])('leaves the outcome unknown, sending nothing more, when the end is answered 202 with %s', async (_, answer) => {
+      const reports = []
+      const storage = serveTransfers({ answerEnd: () => [202, answer], partsize: 1024 })
+
+      const { error } = await outcomeOf(File.uploadData(DESTINATION, DATA, {}, { onProgress: progress => reports.push(progress) }))
+
+      expect(error).toBeInstanceOf(FilesError)
+      expect(error).toMatchObject({ code: 202, completionUnknown: true })
+      expect(ends(storage.apiRequests)).toHaveLength(1)
+      expect(reports.some(({ finalizing }) => finalizing)).toBe(false)
+    })
+
+    it('rejects with the API\'s error answer to an end sent again, which Files.com finalized the upload to, as the upload\'s outcome', async () => {
+      const storage = serveTransfers({
+        answerEnd: ({ end }) => (end === 1
+          ? pending({ progress: 42 })
+          : [422, { error: 'The remote server refused the file', 'http-code': 422, title: 'Remote Server Error', type: 'processing-failure/remote-server-error' }]),
+        partsize: 1024,
+      })
+
+      const { error } = await outcomeOf(File.uploadData(DESTINATION, DATA))
+
+      expect(error).toBeInstanceOf(FilesApiError)
+      expect(error).toMatchObject({ code: 422, completionUnknown: false, message: 'The remote server refused the file', type: 'processing-failure/remote-server-error' })
+      expect(ends(storage.apiRequests)).toHaveLength(2)
+    })
+
+    it('retries an end sent again after a network failure, a 5xx or a 429, and leaves the outcome unknown once its retries run out', async () => {
+      Files.configureNetwork({ maxNetworkRetries: 3, maxNetworkRetryDelay: 0.001, minNetworkRetryDelay: 0.001 })
+
+      const reset = () => Object.assign(new Error('socket hang up'), { code: 'ECONNRESET' })
+      const unavailable = [503, { 'http-code': 503, title: 'Service Unavailable', type: 'service-unavailable' }]
+      const limited = [429, { 'http-code': 429, title: 'Too Many Requests', type: 'too-many-requests' }]
+      const storage = serveTransfers({
+        answerEnd: ({ body, end, path: uploadPath }) => {
+          if (end === 1) {
+            return pending()
+          }
+
+          if (uploadPath === 'reports/recovered.csv') {
+            return [reset(), unavailable, limited][end - 2] ?? [201, { path: uploadPath, size: body.size, type: 'file' }]
+          }
+
+          return unavailable
+        },
+        partsize: 1024,
+      })
+
+      const [recovered, abandoned] = await Promise.all([
+        outcomeOf(File.uploadData('reports/recovered.csv', DATA)),
+        outcomeOf(File.uploadData('reports/abandoned.csv', DATA)),
+      ])
+
+      expect(recovered.value).toBeInstanceOf(File)
+      expect(abandoned.error).toBeInstanceOf(FilesError)
+      expect(abandoned.error).toMatchObject({ code: 503, completionUnknown: true })
+      expect(['reports/recovered.csv', 'reports/abandoned.csv'].map(uploadPath => ends(storage.apiRequests).filter(({ path: sentTo }) => sentTo === uploadPath).length))
+        .toEqual([5, 5])
+    })
+
+    it('stops waiting once its signal aborts while Files.com finalizes the upload, rejecting with the signal\'s reason and sending nothing more', async () => {
+      const controller = new AbortController()
+      const reason = { cause: 'no longer waiting' }
+      const reports = []
+      const storage = serveTransfers({
+        answerEnd: () => {
+          setTimeout(() => controller.abort(reason), 100)
+          return pending({ progress: 42 })
+        },
+        partsize: 1024,
+      })
+
+      const startedAt = Date.now()
+      const settled = await outcomeOf(File.uploadData(DESTINATION, DATA, {}, { onProgress: progress => reports.push(progress), signal: controller.signal }))
+      const stoppedAfter = Date.now() - startedAt
+
+      // Nothing is sent once the wait would have ended either.
+      await new Promise(resolve => { setTimeout(resolve, 1100) })
+
+      expect(Object.keys(settled)).toEqual(['error'])
+      expect(settled.error).toBe(reason)
+      expect(stoppedAfter).toBeLessThan(900)
+      expect(ends(storage.apiRequests)).toHaveLength(1)
+      expect(reports.map(({ finalizing, state }) => `${state} ${finalizing}`).slice(-2)).toEqual(['running true', 'failed false'])
+    })
+
+    it('stops waiting, leaving the outcome unknown, when onProgress throws as it reports a pending answer', async () => {
+      const thrown = new Error('render failed')
+      const storage = serveTransfers({ answerEnd: () => pending({ progress: 42 }), partsize: 1024 })
+
+      const { error } = await outcomeOf(File.uploadData(DESTINATION, DATA, {}, {
+        onProgress: progress => {
+          if (progress.finalizing) {
+            throw thrown
+          }
+        },
+      }))
+
+      expect(error).toBeInstanceOf(FilesError)
+      expect(error.completionUnknown).toBe(true)
+      expect(error.cause).toBe(thrown)
+      expect(error.message).toContain('render failed')
+      expect(ends(storage.apiRequests)).toHaveLength(1)
+    })
   })
 
   it.each([['null', null], ['NaN', NaN]])('stops the part being sent when its signal aborts, and rejects with the signal\'s reason itself, even %s', async (_, reason) => {

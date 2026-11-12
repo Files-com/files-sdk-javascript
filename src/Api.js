@@ -2256,6 +2256,27 @@ class Api {
     return { operation, response }
   }
 
+  // Not public: sends a request as sendRequest() sends it, with a copy of options, and resolves with { operation,
+  // response }: its response, and the context it was sent with, at the host a lockout region mismatch rerouted it to, if
+  // any. Given the operation an earlier request resolved with, it is sent in that context, whatever the settings have
+  // become since: the same site, credential, workspace and other headers. An upload sends its completion again this way
+  // while Files.com answers that it is still finalizing the upload (see Upload.js).
+  static _sendInContext = async (operation, path, verb, params, options) => {
+    const requestOptions = { ...options, headers: { ...options?.headers } }
+    let context = operation
+
+    pageResponses.set(requestOptions, (response, taken) => {
+      context = taken ?? context
+    })
+
+    if (operation) {
+      operationContexts.set(requestOptions, operation)
+    }
+
+    const response = await Api.sendRequest(path, verb, params, requestOptions)
+    return { operation: context, response }
+  }
+
   // The items of a cursor-paginated list operation, one at a time, as an async iterator. listPage(params, options) is
   // the operation's own list method, so each page is checked, requested and made into models just as a list call is;
   // the iterator decides only when to request a page, and with which cursor.

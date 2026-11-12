@@ -25,8 +25,11 @@ export declare class FilesError extends Error {
    * Set on the error an upload fails with when the request that completes it failed. `true` when that failure leaves it
    * unknown whether the upload completed, as a server error, a timeout, a broken connection, or a failure or 429 after
    * the API answered with a redirect does: the request is not sent again, and the file may or may not be at its
-   * destination, so check it before uploading again. `false` when the API refused the completion outright, with a 4xx
-   * other than 429. Absent for any other error; its absence never shows that an upload completed.
+   * destination, so check it before uploading again. While Files.com is finalizing the upload, `true` too for a request
+   * for its outcome whose retries ran out, an answer that is no pending answer for the upload, and an error `onProgress`
+   * threw, which stop the wait: Files.com may still complete the upload. `false` when the API refused the completion
+   * outright, or answered a request for its outcome, with a 4xx other than 429. Absent for any other error; its absence
+   * never shows that an upload completed.
    */
   completionUnknown?: boolean
 

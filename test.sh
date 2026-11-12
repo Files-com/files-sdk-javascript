@@ -123,6 +123,37 @@ for file_scenario in files.owned-binary-roundtrip files.owned-namespace-extended
   fi
 done
 
+# The same files.owned-binary-roundtrip case once more, on a new server of the same Mock loaded with its
+# api-scenarios-remote-finalize preset: the canonical simulator for a site whose uploads go to a remote server mount or
+# a Files Agent. Its Mock answers each upload's finalize, which the SDK sends with async_finalize, as pending three
+# times, without progress, then at 42 and at 100, before it completes the upload, and its journal check,
+# files.finalize_upload background, fails the run unless every upload was answered pending at least once and then
+# completed, every finalize with the same identity headers. It has the canonical cases' launcher, budgets and request
+# body limit; each of its uploads waits about 3 s more for its finalization.
+remote_run_id="javascript-remote-finalize-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+remote_out="test-results/mock-${remote_run_id}"
+FILES_MOCK_MAX_BODY_BYTES="${file_max_body_bytes}" ruby -rbundler -e 'Bundler.with_original_env { exec(RbConfig.ruby, *ARGV) }' -- \
+  "${mock_server}/with-scenario.rb" --scenario api-scenarios-remote-finalize --out "${remote_out}" \
+  --run-id "${remote_run_id}" --schema-sha256 "${schema_sha256}" --startup-timeout 30 --consumer-timeout 210 \
+  --settle-timeout 5 -- "$(command -v node)" "${PWD}/test/scenarios/file-scenarios.cjs" "${mock_server_dir}" files.owned-binary-roundtrip
+remote_status=$?
+
+echo "The remote-finalize file case files.owned-binary-roundtrip ended with status ${remote_status}; its evidence is in ${PWD}/${remote_out}"
+if [[ -f "${remote_out}/run.json" ]]; then
+  cat "${remote_out}/run.json"
+fi
+if [[ -f "${remote_out}/javascript-files.owned-binary-roundtrip-case.json" ]]; then
+  cat "${remote_out}/javascript-files.owned-binary-roundtrip-case.json"
+fi
+if [[ "${remote_status}" -ne 0 && -f "${remote_out}/server.log" ]]; then
+  echo "The last 200 lines of the Mock server's log, ${PWD}/${remote_out}/server.log:"
+  tail -n 200 "${remote_out}/server.log"
+fi
+
+if [[ "${remote_status}" -ne 0 ]]; then
+  exit "${remote_status}"
+fi
+
 # The filesystem parity case, test/scenarios/filesystem-parity.cjs, runs the cases of the native reference
 # (test/support/filesystem-parity.cjs), which the unit tests run against Node.js's own fs/promises, against both
 # Node.js's own fs/promises and this SDK's client.fs on a new server of the same Mock, with the same preset and launcher
