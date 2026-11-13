@@ -344,6 +344,28 @@ const versionOf = opened => {
   return total !== null && STRONG_ETAG.test(etag ?? '') && hasIdentityEncoding(opened) ? { etag, total } : null
 }
 
+// HTTP dates only, including the two obsolete forms recipients accept. Normalize the baseline to GMT and whole
+// seconds. A date is a best-effort precondition; it never grants the strong version that permits ranges.
+const lastModifiedOf = opened => {
+  const value = opened.headers['last-modified']
+  // Node keeps only the first Last-Modified in headers; its native response still exposes every wire value here.
+  const distinct = opened.body?.headersDistinct?.['last-modified']
+
+  if (distinct && distinct.length !== 1) {
+    return null
+  }
+
+  if (typeof value !== 'string' || !/^(?:[A-Za-z]{3}, [0-9]{2} [A-Za-z]{3} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT|[A-Za-z]+, [0-9]{2}-[A-Za-z]{3}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} GMT|[A-Za-z]{3} [A-Za-z]{3} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})$/.test(value)) {
+    return null
+  }
+
+  const date = new Date(value.endsWith('GMT') ? value : `${value} GMT`)
+  const day = value.includes(',') ? Number(value.split(', ')[1].split(/[ -]/)[0]) : Number(value.slice(8, 10))
+
+  return Number.isFinite(date.getTime()) && date.getUTCDate() === day && value.slice(0, 3) === date.toUTCString().slice(0, 3)
+    ? date : null
+}
+
 // The headers that ask for bytes start through end of version, and only of that version.
 const rangeHeaders = ({ end, start }, version) => ({ 'If-Match': version.etag, Range: `bytes=${start}-${end}` })
 
@@ -1024,6 +1046,7 @@ const answerWithin = (exchange, signal) => new Promise(resolve => {
 // even one that chooses none, which keeps its requests here.
 const run = async (destination, {
   agentFor,
+  checkDownloadModificationTime = true,
   choosesAgent,
   control,
   controller,
@@ -1051,6 +1074,7 @@ const run = async (destination, {
   let renewal = null
   let renewalsWithoutProgress = 0
   let filesHeld = false
+  let lastModified = null
 
   // Renewals stopped once no request waited for them any more (see freshUrl()), until they have settled: no other
   // renewal starts before they have, and the download joins them before it gives back its admission and settles.
@@ -1369,7 +1393,11 @@ const run = async (destination, {
   // within freshUrl()'s own limit, and runs those callbacks and checks again. A request for a range that may be read on
   // a download thread (forRange) goes through one when it can (see threadable() and sendThrough()); one that does not,
   // once that has been told, is checked so once more, just before it is sent here.
-  const openRequest = async (headers, number, owning = null, forRange = false) => {
+  const openRequest = async (givenHeaders, number, owning = null, forRange = false) => {
+    const headers = checkDownloadModificationTime && lastModified && !givenHeaders['If-Match']
+      ? { ...givenHeaders, 'If-Unmodified-Since': lastModified.toUTCString() }
+      : givenHeaders
+
     for (;;) {
       let from
       let target
@@ -1479,6 +1507,16 @@ const run = async (destination, {
     }
 
     if (range ? isExactRange(opened, range, range.version) : opened.status === 200) {
+      if (checkDownloadModificationTime && !range) {
+        const modified = lastModifiedOf(opened)
+
+        if (lastModified && modified && modified > lastModified) {
+          return { changed: true, error: changedFileError() }
+        }
+
+        lastModified ??= modified
+      }
+
       return { ok: true }
     }
 
@@ -1496,7 +1534,7 @@ const run = async (destination, {
       return { error: expiredUrlError(), expired: true, waitMs: 0 }
     }
 
-    if (range && [200, 206, 412, 416].includes(status)) {
+    if (status === 412 || (range && [200, 206, 416].includes(status))) {
       return { changed: true, error: changedFileError() }
     }
 
@@ -2080,6 +2118,11 @@ const run = async (destination, {
       await delay(STORAGE_RETRY_MS, stopping.signal)
       // eslint-disable-next-line no-await-in-loop
       await sink.reset()
+
+      if (result.changed) {
+        lastModified = null
+      }
+
       syncReceived()
       progress.reset()
       // eslint-disable-next-line no-await-in-loop
@@ -2135,6 +2178,12 @@ const run = async (destination, {
 // every request's; settings.choosesAgent() tells whether the download has an agent chooser, and settings that do not
 // say are taken to have one; settings.timeoutSecs is each request's budget through Node.js's https.
 const prepare = settings => {
+  const checkDownloadModificationTime = settings.checkDownloadModificationTime ?? true
+
+  if (typeof checkDownloadModificationTime !== 'boolean') {
+    throw new errors.InvalidParameterError('checkDownloadModificationTime must be a boolean')
+  }
+
   const options = settings.options ?? {}
   const control = controlOf(options.control)
   const scope = scopeOf(options.job)
@@ -2147,6 +2196,7 @@ const prepare = settings => {
 
   return (destination, halt = null) => run(destination, {
     agentFor: settings.agentFor ?? (() => settings.agent),
+    checkDownloadModificationTime,
     choosesAgent: settings.choosesAgent ?? (() => true),
     control,
     controller,

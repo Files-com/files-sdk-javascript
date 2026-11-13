@@ -45,6 +45,8 @@ class FilesClient {
 
   getAutoPaginate() { return settings.get(this).autoPaginate }
 
+  getCheckDownloadModificationTime() { return settings.get(this).checkDownloadModificationTime }
+
   getBaseUrl() { return settings.get(this).baseUrl }
 
   getFetch() { return settings.get(this).fetch }

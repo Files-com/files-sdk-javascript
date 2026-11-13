@@ -1461,6 +1461,9 @@ declare namespace File {
 
   /** The options of a download (see `File.downloadToFile()`): its signal and the transfer options. */
   interface DownloadOptions extends TransferOptions {
+    /** Override the client's default-on timestamp check for this download. */
+    checkDownloadModificationTime?: boolean | undefined
+
     /**
      * Cancels the download: every request it has open stops, and it rejects with the signal's reason, unchanged, once
      * they have all closed.

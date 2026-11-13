@@ -197,6 +197,12 @@ describe('File downloads', () => {
   const largeRequests = []
   const served = []
   const renewals = []
+  const dateRequests = []
+  const directoryDateRequests = []
+  const directoryApiRequests = []
+  let onDirectoryDiscovery = null
+  const baselineDate = 'Wed, 21 Oct 2015 07:28:00 GMT'
+  const newerDate = 'Wed, 21 Oct 2015 07:28:01 GMT'
   const heldOrdinary = []
   const heldDownloads = []
   const openRanges = {}
@@ -233,6 +239,7 @@ describe('File downloads', () => {
   let heldThreadRange = null
   let resetRanges = 0
   let renewedDownloadUri = null
+  let onDateRequest = null
   let expiredRangeClosed = null
 
   // Answers an ordinary request for LARGE, or the behavior's shorter file (SHORTER_FILES), as storage would, but with a
@@ -440,6 +447,10 @@ describe('File downloads', () => {
     largeRequests.length = 0
     served.length = 0
     renewals.length = 0
+    dateRequests.length = 0
+    directoryDateRequests.length = 0
+    directoryApiRequests.length = 0
+    onDirectoryDiscovery = null
     releasePaced = null
     onSplitProbe = null
     heldSplitRange = null
@@ -447,6 +458,7 @@ describe('File downloads', () => {
     heldThreadRange = null
     resetRanges = 0
     renewedDownloadUri = null
+    onDateRequest = null
     Object.keys(ordinaryTails).forEach(behavior => { delete ordinaryTails[behavior] })
 
     // Range requests are counted by their file's last path segment, which tests reuse, such as /large/split-renewal/1
@@ -488,6 +500,66 @@ describe('File downloads', () => {
 
     server = https.createServer({ cert, key: fs.readFileSync(keyPath) }, (request, response) => {
       served.push(`${request.method} ${request.url.split('?')[0]} ${request.headers.range ?? ''} ${request.headers['if-match'] ?? ''}`.trim())
+
+      const apiPath = decodeURIComponent(request.url.split('?')[0])
+      if (apiPath.startsWith('/api/rest/v1/') && apiPath.includes('/reports/directory-date')) {
+        directoryApiRequests.push({ headers: request.headers, url: request.url })
+        onDirectoryDiscovery?.()
+        const root = 'reports/directory-date'
+        let data
+        if (apiPath.startsWith('/api/rest/v1/file_actions/metadata/')) {
+          data = { path: root, type: 'directory' }
+        } else if (apiPath.startsWith('/api/rest/v1/folders/')) {
+          data = ['a', 'b'].map(name => ({ path: `${root}/${name}.bin`, type: 'file' }))
+        } else {
+          const name = apiPath.endsWith('/a.bin') ? 'a' : 'b'
+          data = { path: `${root}/${name}.bin`, type: 'file', download_uri: `${baseUrl}/directory-date/${name}?X-Amz-Signature=${SIGNATURE}` }
+        }
+        response.writeHead(200, { 'Content-Type': 'application/json' })
+        response.end(JSON.stringify(data))
+        return
+      }
+
+      if (request.url.startsWith('/directory-date/')) {
+        const name = request.url.split('?')[0].split('/')[2]
+        const count = directoryDateRequests.filter(item => item.name === name).length
+        directoryDateRequests.push({ name, since: request.headers['if-unmodified-since'] })
+        onDateRequest?.()
+        response.writeHead(200, { 'Content-Length': PAYLOAD.length, 'Last-Modified': baselineDate })
+        if (count === 0) {
+          response.flushHeaders()
+          setTimeout(() => response.socket?.destroy(), 20)
+        } else {
+          response.end(PAYLOAD)
+        }
+        return
+      }
+
+      if (request.url.startsWith('/date-guard/')) {
+        const behavior = request.url.split('?')[0].split('/')[2]
+        const count = dateRequests.length
+        dateRequests.push(request.headers)
+        onDateRequest?.()
+        const modified = behavior === 'duplicate' ? [baselineDate, newerDate] : behavior === 'invalid' ? 'tomorrow' : behavior === 'missing' ? null
+          : behavior === 'asctime' ? 'Wed Oct 21 07:28:00 2015' : behavior === 'rfc850' ? 'Wednesday, 21-Oct-15 07:28:00 GMT'
+          : ['changed', 'ignored'].includes(behavior) && count > 0 ? newerDate : baselineDate
+
+        if (behavior === 'renew' && count === 1) {
+          response.writeHead(403)
+          response.end('<Error><Code>ExpiredToken</Code></Error>')
+        } else if (behavior === 'changed' && count > 0 && request.headers['if-unmodified-since'] === baselineDate) {
+          response.writeHead(412)
+          response.end('source changed')
+        } else {
+          response.writeHead(200, { 'Content-Length': PAYLOAD.length, ...(modified ? { 'Last-Modified': modified } : {}) })
+          if (count === 0) {
+            response.write(PAYLOAD.subarray(0, RESUME_CUT), () => setTimeout(() => response.socket?.destroy(), 20))
+          } else {
+            response.end(PAYLOAD)
+          }
+        }
+        return
+      }
 
       if (request.url.startsWith('/large/')) {
         const [, , behavior, file] = request.url.split('?')[0].split('/')
@@ -558,7 +630,7 @@ describe('File downloads', () => {
 
         if (asked) {
           const [start, end] = [Number(asked[1]), Number(asked[2])]
-          const headers = { 'Content-Range': `bytes ${start}-${end}/${PAYLOAD.length}`, ETag: '"r1"' }
+          const headers = { 'Content-Range': `bytes ${start}-${end}/${PAYLOAD.length}`, ETag: request.url.startsWith('/resumable-changed') ? '"r2"' : '"r1"', 'Last-Modified': newerDate }
 
           if (request.url.startsWith('/resumable-unterminated')) {
             response.writeHead(206, headers)
@@ -569,7 +641,7 @@ describe('File downloads', () => {
             response.end(PAYLOAD.subarray(start, end + 1))
           }
         } else {
-          response.writeHead(200, { 'Content-Length': PAYLOAD.length, ETag: '"r1"' })
+          response.writeHead(200, { 'Content-Length': PAYLOAD.length, ETag: '"r1"', 'Last-Modified': baselineDate })
           response.write(PAYLOAD.subarray(0, RESUME_CUT), () => setTimeout(() => response.socket.destroy(), 20))
         }
 
@@ -653,6 +725,70 @@ describe('File downloads', () => {
   })
 
   describe('downloadToFile', () => {
+    it('still rejects a changed strong ETag with timestamp checks disabled', async () => {
+      const destination = path.join(directory, 'unchecked-strong-version.bin')
+      await expect(clientFile('/resumable-changed', { maxNetworkRetries: 1, checkDownloadModificationTime: false })
+        .downloadToFile(destination)).rejects.toThrow('The file changed')
+      expect(served.some(line => line.startsWith('GET /resumable-changed bytes=') && line.endsWith('"r1"'))).toBe(true)
+    })
+
+    it('snapshots a disabled global setting before requests begin', async () => {
+      const prior = { checkDownloadModificationTime: Files.getCheckDownloadModificationTime(), maxNetworkRetries: Files.getMaxNetworkRetries() }
+      Files.configureNetwork({ checkDownloadModificationTime: false, maxNetworkRetries: 1 })
+      onDateRequest = () => Files.configureNetwork({ checkDownloadModificationTime: true })
+      try {
+        const destination = path.join(directory, 'snapshot-date.bin')
+        await downloadableFile('/date-guard/ignored').downloadToFile(destination)
+        expect(fs.readFileSync(destination)).toEqual(PAYLOAD)
+        expect(dateRequests.map(headers => headers['if-unmodified-since'])).toEqual([undefined, undefined])
+      } finally {
+        Files.configureNetwork(prior)
+      }
+    })
+
+    it.each([[false, undefined], [true, false]])('can disable only timestamp checks through client or local settings (%s, %s)', async (clientCheck, localCheck) => {
+      const destination = path.join(directory, 'unchecked-date.bin')
+      await clientFile('/date-guard/ignored', { maxNetworkRetries: 1, checkDownloadModificationTime: clientCheck })
+        .downloadToFile(destination, { checkDownloadModificationTime: localCheck })
+      expect(fs.readFileSync(destination)).toEqual(PAYLOAD)
+      expect(dateRequests.map(headers => headers['if-unmodified-since'])).toEqual([undefined, undefined])
+    })
+
+    it('can enable timestamp checks locally over a disabled client default', async () => {
+      const destination = path.join(directory, 'checked-date.bin')
+      await expect(clientFile('/date-guard/ignored', { maxNetworkRetries: 1, checkDownloadModificationTime: false })
+        .downloadToFile(destination, { checkDownloadModificationTime: true })).rejects.toThrow('The file changed')
+      expect(dateRequests.map(headers => headers['if-unmodified-since'])).toEqual([undefined, baselineDate])
+    })
+
+    it.each(['stable', 'asctime', 'rfc850', 'missing', 'invalid', 'duplicate'])('keeps the first valid Last-Modified across a whole retry (%s)', async behavior => {
+      const destination = path.join(directory, 'date.bin')
+      await clientFile(`/date-guard/${behavior}`, { maxNetworkRetries: 1 }).downloadToFile(destination)
+      expect(fs.readFileSync(destination)).toEqual(PAYLOAD)
+      expect(dateRequests.map(headers => headers.range)).toEqual([undefined, undefined])
+      expect(dateRequests.map(headers => headers['if-unmodified-since']))
+        .toEqual([undefined, ['stable', 'asctime', 'rfc850'].includes(behavior) ? baselineDate : undefined])
+    })
+
+    it.each(['changed', 'ignored'])('refuses a newer date before its body is written (%s)', async behavior => {
+      const destination = path.join(directory, 'changed-date.bin')
+      await expect(clientFile(`/date-guard/${behavior}`, { maxNetworkRetries: 1 }).downloadToFile(destination))
+        .rejects.toThrow('The file changed')
+      expect(dateRequests.map(headers => headers['if-unmodified-since'])).toEqual([undefined, baselineDate])
+      expect(fs.readFileSync(destination)).toHaveLength(0)
+    })
+
+    it('keeps its date baseline when the signed URL is renewed', async () => {
+      renewedDownloadUri = `${baseUrl}/date-guard/renew?X-Amz-Signature=${SIGNATURE}`
+      const destination = path.join(directory, 'renewed-date.bin')
+      const file = clientFile('/date-guard/renew', { maxNetworkRetries: 2 })
+      file.attributes.path = 'reports/renewed.bin'
+      await file.downloadToFile(destination)
+      expect(fs.readFileSync(destination)).toEqual(PAYLOAD)
+      expect(dateRequests.map(headers => headers['if-unmodified-since'])).toEqual([undefined, baselineDate, baselineDate])
+      expect(renewals).toHaveLength(1)
+    })
+
     it('writes the exact bytes and closes the file it opened', async () => {
       const opened = trackOpenedFiles()
       const destination = path.join(directory, 'complete.bin')
@@ -3112,6 +3248,53 @@ describe('File downloads', () => {
         return tree[file] ? apiAnswer({ ...entryOf(file), ...downloadUri }) : notFound
       },
       maxNetworkRetries: 0,
+    })
+
+    // A first response gives headers but no bytes, so each child's retry exposes its captured IUS policy without
+    // replaying anything to the stream. Discovery and the first child's completion both change the global setting.
+    it.each([
+      ['global', undefined, undefined, false],
+      ['client', false, undefined, true],
+      ['local', false, true, true],
+    ])('keeps one timestamp policy for the directory batch from %s settings', async (scope, clientCheck, localCheck, initialGlobal) => {
+      const prior = {
+        apiKey: Files.getApiKey(),
+        baseUrl: Files.getBaseUrl(),
+        checkDownloadModificationTime: Files.getCheckDownloadModificationTime(),
+        maxNetworkRetries: Files.getMaxNetworkRetries(),
+      }
+      const destination = path.join(directory, `directory-date-${scope}`)
+      onDirectoryDiscovery = () => Files.configureNetwork({ checkDownloadModificationTime: !initialGlobal })
+      onDateRequest = () => {
+        if (directoryDateRequests.length === 2) {
+          Files.configureNetwork({ checkDownloadModificationTime: initialGlobal })
+        }
+      }
+      Files.setApiKey('batch-key')
+      Files.setBaseUrl(baseUrl)
+      Files.configureNetwork({ maxNetworkRetries: 1, checkDownloadModificationTime: initialGlobal })
+      try {
+        const options = localCheck === undefined ? {} : { checkDownloadModificationTime: localCheck }
+        const result = clientCheck === undefined
+          ? await File.downloadDirectory('reports/directory-date', destination, options)
+          : await new FilesClient({ apiKey: 'batch-key', baseUrl, maxNetworkRetries: 1, checkDownloadModificationTime: clientCheck })
+            .files.downloadDirectory('reports/directory-date', destination, options)
+        const effective = localCheck ?? clientCheck ?? initialGlobal
+        expect(result.files).toEqual(['a.bin', 'b.bin'])
+        expect(fs.readFileSync(path.join(destination, 'a.bin'))).toEqual(PAYLOAD)
+        expect(fs.readFileSync(path.join(destination, 'b.bin'))).toEqual(PAYLOAD)
+        expect(directoryDateRequests).toEqual([
+          { name: 'a', since: undefined }, { name: 'a', since: effective ? baselineDate : undefined },
+          { name: 'b', since: undefined }, { name: 'b', since: effective ? baselineDate : undefined },
+        ])
+        expect(directoryApiRequests).toHaveLength(4)
+        expect(directoryApiRequests.every(({ headers, url }) => !('checkdownloadmodificationtime' in headers)
+          && !new URL(url, baseUrl).searchParams.has('checkDownloadModificationTime'))).toBe(true)
+      } finally {
+        Files.setApiKey(prior.apiKey)
+        Files.setBaseUrl(prior.baseUrl)
+        Files.configureNetwork(prior)
+      }
     })
 
     it('downloads a folder into a new local folder through its client, its empty folder included, each file exact in a new file it closed, the client\'s key sent only to the API', async () => {

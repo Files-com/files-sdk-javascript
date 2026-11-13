@@ -193,6 +193,8 @@ class File {
   // and the download's own options.
   static _downloadSettingsOf = (file, url, options) => ({
     agentFor: requestUrl => File._downloadAgent(file, requestUrl),
+    checkDownloadModificationTime: options?.checkDownloadModificationTime ?? file.options.checkDownloadModificationTime
+      ?? File._downloadSettings(file).getCheckDownloadModificationTime?.() ?? true,
     choosesAgent: () => File._choosesDownloadAgent(file),
     log: File._downloadLog(file),
     maxRetries: File._downloadSettings(file).getMaxNetworkRetries(),
@@ -441,18 +443,28 @@ class File {
 
   // The options of a folder upload or download that are its files' own transfers', never those of the API requests it
   // makes itself (creating, describing and listing folders, and describing each file), which take every other option.
-  static _directoryTransferOptions = ['concurrency', 'control', 'determinePartUploadUri', 'job', 'maxConcurrency', 'onProgress', 'size', 'startup']
+  static _directoryTransferOptions = ['checkDownloadModificationTime', 'concurrency', 'control', 'determinePartUploadUri', 'job', 'maxConcurrency', 'onProgress', 'size', 'startup']
 
   static _directoryRequestOptions = options => Object.fromEntries(Object.entries(options ?? {})
     .filter(([name]) => !File._directoryTransferOptions.includes(name)))
 
   // What each file's download of a folder download takes: the call's signal and transfer options, and job.
-  static _directoryDownloadOptions = (options, job) => ({
-    ...Object.fromEntries(['control', 'maxConcurrency', 'onProgress', 'signal']
-      .filter(name => options?.[name] !== undefined)
-      .map(name => [name, options[name]])),
-    job,
-  })
+  static _directoryDownloadOptions = (options, job) => {
+    const checkDownloadModificationTime = options?.checkDownloadModificationTime
+      ?? options?.client?.getCheckDownloadModificationTime?.() ?? require('../Files.js').default.getCheckDownloadModificationTime()
+
+    if (typeof checkDownloadModificationTime !== 'boolean') {
+      throw new errors.InvalidParameterError('checkDownloadModificationTime must be a boolean')
+    }
+
+    return {
+      ...Object.fromEntries(['control', 'maxConcurrency', 'onProgress', 'signal']
+        .filter(name => options?.[name] !== undefined)
+        .map(name => [name, options[name]])),
+      checkDownloadModificationTime,
+      job,
+    }
+  }
 
   // The Files.com folder of a folder upload or download, as given, but for slashes at either end; a path that is not a
   // string, or names the site's root folder, is refused.

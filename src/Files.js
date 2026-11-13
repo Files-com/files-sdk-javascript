@@ -6,7 +6,7 @@ import { defaultUserAgentOf } from './UserAgent'
 import { isObject } from './utils'
 
 const endpointPrefix = '/api/rest/v1'
-const version = '2.0.41'
+const version = '2.0.42'
 
 // The SDK's declared defaults for the settings of a request, its logging included. The global settings start from them,
 // and so does every client, from new FilesClient() or Files.createClient(), whatever the global settings have become
@@ -19,6 +19,7 @@ const defaults = Object.freeze({
   apiKey: undefined,
   autoPaginate: true,
   baseUrl: 'https://app.files.com',
+  checkDownloadModificationTime: true,
   debugRequest: false,
   debugResponseHeaders: false,
   fetch: undefined,
@@ -40,6 +41,7 @@ const defaults = Object.freeze({
 let {
   apiKey,
   autoPaginate,
+  checkDownloadModificationTime,
   baseUrl,
   debugRequest,
   debugResponseHeaders,
@@ -100,6 +102,9 @@ class Files {
     checkLogger(config?.logger)
     checkTrustRegionHost(config?.trustRegionHost)
     checkFetch(config?.fetch)
+    if (config?.checkDownloadModificationTime !== undefined && typeof config.checkDownloadModificationTime !== 'boolean') {
+      throw new ConfigurationError('checkDownloadModificationTime must be a boolean')
+    }
 
     if (!isObject(config)) {
       throw new ConfigurationError('Client settings must be an object')
@@ -125,6 +130,7 @@ class Files {
     apiKey,
     autoPaginate,
     baseUrl,
+    checkDownloadModificationTime,
     debugRequest,
     debugResponseHeaders,
     fetch: fetchSetting,
@@ -196,6 +202,14 @@ class Files {
   static shouldDebugResponseHeaders = () => debugResponseHeaders
 
   static configureNetwork = options => {
+    if (options.checkDownloadModificationTime !== undefined) {
+      if (typeof options.checkDownloadModificationTime !== 'boolean') {
+        throw new ConfigurationError('checkDownloadModificationTime must be a boolean')
+      }
+
+      checkDownloadModificationTime = options.checkDownloadModificationTime
+    }
+
     if (typeof options.maxNetworkRetries !== 'undefined') {
       maxNetworkRetries = options.maxNetworkRetries
     }
@@ -230,6 +244,8 @@ class Files {
       fetchSetting = options.fetch
     }
   }
+
+  static getCheckDownloadModificationTime = () => checkDownloadModificationTime
 
   static getMaxNetworkRetries = () => maxNetworkRetries
 

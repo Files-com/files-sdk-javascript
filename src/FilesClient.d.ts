@@ -147,6 +147,8 @@ declare class FilesClient {
 
   getAutoPaginate(): boolean
 
+  getCheckDownloadModificationTime(): boolean
+
   /**
    * The client's site. A lockout region mismatch that a request sent to it with the client's own API key or session, in
    * the client's own workspace, follows moves it to the host the API named; a request that sends no credential, such as

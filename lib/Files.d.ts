@@ -88,6 +88,8 @@ declare class Files {
   /** Changes the network settings given; the others keep their values. */
   static configureNetwork(options: Files.NetworkOptions): void
 
+  static getCheckDownloadModificationTime(): boolean
+
   static getMaxNetworkRetries(): number
 
   static getMinNetworkRetryDelay(): number
@@ -115,6 +117,9 @@ declare namespace Files {
    * included, and leaves out `signal`; the options never change the client or its other calls.
    */
   interface RequestOptions {
+    /** Override the client modification-time check for downloads of a returned File. */
+    checkDownloadModificationTime?: boolean | undefined
+
     /** An API key for this call, instead of the configured API key or session. */
     apiKey?: string | null | undefined
 
@@ -267,6 +272,9 @@ declare namespace Files {
 
   /** The network settings changed by `Files.configureNetwork()`. Times are in seconds. */
   interface NetworkOptions {
+    /** Check Last-Modified during downloads; true by default. Stronger version checks remain enabled. */
+    checkDownloadModificationTime?: boolean | undefined
+
     /**
      * The most times a request is retried, 3 by default, whatever its method: after a network failure, an attempt that
      * ran out of time before its response arrived, a 429 Too Many Requests, or a server error other than 501 Not
