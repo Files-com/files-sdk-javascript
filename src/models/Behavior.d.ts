@@ -1136,8 +1136,14 @@ declare namespace Behavior {
        */
       algorithm: 'PGP/GPG'
 
-      /** Filename suffix that if present will be removed after decryption. */
+      /**
+       * Legacy suffix. Writing it replaces `suffixes` unless `suffixes` is also provided.
+       * @deprecated
+       */
       suffix?: string
+
+      /** Filename suffixes to remove after decryption. An empty list keeps filenames unchanged. */
+      suffixes?: string[]
 
       /** Set to true if you want to ignore any errors from the MDC (modification detection code) check. */
       ignore_mdc_error?: boolean
