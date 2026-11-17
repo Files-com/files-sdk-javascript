@@ -1072,6 +1072,7 @@ Error
 |     `BadRequest_RequestParamsInvalidError`|  `BadRequestError` |
 |     `BadRequest_RequestParamsRequiredError`|  `BadRequestError` |
 |     `BadRequest_SearchAllOnChildPathError`|  `BadRequestError` |
+|     `BadRequest_SearchQueryTooShortError`|  `BadRequestError` |
 |     `BadRequest_UnrecognizedSortIndexError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedHttpResponseFormatError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedMediaTypeError`|  `BadRequestError` |
@@ -1209,6 +1210,7 @@ Error
 |     `ProcessingFailure_RemoteServerErrorError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceBelongsToParentSiteError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_ResourceLockedError`|  `ProcessingFailureError` |
+|     `ProcessingFailure_SearchTimedOutError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_SubfolderLockedError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_SyncInProgressError`|  `ProcessingFailureError` |
 |     `ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError`|  `ProcessingFailureError` |

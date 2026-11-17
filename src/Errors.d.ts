@@ -277,6 +277,9 @@ export declare class BadRequest_RequestParamsRequiredError extends BadRequestErr
 /** Search All On Child Path */
 export declare class BadRequest_SearchAllOnChildPathError extends BadRequestError {}
 
+/** Search Query Too Short */
+export declare class BadRequest_SearchQueryTooShortError extends BadRequestError {}
+
 /** Unrecognized Sort Index */
 export declare class BadRequest_UnrecognizedSortIndexError extends BadRequestError {}
 
@@ -687,6 +690,9 @@ export declare class ProcessingFailure_ResourceBelongsToParentSiteError extends 
 
 /** Resource Locked */
 export declare class ProcessingFailure_ResourceLockedError extends ProcessingFailureError {}
+
+/** Search Timed Out */
+export declare class ProcessingFailure_SearchTimedOutError extends ProcessingFailureError {}
 
 /** Subfolder Locked */
 export declare class ProcessingFailure_SubfolderLockedError extends ProcessingFailureError {}

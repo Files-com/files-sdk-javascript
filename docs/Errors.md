@@ -91,6 +91,7 @@ These errors are derived from the error groups listed above.
 ### BadRequest_RequestParamsInvalidError
 ### BadRequest_RequestParamsRequiredError
 ### BadRequest_SearchAllOnChildPathError
+### BadRequest_SearchQueryTooShortError
 ### BadRequest_UnrecognizedSortIndexError
 ### BadRequest_UnsupportedHttpResponseFormatError
 ### BadRequest_UnsupportedMediaTypeError
@@ -228,6 +229,7 @@ These errors are derived from the error groups listed above.
 ### ProcessingFailure_RemoteServerErrorError
 ### ProcessingFailure_ResourceBelongsToParentSiteError
 ### ProcessingFailure_ResourceLockedError
+### ProcessingFailure_SearchTimedOutError
 ### ProcessingFailure_SubfolderLockedError
 ### ProcessingFailure_SyncInProgressError
 ### ProcessingFailure_TwoFactorAuthenticationCodeAlreadySentError
