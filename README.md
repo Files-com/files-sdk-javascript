@@ -1073,7 +1073,6 @@ Error
 |     `BadRequest_RequestParamsRequiredError`|  `BadRequestError` |
 |     `BadRequest_SearchAllOnChildPathError`|  `BadRequestError` |
 |     `BadRequest_UnrecognizedSortIndexError`|  `BadRequestError` |
-|     `BadRequest_UnsupportedCurrencyError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedHttpResponseFormatError`|  `BadRequestError` |
 |     `BadRequest_UnsupportedMediaTypeError`|  `BadRequestError` |
 |     `BadRequest_UserIdInvalidError`|  `BadRequestError` |

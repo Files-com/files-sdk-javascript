@@ -92,7 +92,6 @@ These errors are derived from the error groups listed above.
 ### BadRequest_RequestParamsRequiredError
 ### BadRequest_SearchAllOnChildPathError
 ### BadRequest_UnrecognizedSortIndexError
-### BadRequest_UnsupportedCurrencyError
 ### BadRequest_UnsupportedHttpResponseFormatError
 ### BadRequest_UnsupportedMediaTypeError
 ### BadRequest_UserIdInvalidError

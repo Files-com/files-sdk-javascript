@@ -280,9 +280,6 @@ export declare class BadRequest_SearchAllOnChildPathError extends BadRequestErro
 /** Unrecognized Sort Index */
 export declare class BadRequest_UnrecognizedSortIndexError extends BadRequestError {}
 
-/** Unsupported Currency */
-export declare class BadRequest_UnsupportedCurrencyError extends BadRequestError {}
-
 /** Unsupported Http Response Format */
 export declare class BadRequest_UnsupportedHttpResponseFormatError extends BadRequestError {}
 
