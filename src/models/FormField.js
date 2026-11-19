@@ -60,10 +60,10 @@ class FormField {
   // string # Type of Field
   getFieldType = () => this.attributes.field_type
 
-  // array(string) # Options to display for radio and dropdown
+  // array(string) # Options to display for radio, dropdown, and multi_select
   getOptionsForSelect = () => this.attributes.options_for_select
 
-  // string # Default option for radio and dropdown
+  // string # Default option for radio, dropdown, and multi_select
   getDefaultOption = () => this.attributes.default_option
 
   // int64 # Form field set id

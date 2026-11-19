@@ -34,12 +34,12 @@ declare class FormField {
   readonly help_text?: string | null
 
   /** Type of Field */
-  readonly field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | Files.OtherString | null
+  readonly field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | 'multi_select' | Files.OtherString | null
 
-  /** Options to display for radio and dropdown */
+  /** Options to display for radio, dropdown, and multi_select */
   readonly options_for_select?: string[] | null
 
-  /** Default option for radio and dropdown */
+  /** Default option for radio, dropdown, and multi_select */
   readonly default_option?: string | null
 
   /** Form field set id */
@@ -58,12 +58,12 @@ declare class FormField {
   getHelpText(): string | null | undefined
 
   /** Type of Field */
-  getFieldType(): 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | Files.OtherString | null | undefined
+  getFieldType(): 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | 'multi_select' | Files.OtherString | null | undefined
 
-  /** Options to display for radio and dropdown */
+  /** Options to display for radio, dropdown, and multi_select */
   getOptionsForSelect(): string[] | null | undefined
 
-  /** Default option for radio and dropdown */
+  /** Default option for radio, dropdown, and multi_select */
   getDefaultOption(): string | null | undefined
 
   /** Form field set id */
@@ -88,12 +88,12 @@ declare namespace FormField {
     help_text?: string | null
 
     /** Type of Field */
-    field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | Files.OtherString | null
+    field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | 'multi_select' | Files.OtherString | null
 
-    /** Options to display for radio and dropdown */
+    /** Options to display for radio, dropdown, and multi_select */
     options_for_select?: string[] | null
 
-    /** Default option for radio and dropdown */
+    /** Default option for radio, dropdown, and multi_select */
     default_option?: string | null
 
     /** Form field set id */

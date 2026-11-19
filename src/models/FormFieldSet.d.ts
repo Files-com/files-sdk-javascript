@@ -266,11 +266,11 @@ declare namespace FormFieldSet {
      * Each item's keys, as the API describes them:
      * - `id`: Id of existing Form Field
      * - `label`: Label of Field
-     * - `field_type`: Type of field: text, text_area, dropdown, radio, or date
+     * - `field_type`: Type of field: text, text_area, dropdown, radio, date, or multi_select
      * - `help_text`: Help text of field
      * - `required`: Is this a required field? (default true)
-     * - `options_for_select`: List of options for dropdown or radio
-     * - `default_option`: Default option to be preselected in the dropdown or radio.
+     * - `options_for_select`: List of options for dropdown, radio, or multi_select
+     * - `default_option`: Default option to be preselected in dropdown, radio, or multi_select.
      */
     form_fields?: FormFieldSet.FormFields
   }
@@ -301,11 +301,11 @@ declare namespace FormFieldSet {
      * Each item's keys, as the API describes them:
      * - `id`: Id of existing Form Field
      * - `label`: Label of Field
-     * - `field_type`: Type of field: text, text_area, dropdown, radio, or date
+     * - `field_type`: Type of field: text, text_area, dropdown, radio, date, or multi_select
      * - `help_text`: Help text of field
      * - `required`: Is this a required field? (default true)
-     * - `options_for_select`: List of options for dropdown or radio
-     * - `default_option`: Default option to be preselected in the dropdown or radio.
+     * - `options_for_select`: List of options for dropdown, radio, or multi_select
+     * - `default_option`: Default option to be preselected in dropdown, radio, or multi_select.
      */
     form_fields?: FormFieldSet.FormFields
   }
@@ -326,7 +326,7 @@ declare namespace FormFieldSet {
     label?: string
 
     /** Type of field. Required for a new field. */
-    field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date'
+    field_type?: 'text' | 'text_area' | 'dropdown' | 'radio' | 'date' | 'multi_select'
 
     /** Help text to be displayed. */
     help_text?: string | null
@@ -334,7 +334,10 @@ declare namespace FormFieldSet {
     /** Is this a required field? Defaults to true for a new field. */
     required?: boolean
 
-    /** Options to display. Required for dropdown and radio fields. Removed from text and text_area fields. */
+    /**
+     * Options to display. Required for dropdown, radio, and multi_select fields. Multi-select answers are strings
+     * containing one CSV record without a header. Removed from text and text_area fields.
+     */
     options_for_select?: string[] | null
 
     /** Option to preselect. Must be one of options_for_select. Removed from text and text_area fields. */
