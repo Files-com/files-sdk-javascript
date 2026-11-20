@@ -27,6 +27,9 @@ declare class EmailIncomingMessage {
   /** Id of the Inbox associated with this message */
   readonly inbox_id?: number | null
 
+  /** ID of the Workspace that owns the Inbox. The Default Workspace has ID 0. */
+  readonly workspace_id?: number | null
+
   /** Sender of the email */
   readonly sender?: string | null
 
@@ -36,7 +39,7 @@ declare class EmailIncomingMessage {
   /** Status of the message */
   readonly status?: 'success' | 'partial_failure' | 'failure' | 'skipped' | Files.OtherString | null
 
-  /** Body of the email */
+  /** Body of the email. Only available to Site Administrators. */
   readonly body?: string | null
 
   /** Message describing the failure */
@@ -54,6 +57,9 @@ declare class EmailIncomingMessage {
   /** Id of the Inbox associated with this message */
   getInboxId(): number | null | undefined
 
+  /** ID of the Workspace that owns the Inbox. The Default Workspace has ID 0. */
+  getWorkspaceId(): number | null | undefined
+
   /** Sender of the email */
   getSender(): string | null | undefined
 
@@ -63,7 +69,7 @@ declare class EmailIncomingMessage {
   /** Status of the message */
   getStatus(): 'success' | 'partial_failure' | 'failure' | 'skipped' | Files.OtherString | null | undefined
 
-  /** Body of the email */
+  /** Body of the email. Only available to Site Administrators. */
   getBody(): string | null | undefined
 
   /** Message describing the failure */
@@ -102,6 +108,9 @@ declare namespace EmailIncomingMessage {
     /** Id of the Inbox associated with this message */
     inbox_id?: number | null
 
+    /** ID of the Workspace that owns the Inbox. The Default Workspace has ID 0. */
+    workspace_id?: number | null
+
     /** Sender of the email */
     sender?: string | null
 
@@ -111,7 +120,7 @@ declare namespace EmailIncomingMessage {
     /** Status of the message */
     status?: 'success' | 'partial_failure' | 'failure' | 'skipped' | Files.OtherString | null
 
-    /** Body of the email */
+    /** Body of the email. Only available to Site Administrators. */
     body?: string | null
 
     /** Message describing the failure */
@@ -138,15 +147,20 @@ declare namespace EmailIncomingMessage {
 
     /**
      * If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`,
-     * `sender`, `status` or `inbox_id`.
+     * `workspace_id`, `sender`, `status` or `inbox_id`.
      */
     sort_by?: Files.JsonObject
 
     /**
      * If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`,
-     * `inbox_id`, `sender` or `status`. Valid field combinations are `[ inbox_id, created_at ]`, `[ sender, created_at
-     * ]`, `[ status, created_at ]`, `[ inbox_id, status ]`, `[ status, sender ]`, `[ inbox_id, status, created_at ]`,
-     * `[ status, sender, created_at ]`, `[ inbox_id, status, sender ]` or `[ inbox_id, status, sender, created_at ]`.
+     * `inbox_id`, `sender`, `status` or `workspace_id`. Valid field combinations are `[ inbox_id, created_at ]`, `[
+     * sender, created_at ]`, `[ status, created_at ]`, `[ workspace_id, created_at ]`, `[ inbox_id, status ]`, `[
+     * workspace_id, inbox_id ]`, `[ status, sender ]`, `[ workspace_id, sender ]`, `[ workspace_id, status ]`, `[
+     * inbox_id, status, created_at ]`, `[ workspace_id, inbox_id, created_at ]`, `[ status, sender, created_at ]`, `[
+     * workspace_id, sender, created_at ]`, `[ workspace_id, status, created_at ]`, `[ inbox_id, status, sender ]`, `[
+     * workspace_id, inbox_id, status ]`, `[ workspace_id, status, sender ]`, `[ inbox_id, status, sender, created_at
+     * ]`, `[ workspace_id, inbox_id, status, created_at ]`, `[ workspace_id, status, sender, created_at ]`, `[
+     * workspace_id, inbox_id, status, sender ]` or `[ workspace_id, inbox_id, status, sender, created_at ]`.
      */
     filter?: Files.JsonObject
 
