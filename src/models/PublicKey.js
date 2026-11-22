@@ -133,7 +133,7 @@ class PublicKey {
     exposeAttributes(this, ['last_login_at'])
   }
 
-  // string # Only returned when generating keys. Private key generated for the user.
+  // string # Available for 60 minutes after key creation, only to the API key or login session that requested generation.
   getGeneratedPrivateKey = () => this.attributes.generated_private_key
 
   setGeneratedPrivateKey = value => {

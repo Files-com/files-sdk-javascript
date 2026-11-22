@@ -51,7 +51,7 @@ declare class PublicKey {
   /** Key's most recent login time via SFTP */
   readonly last_login_at?: Files.DateTimeString | null
 
-  /** Only returned when generating keys. Private key generated for the user. */
+  /** Available for 60 minutes after key creation, only to the API key or login session that requested generation. */
   readonly generated_private_key?: string | null
 
   /** Only returned when generating keys. Public key generated for the user. */
@@ -116,7 +116,7 @@ declare class PublicKey {
   /** Key's most recent login time via SFTP */
   getLastLoginAt(): Files.DateTimeString | null | undefined
 
-  /** Only returned when generating keys. Private key generated for the user. */
+  /** Available for 60 minutes after key creation, only to the API key or login session that requested generation. */
   getGeneratedPrivateKey(): string | null | undefined
 
   /** Only returned when generating keys. Public key generated for the user. */
@@ -178,7 +178,7 @@ declare class PublicKey {
   /** Key's most recent login time via SFTP */
   setLastLoginAt(value: Files.DateTimeString): void
 
-  /** Only returned when generating keys. Private key generated for the user. */
+  /** Available for 60 minutes after key creation, only to the API key or login session that requested generation. */
   setGeneratedPrivateKey(value: string): void
 
   /** Only returned when generating keys. Public key generated for the user. */
@@ -289,7 +289,7 @@ declare namespace PublicKey {
     /** Key's most recent login time via SFTP */
     last_login_at?: Files.DateTimeString | null
 
-    /** Only returned when generating keys. Private key generated for the user. */
+    /** Available for 60 minutes after key creation, only to the API key or login session that requested generation. */
     generated_private_key?: string | null
 
     /** Only returned when generating keys. Public key generated for the user. */
