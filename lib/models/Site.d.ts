@@ -689,7 +689,7 @@ declare class Site {
    */
   readonly email_footer_custom_text?: string | null
 
-  /** Include this email in welcome emails if enabled */
+  /** Copy welcome emails to this address when the email contains neither a create-password link nor a password. */
   readonly welcome_email_cc?: string | null
 
   /** Include this email subject in welcome emails if enabled */
@@ -1367,7 +1367,7 @@ declare class Site {
    */
   getEmailFooterCustomText(): string | null | undefined
 
-  /** Include this email in welcome emails if enabled */
+  /** Copy welcome emails to this address when the email contains neither a create-password link nor a password. */
   getWelcomeEmailCc(): string | null | undefined
 
   /** Include this email subject in welcome emails if enabled */
@@ -2066,7 +2066,7 @@ declare namespace Site {
      */
     email_footer_custom_text?: string | null
 
-    /** Include this email in welcome emails if enabled */
+    /** Copy welcome emails to this address when the email contains neither a create-password link nor a password. */
     welcome_email_cc?: string | null
 
     /** Include this email subject in welcome emails if enabled */
@@ -2135,7 +2135,7 @@ declare namespace Site {
      */
     always_mkdir_parents?: boolean
 
-    /** Include this email in welcome emails if enabled */
+    /** Copy welcome emails to this address when the email contains neither a create-password link nor a password. */
     welcome_email_cc?: string
 
     /** Include this email subject in welcome emails if enabled */

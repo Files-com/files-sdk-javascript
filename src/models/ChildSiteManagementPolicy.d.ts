@@ -322,7 +322,7 @@ declare namespace ChildSiteManagementPolicy {
      */
     always_mkdir_parents?: boolean | null
 
-    /** Include this email in welcome emails if enabled */
+    /** Copy welcome emails to this address when the email contains neither a create-password link nor a password. */
     welcome_email_cc?: string | null
 
     /** Include this email subject in welcome emails if enabled */

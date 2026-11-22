@@ -98,7 +98,7 @@ class Partner {
     exposeAttributes(this, ['allow_user_creation'])
   }
 
-  // boolean # When `true`, emails sent to Partner users are copied to the responsible User or Group.
+  // boolean # When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
   getCcEmailsToResponsibleParty = () => this.attributes.cc_emails_to_responsible_party
 
   setCcEmailsToResponsibleParty = value => {
@@ -233,7 +233,7 @@ class Partner {
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
-  //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
+  //   cc_emails_to_responsible_party - boolean - When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
   //   notes - string - Notes about this Partner.
   //   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
   //   responsible_group_id - int64 - ID of the Group responsible for this Partner.
@@ -440,7 +440,7 @@ class Partner {
   //   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
   //   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
   //   allow_user_creation - boolean - Allow Partner Admins to create users.
-  //   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
+  //   cc_emails_to_responsible_party - boolean - When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
   //   notes - string - Notes about this Partner.
   //   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
   //   responsible_group_id - int64 - ID of the Group responsible for this Partner.

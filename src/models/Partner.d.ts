@@ -43,7 +43,11 @@ declare class Partner {
   /** Allow Partner Admins to create users. */
   readonly allow_user_creation?: boolean | null
 
-  /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+  /**
+   * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+   * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification
+   * codes, and signed export links go only to the primary email address.
+   */
   readonly cc_emails_to_responsible_party?: boolean | null
 
   /**
@@ -124,7 +128,11 @@ declare class Partner {
   /** Allow Partner Admins to create users. */
   getAllowUserCreation(): boolean | null | undefined
 
-  /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+  /**
+   * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+   * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification
+   * codes, and signed export links go only to the primary email address.
+   */
   getCcEmailsToResponsibleParty(): boolean | null | undefined
 
   /**
@@ -205,7 +213,11 @@ declare class Partner {
   /** Allow Partner Admins to create users. */
   setAllowUserCreation(value: boolean): void
 
-  /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+  /**
+   * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+   * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification
+   * codes, and signed export links go only to the primary email address.
+   */
   setCcEmailsToResponsibleParty(value: boolean): void
 
   /**
@@ -332,7 +344,11 @@ declare namespace Partner {
     /** Allow Partner Admins to create users. */
     allow_user_creation?: boolean | null
 
-    /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+    /**
+     * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+     * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email
+     * verification codes, and signed export links go only to the primary email address.
+     */
     cc_emails_to_responsible_party?: boolean | null
 
     /**
@@ -445,7 +461,11 @@ declare namespace Partner {
     /** Allow Partner Admins to create users. */
     allow_user_creation?: boolean
 
-    /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+    /**
+     * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+     * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email
+     * verification codes, and signed export links go only to the primary email address.
+     */
     cc_emails_to_responsible_party?: boolean
 
     /** Notes about this Partner. */
@@ -504,7 +524,11 @@ declare namespace Partner {
     /** Allow Partner Admins to create users. */
     allow_user_creation?: boolean
 
-    /** When `true`, emails sent to Partner users are copied to the responsible User or Group. */
+    /**
+     * When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own
+     * Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email
+     * verification codes, and signed export links go only to the primary email address.
+     */
     cc_emails_to_responsible_party?: boolean
 
     /** Notes about this Partner. */
