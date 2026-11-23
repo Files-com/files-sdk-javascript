@@ -120,8 +120,17 @@ declare class Bundle {
    */
   readonly effective_expires_at?: Files.DateTimeString | null
 
-  /** Maximum number of times bundle can be accessed */
+  /**
+   * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+   * exceed the Site-wide cap.
+   */
   readonly max_uses?: number | null
+
+  /**
+   * Read-only visitor limit actually enforced for this Share Link. Uses the lower of the link limit and the Site-wide
+   * cap when both are set. Null means unlimited.
+   */
+  readonly effective_max_uses?: number | null
 
   /** Internal name for identifying this Share Link. */
   readonly internal_name?: string | null
@@ -305,8 +314,17 @@ declare class Bundle {
    */
   getEffectiveExpiresAt(): Files.DateTimeString | null | undefined
 
-  /** Maximum number of times bundle can be accessed */
+  /**
+   * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+   * exceed the Site-wide cap.
+   */
   getMaxUses(): number | null | undefined
+
+  /**
+   * Read-only visitor limit actually enforced for this Share Link. Uses the lower of the link limit and the Site-wide
+   * cap when both are set. Null means unlimited.
+   */
+  getEffectiveMaxUses(): number | null | undefined
 
   /** Internal name for identifying this Share Link. */
   getInternalName(): string | null | undefined
@@ -487,8 +505,17 @@ declare class Bundle {
    */
   setEffectiveExpiresAt(value: Files.DateTimeString): void
 
-  /** Maximum number of times bundle can be accessed */
+  /**
+   * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+   * exceed the Site-wide cap.
+   */
   setMaxUses(value: number): void
+
+  /**
+   * Read-only visitor limit actually enforced for this Share Link. Uses the lower of the link limit and the Site-wide
+   * cap when both are set. Null means unlimited.
+   */
+  setEffectiveMaxUses(value: number): void
 
   /** Internal name for identifying this Share Link. */
   setInternalName(value: string): void
@@ -722,8 +749,17 @@ declare namespace Bundle {
      */
     effective_expires_at?: Files.DateTimeString | null
 
-    /** Maximum number of times bundle can be accessed */
+    /**
+     * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+     * exceed the Site-wide cap.
+     */
     max_uses?: number | null
+
+    /**
+     * Read-only visitor limit actually enforced for this Share Link. Uses the lower of the link limit and the Site-wide
+     * cap when both are set. Null means unlimited.
+     */
+    effective_max_uses?: number | null
 
     /** Internal name for identifying this Share Link. */
     internal_name?: string | null
@@ -908,7 +944,10 @@ declare namespace Bundle {
     /** If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true. */
     finalize_snapshot?: boolean
 
-    /** Maximum number of times bundle can be accessed */
+    /**
+     * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+     * exceed the Site-wide cap.
+     */
     max_uses?: number
 
     /** Owning group ID. If set, members of this group can view, edit, and share this Share Link. */
@@ -1039,7 +1078,10 @@ declare namespace Bundle {
     /** ID of the associated inbox, if available. */
     inbox_id?: number
 
-    /** Maximum number of times bundle can be accessed */
+    /**
+     * Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot
+     * exceed the Site-wide cap.
+     */
     max_uses?: number
 
     /** Owning group ID. If set, members of this group can view, edit, and share this Share Link. */

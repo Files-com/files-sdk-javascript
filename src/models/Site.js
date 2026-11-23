@@ -136,6 +136,9 @@ class Site {
   // int64 # Site-wide Bundle expiration in days
   getBundleExpiration = () => this.attributes.bundle_expiration
 
+  // int64 # Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
+  getBundleMaxUses = () => this.attributes.bundle_max_uses
+
   // string # Custom error message to show when bundle is not found.
   getBundleNotFoundMessage = () => this.attributes.bundle_not_found_message
 
@@ -668,6 +671,7 @@ class Site {
   //   reply_to_email - string - Reply-to email for this site
   //   allow_bundle_names - boolean - Are manual Bundle names allowed?
   //   bundle_expiration - int64 - Site-wide Bundle expiration in days
+  //   bundle_max_uses - int64 - Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
   //   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
   //   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
   //   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
@@ -876,6 +880,10 @@ class Site {
 
     if (params.bundle_expiration !== undefined && params.bundle_expiration !== null && !isInt(params.bundle_expiration)) {
       throw new errors.InvalidParameterError(`Bad parameter: bundle_expiration must be of type Int, received ${getType(params.bundle_expiration)}`)
+    }
+
+    if (params.bundle_max_uses !== undefined && params.bundle_max_uses !== null && !isInt(params.bundle_max_uses)) {
+      throw new errors.InvalidParameterError(`Bad parameter: bundle_max_uses must be of type Int, received ${getType(params.bundle_max_uses)}`)
     }
 
     if (isArray(params.welcome_email_enabled) || isObject(params.welcome_email_enabled)) {

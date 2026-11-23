@@ -117,6 +117,12 @@ declare class Site {
   /** Site-wide Bundle expiration in days */
   readonly bundle_expiration?: number | null
 
+  /**
+   * Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all
+   * Workspaces. Null disables the Site-wide cap.
+   */
+  readonly bundle_max_uses?: number | null
+
   /** Custom error message to show when bundle is not found. */
   readonly bundle_not_found_message?: string | null
 
@@ -794,6 +800,12 @@ declare class Site {
 
   /** Site-wide Bundle expiration in days */
   getBundleExpiration(): number | null | undefined
+
+  /**
+   * Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all
+   * Workspaces. Null disables the Site-wide cap.
+   */
+  getBundleMaxUses(): number | null | undefined
 
   /** Custom error message to show when bundle is not found. */
   getBundleNotFoundMessage(): string | null | undefined
@@ -1491,6 +1503,12 @@ declare namespace Site {
     /** Site-wide Bundle expiration in days */
     bundle_expiration?: number | null
 
+    /**
+     * Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all
+     * Workspaces. Null disables the Site-wide cap.
+     */
+    bundle_max_uses?: number | null
+
     /** Custom error message to show when bundle is not found. */
     bundle_not_found_message?: string | null
 
@@ -2115,6 +2133,12 @@ declare namespace Site {
 
     /** Site-wide Bundle expiration in days */
     bundle_expiration?: number
+
+    /**
+     * Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all
+     * Workspaces. Null disables the Site-wide cap.
+     */
+    bundle_max_uses?: number
 
     /** Will the welcome email be sent to new users? */
     welcome_email_enabled?: boolean
