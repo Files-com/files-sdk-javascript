@@ -314,6 +314,12 @@ declare namespace ChildSiteManagementPolicy {
      */
     bundle_max_uses?: number | null
 
+    /**
+     * Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling
+     * can serve file content from the same hostname as the signed-in web app. Disabled by default.
+     */
+    dangerously_use_custom_domain_for_transfer_urls?: boolean | null
+
     /** Will the welcome email be sent to new users? */
     welcome_email_enabled?: boolean | null
 

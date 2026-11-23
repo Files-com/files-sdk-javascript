@@ -526,6 +526,27 @@ class FilesClient {
     })
   }
 
+  get certificates() {
+    return resource(this, 'certificates', () => {
+      const Certificate = require('./models/Certificate.js').default
+
+      return {
+        all: (params = {}, options = {}) =>
+          Certificate.all(params, withClient(this, options)),
+        create: (params = {}, options = {}) =>
+          Certificate.create(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          Certificate.find(id, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          Certificate.get(id, params, withClient(this, options)),
+        list: (params = {}, options = {}) =>
+          Certificate.list(params, withClient(this, options)),
+        listIterator: (params = {}, options = {}) =>
+          Certificate.listIterator(params, withClient(this, options)),
+      }
+    })
+  }
+
   get chatSessions() {
     return resource(this, 'chatSessions', () => {
       const ChatSession = require('./models/ChatSession.js').default

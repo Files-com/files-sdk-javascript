@@ -304,6 +304,12 @@ declare class Site {
   /** Custom domain */
   readonly domain?: string | null
 
+  /**
+   * Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can
+   * serve file content from the same hostname as the signed-in web app. Disabled by default.
+   */
+  readonly dangerously_use_custom_domain_for_transfer_urls?: boolean | null
+
   /** Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain? */
   readonly domain_hsts_header?: boolean | null
 
@@ -987,6 +993,12 @@ declare class Site {
 
   /** Custom domain */
   getDomain(): string | null | undefined
+
+  /**
+   * Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can
+   * serve file content from the same hostname as the signed-in web app. Disabled by default.
+   */
+  getDangerouslyUseCustomDomainForTransferUrls(): boolean | null | undefined
 
   /** Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain? */
   getDomainHstsHeader(): boolean | null | undefined
@@ -1690,6 +1702,12 @@ declare namespace Site {
     /** Custom domain */
     domain?: string | null
 
+    /**
+     * Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling
+     * can serve file content from the same hostname as the signed-in web app. Disabled by default.
+     */
+    dangerously_use_custom_domain_for_transfer_urls?: boolean | null
+
     /** Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain? */
     domain_hsts_header?: boolean | null
 
@@ -2139,6 +2157,12 @@ declare namespace Site {
      * Workspaces. Null disables the Site-wide cap.
      */
     bundle_max_uses?: number
+
+    /**
+     * Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling
+     * can serve file content from the same hostname as the signed-in web app. Disabled by default.
+     */
+    dangerously_use_custom_domain_for_transfer_urls?: boolean
 
     /** Will the welcome email be sent to new users? */
     welcome_email_enabled?: boolean

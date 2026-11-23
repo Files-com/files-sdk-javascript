@@ -23,6 +23,7 @@ import BundleNotification from './models/BundleNotification'
 import BundleRecipient from './models/BundleRecipient'
 import BundleRegistration from './models/BundleRegistration'
 import Bundle from './models/Bundle'
+import Certificate from './models/Certificate'
 import ChatSession from './models/ChatSession'
 import ChildSiteManagementPolicy from './models/ChildSiteManagementPolicy'
 import Clickwrap from './models/Clickwrap'
@@ -268,6 +269,9 @@ declare class FilesClient {
 
   /** `Bundle`'s static methods, made with this client's settings. */
   readonly bundles: Pick<typeof Bundle, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
+
+  /** `Certificate`'s static methods, made with this client's settings. */
+  readonly certificates: Pick<typeof Certificate, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `ChatSession`'s static methods, made with this client's settings. */
   readonly chatSessions: Pick<typeof ChatSession, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
