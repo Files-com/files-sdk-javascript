@@ -50,7 +50,10 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   readonly skip_company?: boolean | null
 
-  /** Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration */
+  /**
+   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
+   * upload destination
+   */
   readonly in_use?: boolean | null
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -88,7 +91,10 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   getSkipCompany(): boolean | null | undefined
 
-  /** Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration */
+  /**
+   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
+   * upload destination
+   */
   getInUse(): boolean | null | undefined
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -126,7 +132,10 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   setSkipCompany(value: boolean): void
 
-  /** Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration */
+  /**
+   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
+   * upload destination
+   */
   setInUse(value: boolean): void
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -211,7 +220,10 @@ declare namespace FormFieldSet {
     /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
     skip_company?: boolean | null
 
-    /** Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration */
+    /**
+     * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
+     * upload destination
+     */
     in_use?: boolean | null
 
     /** User ID.  Provide a value of `0` to operate the current session's user. */

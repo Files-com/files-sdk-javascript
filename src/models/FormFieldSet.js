@@ -122,7 +122,7 @@ class FormFieldSet {
     exposeAttributes(this, ['skip_company'])
   }
 
-  // boolean # Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration
+  // boolean # Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel upload destination
   getInUse = () => this.attributes.in_use
 
   setInUse = value => {

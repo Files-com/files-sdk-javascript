@@ -162,6 +162,14 @@ class PartnerChannel {
     exposeAttributes(this, ['from_partner_managed_folder_paths'])
   }
 
+  // array(object) # Form Field Sets attached to From Partner upload destinations.
+  getFromPartnerUploadForms = () => this.attributes.from_partner_upload_forms
+
+  setFromPartnerUploadForms = value => {
+    this.attributes.from_partner_upload_forms = value
+    exposeAttributes(this, ['from_partner_upload_forms'])
+  }
+
   // string # Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
   getEffectiveToPartnerFolderName = () => this.attributes.effective_to_partner_folder_name
 
@@ -207,6 +215,7 @@ class PartnerChannel {
   //   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+  //   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
   //   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
   //   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -242,6 +251,10 @@ class PartnerChannel {
 
     if (params.from_partner_managed_folder_paths !== undefined && params.from_partner_managed_folder_paths !== null && !isArray(params.from_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
+    }
+
+    if (params.from_partner_upload_forms !== undefined && params.from_partner_upload_forms !== null && !isArray(params.from_partner_upload_forms)) {
+      throw new errors.InvalidParameterError(`Bad parameter: from_partner_upload_forms must be of type Array, received ${getType(params.from_partner_upload_forms)}`)
     }
 
     if (params.from_partner_route_path !== undefined && params.from_partner_route_path !== null && !isString(params.from_partner_route_path)) {
@@ -379,6 +392,7 @@ class PartnerChannel {
   //   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
   //   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
   //   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+  //   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
   //   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
   //   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
   //   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -409,6 +423,10 @@ class PartnerChannel {
 
     if (params.from_partner_managed_folder_paths !== undefined && params.from_partner_managed_folder_paths !== null && !isArray(params.from_partner_managed_folder_paths)) {
       throw new errors.InvalidParameterError(`Bad parameter: from_partner_managed_folder_paths must be of type Array, received ${getType(params.from_partner_managed_folder_paths)}`)
+    }
+
+    if (params.from_partner_upload_forms !== undefined && params.from_partner_upload_forms !== null && !isArray(params.from_partner_upload_forms)) {
+      throw new errors.InvalidParameterError(`Bad parameter: from_partner_upload_forms must be of type Array, received ${getType(params.from_partner_upload_forms)}`)
     }
 
     if (params.from_partner_route_path !== undefined && params.from_partner_route_path !== null && !isString(params.from_partner_route_path)) {

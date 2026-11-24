@@ -223,6 +223,11 @@ declare namespace AutomationVersion {
       | AutomationVersion.Definition.NodeTriggerWebhook
       | AutomationVersion.Definition.NodeTriggerEmail
       | AutomationVersion.Definition.NodeCreateFolder
+      | AutomationVersion.Definition.NodeCreateUser
+      | AutomationVersion.Definition.NodeCreateGroup
+      | AutomationVersion.Definition.NodeAddUserToGroup
+      | AutomationVersion.Definition.NodeCreatePermission
+      | AutomationVersion.Definition.NodeCreateShareLink
       | AutomationVersion.Definition.NodeCopyFile
       | AutomationVersion.Definition.NodeMoveFile
       | AutomationVersion.Definition.NodeDeleteFile
@@ -232,6 +237,7 @@ declare namespace AutomationVersion {
       | AutomationVersion.Definition.NodeSendEmail
       | AutomationVersion.Definition.NodeSendChatMessage
       | AutomationVersion.Definition.NodeSendWebhook
+      | AutomationVersion.Definition.NodeHttpRequest
       | AutomationVersion.Definition.NodePublishAmazonSns
       | AutomationVersion.Definition.NodePublishAmazonSqs
       | AutomationVersion.Definition.NodePublishGooglePubsub
@@ -444,6 +450,227 @@ declare namespace AutomationVersion {
       config: {
         /** One or more destination path templates. */
         destinations: AutomationVersion.Definition.Destinations
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Create user node */
+    interface NodeCreateUser {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'create_user'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        username: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        email: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        name?: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        company?: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        notes?: AutomationVersion.Definition.TemplateString
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Create group node */
+    interface NodeCreateGroup {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'create_group'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        name: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        notes?: AutomationVersion.Definition.TemplateString
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Add user to group node */
+    interface NodeAddUserToGroup {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'add_user_to_group'
+
+      /** Configuration fields for this node type. */
+      config?: {
+        user_id?: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        user_id_expression?: AutomationVersion.Definition.FtsExpression
+
+        group_id?: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        group_id_expression?: AutomationVersion.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Create permission node */
+    interface NodeCreatePermission {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'create_permission'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        folder_path?: AutomationVersion.Definition.TemplateString
+
+        user_id?: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        user_id_expression?: AutomationVersion.Definition.FtsExpression
+
+        group_id?: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        group_id_expression?: AutomationVersion.Definition.FtsExpression
+
+        permission: 'readonly' | 'writeonly' | 'list' | 'history' | 'previewonly' | 'bundle' | 'full' | 'admin'
+
+        /** @defaultValue true */
+        recursive?: boolean
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Create share link node */
+    interface NodeCreateShareLink {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'create_share_link'
+
+      /** Configuration fields for this node type. */
+      config?: {
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        description?: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        internal_name?: AutomationVersion.Definition.TemplateString
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        note?: AutomationVersion.Definition.TemplateString
+
+        /** @defaultValue 'read' */
+        permissions?: 'read' | 'preview_only'
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        expires_at?: AutomationVersion.Definition.TemplateString
+
+        expires_in_minutes?: number
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        start_access_on_date?: AutomationVersion.Definition.TemplateString
+
+        max_uses?: number
+
+        password_secret_id?: number
+
+        clickwrap_id?: number
+
+        require_registration?: boolean
+
+        require_share_recipient?: boolean
+
+        send_one_time_password_to_recipient_at_registration?: boolean
+
+        recipients?: AutomationVersion.Definition.TemplateString[]
+
+        /** A bare Files TransformScript expression, no braces. */
+        recipients_expression?: AutomationVersion.Definition.FtsExpression
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        recipient_note?: AutomationVersion.Definition.TemplateString
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: AutomationVersion.Definition.OnError
@@ -727,6 +954,49 @@ declare namespace AutomationVersion {
 
         /** @defaultValue false */
         use_dedicated_ips?: boolean
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Http request node */
+    interface NodeHttpRequest {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'http_request'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /** @defaultValue 'get' */
+        method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        url: AutomationVersion.Definition.TemplateString
+
+        query?: {
+          [key: string]: AutomationVersion.Definition.TemplateString
+        }
+
+        headers?: {
+          [key: string]: AutomationVersion.Definition.TemplateString
+        }
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        body?: AutomationVersion.Definition.TemplateString
+
+        auth_secret_id?: number
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: AutomationVersion.Definition.OnError

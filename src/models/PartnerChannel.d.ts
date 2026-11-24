@@ -1,4 +1,5 @@
 import Files from '../Files'
+import PartnerChannelUploadForm from './PartnerChannelUploadForm'
 
 /**
  * A PartnerChannel defines a structured communication path within a Partner root folder, including directional folder
@@ -72,6 +73,9 @@ declare class PartnerChannel {
   /** Managed folder paths inside the from-Partner folder. */
   readonly from_partner_managed_folder_paths?: string[] | null
 
+  /** Form Field Sets attached to From Partner upload destinations. */
+  readonly from_partner_upload_forms?: PartnerChannelUploadForm.Attributes[] | Files.JsonObject[] | null
+
   /** Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly. */
   readonly effective_to_partner_folder_name?: string | null
 
@@ -135,6 +139,9 @@ declare class PartnerChannel {
   /** Managed folder paths inside the from-Partner folder. */
   getFromPartnerManagedFolderPaths(): string[] | null | undefined
 
+  /** Form Field Sets attached to From Partner upload destinations. */
+  getFromPartnerUploadForms(): PartnerChannelUploadForm.Attributes[] | Files.JsonObject[] | null | undefined
+
   /** Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly. */
   getEffectiveToPartnerFolderName(): string | null | undefined
 
@@ -197,6 +204,9 @@ declare class PartnerChannel {
 
   /** Managed folder paths inside the from-Partner folder. */
   setFromPartnerManagedFolderPaths(value: string[]): void
+
+  /** Form Field Sets attached to From Partner upload destinations. */
+  setFromPartnerUploadForms(value: Files.JsonObject[]): void
 
   /** Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly. */
   setEffectiveToPartnerFolderName(value: string): void
@@ -307,6 +317,9 @@ declare namespace PartnerChannel {
     /** Managed folder paths inside the from-Partner folder. */
     from_partner_managed_folder_paths?: string[] | null
 
+    /** Form Field Sets attached to From Partner upload destinations. */
+    from_partner_upload_forms?: PartnerChannelUploadForm.Attributes[] | Files.JsonObject[] | null
+
     /** Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly. */
     effective_to_partner_folder_name?: string | null
 
@@ -367,6 +380,13 @@ declare namespace PartnerChannel {
     /** Managed folder paths inside the from-Partner folder. */
     from_partner_managed_folder_paths?: string[]
 
+    /**
+     * Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder
+     * and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces
+     * all assignments, and an empty array removes them.
+     */
+    from_partner_upload_forms?: Files.JsonObject[]
+
     /** Optional route path for files uploaded by the Partner. */
     from_partner_route_path?: string
 
@@ -407,6 +427,13 @@ declare namespace PartnerChannel {
 
     /** Managed folder paths inside the from-Partner folder. */
     from_partner_managed_folder_paths?: string[]
+
+    /**
+     * Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder
+     * and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces
+     * all assignments, and an empty array removes them.
+     */
+    from_partner_upload_forms?: Files.JsonObject[]
 
     /** Optional route path for files uploaded by the Partner. */
     from_partner_route_path?: string

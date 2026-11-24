@@ -266,7 +266,7 @@ declare class User {
   readonly workspace_id?: number | null
 
   /** Workspace ID the user should land in by default when more than one Workspace is available. */
-  readonly default_workspace_id?: number | null
+  readonly preferred_workspace_id?: number | null
 
   /** Skip Welcome page in the UI? */
   readonly skip_welcome_screen?: boolean | null
@@ -617,7 +617,7 @@ declare class User {
   getWorkspaceId(): number | null | undefined
 
   /** Workspace ID the user should land in by default when more than one Workspace is available. */
-  getDefaultWorkspaceId(): number | null | undefined
+  getPreferredWorkspaceId(): number | null | undefined
 
   /** Skip Welcome page in the UI? */
   getSkipWelcomeScreen(): boolean | null | undefined
@@ -965,7 +965,7 @@ declare class User {
   setWorkspaceId(value: number): void
 
   /** Workspace ID the user should land in by default when more than one Workspace is available. */
-  setDefaultWorkspaceId(value: number): void
+  setPreferredWorkspaceId(value: number): void
 
   /** Skip Welcome page in the UI? */
   setSkipWelcomeScreen(value: boolean): void
@@ -1371,7 +1371,7 @@ declare namespace User {
     workspace_id?: number | null
 
     /** Workspace ID the user should land in by default when more than one Workspace is available. */
-    default_workspace_id?: number | null
+    preferred_workspace_id?: number | null
 
     /** Skip Welcome page in the UI? */
     skip_welcome_screen?: boolean | null
@@ -1639,7 +1639,7 @@ declare namespace User {
     desktop_configuration_profile_id?: number
 
     /** Workspace ID the user should land in by default when more than one Workspace is available. */
-    default_workspace_id?: number
+    preferred_workspace_id?: number
 
     /**
      * Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically
@@ -1881,7 +1881,7 @@ declare namespace User {
     desktop_configuration_profile_id?: number
 
     /** Workspace ID the user should land in by default when more than one Workspace is available. */
-    default_workspace_id?: number
+    preferred_workspace_id?: number
 
     /**
      * Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically
