@@ -357,6 +357,25 @@ class FilesClient {
     })
   }
 
+  get automationVersions() {
+    return resource(this, 'automationVersions', () => {
+      const AutomationVersion = require('./models/AutomationVersion.js').default
+
+      return {
+        all: (params = {}, options = {}) =>
+          AutomationVersion.all(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          AutomationVersion.find(id, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          AutomationVersion.get(id, params, withClient(this, options)),
+        list: (params = {}, options = {}) =>
+          AutomationVersion.list(params, withClient(this, options)),
+        listIterator: (params = {}, options = {}) =>
+          AutomationVersion.listIterator(params, withClient(this, options)),
+      }
+    })
+  }
+
   get automations() {
     return resource(this, 'automations', () => {
       const Automation = require('./models/Automation.js').default

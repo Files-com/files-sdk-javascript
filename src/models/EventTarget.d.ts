@@ -28,7 +28,7 @@ declare class EventTarget {
   readonly name?: string | null
 
   /** Event Target type. */
-  readonly target_type?: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | Files.OtherString | null
+  readonly target_type?: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | 'amazon_sqs' | 'azure_service_bus' | Files.OtherString | null
 
   /** Workspace ID. 0 means the default workspace or site-wide. */
   readonly workspace_id?: number | null
@@ -63,7 +63,7 @@ declare class EventTarget {
   getName(): string | null | undefined
 
   /** Event Target type. */
-  getTargetType(): 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | Files.OtherString | null | undefined
+  getTargetType(): 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | 'amazon_sqs' | 'azure_service_bus' | Files.OtherString | null | undefined
 
   /** Workspace ID. 0 means the default workspace or site-wide. */
   getWorkspaceId(): number | null | undefined
@@ -98,7 +98,7 @@ declare class EventTarget {
   setName(value: string): void
 
   /** Event Target type. */
-  setTargetType(value: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder'): void
+  setTargetType(value: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | 'amazon_sqs' | 'azure_service_bus'): void
 
   /** Workspace ID. 0 means the default workspace or site-wide. */
   setWorkspaceId(value: number): void
@@ -173,7 +173,7 @@ declare namespace EventTarget {
     name?: string | null
 
     /** Event Target type. */
-    target_type?: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | Files.OtherString | null
+    target_type?: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | 'amazon_sqs' | 'azure_service_bus' | Files.OtherString | null
 
     /** Workspace ID. 0 means the default workspace or site-wide. */
     workspace_id?: number | null
@@ -253,7 +253,7 @@ declare namespace EventTarget {
     delivery_policy?: EventTarget.DeliveryPolicy
 
     /** Event Target type. */
-    target_type: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder'
+    target_type: 'email' | 'webhook' | 'slack_webhook' | 'teams_webhook' | 'amazon_sns' | 'google_pubsub' | 'folder' | 'amazon_sqs' | 'azure_service_bus'
   }
 
   interface UpdateParams {
@@ -322,11 +322,17 @@ declare namespace EventTarget {
     /** Slack targets only. Emoji to use as the message icon instead of the Files.com icon. */
     icon_emoji?: string
 
-    /** Required for Amazon SNS targets. ARN of the SNS topic. */
+    /** Required for Amazon SNS and SQS targets. ARN of the SNS topic or SQS queue. */
     arn?: string
 
-    /** Required for Amazon SNS targets. Responses omit secret_access_key. Region defaults to us-east-1. */
+    /**
+     * Required for Amazon SNS and SQS targets. Responses omit secret_access_key. SNS defaults to us-east-1. SQS uses
+     * the region from the queue ARN.
+     */
     aws_credentials?: EventTarget.Config.AwsCredentials
+
+    /** SQS message group ID. Required for FIFO queues. */
+    message_group_id?: string
 
     /** Required for Google Pub/Sub targets. Google Cloud project ID. */
     project_id?: string
@@ -342,6 +348,25 @@ declare namespace EventTarget {
      * It is stored as an object. Responses omit private_key.
      */
     google_credentials?: EventTarget.Config.GoogleCredentials
+
+    /** Azure Service Bus namespace name in the public Azure cloud. */
+    namespace?: string
+
+    /** Azure Service Bus queue or topic name, including any slash-separated path. */
+    entity_path?: string
+
+    /**
+     * Shared access policy name and key for Azure Service Bus. The policy needs Send permission. Responses omit
+     * shared_access_key.
+     */
+    azure_credentials?: {
+      shared_access_key_name: string
+
+      /** Accepted in requests; never returned by the API. */
+      shared_access_key?: string
+
+      [key: string]: unknown
+    }
 
     /** Required for folder targets. Folder that receives event files. */
     path?: string

@@ -221,7 +221,11 @@ declare class Automation {
   /** A Hash of attributes specific to the automation type. */
   readonly value?: Automation.Value | null
 
-  /** If trigger is `webhook`, this is the URL of the webhook to trigger the Automation. */
+  /**
+   * If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file,
+   * POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON
+   * body is saved as `payload.json` when the header is omitted.
+   */
   readonly webhook_url?: string | null
 
   /** Skip the automation if there is a formal, observed holiday for this region. */
@@ -426,7 +430,11 @@ declare class Automation {
   /** A Hash of attributes specific to the automation type. */
   getValue(): Automation.Value | null | undefined
 
-  /** If trigger is `webhook`, this is the URL of the webhook to trigger the Automation. */
+  /**
+   * If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file,
+   * POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON
+   * body is saved as `payload.json` when the header is omitted.
+   */
   getWebhookUrl(): string | null | undefined
 
   /** Skip the automation if there is a formal, observed holiday for this region. */
@@ -631,7 +639,11 @@ declare class Automation {
   /** A Hash of attributes specific to the automation type. */
   setValue(value: Automation.Value): void
 
-  /** If trigger is `webhook`, this is the URL of the webhook to trigger the Automation. */
+  /**
+   * If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file,
+   * POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON
+   * body is saved as `payload.json` when the header is omitted.
+   */
   setWebhookUrl(value: string): void
 
   /** Skip the automation if there is a formal, observed holiday for this region. */
@@ -895,7 +907,11 @@ declare namespace Automation {
     /** A Hash of attributes specific to the automation type. */
     value?: Automation.Value | null
 
-    /** If trigger is `webhook`, this is the URL of the webhook to trigger the Automation. */
+    /**
+     * If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file,
+     * POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON
+     * body is saved as `payload.json` when the header is omitted.
+     */
     webhook_url?: string | null
 
     /** Skip the automation if there is a formal, observed holiday for this region. */
@@ -1369,6 +1385,12 @@ declare namespace Automation {
       | Automation.Definition.NodeRunSync
       | Automation.Definition.NodeAs2Send
       | Automation.Definition.NodeSendEmail
+      | Automation.Definition.NodeSendChatMessage
+      | Automation.Definition.NodeSendWebhook
+      | Automation.Definition.NodePublishAmazonSns
+      | Automation.Definition.NodePublishAmazonSqs
+      | Automation.Definition.NodePublishGooglePubsub
+      | Automation.Definition.NodePublishAzureServiceBus
       | Automation.Definition.NodeAgentCompute
       | Automation.Definition.NodeSetMetadata
       | Automation.Definition.NodeExtract
@@ -1522,6 +1544,15 @@ declare namespace Automation {
         exclude_pattern?: string
 
         path_time_zone?: string
+
+        /** @defaultValue false */
+        upload_file?: boolean
+
+        destination?: string
+
+        bearer_token_sha256?: string
+
+        allowed_ips?: string[]
       }
     }
 
@@ -1785,6 +1816,180 @@ declare namespace Automation {
         body?: Automation.Definition.TemplateString
 
         attachments?: Automation.Definition.TemplateString[]
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Send chat message node */
+    interface NodeSendChatMessage {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'send_chat_message'
+
+      /** Configuration fields for this node type. */
+      config: {
+        provider: 'slack' | 'teams'
+
+        webhook_url_secret_id: number
+
+        /**
+         * A string value. Supports {{ fts }} interpolation, evaluated per item at execution time. In path fields, {{
+         * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
+         */
+        message: Automation.Definition.TemplateString
+
+        channel?: string
+
+        username?: string
+
+        icon_emoji?: string
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Send webhook node */
+    interface NodeSendWebhook {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'send_webhook'
+
+      /** Configuration fields for this node type. */
+      config: {
+        url?: string
+
+        url_secret_id?: number
+
+        headers_secret_id?: number
+
+        signing_secret_id?: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        payload: Automation.Definition.FtsExpression
+
+        /** @defaultValue false */
+        use_dedicated_ips?: boolean
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Publish amazon sns node */
+    interface NodePublishAmazonSns {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'publish_amazon_sns'
+
+      /** Configuration fields for this node type. */
+      config: {
+        arn: string
+
+        message_group_id?: string
+
+        aws_credentials_secret_id: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        payload: Automation.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Publish amazon sqs node */
+    interface NodePublishAmazonSqs {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'publish_amazon_sqs'
+
+      /** Configuration fields for this node type. */
+      config: {
+        arn: string
+
+        message_group_id?: string
+
+        aws_credentials_secret_id: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        payload: Automation.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Publish google pubsub node */
+    interface NodePublishGooglePubsub {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'publish_google_pubsub'
+
+      /** Configuration fields for this node type. */
+      config: {
+        project_id: string
+
+        topic_id: string
+
+        google_credentials_secret_id: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        payload: Automation.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Publish azure service bus node */
+    interface NodePublishAzureServiceBus {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'publish_azure_service_bus'
+
+      /** Configuration fields for this node type. */
+      config: {
+        namespace: string
+
+        entity_path: string
+
+        azure_credentials_secret_id: number
+
+        /** A bare Files TransformScript expression, no braces. */
+        payload: Automation.Definition.FtsExpression
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError

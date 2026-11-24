@@ -14,6 +14,7 @@ import As2Partner = require('./models/As2Partner')
 import As2Station = require('./models/As2Station')
 import AutomationLog = require('./models/AutomationLog')
 import AutomationRun = require('./models/AutomationRun')
+import AutomationVersion = require('./models/AutomationVersion')
 import Automation = require('./models/Automation')
 import BandwidthSnapshot = require('./models/BandwidthSnapshot')
 import Behavior = require('./models/Behavior')
@@ -242,6 +243,9 @@ declare class FilesClient {
 
   /** `AutomationRun`'s static methods, made with this client's settings. */
   readonly automationRuns: Pick<typeof AutomationRun, 'all' | 'find' | 'findNode' | 'get' | 'list' | 'listIterator'>
+
+  /** `AutomationVersion`'s static methods, made with this client's settings. */
+  readonly automationVersions: Pick<typeof AutomationVersion, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `Automation`'s static methods, made with this client's settings. */
   readonly automations: Pick<typeof Automation, 'all' | 'create' | 'find' | 'get' | 'getAuthoringSchema' | 'list' | 'listIterator'>
