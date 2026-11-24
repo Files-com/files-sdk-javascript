@@ -90,6 +90,12 @@ declare class Group {
    */
   readonly integration_centric_profile_id?: number | null
 
+  /**
+   * Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The
+   * Group must have a Permission in that Workspace.
+   */
+  readonly preferred_workspace_id?: number | null
+
   /** Site ID */
   readonly site_id?: number | null
 
@@ -165,6 +171,12 @@ declare class Group {
    */
   getIntegrationCentricProfileId(): number | null | undefined
 
+  /**
+   * Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The
+   * Group must have a Permission in that Workspace.
+   */
+  getPreferredWorkspaceId(): number | null | undefined
+
   /** Site ID */
   getSiteId(): number | null | undefined
 
@@ -239,6 +251,12 @@ declare class Group {
    * per-user assignment overrides it.
    */
   setIntegrationCentricProfileId(value: number): void
+
+  /**
+   * Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The
+   * Group must have a Permission in that Workspace.
+   */
+  setPreferredWorkspaceId(value: number): void
 
   /** Site ID */
   setSiteId(value: number): void
@@ -362,6 +380,12 @@ declare namespace Group {
      * per-user assignment overrides it.
      */
     integration_centric_profile_id?: number | null
+
+    /**
+     * Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The
+     * Group must have a Permission in that Workspace.
+     */
+    preferred_workspace_id?: number | null
 
     /** Site ID */
     site_id?: number | null
@@ -542,6 +566,12 @@ declare namespace Group {
 
     /** Group name. */
     name?: string
+
+    /**
+     * Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The
+     * Group must have a Permission in that Workspace.
+     */
+    preferred_workspace_id?: number
   }
 }
 

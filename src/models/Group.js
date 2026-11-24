@@ -178,6 +178,14 @@ class Group {
     exposeAttributes(this, ['integration_centric_profile_id'])
   }
 
+  // int64 # Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
+  getPreferredWorkspaceId = () => this.attributes.preferred_workspace_id
+
+  setPreferredWorkspaceId = value => {
+    this.attributes.preferred_workspace_id = value
+    exposeAttributes(this, ['preferred_workspace_id'])
+  }
+
   // int64 # Site ID
   getSiteId = () => this.attributes.site_id
 
@@ -208,6 +216,7 @@ class Group {
   //   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
   //   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
   //   name - string - Group name.
+  //   preferred_workspace_id - int64 - Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
   update = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')
@@ -274,6 +283,10 @@ class Group {
 
     if (params.name !== undefined && params.name !== null && !isString(params.name)) {
       throw new errors.InvalidParameterError(`Bad parameter: name must be of type String, received ${getType(params.name)}`)
+    }
+
+    if (params.preferred_workspace_id !== undefined && params.preferred_workspace_id !== null && !isInt(params.preferred_workspace_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: preferred_workspace_id must be of type Int, received ${getType(params.preferred_workspace_id)}`)
     }
 
     if (!params.id) {
