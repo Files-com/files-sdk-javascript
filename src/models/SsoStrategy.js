@@ -187,11 +187,8 @@ class SsoStrategy {
   // boolean # Should this strategy be displayed on the login page?
   getDisplayOnLoginPage = () => this.attributes.display_on_login_page
 
-  // string # Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to null to turn off discovery.
+  // string # Username domain that can publicly discover this SSO provider on this site. Set to null to turn off discovery.
   getPublicSsoDomain = () => this.attributes.public_sso_domain
-
-  // string # This provider's DNS TXT value to publish at _files-sso.<domain> before enabling public SSO discovery for that domain.
-  getPublicSsoDomainDnsValue = () => this.attributes.public_sso_domain_dns_value
 
   // string # LDAP host
   getLdapHost = () => this.attributes.ldap_host
