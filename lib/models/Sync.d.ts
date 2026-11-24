@@ -131,6 +131,9 @@ declare class Sync {
    */
   readonly schedule_days_of_week?: number[] | null
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  readonly schedule_interval_minutes?: number | null
+
   /**
    * Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For
    * `daily`, run at these times on the scheduled interval date.
@@ -252,6 +255,9 @@ declare class Sync {
    */
   getScheduleDaysOfWeek(): number[] | null | undefined
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  getScheduleIntervalMinutes(): number | null | undefined
+
   /**
    * Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For
    * `daily`, run at these times on the scheduled interval date.
@@ -366,6 +372,9 @@ declare class Sync {
    * week. 0 is Sunday, 1 is Monday, etc.
    */
   setScheduleDaysOfWeek(value: number[]): void
+
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  setScheduleIntervalMinutes(value: number): void
 
   /**
    * Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For
@@ -542,6 +551,9 @@ declare namespace Sync {
      */
     schedule_days_of_week?: number[] | null
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number | null
+
     /**
      * Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For
      * `daily`, run at these times on the scheduled interval date.
@@ -644,6 +656,9 @@ declare namespace Sync {
      */
     schedule_days_of_week?: number[]
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
+
     /** Time zone for the schedule. If not set, times are interpreted as UTC. */
     schedule_time_zone?: string
 
@@ -739,6 +754,9 @@ declare namespace Sync {
      * week. 0 is Sunday, 1 is Monday, etc.
      */
     schedule_days_of_week?: number[]
+
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
 
     /** Time zone for the schedule. If not set, times are interpreted as UTC. */
     schedule_time_zone?: string

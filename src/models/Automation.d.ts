@@ -180,6 +180,12 @@ declare class Automation {
   readonly schedule_days_of_week?: number[] | null
 
   /**
+   * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+   * Automations, set this field in the Scheduled trigger's definition.
+   */
+  readonly schedule_interval_minutes?: number | null
+
+  /**
    * Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of week.
    * For `daily`, run at these times on the scheduled interval date.
    */
@@ -379,6 +385,12 @@ declare class Automation {
   getScheduleDaysOfWeek(): number[] | null | undefined
 
   /**
+   * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+   * Automations, set this field in the Scheduled trigger's definition.
+   */
+  getScheduleIntervalMinutes(): number | null | undefined
+
+  /**
    * Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of week.
    * For `daily`, run at these times on the scheduled interval date.
    */
@@ -576,6 +588,12 @@ declare class Automation {
    * is Monday, etc.
    */
   setScheduleDaysOfWeek(value: number[]): void
+
+  /**
+   * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+   * Automations, set this field in the Scheduled trigger's definition.
+   */
+  setScheduleIntervalMinutes(value: number): void
 
   /**
    * Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of week.
@@ -834,6 +852,12 @@ declare namespace Automation {
     schedule_days_of_week?: number[] | null
 
     /**
+     * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+     * Automations, set this field in the Scheduled trigger's definition.
+     */
+    schedule_interval_minutes?: number | null
+
+    /**
      * Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of
      * week. For `daily`, run at these times on the scheduled interval date.
      */
@@ -976,8 +1000,14 @@ declare namespace Automation {
     schedule_days_of_week?: number[]
 
     /**
-     * Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for
-     * `daily` triggers; if not set, runs at midnight UTC.
+     * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+     * Automations, set this field in the Scheduled trigger's definition.
+     */
+    schedule_interval_minutes?: number
+
+    /**
+     * Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or
+     * `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
      */
     schedule_times_of_day?: string[]
 
@@ -1144,8 +1174,14 @@ declare namespace Automation {
     schedule_days_of_week?: number[]
 
     /**
-     * Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for
-     * `daily` triggers; if not set, runs at midnight UTC.
+     * Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2
+     * Automations, set this field in the Scheduled trigger's definition.
+     */
+    schedule_interval_minutes?: number
+
+    /**
+     * Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or
+     * `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
      */
     schedule_times_of_day?: string[]
 
@@ -1368,6 +1404,8 @@ declare namespace Automation {
         schedule_id?: number
 
         schedule_days_of_week?: number[]
+
+        schedule_interval_minutes?: number
 
         schedule_times_of_day?: string[]
 

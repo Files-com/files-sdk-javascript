@@ -66,6 +66,9 @@ declare class ScheduledExport {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   readonly schedule_days_of_week?: number[] | null
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  readonly schedule_interval_minutes?: number | null
+
   /** Times of day in HH:MM format for the scheduled export schedule. */
   readonly schedule_times_of_day?: string[] | null
 
@@ -138,6 +141,9 @@ declare class ScheduledExport {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   getScheduleDaysOfWeek(): number[] | null | undefined
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  getScheduleIntervalMinutes(): number | null | undefined
+
   /** Times of day in HH:MM format for the scheduled export schedule. */
   getScheduleTimesOfDay(): string[] | null | undefined
 
@@ -209,6 +215,9 @@ declare class ScheduledExport {
 
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   setScheduleDaysOfWeek(value: number[]): void
+
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  setScheduleIntervalMinutes(value: number): void
 
   /** Times of day in HH:MM format for the scheduled export schedule. */
   setScheduleTimesOfDay(value: string[]): void
@@ -324,6 +333,9 @@ declare namespace ScheduledExport {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[] | null
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number | null
+
     /** Times of day in HH:MM format for the scheduled export schedule. */
     schedule_times_of_day?: string[] | null
 
@@ -426,6 +438,9 @@ declare namespace ScheduledExport {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
+
     /** Times of day in HH:MM format for the scheduled export schedule. */
     schedule_times_of_day?: string[]
 
@@ -474,6 +489,9 @@ declare namespace ScheduledExport {
 
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
+
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
 
     /** Times of day in HH:MM format for the scheduled export schedule. */
     schedule_times_of_day?: string[]

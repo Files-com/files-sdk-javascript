@@ -280,6 +280,14 @@ class Sync {
     exposeAttributes(this, ['schedule_days_of_week'])
   }
 
+  // int64 # Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
+  getScheduleIntervalMinutes = () => this.attributes.schedule_interval_minutes
+
+  setScheduleIntervalMinutes = value => {
+    this.attributes.schedule_interval_minutes = value
+    exposeAttributes(this, ['schedule_interval_minutes'])
+  }
+
   // array(string) # Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
   getScheduleTimesOfDay = () => this.attributes.schedule_times_of_day
 
@@ -384,6 +392,7 @@ class Sync {
   //   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
   //   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
   //   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
   //   src_path - string - Absolute source path for the sync
@@ -466,6 +475,10 @@ class Sync {
 
     if (params.schedule_days_of_week !== undefined && params.schedule_days_of_week !== null && !isArray(params.schedule_days_of_week)) {
       throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_interval_minutes !== undefined && params.schedule_interval_minutes !== null && !isInt(params.schedule_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_interval_minutes must be of type Int, received ${getType(params.schedule_interval_minutes)}`)
     }
 
     if (params.schedule_time_zone !== undefined && params.schedule_time_zone !== null && !isString(params.schedule_time_zone)) {
@@ -626,6 +639,7 @@ class Sync {
   //   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
   //   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
   //   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+  //   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
   //   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
   //   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
   //   src_path - string - Absolute source path for the sync
@@ -694,6 +708,10 @@ class Sync {
 
     if (params.schedule_days_of_week !== undefined && params.schedule_days_of_week !== null && !isArray(params.schedule_days_of_week)) {
       throw new errors.InvalidParameterError(`Bad parameter: schedule_days_of_week must be of type Array, received ${getType(params.schedule_days_of_week)}`)
+    }
+
+    if (params.schedule_interval_minutes !== undefined && params.schedule_interval_minutes !== null && !isInt(params.schedule_interval_minutes)) {
+      throw new errors.InvalidParameterError(`Bad parameter: schedule_interval_minutes must be of type Int, received ${getType(params.schedule_interval_minutes)}`)
     }
 
     if (params.schedule_time_zone !== undefined && params.schedule_time_zone !== null && !isString(params.schedule_time_zone)) {

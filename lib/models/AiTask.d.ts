@@ -78,6 +78,9 @@ declare class AiTask {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   readonly schedule_days_of_week?: number[] | null
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  readonly schedule_interval_minutes?: number | null
+
   /** Times of day in HH:MM format for the AI Task schedule. */
   readonly schedule_times_of_day?: string[] | null
 
@@ -159,6 +162,9 @@ declare class AiTask {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   getScheduleDaysOfWeek(): number[] | null | undefined
 
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  getScheduleIntervalMinutes(): number | null | undefined
+
   /** Times of day in HH:MM format for the AI Task schedule. */
   getScheduleTimesOfDay(): string[] | null | undefined
 
@@ -239,6 +245,9 @@ declare class AiTask {
 
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   setScheduleDaysOfWeek(value: number[]): void
+
+  /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+  setScheduleIntervalMinutes(value: number): void
 
   /** Times of day in HH:MM format for the AI Task schedule. */
   setScheduleTimesOfDay(value: string[]): void
@@ -366,6 +375,9 @@ declare namespace AiTask {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[] | null
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number | null
+
     /** Times of day in HH:MM format for the AI Task schedule. */
     schedule_times_of_day?: string[] | null
 
@@ -456,6 +468,9 @@ declare namespace AiTask {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
 
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
+
     /** Time zone used by the AI Task schedule. */
     schedule_time_zone?: string
 
@@ -517,6 +532,9 @@ declare namespace AiTask {
 
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
+
+    /** Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. */
+    schedule_interval_minutes?: number
 
     /** Time zone used by the AI Task schedule. */
     schedule_time_zone?: string

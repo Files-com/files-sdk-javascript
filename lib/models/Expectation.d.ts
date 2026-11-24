@@ -76,6 +76,12 @@ declare class Expectation {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   readonly schedule_days_of_week?: number[] | null
 
+  /**
+   * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+   * `custom_schedule`.
+   */
+  readonly schedule_interval_minutes?: number | null
+
   /** Times of day in HH:MM format for the Expectation schedule. */
   readonly schedule_times_of_day?: string[] | null
 
@@ -175,6 +181,12 @@ declare class Expectation {
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   getScheduleDaysOfWeek(): number[] | null | undefined
 
+  /**
+   * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+   * `custom_schedule`.
+   */
+  getScheduleIntervalMinutes(): number | null | undefined
+
   /** Times of day in HH:MM format for the Expectation schedule. */
   getScheduleTimesOfDay(): string[] | null | undefined
 
@@ -273,6 +285,12 @@ declare class Expectation {
 
   /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
   setScheduleDaysOfWeek(value: number[]): void
+
+  /**
+   * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+   * `custom_schedule`.
+   */
+  setScheduleIntervalMinutes(value: number): void
 
   /** Times of day in HH:MM format for the Expectation schedule. */
   setScheduleTimesOfDay(value: string[]): void
@@ -418,6 +436,12 @@ declare namespace Expectation {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[] | null
 
+    /**
+     * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+     * `custom_schedule`.
+     */
+    schedule_interval_minutes?: number | null
+
     /** Times of day in HH:MM format for the Expectation schedule. */
     schedule_times_of_day?: string[] | null
 
@@ -534,6 +558,12 @@ declare namespace Expectation {
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
 
+    /**
+     * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+     * `custom_schedule`.
+     */
+    schedule_interval_minutes?: number
+
     /** Times of day in HH:MM format for the Expectation schedule. */
     schedule_times_of_day?: string[]
 
@@ -610,6 +640,12 @@ declare namespace Expectation {
 
     /** If trigger is `custom_schedule`, the 0-based weekdays used by the schedule. */
     schedule_days_of_week?: number[]
+
+    /**
+     * Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with
+     * `custom_schedule`.
+     */
+    schedule_interval_minutes?: number
 
     /** Times of day in HH:MM format for the Expectation schedule. */
     schedule_times_of_day?: string[]
