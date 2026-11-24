@@ -62,7 +62,7 @@ await DatabaseDestination.find(id)
 await DatabaseDestination.create({
   'name': "Orders",
   'provider': "snowflake",
-  'config': "example",
+  'config': {"account_identifier":"value","database_name":"value","schema_name":"value","table_name":"value"},
   'secret_id': 1,
   'workspace_id': 1,
 })
@@ -87,6 +87,7 @@ const database_destination = await DatabaseDestination.find(id)
 await database_destination.update({
   'name': "Orders",
   'secret_id': 1,
+  'config': {"account_identifier":"value","database_name":"value","schema_name":"value","table_name":"value"},
 })
 ```
 
