@@ -173,6 +173,18 @@ declare class SsoStrategy {
   /** Should this strategy be displayed on the login page? */
   readonly display_on_login_page?: boolean | null
 
+  /**
+   * Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to
+   * null to turn off discovery.
+   */
+  readonly public_sso_domain?: string | null
+
+  /**
+   * This provider's DNS TXT value to publish at _files-sso.<domain> before enabling public SSO discovery for that
+   * domain.
+   */
+  readonly public_sso_domain_dns_value?: string | null
+
   /** LDAP host */
   readonly ldap_host?: string | null
 
@@ -357,6 +369,18 @@ declare class SsoStrategy {
 
   /** Should this strategy be displayed on the login page? */
   getDisplayOnLoginPage(): boolean | null | undefined
+
+  /**
+   * Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to
+   * null to turn off discovery.
+   */
+  getPublicSsoDomain(): string | null | undefined
+
+  /**
+   * This provider's DNS TXT value to publish at _files-sso.<domain> before enabling public SSO discovery for that
+   * domain.
+   */
+  getPublicSsoDomainDnsValue(): string | null | undefined
 
   /** LDAP host */
   getLdapHost(): string | null | undefined
@@ -577,6 +601,18 @@ declare namespace SsoStrategy {
 
     /** Should this strategy be displayed on the login page? */
     display_on_login_page?: boolean | null
+
+    /**
+     * Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to
+     * null to turn off discovery.
+     */
+    public_sso_domain?: string | null
+
+    /**
+     * This provider's DNS TXT value to publish at _files-sso.<domain> before enabling public SSO discovery for that
+     * domain.
+     */
+    public_sso_domain_dns_value?: string | null
 
     /** LDAP host */
     ldap_host?: string | null
