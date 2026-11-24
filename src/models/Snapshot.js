@@ -114,6 +114,14 @@ class Snapshot {
     exposeAttributes(this, ['workspace_id'])
   }
 
+  // int64 # Shared Workflow for which the Snapshot was created.
+  getSharedWorkflowId = () => this.attributes.shared_workflow_id
+
+  setSharedWorkflowId = value => {
+    this.attributes.shared_workflow_id = value
+    exposeAttributes(this, ['shared_workflow_id'])
+  }
+
   // array(string) # An array of paths to add to the snapshot.
   getPaths = () => this.attributes.paths
 
@@ -295,6 +303,7 @@ class Snapshot {
   //   name - string - A name for the snapshot.
   //   paths - array(string) - An array of paths to add to the snapshot.
   //   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+  //   shared_workflow_id - int64 - Shared Workflow for which the Snapshot was created.
   static create = async (params = {}, options = {}) => {
     if (params.expires_at !== undefined && params.expires_at !== null && !isString(params.expires_at)) {
       throw new errors.InvalidParameterError(`Bad parameter: expires_at must be of type String, received ${getType(params.expires_at)}`)
@@ -310,6 +319,10 @@ class Snapshot {
 
     if (params.workspace_id !== undefined && params.workspace_id !== null && !isInt(params.workspace_id)) {
       throw new errors.InvalidParameterError(`Bad parameter: workspace_id must be of type Int, received ${getType(params.workspace_id)}`)
+    }
+
+    if (params.shared_workflow_id !== undefined && params.shared_workflow_id !== null && !isInt(params.shared_workflow_id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: shared_workflow_id must be of type Int, received ${getType(params.shared_workflow_id)}`)
     }
 
     const response = await Api.sendRequest('/snapshots', 'POST', params, options)

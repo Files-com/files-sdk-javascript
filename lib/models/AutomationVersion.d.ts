@@ -218,6 +218,7 @@ declare namespace AutomationVersion {
     type Node =
       | AutomationVersion.Definition.NodeTriggerScheduled
       | AutomationVersion.Definition.NodeTriggerManual
+      | AutomationVersion.Definition.NodeTriggerShared
       | AutomationVersion.Definition.NodeTriggerAction
       | AutomationVersion.Definition.NodeTriggerFolderCreation
       | AutomationVersion.Definition.NodeTriggerWebhook
@@ -232,6 +233,7 @@ declare namespace AutomationVersion {
       | AutomationVersion.Definition.NodeMoveFile
       | AutomationVersion.Definition.NodeDeleteFile
       | AutomationVersion.Definition.NodeImportFile
+      | AutomationVersion.Definition.NodeImportIntoDatabase
       | AutomationVersion.Definition.NodeRunSync
       | AutomationVersion.Definition.NodeAs2Send
       | AutomationVersion.Definition.NodeSendEmail
@@ -327,6 +329,20 @@ declare namespace AutomationVersion {
         exclude_pattern?: string
 
         path_time_zone?: string
+      }
+    }
+
+    /** Trigger shared node */
+    interface NodeTriggerShared {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'trigger_shared'
+
+      /** Configuration fields for this node type. */
+      config?: {
+        form_field_set_id?: number
       }
     }
 
@@ -799,6 +815,32 @@ declare namespace AutomationVersion {
          * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
          */
         content?: AutomationVersion.Definition.TemplateString
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Import into database node */
+    interface NodeImportIntoDatabase {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'import_into_database'
+
+      /** Configuration fields for this node type. */
+      config: {
+        database_destination_id: number
+
+        /**
+         * A bare Files TransformScript expression, no braces.
+         * @defaultValue 'payload'
+         */
+        rows?: AutomationVersion.Definition.FtsExpression
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: AutomationVersion.Definition.OnError

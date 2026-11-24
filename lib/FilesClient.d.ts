@@ -29,6 +29,7 @@ import ChatSession = require('./models/ChatSession')
 import ChildSiteManagementPolicy = require('./models/ChildSiteManagementPolicy')
 import Clickwrap = require('./models/Clickwrap')
 import CustomDomain = require('./models/CustomDomain')
+import DatabaseDestination = require('./models/DatabaseDestination')
 import DesktopConfigurationProfile = require('./models/DesktopConfigurationProfile')
 import DnsRecord = require('./models/DnsRecord')
 import EmailIncomingMessage = require('./models/EmailIncomingMessage')
@@ -95,6 +96,7 @@ import SettingsChange = require('./models/SettingsChange')
 import SftpActionLog = require('./models/SftpActionLog')
 import SftpHostKey = require('./models/SftpHostKey')
 import ShareGroup = require('./models/ShareGroup')
+import SharedWorkflow = require('./models/SharedWorkflow')
 import SiemHttpDestinationEvent = require('./models/SiemHttpDestinationEvent')
 import SiemHttpDestination = require('./models/SiemHttpDestination')
 import SiteSubdomainRedirect = require('./models/SiteSubdomainRedirect')
@@ -288,6 +290,9 @@ declare class FilesClient {
 
   /** `CustomDomain`'s static methods, made with this client's settings. */
   readonly customDomains: Pick<typeof CustomDomain, 'all' | 'create' | 'createAllocateIp' | 'find' | 'get' | 'list' | 'listIterator'>
+
+  /** `DatabaseDestination`'s static methods, made with this client's settings. */
+  readonly databaseDestinations: Pick<typeof DatabaseDestination, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `DesktopConfigurationProfile`'s static methods, made with this client's settings. */
   readonly desktopConfigurationProfiles: Pick<typeof DesktopConfigurationProfile, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
@@ -486,6 +491,9 @@ declare class FilesClient {
 
   /** `ShareGroup`'s static methods, made with this client's settings. */
   readonly shareGroups: Pick<typeof ShareGroup, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
+
+  /** `SharedWorkflow`'s static methods, made with this client's settings. */
+  readonly sharedWorkflows: Pick<typeof SharedWorkflow, 'all' | 'find' | 'findRun' | 'get' | 'list' | 'listIterator'>
 
   /** `SiemHttpDestinationEvent`'s static methods, made with this client's settings. */
   readonly siemHttpDestinationEvents: Pick<typeof SiemHttpDestinationEvent, 'all' | 'find' | 'get' | 'list' | 'listIterator'>

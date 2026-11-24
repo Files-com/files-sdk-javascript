@@ -5,13 +5,16 @@
 ```
 {
   "id": 1,
+  "completed_at": "2000-01-01T01:00:00Z",
+  "created_at": "2000-01-01T01:00:00Z",
+  "status": "success",
   "automation_id": 1,
   "automation_version_id": 1,
   "version": 1,
   "workspace_id": 1,
+  "initiating_user_id": 1,
+  "initiating_interface": "example",
   "cancel_requested_at": "2000-01-01T01:00:00Z",
-  "completed_at": "2000-01-01T01:00:00Z",
-  "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
   "retried_at": "2000-01-01T01:00:00Z",
   "retried_in_run_id": 1,
@@ -19,7 +22,6 @@
   "rerun_of_run_id": 1,
   "rerun_from_node_id": "example",
   "runtime": 1.0,
-  "status": "success",
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",
@@ -50,13 +52,16 @@
 ```
 
 * `id` (int64): ID.
+* `completed_at` (date-time): Automation run completion/failure date/time.
+* `created_at` (date-time): Automation run start date/time.
+* `status` (string): The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
 * `automation_id` (int64): ID of the associated Automation.
 * `automation_version_id` (int64): ID of the immutable Automation version pinned by this run.
 * `version` (int64): Pinned Automation v2 definition version.
 * `workspace_id` (int64): Workspace ID.
+* `initiating_user_id` (int64): User who initiated a Shared Workflow run.
+* `initiating_interface` (string): Interface from which the Shared Workflow was started.
 * `cancel_requested_at` (date-time): Date/time at which cancellation was requested.
-* `completed_at` (date-time): Automation run completion/failure date/time.
-* `created_at` (date-time): Automation run start date/time.
 * `retry_at` (date-time): If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
 * `retried_at` (date-time): If set, this Automation run was retried due to `failure` or `partial_failure`.
 * `retried_in_run_id` (int64): ID of the run that is or will be retrying this run.
@@ -64,7 +69,6 @@
 * `rerun_of_run_id` (int64): ID of the run whose persisted node outputs this run reused.
 * `rerun_from_node_id` (string): Node at which this run resumed execution.
 * `runtime` (double): Automation run runtime.
-* `status` (string): The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
 * `successful_operations` (int64): Count of successful operations.
 * `failed_operations` (int64): Count of failed operations.
 * `definition` (object): Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
@@ -145,13 +149,16 @@ await automation_run.rerun({
 ```json
 {
   "id": 1,
+  "completed_at": "2000-01-01T01:00:00Z",
+  "created_at": "2000-01-01T01:00:00Z",
+  "status": "success",
   "automation_id": 1,
   "automation_version_id": 1,
   "version": 1,
   "workspace_id": 1,
+  "initiating_user_id": 1,
+  "initiating_interface": "example",
   "cancel_requested_at": "2000-01-01T01:00:00Z",
-  "completed_at": "2000-01-01T01:00:00Z",
-  "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
   "retried_at": "2000-01-01T01:00:00Z",
   "retried_in_run_id": 1,
@@ -159,7 +166,6 @@ await automation_run.rerun({
   "rerun_of_run_id": 1,
   "rerun_from_node_id": "example",
   "runtime": 1.0,
-  "status": "success",
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",
@@ -208,13 +214,16 @@ await automation_run.cancel()
 ```json
 {
   "id": 1,
+  "completed_at": "2000-01-01T01:00:00Z",
+  "created_at": "2000-01-01T01:00:00Z",
+  "status": "success",
   "automation_id": 1,
   "automation_version_id": 1,
   "version": 1,
   "workspace_id": 1,
+  "initiating_user_id": 1,
+  "initiating_interface": "example",
   "cancel_requested_at": "2000-01-01T01:00:00Z",
-  "completed_at": "2000-01-01T01:00:00Z",
-  "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
   "retried_at": "2000-01-01T01:00:00Z",
   "retried_in_run_id": 1,
@@ -222,7 +231,6 @@ await automation_run.cancel()
   "rerun_of_run_id": 1,
   "rerun_from_node_id": "example",
   "runtime": 1.0,
-  "status": "success",
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",

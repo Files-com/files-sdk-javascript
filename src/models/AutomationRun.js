@@ -61,6 +61,15 @@ class AutomationRun {
   // int64 # ID.
   getId = () => this.attributes.id
 
+  // date-time # Automation run completion/failure date/time.
+  getCompletedAt = () => this.attributes.completed_at
+
+  // date-time # Automation run start date/time.
+  getCreatedAt = () => this.attributes.created_at
+
+  // string # The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
+  getStatus = () => this.attributes.status
+
   // int64 # ID of the associated Automation.
   getAutomationId = () => this.attributes.automation_id
 
@@ -73,14 +82,14 @@ class AutomationRun {
   // int64 # Workspace ID.
   getWorkspaceId = () => this.attributes.workspace_id
 
+  // int64 # User who initiated a Shared Workflow run.
+  getInitiatingUserId = () => this.attributes.initiating_user_id
+
+  // string # Interface from which the Shared Workflow was started.
+  getInitiatingInterface = () => this.attributes.initiating_interface
+
   // date-time # Date/time at which cancellation was requested.
   getCancelRequestedAt = () => this.attributes.cancel_requested_at
-
-  // date-time # Automation run completion/failure date/time.
-  getCompletedAt = () => this.attributes.completed_at
-
-  // date-time # Automation run start date/time.
-  getCreatedAt = () => this.attributes.created_at
 
   // date-time # If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
   getRetryAt = () => this.attributes.retry_at
@@ -102,9 +111,6 @@ class AutomationRun {
 
   // double # Automation run runtime.
   getRuntime = () => this.attributes.runtime
-
-  // string # The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
-  getStatus = () => this.attributes.status
 
   // int64 # Count of successful operations.
   getSuccessfulOperations = () => this.attributes.successful_operations

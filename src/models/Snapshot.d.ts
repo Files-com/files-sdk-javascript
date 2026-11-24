@@ -42,6 +42,9 @@ declare class Snapshot {
   /** Workspace ID. `0` means the default workspace. */
   readonly workspace_id?: number | null
 
+  /** Shared Workflow for which the Snapshot was created. */
+  readonly shared_workflow_id?: number | null
+
   /** An array of paths to add to the snapshot. */
   readonly paths?: string[]
 
@@ -66,6 +69,9 @@ declare class Snapshot {
   /** Workspace ID. `0` means the default workspace. */
   getWorkspaceId(): number | null | undefined
 
+  /** Shared Workflow for which the Snapshot was created. */
+  getSharedWorkflowId(): number | null | undefined
+
   /** An array of paths to add to the snapshot. */
   getPaths(): string[] | undefined
 
@@ -89,6 +95,9 @@ declare class Snapshot {
 
   /** Workspace ID. `0` means the default workspace. */
   setWorkspaceId(value: number): void
+
+  /** Shared Workflow for which the Snapshot was created. */
+  setSharedWorkflowId(value: number): void
 
   /** An array of paths to add to the snapshot. */
   setPaths(value: string[]): void
@@ -163,6 +172,9 @@ declare namespace Snapshot {
     /** Workspace ID. `0` means the default workspace. */
     workspace_id?: number | null
 
+    /** Shared Workflow for which the Snapshot was created. */
+    shared_workflow_id?: number | null
+
     /** An array of paths to add to the snapshot. */
     paths?: string[]
   }
@@ -192,6 +204,9 @@ declare namespace Snapshot {
 
     /** Workspace ID. `0` means the default workspace. */
     workspace_id?: number
+
+    /** Shared Workflow for which the Snapshot was created. */
+    shared_workflow_id?: number
   }
 
   interface UpdateParams {

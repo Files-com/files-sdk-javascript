@@ -25,6 +25,18 @@ declare class AutomationRun {
   /** ID. */
   readonly id?: number | null
 
+  /** Automation run completion/failure date/time. */
+  readonly completed_at?: Files.DateTimeString | null
+
+  /** Automation run start date/time. */
+  readonly created_at?: Files.DateTimeString | null
+
+  /**
+   * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or
+   * `canceled`.
+   */
+  readonly status?: 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null
+
   /** ID of the associated Automation. */
   readonly automation_id?: number | null
 
@@ -37,14 +49,14 @@ declare class AutomationRun {
   /** Workspace ID. */
   readonly workspace_id?: number | null
 
+  /** User who initiated a Shared Workflow run. */
+  readonly initiating_user_id?: number | null
+
+  /** Interface from which the Shared Workflow was started. */
+  readonly initiating_interface?: string | null
+
   /** Date/time at which cancellation was requested. */
   readonly cancel_requested_at?: Files.DateTimeString | null
-
-  /** Automation run completion/failure date/time. */
-  readonly completed_at?: Files.DateTimeString | null
-
-  /** Automation run start date/time. */
-  readonly created_at?: Files.DateTimeString | null
 
   /** If set, this automation will be retried at this date/time due to `failure` or `partial_failure`. */
   readonly retry_at?: Files.DateTimeString | null
@@ -66,12 +78,6 @@ declare class AutomationRun {
 
   /** Automation run runtime. */
   readonly runtime?: number | null
-
-  /**
-   * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or
-   * `canceled`.
-   */
-  readonly status?: 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null
 
   /** Count of successful operations. */
   readonly successful_operations?: number | null
@@ -106,6 +112,18 @@ declare class AutomationRun {
   /** ID. */
   getId(): number | null | undefined
 
+  /** Automation run completion/failure date/time. */
+  getCompletedAt(): Files.DateTimeString | null | undefined
+
+  /** Automation run start date/time. */
+  getCreatedAt(): Files.DateTimeString | null | undefined
+
+  /**
+   * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or
+   * `canceled`.
+   */
+  getStatus(): 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null | undefined
+
   /** ID of the associated Automation. */
   getAutomationId(): number | null | undefined
 
@@ -118,14 +136,14 @@ declare class AutomationRun {
   /** Workspace ID. */
   getWorkspaceId(): number | null | undefined
 
+  /** User who initiated a Shared Workflow run. */
+  getInitiatingUserId(): number | null | undefined
+
+  /** Interface from which the Shared Workflow was started. */
+  getInitiatingInterface(): string | null | undefined
+
   /** Date/time at which cancellation was requested. */
   getCancelRequestedAt(): Files.DateTimeString | null | undefined
-
-  /** Automation run completion/failure date/time. */
-  getCompletedAt(): Files.DateTimeString | null | undefined
-
-  /** Automation run start date/time. */
-  getCreatedAt(): Files.DateTimeString | null | undefined
 
   /** If set, this automation will be retried at this date/time due to `failure` or `partial_failure`. */
   getRetryAt(): Files.DateTimeString | null | undefined
@@ -147,12 +165,6 @@ declare class AutomationRun {
 
   /** Automation run runtime. */
   getRuntime(): number | null | undefined
-
-  /**
-   * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or
-   * `canceled`.
-   */
-  getStatus(): 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null | undefined
 
   /** Count of successful operations. */
   getSuccessfulOperations(): number | null | undefined
@@ -227,6 +239,18 @@ declare namespace AutomationRun {
     /** ID. */
     id?: number | null
 
+    /** Automation run completion/failure date/time. */
+    completed_at?: Files.DateTimeString | null
+
+    /** Automation run start date/time. */
+    created_at?: Files.DateTimeString | null
+
+    /**
+     * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`,
+     * or `canceled`.
+     */
+    status?: 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null
+
     /** ID of the associated Automation. */
     automation_id?: number | null
 
@@ -239,14 +263,14 @@ declare namespace AutomationRun {
     /** Workspace ID. */
     workspace_id?: number | null
 
+    /** User who initiated a Shared Workflow run. */
+    initiating_user_id?: number | null
+
+    /** Interface from which the Shared Workflow was started. */
+    initiating_interface?: string | null
+
     /** Date/time at which cancellation was requested. */
     cancel_requested_at?: Files.DateTimeString | null
-
-    /** Automation run completion/failure date/time. */
-    completed_at?: Files.DateTimeString | null
-
-    /** Automation run start date/time. */
-    created_at?: Files.DateTimeString | null
 
     /** If set, this automation will be retried at this date/time due to `failure` or `partial_failure`. */
     retry_at?: Files.DateTimeString | null
@@ -268,12 +292,6 @@ declare namespace AutomationRun {
 
     /** Automation run runtime. */
     runtime?: number | null
-
-    /**
-     * The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`,
-     * or `canceled`.
-     */
-    status?: 'running' | 'success' | 'partial_failure' | 'failure' | 'skipped' | 'queued' | 'canceled' | Files.OtherString | null
 
     /** Count of successful operations. */
     successful_operations?: number | null

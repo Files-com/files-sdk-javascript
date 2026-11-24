@@ -200,6 +200,15 @@ declare class Automation {
    */
   readonly source?: string | null
 
+  /** Users who can start this Shared Workflow. */
+  readonly shared_trigger_user_ids?: number[] | null
+
+  /** Groups whose members can start this Shared Workflow. */
+  readonly shared_trigger_group_ids?: number[] | null
+
+  /** Partners whose users can start this Shared Workflow. */
+  readonly shared_trigger_partner_ids?: number[] | null
+
   /** IDs of Syncs to run by this Automation. */
   readonly sync_ids?: number[] | string | null
 
@@ -210,7 +219,7 @@ declare class Automation {
   readonly trigger_actions?: string[] | null
 
   /** How this automation is triggered to run. */
-  readonly trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | Files.OtherString | null
+  readonly trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared' | Files.OtherString | null
 
   /** User ID of the Automation's creator. */
   readonly user_id?: number | null
@@ -409,6 +418,15 @@ declare class Automation {
    */
   getSource(): string | null | undefined
 
+  /** Users who can start this Shared Workflow. */
+  getSharedTriggerUserIds(): number[] | null | undefined
+
+  /** Groups whose members can start this Shared Workflow. */
+  getSharedTriggerGroupIds(): number[] | null | undefined
+
+  /** Partners whose users can start this Shared Workflow. */
+  getSharedTriggerPartnerIds(): number[] | null | undefined
+
   /** IDs of Syncs to run by this Automation. */
   getSyncIds(): number[] | string | null | undefined
 
@@ -419,7 +437,7 @@ declare class Automation {
   getTriggerActions(): string[] | null | undefined
 
   /** How this automation is triggered to run. */
-  getTrigger(): 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | Files.OtherString | null | undefined
+  getTrigger(): 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared' | Files.OtherString | null | undefined
 
   /** User ID of the Automation's creator. */
   getUserId(): number | null | undefined
@@ -618,6 +636,15 @@ declare class Automation {
    */
   setSource(value: string): void
 
+  /** Users who can start this Shared Workflow. */
+  setSharedTriggerUserIds(value: number[]): void
+
+  /** Groups whose members can start this Shared Workflow. */
+  setSharedTriggerGroupIds(value: number[]): void
+
+  /** Partners whose users can start this Shared Workflow. */
+  setSharedTriggerPartnerIds(value: number[]): void
+
   /** IDs of Syncs to run by this Automation. */
   setSyncIds(value: string): void
 
@@ -628,7 +655,7 @@ declare class Automation {
   setTriggerActions(value: string[]): void
 
   /** How this automation is triggered to run. */
-  setTrigger(value: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action'): void
+  setTrigger(value: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared'): void
 
   /** User ID of the Automation's creator. */
   setUserId(value: number): void
@@ -884,6 +911,15 @@ declare namespace Automation {
      */
     source?: string | null
 
+    /** Users who can start this Shared Workflow. */
+    shared_trigger_user_ids?: number[] | null
+
+    /** Groups whose members can start this Shared Workflow. */
+    shared_trigger_group_ids?: number[] | null
+
+    /** Partners whose users can start this Shared Workflow. */
+    shared_trigger_partner_ids?: number[] | null
+
     /** IDs of Syncs to run by this Automation. */
     sync_ids?: number[] | string | null
 
@@ -894,7 +930,7 @@ declare namespace Automation {
     trigger_actions?: string[] | null
 
     /** How this automation is triggered to run. */
-    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | Files.OtherString | null
+    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared' | Files.OtherString | null
 
     /** User ID of the Automation's creator. */
     user_id?: number | null
@@ -1009,6 +1045,15 @@ declare namespace Automation {
     /** If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields. */
     schedule_id?: number
 
+    /** Users who can start this Shared Workflow. */
+    shared_trigger_user_ids?: number[]
+
+    /** Groups whose members can start this Shared Workflow. */
+    shared_trigger_group_ids?: number[]
+
+    /** Partners whose users can start this Shared Workflow. */
+    shared_trigger_partner_ids?: number[]
+
     /**
      * If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is
      * Sunday, 1 is Monday, etc.
@@ -1108,7 +1153,7 @@ declare namespace Automation {
     retry_on_failure_number_of_attempts?: number
 
     /** How this automation is triggered to run. */
-    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action'
+    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared'
 
     /**
      * If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are
@@ -1183,6 +1228,15 @@ declare namespace Automation {
     /** If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields. */
     schedule_id?: number
 
+    /** Users who can start this Shared Workflow. */
+    shared_trigger_user_ids?: number[]
+
+    /** Groups whose members can start this Shared Workflow. */
+    shared_trigger_group_ids?: number[]
+
+    /** Partners whose users can start this Shared Workflow. */
+    shared_trigger_partner_ids?: number[]
+
     /**
      * If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is
      * Sunday, 1 is Monday, etc.
@@ -1282,7 +1336,7 @@ declare namespace Automation {
     retry_on_failure_number_of_attempts?: number
 
     /** How this automation is triggered to run. */
-    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action'
+    trigger?: 'manual' | 'daily' | 'custom_schedule' | 'webhook' | 'email' | 'action' | 'shared'
 
     /**
      * If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are
@@ -1371,6 +1425,7 @@ declare namespace Automation {
     type Node =
       | Automation.Definition.NodeTriggerScheduled
       | Automation.Definition.NodeTriggerManual
+      | Automation.Definition.NodeTriggerShared
       | Automation.Definition.NodeTriggerAction
       | Automation.Definition.NodeTriggerFolderCreation
       | Automation.Definition.NodeTriggerWebhook
@@ -1385,6 +1440,7 @@ declare namespace Automation {
       | Automation.Definition.NodeMoveFile
       | Automation.Definition.NodeDeleteFile
       | Automation.Definition.NodeImportFile
+      | Automation.Definition.NodeImportIntoDatabase
       | Automation.Definition.NodeRunSync
       | Automation.Definition.NodeAs2Send
       | Automation.Definition.NodeSendEmail
@@ -1480,6 +1536,20 @@ declare namespace Automation {
         exclude_pattern?: string
 
         path_time_zone?: string
+      }
+    }
+
+    /** Trigger shared node */
+    interface NodeTriggerShared {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'trigger_shared'
+
+      /** Configuration fields for this node type. */
+      config?: {
+        form_field_set_id?: number
       }
     }
 
@@ -1952,6 +2022,32 @@ declare namespace Automation {
          * fts }} supplies one file or folder name; {{{ fts }}} supplies a path fragment.
          */
         content?: Automation.Definition.TemplateString
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Import into database node */
+    interface NodeImportIntoDatabase {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'import_into_database'
+
+      /** Configuration fields for this node type. */
+      config: {
+        database_destination_id: number
+
+        /**
+         * A bare Files TransformScript expression, no braces.
+         * @defaultValue 'payload'
+         */
+        rows?: Automation.Definition.FtsExpression
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError

@@ -1,6 +1,9 @@
 import Files = require('../Files')
 
-/** A Form Field Set is a custom form to be used for bundle and inbox registrations. */
+/**
+ * A Form Field Set is a custom form that can be used for Share Link and Inbox registrations, Partner Channel uploads,
+ * and Shared Workflows.
+ */
 declare class FormFieldSet {
   /**
    * Creates a model whose state is the attributes given, such as those the API returns. Attributes not given are left
@@ -50,10 +53,7 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   readonly skip_company?: boolean | null
 
-  /**
-   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
-   * upload destination
-   */
+  /** Form Field Set is in use by an active Inbox, Share Link, Partner Channel upload destination, or Shared Trigger. */
   readonly in_use?: boolean | null
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -91,10 +91,7 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   getSkipCompany(): boolean | null | undefined
 
-  /**
-   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
-   * upload destination
-   */
+  /** Form Field Set is in use by an active Inbox, Share Link, Partner Channel upload destination, or Shared Trigger. */
   getInUse(): boolean | null | undefined
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -132,10 +129,7 @@ declare class FormFieldSet {
   /** Any associated InboxRegistrations or BundleRegistrations can be saved without providing company */
   setSkipCompany(value: boolean): void
 
-  /**
-   * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
-   * upload destination
-   */
+  /** Form Field Set is in use by an active Inbox, Share Link, Partner Channel upload destination, or Shared Trigger. */
   setInUse(value: boolean): void
 
   /** User ID.  Provide a value of `0` to operate the current session's user. */
@@ -223,8 +217,7 @@ declare namespace FormFieldSet {
     skip_company?: boolean | null
 
     /**
-     * Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel
-     * upload destination
+     * Form Field Set is in use by an active Inbox, Share Link, Partner Channel upload destination, or Shared Trigger.
      */
     in_use?: boolean | null
 

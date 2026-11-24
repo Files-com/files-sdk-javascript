@@ -650,6 +650,27 @@ class FilesClient {
     })
   }
 
+  get databaseDestinations() {
+    return resource(this, 'databaseDestinations', () => {
+      const DatabaseDestination = require('./models/DatabaseDestination.js').default
+
+      return {
+        all: (params = {}, options = {}) =>
+          DatabaseDestination.all(params, withClient(this, options)),
+        create: (params = {}, options = {}) =>
+          DatabaseDestination.create(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          DatabaseDestination.find(id, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          DatabaseDestination.get(id, params, withClient(this, options)),
+        list: (params = {}, options = {}) =>
+          DatabaseDestination.list(params, withClient(this, options)),
+        listIterator: (params = {}, options = {}) =>
+          DatabaseDestination.listIterator(params, withClient(this, options)),
+      }
+    })
+  }
+
   get desktopConfigurationProfiles() {
     return resource(this, 'desktopConfigurationProfiles', () => {
       const DesktopConfigurationProfile = require('./models/DesktopConfigurationProfile.js').default
@@ -1914,6 +1935,27 @@ class FilesClient {
           ShareGroup.list(params, withClient(this, options)),
         listIterator: (params = {}, options = {}) =>
           ShareGroup.listIterator(params, withClient(this, options)),
+      }
+    })
+  }
+
+  get sharedWorkflows() {
+    return resource(this, 'sharedWorkflows', () => {
+      const SharedWorkflow = require('./models/SharedWorkflow.js').default
+
+      return {
+        all: (params = {}, options = {}) =>
+          SharedWorkflow.all(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          SharedWorkflow.find(id, params, withClient(this, options)),
+        findRun: (id, runId, params = {}, options = {}) =>
+          SharedWorkflow.findRun(id, runId, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          SharedWorkflow.get(id, params, withClient(this, options)),
+        list: (params = {}, options = {}) =>
+          SharedWorkflow.list(params, withClient(this, options)),
+        listIterator: (params = {}, options = {}) =>
+          SharedWorkflow.listIterator(params, withClient(this, options)),
       }
     })
   }

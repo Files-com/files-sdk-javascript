@@ -29,6 +29,7 @@ import ChatSession from './models/ChatSession'
 import ChildSiteManagementPolicy from './models/ChildSiteManagementPolicy'
 import Clickwrap from './models/Clickwrap'
 import CustomDomain from './models/CustomDomain'
+import DatabaseDestination from './models/DatabaseDestination'
 import DesktopConfigurationProfile from './models/DesktopConfigurationProfile'
 import DnsRecord from './models/DnsRecord'
 import EmailIncomingMessage from './models/EmailIncomingMessage'
@@ -95,6 +96,7 @@ import SettingsChange from './models/SettingsChange'
 import SftpActionLog from './models/SftpActionLog'
 import SftpHostKey from './models/SftpHostKey'
 import ShareGroup from './models/ShareGroup'
+import SharedWorkflow from './models/SharedWorkflow'
 import SiemHttpDestinationEvent from './models/SiemHttpDestinationEvent'
 import SiemHttpDestination from './models/SiemHttpDestination'
 import SiteSubdomainRedirect from './models/SiteSubdomainRedirect'
@@ -288,6 +290,9 @@ declare class FilesClient {
 
   /** `CustomDomain`'s static methods, made with this client's settings. */
   readonly customDomains: Pick<typeof CustomDomain, 'all' | 'create' | 'createAllocateIp' | 'find' | 'get' | 'list' | 'listIterator'>
+
+  /** `DatabaseDestination`'s static methods, made with this client's settings. */
+  readonly databaseDestinations: Pick<typeof DatabaseDestination, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `DesktopConfigurationProfile`'s static methods, made with this client's settings. */
   readonly desktopConfigurationProfiles: Pick<typeof DesktopConfigurationProfile, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
@@ -486,6 +491,9 @@ declare class FilesClient {
 
   /** `ShareGroup`'s static methods, made with this client's settings. */
   readonly shareGroups: Pick<typeof ShareGroup, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
+
+  /** `SharedWorkflow`'s static methods, made with this client's settings. */
+  readonly sharedWorkflows: Pick<typeof SharedWorkflow, 'all' | 'find' | 'findRun' | 'get' | 'list' | 'listIterator'>
 
   /** `SiemHttpDestinationEvent`'s static methods, made with this client's settings. */
   readonly siemHttpDestinationEvents: Pick<typeof SiemHttpDestinationEvent, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
