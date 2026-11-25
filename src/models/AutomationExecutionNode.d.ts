@@ -56,11 +56,23 @@ declare class AutomationExecutionNode {
   /** Output counts, item kinds, and typed-error summaries by outlet. */
   readonly outputs?: Files.JsonObject | null
 
-  /** Materialized input items currently available, grouped by inlet. */
+  /** Available input items grouped by inlet. Resolve large values with item_refs and item_values. */
   readonly input_items?: Files.JsonObject | null
 
-  /** Materialized output items grouped by outlet. */
+  /** Output items grouped by outlet. Resolve large values with item_refs and item_values. */
   readonly output_items?: Files.JsonObject | null
+
+  /**
+   * References with a path from the response root and a digest. Replace the null at each path with the value for that
+   * digest. Path segments are literal object keys or zero-based array indexes.
+   */
+  readonly item_refs?: Files.JsonObject[] | null
+
+  /**
+   * Ordered entries with a digest, a value, and optional item_refs relative to that value. References inside entries
+   * point to earlier entries in this array.
+   */
+  readonly item_values?: Files.JsonObject[] | null
 
   /** Node ID from the pinned Automation definition. */
   getNodeId(): string | null | undefined
@@ -98,11 +110,23 @@ declare class AutomationExecutionNode {
   /** Output counts, item kinds, and typed-error summaries by outlet. */
   getOutputs(): Files.JsonObject | null | undefined
 
-  /** Materialized input items currently available, grouped by inlet. */
+  /** Available input items grouped by inlet. Resolve large values with item_refs and item_values. */
   getInputItems(): Files.JsonObject | null | undefined
 
-  /** Materialized output items grouped by outlet. */
+  /** Output items grouped by outlet. Resolve large values with item_refs and item_values. */
   getOutputItems(): Files.JsonObject | null | undefined
+
+  /**
+   * References with a path from the response root and a digest. Replace the null at each path with the value for that
+   * digest. Path segments are literal object keys or zero-based array indexes.
+   */
+  getItemRefs(): Files.JsonObject[] | null | undefined
+
+  /**
+   * Ordered entries with a digest, a value, and optional item_refs relative to that value. References inside entries
+   * point to earlier entries in this array.
+   */
+  getItemValues(): Files.JsonObject[] | null | undefined
 }
 
 declare namespace AutomationExecutionNode {
@@ -144,11 +168,23 @@ declare namespace AutomationExecutionNode {
     /** Output counts, item kinds, and typed-error summaries by outlet. */
     outputs?: Files.JsonObject | null
 
-    /** Materialized input items currently available, grouped by inlet. */
+    /** Available input items grouped by inlet. Resolve large values with item_refs and item_values. */
     input_items?: Files.JsonObject | null
 
-    /** Materialized output items grouped by outlet. */
+    /** Output items grouped by outlet. Resolve large values with item_refs and item_values. */
     output_items?: Files.JsonObject | null
+
+    /**
+     * References with a path from the response root and a digest. Replace the null at each path with the value for that
+     * digest. Path segments are literal object keys or zero-based array indexes.
+     */
+    item_refs?: Files.JsonObject[] | null
+
+    /**
+     * Ordered entries with a digest, a value, and optional item_refs relative to that value. References inside entries
+     * point to earlier entries in this array.
+     */
+    item_values?: Files.JsonObject[] | null
   }
 }
 

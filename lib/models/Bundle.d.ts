@@ -108,9 +108,10 @@ declare class Bundle {
   readonly deleted_at?: Files.DateTimeString | null
 
   /**
-   * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-   * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless
-   * absolutely required.
+   * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder access
+   * require this to be true. If omitted on create, the API sets it to true for those links. Note: there are subtle
+   * security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly
+   * discourage use of this option unless absolutely required.
    */
   readonly dont_separate_submissions_by_folder?: boolean | null
 
@@ -302,9 +303,10 @@ declare class Bundle {
   getDeletedAt(): Files.DateTimeString | null | undefined
 
   /**
-   * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-   * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless
-   * absolutely required.
+   * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder access
+   * require this to be true. If omitted on create, the API sets it to true for those links. Note: there are subtle
+   * security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly
+   * discourage use of this option unless absolutely required.
    */
   getDontSeparateSubmissionsByFolder(): boolean | null | undefined
 
@@ -493,9 +495,10 @@ declare class Bundle {
   setDeletedAt(value: Files.DateTimeString): void
 
   /**
-   * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-   * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless
-   * absolutely required.
+   * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder access
+   * require this to be true. If omitted on create, the API sets it to true for those links. Note: there are subtle
+   * security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly
+   * discourage use of this option unless absolutely required.
    */
   setDontSeparateSubmissionsByFolder(value: boolean): void
 
@@ -739,9 +742,10 @@ declare namespace Bundle {
     deleted_at?: Files.DateTimeString | null
 
     /**
-     * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-     * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option
-     * unless absolutely required.
+     * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder
+     * access require this to be true. If omitted on create, the API sets it to true for those links. Note: there are
+     * subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We
+     * strongly discourage use of this option unless absolutely required.
      */
     dont_separate_submissions_by_folder?: boolean | null
 
@@ -934,9 +938,10 @@ declare namespace Bundle {
     create_snapshot?: boolean
 
     /**
-     * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-     * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option
-     * unless absolutely required.
+     * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder
+     * access require this to be true. If omitted on create, the API sets it to true for those links. Note: there are
+     * subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We
+     * strongly discourage use of this option unless absolutely required.
      */
     dont_separate_submissions_by_folder?: boolean
 
@@ -1065,9 +1070,10 @@ declare namespace Bundle {
     description?: string
 
     /**
-     * Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing
-     * anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option
-     * unless absolutely required.
+     * Do not create subfolders for files uploaded to this share. Upload-only Share Links with non-recursive folder
+     * access require this to be true. If omitted on create, the API sets it to true for those links. Note: there are
+     * subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We
+     * strongly discourage use of this option unless absolutely required.
      */
     dont_separate_submissions_by_folder?: boolean
 

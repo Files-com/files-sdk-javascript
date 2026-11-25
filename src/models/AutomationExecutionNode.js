@@ -81,11 +81,17 @@ class AutomationExecutionNode {
   // object # Output counts, item kinds, and typed-error summaries by outlet.
   getOutputs = () => this.attributes.outputs
 
-  // object # Materialized input items currently available, grouped by inlet.
+  // object # Available input items grouped by inlet. Resolve large values with item_refs and item_values.
   getInputItems = () => this.attributes.input_items
 
-  // object # Materialized output items grouped by outlet.
+  // object # Output items grouped by outlet. Resolve large values with item_refs and item_values.
   getOutputItems = () => this.attributes.output_items
+
+  // array(object) # References with a path from the response root and a digest. Replace the null at each path with the value for that digest. Path segments are literal object keys or zero-based array indexes.
+  getItemRefs = () => this.attributes.item_refs
+
+  // array(object) # Ordered entries with a digest, a value, and optional item_refs relative to that value. References inside entries point to earlier entries in this array.
+  getItemValues = () => this.attributes.item_values
 }
 
 export default AutomationExecutionNode
