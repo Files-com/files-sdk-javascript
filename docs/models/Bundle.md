@@ -487,6 +487,33 @@ await bundle.update({
 
 ---
 
+## Update Bundle Path
+
+```
+const bundle = await Bundle.find(id)
+
+await bundle.updateBundle({
+  'recursive': true,
+})
+```
+
+### Parameters
+
+* `id` (int64): Required - Bundle ID.
+* `path` (string): Required - Path to operate on.
+* `recursive` (boolean): Required - Allow access to subfolders content?
+
+### Example Response
+
+```json
+{
+  "recursive": true,
+  "path": "example"
+}
+```
+
+---
+
 ## Delete Share Link
 
 ```

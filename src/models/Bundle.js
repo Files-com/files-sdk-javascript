@@ -729,6 +729,65 @@ class Bundle {
     return this
   }
 
+  // Update Bundle Path
+  //
+  // Parameters:
+  //   path (required) - string - Path to operate on.
+  //   recursive (required) - boolean - Allow access to subfolders content?
+  updateBundle = async (params = {}) => {
+    if (!this.attributes.id) {
+      throw new errors.EmptyPropertyError('Current object has no id')
+    }
+
+    if (!isObject(params)) {
+      throw new errors.InvalidParameterError(`Bad parameter: params must be of type object, received ${getType(params)}`)
+    }
+
+    // The request is prepared on a shallow copy, so the caller's params and the model's attributes stay as they were.
+    params = { ...params }
+    params.id = this.attributes.id
+    if (params.id !== undefined && params.id !== null && !isInt(params.id)) {
+      throw new errors.InvalidParameterError(`Bad parameter: id must be of type Int, received ${getType(params.id)}`)
+    }
+
+    if (params.path !== undefined && params.path !== null && !isString(params.path)) {
+      throw new errors.InvalidParameterError(`Bad parameter: path must be of type String, received ${getType(params.path)}`)
+    }
+
+    if (isArray(params.recursive) || isObject(params.recursive)) {
+      throw new errors.InvalidParameterError(`Bad parameter: recursive must be of type Boolean, received ${getType(params.recursive)}`)
+    }
+
+    if (!params.id) {
+      if (this.attributes.id) {
+        params.id = this.id
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: id')
+      }
+    }
+
+    if (!params.path) {
+      if (this.attributes.path) {
+        params.path = this.path
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: path')
+      }
+    }
+
+    if (!params.recursive) {
+      if (this.attributes.recursive) {
+        params.recursive = this.recursive
+      } else {
+        throw new errors.MissingParameterError('Parameter missing: recursive')
+      }
+    }
+
+    const response = await Api.sendRequest(`/bundles/${encodeURIComponent(params.id)}/paths/${encodeURIComponent(params.path)}`, 'PATCH', params, this.options)
+
+    const BundlePath = require('./BundlePath.js').default
+    return new BundlePath(response?.data, this.options)
+  }
+
   delete = async (params = {}) => {
     if (!this.attributes.id) {
       throw new errors.EmptyPropertyError('Current object has no id')

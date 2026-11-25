@@ -613,6 +613,9 @@ declare class Bundle {
   /** Update Share Link */
   update(params?: Bundle.UpdateParams): Promise<this>
 
+  /** Update Bundle Path */
+  updateBundle(params?: Bundle.UpdateBundleParams): Promise<BundlePath>
+
   /** Delete Share Link */
   delete(params?: Files.NoParams): Promise<void>
 
@@ -1157,6 +1160,14 @@ declare namespace Bundle {
 
     /** Workspace ID. `0` means the default workspace. */
     workspace_id?: number
+  }
+
+  interface UpdateBundleParams {
+    /** Required: when not given, this object's `path` is used. Path to operate on. */
+    path?: string
+
+    /** Required: when not given, this object's `recursive` is used. Allow access to subfolders content? */
+    recursive?: boolean
   }
 
   /** Share Link watermark settings */
