@@ -40,11 +40,12 @@ declare class CustomDomain {
   readonly domain?: string | null
 
   /**
-   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing
-   * traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be
-   * set manually via the API for any reason.
+   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+   * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It applies
+   * to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically when a bound
+   * `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
    */
-  readonly destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | Files.OtherString | null
+  readonly destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content' | Files.OtherString | null
 
   /** Current DNS verification status. */
   readonly dns_status?: 'disabled' | 'correct' | 'no_records' | 'cname_wrong' | 'a_record' | 'caa_conflict' | Files.OtherString | null
@@ -89,11 +90,12 @@ declare class CustomDomain {
   getDomain(): string | null | undefined
 
   /**
-   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing
-   * traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be
-   * set manually via the API for any reason.
+   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+   * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It applies
+   * to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically when a bound
+   * `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
    */
-  getDestination(): 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | Files.OtherString | null | undefined
+  getDestination(): 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content' | Files.OtherString | null | undefined
 
   /** Current DNS verification status. */
   getDnsStatus(): 'disabled' | 'correct' | 'no_records' | 'cname_wrong' | 'a_record' | 'caa_conflict' | Files.OtherString | null | undefined
@@ -138,11 +140,12 @@ declare class CustomDomain {
   setDomain(value: string): void
 
   /**
-   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing
-   * traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be
-   * set manually via the API for any reason.
+   * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+   * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It applies
+   * to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically when a bound
+   * `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
    */
-  setDestination(value: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned'): void
+  setDestination(value: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content'): void
 
   /** Current DNS verification status. */
   setDnsStatus(value: 'disabled' | 'correct' | 'no_records' | 'cname_wrong' | 'a_record' | 'caa_conflict' | Files.OtherString): void
@@ -233,11 +236,12 @@ declare namespace CustomDomain {
     domain?: string | null
 
     /**
-     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not
-     * routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and
-     * can be set manually via the API for any reason.
+     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+     * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It
+     * applies to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically
+     * when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
      */
-    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | Files.OtherString | null
+    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content' | Files.OtherString | null
 
     /** Current DNS verification status. */
     dns_status?: 'disabled' | 'correct' | 'no_records' | 'cname_wrong' | 'a_record' | 'caa_conflict' | Files.OtherString | null
@@ -296,11 +300,12 @@ declare namespace CustomDomain {
     workspace_id?: number
 
     /**
-     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not
-     * routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and
-     * can be set manually via the API for any reason.
+     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+     * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It
+     * applies to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically
+     * when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
      */
-    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned'
+    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content'
 
     /**
      * Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior. Preserved as historical
@@ -328,11 +333,12 @@ declare namespace CustomDomain {
     workspace_id?: number
 
     /**
-     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not
-     * routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and
-     * can be set manually via the API for any reason.
+     * Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, `file_content`, or
+     * `unassigned` (not routing traffic). Each Site can have one File Content domain in its default workspace. It
+     * applies to the whole Site and uses the Site's existing dedicated HTTPS IPs. Set to `unassigned` automatically
+     * when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
      */
-    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned'
+    destination?: 'site_alias' | 'public_hosting' | 's3_endpoint' | 'unassigned' | 'file_content'
 
     /**
      * Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior. Preserved as historical

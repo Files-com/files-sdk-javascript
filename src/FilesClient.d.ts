@@ -7,6 +7,7 @@ import AiAssistantPersonality from './models/AiAssistantPersonality'
 import AiTask from './models/AiTask'
 import ApiKey from './models/ApiKey'
 import ApiRequestLog from './models/ApiRequestLog'
+import ApplicationConnection from './models/ApplicationConnection'
 import App from './models/App'
 import As2IncomingMessage from './models/As2IncomingMessage'
 import As2OutgoingMessage from './models/As2OutgoingMessage'
@@ -225,6 +226,9 @@ declare class FilesClient {
   /** `ApiRequestLog`'s static methods, made with this client's settings. */
   readonly apiRequestLogs: Pick<typeof ApiRequestLog, 'all' | 'list' | 'listIterator'>
 
+  /** `ApplicationConnection`'s static methods, made with this client's settings. */
+  readonly applicationConnections: Pick<typeof ApplicationConnection, 'all' | 'create' | 'find' | 'get' | 'list' | 'listIterator'>
+
   /** `App`'s static methods, made with this client's settings. */
   readonly apps: Pick<typeof App, 'all' | 'list' | 'listIterator'>
 
@@ -250,7 +254,7 @@ declare class FilesClient {
   readonly automationVersions: Pick<typeof AutomationVersion, 'all' | 'find' | 'get' | 'list' | 'listIterator'>
 
   /** `Automation`'s static methods, made with this client's settings. */
-  readonly automations: Pick<typeof Automation, 'all' | 'create' | 'find' | 'get' | 'getAuthoringSchema' | 'list' | 'listIterator'>
+  readonly automations: Pick<typeof Automation, 'all' | 'create' | 'find' | 'get' | 'getAuthoringSchema' | 'list' | 'listApplicationActions' | 'listApplicationActionsIterator' | 'listApplications' | 'listApplicationsIterator' | 'listIterator'>
 
   /** `BandwidthSnapshot`'s static methods, made with this client's settings. */
   readonly bandwidthSnapshots: Pick<typeof BandwidthSnapshot, 'all' | 'list' | 'listIterator'>

@@ -130,6 +130,14 @@ class Automation {
     exposeAttributes(this, ['definition'])
   }
 
+  // object # Normalized application action metadata keyed by pinned action fingerprint.
+  getApplicationActions = () => this.attributes.application_actions
+
+  setApplicationActions = value => {
+    this.attributes.application_actions = value
+    exposeAttributes(this, ['application_actions'])
+  }
+
   // string # If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
   getDestinationReplaceFrom = () => this.attributes.destination_replace_from
 
@@ -848,6 +856,63 @@ class Automation {
 
   static get = (id, params = {}, options = {}) =>
     Automation.find(id, params, options)
+
+  // Parameters:
+  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+  //   application_key (required) - string - Application key returned by the Automation applications list.
+  static listApplicationActions = async (params = {}, options = {}) => {
+    if (!params.application_key) {
+      throw new errors.MissingParameterError('Parameter missing: application_key')
+    }
+
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
+    }
+
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
+    }
+
+    if (params.application_key !== undefined && params.application_key !== null && !isString(params.application_key)) {
+      throw new errors.InvalidParameterError(`Bad parameter: application_key must be of type String, received ${getType(params.application_key)}`)
+    }
+
+    const response = await Api.sendRequest('/automations/application_actions', 'GET', params, options)
+
+    const AutomationApplicationAction = require('./AutomationApplicationAction.js').default
+    return response?.data?.map(obj => new AutomationApplicationAction(obj, retainedOptions(options))) || []
+  }
+
+  // The items listApplicationActions() lists, one at a time: an async iterator that requests each page
+  // through listApplicationActions() only once the items before it have been taken (see Api._iterate).
+  static listApplicationActionsIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      Automation.listApplicationActions(pageParams, pageOptions))
+
+  // Parameters:
+  //   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+  //   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+  static listApplications = async (params = {}, options = {}) => {
+    if (params.cursor !== undefined && params.cursor !== null && !isString(params.cursor)) {
+      throw new errors.InvalidParameterError(`Bad parameter: cursor must be of type String, received ${getType(params.cursor)}`)
+    }
+
+    if (params.per_page !== undefined && params.per_page !== null && !isInt(params.per_page)) {
+      throw new errors.InvalidParameterError(`Bad parameter: per_page must be of type Int, received ${getType(params.per_page)}`)
+    }
+
+    const response = await Api.sendRequest('/automations/applications', 'GET', params, options)
+
+    const AutomationApplication = require('./AutomationApplication.js').default
+    return response?.data?.map(obj => new AutomationApplication(obj, retainedOptions(options))) || []
+  }
+
+  // The items listApplications() lists, one at a time: an async iterator that requests each page
+  // through listApplications() only once the items before it have been taken (see Api._iterate).
+  static listApplicationsIterator = (params = {}, options = {}) =>
+    Api._iterate(params, options, (pageParams, pageOptions) =>
+      Automation.listApplications(pageParams, pageOptions))
 
   static getAuthoringSchema = async (options = {}) => {
     const response = await Api.sendRequest('/automations/authoring_schema', 'GET', {}, options)

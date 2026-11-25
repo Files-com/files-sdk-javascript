@@ -91,6 +91,9 @@ declare class AutomationRun {
    */
   readonly definition?: Files.JsonObject | null
 
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  readonly application_actions?: Files.JsonObject | null
+
   /**
    * Status and execution stage for each node in this run. For performance reasons, this is not provided when listing
    * Automation runs.
@@ -177,6 +180,9 @@ declare class AutomationRun {
    * Automation runs.
    */
   getDefinition(): Files.JsonObject | null | undefined
+
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  getApplicationActions(): Files.JsonObject | null | undefined
 
   /**
    * Status and execution stage for each node in this run. For performance reasons, this is not provided when listing
@@ -304,6 +310,9 @@ declare namespace AutomationRun {
      * Automation runs.
      */
     definition?: Files.JsonObject | null
+
+    /** Normalized application action metadata keyed by pinned action fingerprint. */
+    application_actions?: Files.JsonObject | null
 
     /**
      * Status and execution stage for each node in this run. For performance reasons, this is not provided when listing

@@ -122,6 +122,7 @@ await shared_workflow.runWorkflow({
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",
+  "application_actions": "example",
   "node_states": "example",
   "execution_nodes": [
     {

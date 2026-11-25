@@ -49,6 +49,9 @@ declare class AutomationVersion {
   /** Saved Automation v2 graph definition. Included when retrieving a single revision. */
   readonly definition?: AutomationVersion.Definition | null
 
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  readonly application_actions?: Files.JsonObject | null
+
   /** Automation revision ID. */
   getId(): number | null | undefined
 
@@ -75,6 +78,9 @@ declare class AutomationVersion {
 
   /** Saved Automation v2 graph definition. Included when retrieving a single revision. */
   getDefinition(): AutomationVersion.Definition | null | undefined
+
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  getApplicationActions(): Files.JsonObject | null | undefined
 
   /** Restore an Automation v2 definition as a new current version */
   restore(params?: Files.NoParams): Promise<Automation>
@@ -135,6 +141,9 @@ declare namespace AutomationVersion {
 
     /** Saved Automation v2 graph definition. Included when retrieving a single revision. */
     definition?: AutomationVersion.Definition | null
+
+    /** Normalized application action metadata keyed by pinned action fingerprint. */
+    application_actions?: Files.JsonObject | null
   }
 
   interface ListParams {
@@ -240,6 +249,7 @@ declare namespace AutomationVersion {
       | AutomationVersion.Definition.NodeSendChatMessage
       | AutomationVersion.Definition.NodeSendWebhook
       | AutomationVersion.Definition.NodeHttpRequest
+      | AutomationVersion.Definition.NodeApplicationAction
       | AutomationVersion.Definition.NodePublishAmazonSns
       | AutomationVersion.Definition.NodePublishAmazonSqs
       | AutomationVersion.Definition.NodePublishGooglePubsub
@@ -1040,6 +1050,42 @@ declare namespace AutomationVersion {
         body?: AutomationVersion.Definition.TemplateString
 
         auth_secret_id?: number
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Application action node */
+    interface NodeApplicationAction {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'application_action'
+
+      /** Configuration fields for this node type. */
+      config: {
+        application_key: string
+
+        action_key: string
+
+        fingerprint: string
+
+        connection_id: number
+
+        /** Mappings keyed by field key from the application actions list. */
+        mappings: {
+          [key: string]: {
+            literal: Files.JsonValue
+          } | {
+            /** A bare Files TransformScript expression, no braces. */
+            expression: AutomationVersion.Definition.FtsExpression
+          }
+        }
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: AutomationVersion.Definition.OnError

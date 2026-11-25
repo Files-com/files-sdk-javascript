@@ -1,4 +1,6 @@
 import Files = require('../Files')
+import AutomationApplication = require('./AutomationApplication')
+import AutomationApplicationAction = require('./AutomationApplicationAction')
 import AutomationAuthoringSchema = require('./AutomationAuthoringSchema')
 
 /** An Automation is an automated process of controlling workflows on your Files.com site. */
@@ -56,6 +58,9 @@ declare class Automation {
 
   /** Automation v2 graph definition. */
   readonly definition?: Automation.Definition | null
+
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  readonly application_actions?: Files.JsonObject | null
 
   /** If set, this string in the destination path will be replaced with the value in `destination_replace_to`. */
   readonly destination_replace_from?: string | null
@@ -275,6 +280,9 @@ declare class Automation {
   /** Automation v2 graph definition. */
   getDefinition(): Automation.Definition | null | undefined
 
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  getApplicationActions(): Files.JsonObject | null | undefined
+
   /** If set, this string in the destination path will be replaced with the value in `destination_replace_to`. */
   getDestinationReplaceFrom(): string | null | undefined
 
@@ -492,6 +500,9 @@ declare class Automation {
 
   /** Automation v2 graph definition. */
   setDefinition(value: Automation.Definition): void
+
+  /** Normalized application action metadata keyed by pinned action fingerprint. */
+  setApplicationActions(value: Files.JsonObject): void
 
   /** If set, this string in the destination path will be replaced with the value in `destination_replace_to`. */
   setDestinationReplaceFrom(value: string): void
@@ -721,6 +732,30 @@ declare class Automation {
   /** Alias of `find()`. */
   static get(id: number, params?: Files.NoParams, options?: Files.RequestOptions): Promise<Automation>
 
+  /** List actions available for an Automation application */
+  static listApplicationActions(params: Automation.ListApplicationActionsParams, options?: Files.RequestOptions): Promise<AutomationApplicationAction[]>
+
+  /**
+   * The models `listApplicationActions()` lists, one at a time: nothing is requested before the first `next()`, and
+   * each page only once the models before it have been taken. The params, options and settings are taken when the
+   * iterator is made, the global settings as they are then unless `options.client` is given, and every page and model
+   * uses them. Leaving a `for await` loop requests nothing more, and `options.signal` cancels a page request under way,
+   * which is not retried.
+   */
+  static listApplicationActionsIterator(params: Automation.ListApplicationActionsParams, options?: Files.RequestOptions): AsyncIterableIterator<AutomationApplicationAction>
+
+  /** List applications available in the Automation builder */
+  static listApplications(params?: Automation.ListApplicationsParams, options?: Files.RequestOptions): Promise<AutomationApplication[]>
+
+  /**
+   * The models `listApplications()` lists, one at a time: nothing is requested before the first `next()`, and each page
+   * only once the models before it have been taken. The params, options and settings are taken when the iterator is
+   * made, the global settings as they are then unless `options.client` is given, and every page and model uses them.
+   * Leaving a `for await` loop requests nothing more, and `options.signal` cancels a page request under way, which is
+   * not retried.
+   */
+  static listApplicationsIterator(params?: Automation.ListApplicationsParams, options?: Files.RequestOptions): AsyncIterableIterator<AutomationApplication>
+
   /** Show the Automation v2 authoring schema and active node catalog */
   static getAuthoringSchema(options?: Files.RequestOptions): Promise<AutomationAuthoringSchema>
 
@@ -768,6 +803,9 @@ declare namespace Automation {
 
     /** Automation v2 graph definition. */
     definition?: Automation.Definition | null
+
+    /** Normalized application action metadata keyed by pinned action fingerprint. */
+    application_actions?: Files.JsonObject | null
 
     /** If set, this string in the destination path will be replaced with the value in `destination_replace_to`. */
     destination_replace_from?: string | null
@@ -1005,6 +1043,35 @@ declare namespace Automation {
      * `last_modified_at`.
      */
     filter_lteq?: Files.JsonObject
+  }
+
+  interface ListApplicationActionsParams {
+    /**
+     * Used for pagination. When a list request has more records available, cursors are provided in the response headers
+     * `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`. Send one of those cursor value here to resume an existing list
+     * from the next available record. Note: many of our SDKs have iterator methods that will automatically handle
+     * cursor-based pagination.
+     */
+    cursor?: string
+
+    /** Number of records to show per page.  (Max: 10000, 1,000 or less is recommended). */
+    per_page?: number
+
+    /** Application key returned by the Automation applications list. */
+    application_key: string
+  }
+
+  interface ListApplicationsParams {
+    /**
+     * Used for pagination. When a list request has more records available, cursors are provided in the response headers
+     * `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`. Send one of those cursor value here to resume an existing list
+     * from the next available record. Note: many of our SDKs have iterator methods that will automatically handle
+     * cursor-based pagination.
+     */
+    cursor?: string
+
+    /** Number of records to show per page.  (Max: 10000, 1,000 or less is recommended). */
+    per_page?: number
   }
 
   interface CreateParams {
@@ -1449,6 +1516,7 @@ declare namespace Automation {
       | Automation.Definition.NodeSendChatMessage
       | Automation.Definition.NodeSendWebhook
       | Automation.Definition.NodeHttpRequest
+      | Automation.Definition.NodeApplicationAction
       | Automation.Definition.NodePublishAmazonSns
       | Automation.Definition.NodePublishAmazonSqs
       | Automation.Definition.NodePublishGooglePubsub
@@ -2249,6 +2317,42 @@ declare namespace Automation {
         body?: Automation.Definition.TemplateString
 
         auth_secret_id?: number
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** Application action node */
+    interface NodeApplicationAction {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'application_action'
+
+      /** Configuration fields for this node type. */
+      config: {
+        application_key: string
+
+        action_key: string
+
+        fingerprint: string
+
+        connection_id: number
+
+        /** Mappings keyed by field key from the application actions list. */
+        mappings: {
+          [key: string]: {
+            literal: Files.JsonValue
+          } | {
+            /** A bare Files TransformScript expression, no braces. */
+            expression: Automation.Definition.FtsExpression
+          }
+        }
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError

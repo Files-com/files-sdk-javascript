@@ -85,6 +85,9 @@ class AutomationVersion {
   // object # Saved Automation v2 graph definition. Included when retrieving a single revision.
   getDefinition = () => this.attributes.definition
 
+  // object # Normalized application action metadata keyed by pinned action fingerprint.
+  getApplicationActions = () => this.attributes.application_actions
+
   // Restore an Automation v2 definition as a new current version
   restore = async (params = {}) => {
     if (!this.attributes.id) {

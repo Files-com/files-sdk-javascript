@@ -230,6 +230,27 @@ class FilesClient {
     })
   }
 
+  get applicationConnections() {
+    return resource(this, 'applicationConnections', () => {
+      const ApplicationConnection = require('./models/ApplicationConnection.js').default
+
+      return {
+        all: (params = {}, options = {}) =>
+          ApplicationConnection.all(params, withClient(this, options)),
+        create: (params = {}, options = {}) =>
+          ApplicationConnection.create(params, withClient(this, options)),
+        find: (id, params = {}, options = {}) =>
+          ApplicationConnection.find(id, params, withClient(this, options)),
+        get: (id, params = {}, options = {}) =>
+          ApplicationConnection.get(id, params, withClient(this, options)),
+        list: (params = {}, options = {}) =>
+          ApplicationConnection.list(params, withClient(this, options)),
+        listIterator: (params = {}, options = {}) =>
+          ApplicationConnection.listIterator(params, withClient(this, options)),
+      }
+    })
+  }
+
   get apps() {
     return resource(this, 'apps', () => {
       const App = require('./models/App.js').default
@@ -393,6 +414,14 @@ class FilesClient {
           Automation.getAuthoringSchema(withClient(this, options)),
         list: (params = {}, options = {}) =>
           Automation.list(params, withClient(this, options)),
+        listApplicationActions: (params = {}, options = {}) =>
+          Automation.listApplicationActions(params, withClient(this, options)),
+        listApplicationActionsIterator: (params = {}, options = {}) =>
+          Automation.listApplicationActionsIterator(params, withClient(this, options)),
+        listApplications: (params = {}, options = {}) =>
+          Automation.listApplications(params, withClient(this, options)),
+        listApplicationsIterator: (params = {}, options = {}) =>
+          Automation.listApplicationsIterator(params, withClient(this, options)),
         listIterator: (params = {}, options = {}) =>
           Automation.listIterator(params, withClient(this, options)),
       }

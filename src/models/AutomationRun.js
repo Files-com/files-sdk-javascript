@@ -121,6 +121,9 @@ class AutomationRun {
   // object # Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
   getDefinition = () => this.attributes.definition
 
+  // object # Normalized application action metadata keyed by pinned action fingerprint.
+  getApplicationActions = () => this.attributes.application_actions
+
   // object # Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
   getNodeStates = () => this.attributes.node_states
 
