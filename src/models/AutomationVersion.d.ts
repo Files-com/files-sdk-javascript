@@ -254,6 +254,7 @@ declare namespace AutomationVersion {
       | AutomationVersion.Definition.NodeIf
       | AutomationVersion.Definition.NodeSwitch
       | AutomationVersion.Definition.NodeFilter
+      | AutomationVersion.Definition.NodeForEach
       | AutomationVersion.Definition.NodeJoin
       | AutomationVersion.Definition.NodeAggregate
       | AutomationVersion.Definition.NodeWait
@@ -1472,6 +1473,27 @@ declare namespace AutomationVersion {
 
         /** A bare Files TransformScript expression, no braces. */
         condition: AutomationVersion.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: AutomationVersion.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** For each node */
+    interface NodeForEach {
+      /** Unique node ID within the graph. */
+      id: AutomationVersion.Definition.Slug
+
+      /** Node type. */
+      type: 'for_each'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /** A bare Files TransformScript expression, no braces. */
+        list: AutomationVersion.Definition.FtsExpression
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: AutomationVersion.Definition.OnError

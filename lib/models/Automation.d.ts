@@ -1465,6 +1465,7 @@ declare namespace Automation {
       | Automation.Definition.NodeIf
       | Automation.Definition.NodeSwitch
       | Automation.Definition.NodeFilter
+      | Automation.Definition.NodeForEach
       | Automation.Definition.NodeJoin
       | Automation.Definition.NodeAggregate
       | Automation.Definition.NodeWait
@@ -2683,6 +2684,27 @@ declare namespace Automation {
 
         /** A bare Files TransformScript expression, no braces. */
         condition: Automation.Definition.FtsExpression
+
+        /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
+        on_error?: Automation.Definition.OnError
+      }
+
+      /** Whether this node's output is included in the Automation result. */
+      return?: boolean
+    }
+
+    /** For each node */
+    interface NodeForEach {
+      /** Unique node ID within the graph. */
+      id: Automation.Definition.Slug
+
+      /** Node type. */
+      type: 'for_each'
+
+      /** Configuration fields for this node type. */
+      config: {
+        /** A bare Files TransformScript expression, no braces. */
+        list: Automation.Definition.FtsExpression
 
         /** Error handlers. Each item selects an error pattern and whether to continue or propagate it. */
         on_error?: Automation.Definition.OnError
